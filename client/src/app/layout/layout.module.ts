@@ -5,17 +5,25 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RouterModule } from '@angular/router';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
+import { SharedModule } from '../shared/shared.module';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { LoginOauthComponent } from './components/login-oauth/login-oauth.component';
+import { RegisterDialogComponent } from './components/register-dialog/register-dialog.component';
 
 @NgModule({
   declarations: [
     StandardLayout,
     HeaderComponent,
     FooterComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    LoginFormComponent,
+    LoginOauthComponent,
+    RegisterDialogComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    SharedModule
   ],
   exports: [
     StandardLayout

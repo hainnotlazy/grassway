@@ -1,0 +1,49 @@
+<form
+  [formGroup]="loginForm"
+  class="space-y-2"
+>
+  <div class="flex flex-col gap-2">
+    <label for="username">Username</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="username"
+        formControlName="username"
+        matInput
+        placeholder="Your username or email"
+        type="text"
+      >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(loginForm.get('username')?.errors)"
+      >
+        {{ usernameValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="password">Password</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="password"
+        formControlName="password"
+        matInput
+        placeholder="Your password"
+        type="password"
+      >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(loginForm.get('password')?.errors)"
+      >
+        {{ passwordValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <button
+    type="submit"
+    class="bg-secondary text-white hover:bg-secondary/80 w-full text-center py-2.5 px-4 rounded-md shadow-md"
+  >
+    Login
+  </button>
+</form>

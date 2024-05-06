@@ -1,3 +1,27 @@
+// Angular Material
+@use "@angular/material" as mat;
+@include mat.core();
+
+$my-primary: mat.define-palette(mat.$indigo-palette, 500);
+$my-accent: mat.define-palette(mat.$green-palette, 500);
+
+$my-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+    )
+  )
+);
+
+@include mat.all-component-themes($my-theme);
+
+.mat-mdc-form-field-error-wrapper {
+  padding: 0 !important;
+}
+
+
+// Tailwindcss
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,23 +34,28 @@ body {
 }
 
 .text-ubuntu {
-  font-family: "Ubuntu", sans-serif;
+  font-family: "Ubuntu", sans-serif !important;
 }
 
 .text-rubik {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", sans-serif !important;
 }
 
 .text-poetsen-one {
-  font-family: "Poetsen One", sans-serif;
+  font-family: "Poetsen One", sans-serif !important;
 }
 
 .text-karla {
-  font-family: "Karla", sans-serif;
+  font-family: "Karla", sans-serif !important;
   font-optical-sizing: auto;
 }
 
 .text-jost {
-  font-family: "Jost", sans-serif;
+  font-family: "Jost", sans-serif !important;
+  font-optical-sizing: auto;
+}
+
+.text-roboto-condensed {
+  font-family: "Roboto Condensed", sans-serif !important;
   font-optical-sizing: auto;
 }
