@@ -1,0 +1,17 @@
+version: "3"
+
+name: grassway-app-development
+
+services:
+  client:
+    container_name: client-dev
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    ports:
+      - 4200:4200 
+    networks:
+      - devnet
+
+networks:
+  devnet:
