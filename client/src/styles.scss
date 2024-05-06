@@ -3,3 +3,30 @@
 @tailwind utilities;
 
 @import "libs/icomoon/style.css";
+
+body {
+  font-family: "Karla", sans-serif;
+  font-optical-sizing: auto;
+}
+
+.text-ubuntu {
+  font-family: "Ubuntu", sans-serif;
+}
+
+.text-rubik {
+  font-family: "Rubik", sans-serif;
+}
+
+.text-poetsen-one {
+  font-family: "Poetsen One", sans-serif;
+}
+
+.text-karla {
+  font-family: "Karla", sans-serif;
+  font-optical-sizing: auto;
+}
+
+.text-jost {
+  font-family: "Jost", sans-serif;
+  font-optical-sizing: auto;
+}
