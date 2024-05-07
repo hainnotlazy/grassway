@@ -8,13 +8,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const MatModules = [
   MatFormFieldModule,
   MatButtonModule,
   MatInputModule,
   MatDialogModule,
-  MatIconModule
+  MatIconModule,
+  MatTooltipModule
 ]
 
 @NgModule({

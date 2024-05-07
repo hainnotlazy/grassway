@@ -1,0 +1,46 @@
+<form class="space-y-4">
+  <div class="focus-within:border-primary focus-within:border-2 sm:w-2/3 flex w-full p-1 mx-auto bg-white border border-gray-400 rounded-full">
+    <input
+      class="focus:outline-none flex-grow pl-4 pr-2 rounded-tl-full rounded-bl-full"
+      type="text"
+    >
+    <button
+      class="px-4 py-2.5 rounded-full bg-primary text-white font-semibold hover:shadow-lg hover:bg-secondary whitespace-nowrap"
+      type="submit"
+    >
+      Shorten it
+    </button>
+  </div>
+  <div class="md:w-2/3 sm:flex-row flex flex-col items-center justify-between w-full gap-4 px-8 mx-auto">
+    <p class="text-poetsen-one font-semibold">Your Shortened Link:</p>
+    <button
+      matTooltip="Click to copy to clipboard"
+      matTooltipPosition="above"
+      class="rounded-xl flex items-center flex-grow gap-4 border border-gray-600 px-4 py-2.5 border-dashed hover:text-secondary"
+      type="button"
+    >
+      <p class="text-start shortened-link flex-grow overflow-x-auto">https://shorten.hainkone.com/AB034Ms</p>
+      <i class="icon-copy text-lg"></i>
+    </button>
+  </div>
+</form>
+
+<div class="summary sm:flex-row flex flex-col items-center justify-around gap-6 mb-4">
+  <div class="border-primary hover:scale-110 flex flex-col items-center justify-center gap-2 p-4 transition-all bg-white border border-dashed rounded-md shadow-lg cursor-default">
+    <i class="icon-link text-primary text-3xl"></i>
+    <h6 class="text-secondary text-poetsen-one">1053</h6>
+    <p class="text-jost italic text-center text-gray-400">links were shortened</p>
+  </div>
+
+  <div class="border-primary hover:scale-110 flex flex-col items-center justify-center gap-2 p-4 transition-all bg-white border border-dashed rounded-md shadow-lg cursor-default">
+    <i class="icon-click text-primary text-3xl"></i>
+    <h6 class="text-secondary text-poetsen-one">4576</h6>
+    <p class="text-jost italic text-center text-gray-400">clicks through our links</p>
+  </div>
+
+  <div class="border-primary hover:scale-110 flex flex-col items-center justify-center gap-2 p-4 transition-all bg-white border border-dashed rounded-md shadow-lg cursor-default">
+    <i class="icon-rewrite text-primary text-3xl"></i>
+    <h6 class="text-secondary text-poetsen-one">1683</h6>
+    <p class="text-jost italic text-center text-gray-400">links were customized back-half</p>
+  </div>
+</div>

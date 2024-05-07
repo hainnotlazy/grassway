@@ -1,0 +1,27 @@
+:host  {
+  min-height: inherit;
+
+  form input {
+    width: 150px;
+  }
+
+  .shortened-link {
+    width: 200px;
+  }
+
+  .summary > div {
+    width: 200px;
+  }
+
+  @media (min-width: 400px) {
+    .shortened-link {
+      width: auto;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .summary {
+      align-items: unset;
+    }
+  }
+}
