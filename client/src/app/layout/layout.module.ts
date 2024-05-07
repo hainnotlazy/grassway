@@ -9,6 +9,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { LoginOauthComponent } from './components/login-oauth/login-oauth.component';
 import { RegisterDialogComponent } from './components/register-dialog/register-dialog.component';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { RegisterDialogComponent } from './components/register-dialog/register-d
     LoginDialogComponent,
     LoginFormComponent,
     LoginOauthComponent,
-    RegisterDialogComponent
+    RegisterDialogComponent,
+    RegisterFormComponent
   ],
   imports: [
     CommonModule,

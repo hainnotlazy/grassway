@@ -1,13 +1,21 @@
 const usernameRequirements = {
   required: true,
-  minLength: 5,
-  maxLength: 255
+  minlength: 5,
+  maxlength: 255
+}
+
+const emailRequirements = {
+  email: true
 }
 
 const passwordRequirements = {
   required: true,
-  minLength: 5,
-  maxLength: 255
+  minlength: 5,
+  maxlength: 255
+}
+
+const confirmPasswordRequirements = {
+  require: true
 }
 
 export const loginRequirements = {
@@ -17,8 +25,8 @@ export const loginRequirements = {
     },
     validationMsg: {
       required: "Username is required",
-      minLength: `Username must be at least ${usernameRequirements.minLength} characters`,
-      maxLength: `Username must be at most ${usernameRequirements.maxLength} characters`
+      minlength: `Username is invalid`,
+      maxlength: `Username is invalid`
     }
   },
   password: {
@@ -27,8 +35,47 @@ export const loginRequirements = {
     },
     validationMsg: {
       required: "Password is required",
-      minLength: `Password must be at least ${passwordRequirements.minLength} characters`,
-      maxLength: `Password must be at most ${passwordRequirements.maxLength} characters`
+      minlength: `Password is invalid`,
+      maxlength: `Password is invalid`
+    }
+  }
+}
+
+export const registerRequirements = {
+  username: {
+    requirements: {
+      ...usernameRequirements
+    },
+    validationMsg: {
+      required: "Username is required",
+      minlength: `Username must be at least ${usernameRequirements.minlength} characters`,
+      maxlength: `Username must be at most ${usernameRequirements.maxlength} characters`
+    }
+  },
+  email: {
+    requirements: {
+      ...emailRequirements
+    },
+    validationMsg: {
+      email: "Email is invalid",
+    }
+  },
+  password: {
+    requirements: {
+      ...passwordRequirements
+    },
+    validationMsg: {
+      required: "Password is required",
+      minlength: `Password must be at least ${passwordRequirements.minlength} characters`,
+      maxlength: `Password must be at most ${passwordRequirements.maxlength} characters`
+    }
+  },
+  confirmPassword: {
+    requirements: {
+      ...confirmPasswordRequirements
+    },
+    validationMsg: {
+      required: "Please confirm your password"
     }
   }
 }

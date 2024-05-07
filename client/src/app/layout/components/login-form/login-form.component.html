@@ -29,8 +29,18 @@
         formControlName="password"
         matInput
         placeholder="Your password"
-        type="password"
+        [type]="hidePassword ? 'password' : 'text'"
       >
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="hidePassword = !hidePassword"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hidePassword"
+        type="button"
+      >
+        <mat-icon class="text-lg">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
       <mat-error
         class="text-jost text-sm"
         *ngFor="let error of getObjectKeys(loginForm.get('password')?.errors)"

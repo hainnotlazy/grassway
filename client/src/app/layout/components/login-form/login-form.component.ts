@@ -5,14 +5,18 @@ import { getObjectKeys } from 'src/app/core/helpers/utils';
 import { IValidationMessage } from 'src/app/core/interfaces/form.interface';
 
 @Component({
-  selector: 'app-login-form',
+  selector: 'login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent {
+  hidePassword = true;
+
+  // Form requirements
   usernameRequirements = loginRequirements.username.requirements;
   passwordRequirements = loginRequirements.password.requirements;
 
+  // Form validation messages
   usernameValidationMessages: IValidationMessage = loginRequirements.username.validationMsg;
   passwordValidationMessages: IValidationMessage = loginRequirements.password.validationMsg;
 
@@ -21,13 +25,13 @@ export class LoginFormComponent {
   loginForm = new FormGroup({
     username: new FormControl("", [
       Validators.required,
-      Validators.minLength(this.usernameRequirements.minLength),
-      Validators.maxLength(this.usernameRequirements.maxLength)
+      Validators.minLength(this.usernameRequirements.minlength),
+      Validators.maxLength(this.usernameRequirements.maxlength)
     ]),
     password: new FormControl("", [
       Validators.required,
-      Validators.minLength(this.passwordRequirements.minLength),
-      Validators.maxLength(this.passwordRequirements.maxLength)
+      Validators.minLength(this.passwordRequirements.minlength),
+      Validators.maxLength(this.passwordRequirements.maxlength)
     ])
   });
 }

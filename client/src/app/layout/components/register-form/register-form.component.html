@@ -1,0 +1,109 @@
+<form
+  [formGroup]="registerForm"
+  (submit)="onSubmit()"
+  class="space-y-2"
+>
+  <div class="flex flex-col gap-2">
+    <label for="username">Username</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="username"
+        formControlName="username"
+        matInput
+        placeholder="Your username"
+        type="text"
+      >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(registerForm.get('username')?.errors)"
+      >
+        {{ usernameValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="email">Email</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="email"
+        formControlName="email"
+        matInput
+        placeholder="Your email"
+        type="email"
+      >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(registerForm.get('email')?.errors)"
+      >
+        {{ emailValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="password">Password</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="password"
+        formControlName="password"
+        matInput
+        placeholder="Your password"
+        [type]="hidePassword ? 'password' : 'text'"
+      >
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="hidePassword = !hidePassword"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hidePassword"
+        type="button"
+      >
+        <mat-icon class="text-lg">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(registerForm.get('password')?.errors)"
+      >
+        {{ passwordValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="confirm-password">Confirm Password</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="confirm-password"
+        formControlName="confirmPassword"
+        matInput
+        placeholder="Confirm your password"
+        [type]="hidePasswordConfirmation ? 'password' : 'text'"
+      >
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="hidePasswordConfirmation = !hidePasswordConfirmation"
+        [attr.aria-label]="'Hide password Confirmation'"
+        [attr.aria-pressed]="hidePasswordConfirmation"
+        type="button"
+      >
+        <mat-icon class="text-lg">{{hidePasswordConfirmation ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(registerForm.get('confirmPassword')?.errors)"
+      >
+        {{ confirmPasswordValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <p *ngIf="formError" class="text-rose-500 -mt-4 text-center">{{ formError }}</p>
+  <button
+    type="submit"
+    class="bg-secondary text-white hover:bg-secondary/80 w-full text-center py-2.5 px-4 rounded-md shadow-md"
+  >
+    Login
+  </button>
+</form>
