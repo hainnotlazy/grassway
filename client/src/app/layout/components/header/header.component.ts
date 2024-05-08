@@ -6,7 +6,7 @@ import { RegisterDialogComponent } from '../register-dialog/register-dialog.comp
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
   constructor(

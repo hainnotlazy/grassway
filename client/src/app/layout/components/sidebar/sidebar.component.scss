@@ -3,16 +3,18 @@
 }
 
 .sidebar {
-  width: 200px;
+  .active::before {
+    content: "";
+    width: 5px;
+    height: 50%;
+    background-color: white;
+    position: absolute;
+    left: 0;
+  }
 
-  .active {
-    &::before {
-      content: "";
-      width: 5px;
-      height: 50%;
-      background-color: white;
-      position: absolute;
-      left: 0;
+  @media (min-width: 1024px) {
+    .active {
+      width: 200px;
     }
   }
 }

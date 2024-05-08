@@ -1,8 +1,15 @@
 <div class="mt-4 space-y-4">
   <div class="flex items-center justify-between">
     <h1 class="text-poetsen-one text-3xl">My Links</h1>
-    <button type="button" class="bg-white px-3 py-1.5 rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black flex items-center gap-1">
-      <i class="icon-rewrite"></i> Shorten new link
+    <!-- TODO: Show tooltip on button shorten new link whenever screen < 640 -->
+    <button
+      matTooltip="Shorten new link"
+      matTooltipPosition="above"
+      matTooltipHideDelay="2000"
+      type="button"
+      class="bg-white px-3 py-1.5 rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black flex items-center gap-1"
+    >
+      <i class="icon-rewrite"></i> <span class="md:inline hidden">Shorten new link</span>
     </button>
   </div>
   <div>
@@ -11,15 +18,17 @@
     </button>
   </div>
   <hr class="border-gray-400">
-  <div class="flex items-baseline justify-between">
+  <div class="sm:flex-row flex flex-col-reverse items-baseline justify-between">
     <div class="space-x-4">
-      <mat-checkbox><span class="text-gray-700">0 selected</span></mat-checkbox>
+      <mat-checkbox>
+        <span class="text-gray-700">0 <span class="sm:inline hidden">selected</span></span>
+      </mat-checkbox>
       <button class="text-primary hover:text-secondary text-sm font-semibold">Export CSV</button>
       <button class="text-primary hover:text-secondary text-sm font-semibold">Inactivate</button>
       <button class="text-primary hover:text-secondary text-sm font-semibold">Tag</button>
     </div>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" color="accent">
       <mat-label>Show links</mat-label>
       <mat-select value="active">
         <mat-option value="active">Active</mat-option>
@@ -29,7 +38,7 @@
   </div>
 
   <div class="links space-y-4">
-    <div class="flex items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow">
+    <div class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow">
       <mat-checkbox></mat-checkbox>
       <div class="self-center -mt-12 -ml-2">
         <img
@@ -41,7 +50,7 @@
         >
       </div>
       <div class="flex flex-col flex-grow gap-6">
-        <div class="flex-grow space-y-1">
+        <div class="link-info flex-grow space-y-1">
           <h6 class="text-jost text-secondary text-lg font-semibold cursor-default">Event EZ303 link</h6>
           <a class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500" routerLink="">https://grassway.hainkone.com/D0N32R3</a>
           <a class="hover:underline hover:text-black block text-sm text-gray-500" href="">https://ez303.com/events/check-in</a>
@@ -74,7 +83,7 @@
       </div>
     </div>
 
-    <div class="flex items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow">
+    <div class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow">
       <mat-checkbox></mat-checkbox>
       <div class="self-center -mt-12 -ml-2">
         <img
@@ -86,7 +95,7 @@
         >
       </div>
       <div class="flex flex-col flex-grow gap-6">
-        <div class="flex-grow space-y-1">
+        <div class="link-info flex-grow space-y-1">
           <h6 class="text-jost text-secondary text-lg font-semibold cursor-default">Event EZ303 link</h6>
           <a class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500" routerLink="">https://grassway.hainkone.com/D0N32R3</a>
           <a class="hover:underline hover:text-black block text-sm text-gray-500" href="">https://ez303.com/events/check-in</a>
@@ -119,9 +128,9 @@
       </div>
     </div>
 
-    <div class="grid items-center w-2/3 grid-cols-3 mx-auto">
+    <div class="lg:w-2/3 grid items-center w-full grid-cols-4 mx-auto">
       <hr class="border-gray-400">
-      <p class="text-rubik text-center">You've reached the end of your links</p>
+      <p class="text-rubik sm:text-base col-span-2 text-sm text-center text-gray-600">You've reached the end of your links</p>
       <hr class="border-gray-400">
     </div>
   </div>
