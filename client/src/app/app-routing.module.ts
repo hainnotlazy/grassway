@@ -1,8 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StandardLayout } from './layout/standard-layout/standard-layout.component';
+import { FullLayout } from './layout/full-layout/full-layout.component';
 
 const routes: Routes = [
+  {
+    path: "",
+    component: FullLayout,
+    children: [
+      {
+        path: "link",
+        loadChildren: () => import('./modules/url/url.module').then(m => m.UrlModule)
+      },
+    ]
+  },
   {
     path: "",
     component: StandardLayout,

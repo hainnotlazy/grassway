@@ -1,0 +1,18 @@
+:host {
+  user-select: none;
+}
+
+.sidebar {
+  width: 200px;
+
+  .active {
+    &::before {
+      content: "";
+      width: 5px;
+      height: 50%;
+      background-color: white;
+      position: absolute;
+      left: 0;
+    }
+  }
+}

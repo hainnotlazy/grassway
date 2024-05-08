@@ -10,6 +10,8 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { LoginOauthComponent } from './components/login-oauth/login-oauth.component';
 import { RegisterDialogComponent } from './components/register-dialog/register-dialog.component';
 import { RegisterFormComponent } from './components/register-form/register-form.component';
+import { FullLayout } from './full-layout/full-layout.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { RegisterFormComponent } from './components/register-form/register-form.
     LoginFormComponent,
     LoginOauthComponent,
     RegisterDialogComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    FullLayout,
+    SidebarComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +32,8 @@ import { RegisterFormComponent } from './components/register-form/register-form.
     SharedModule
   ],
   exports: [
-    StandardLayout
+    StandardLayout,
+    FullLayout
   ]
 })
 export class LayoutModule { }

@@ -1,6 +1,6 @@
-<header class="bg-white w-full px-4 py-2 shadow-sm shadow-gray-300">
-  <div class="container mx-auto flex items-center justify-between">
-    <a class="flex items-center gap-1" routerLink="/">
+<header class="shadow-gray-300 fixed top-0 w-full px-4 py-2 bg-white shadow-sm">
+  <div class="container flex items-center justify-between mx-auto">
+    <a class="flex items-center gap-1" routerLink="/" tabindex="-1">
       <img
         class="logo"
         src="assets/images/grassway-logo.png"
@@ -12,13 +12,13 @@
         tabindex="-1"
         draggable="false"
       >
-      <i class="hidden sm:block icon-grassway-text text-4xl mt-1"></i>
+      <i class="sm:block icon-grassway-text hidden mt-1 text-4xl"></i>
     </a>
 
     <div class="flex items-center gap-3">
       <button
         type="button"
-        class="text-gray-600 hover:text-black"
+        class="hover:text-black text-gray-600"
         (click)="openLoginDialog()"
       >
         Login
