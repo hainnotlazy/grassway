@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?6nqq7c');
-  src:  url('fonts/icomoon.eot?6nqq7c#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?6nqq7c') format('truetype'),
-    url('fonts/icomoon.woff?6nqq7c') format('woff'),
-    url('fonts/icomoon.svg?6nqq7c#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?dl3ibj');
+  src:  url('fonts/icomoon.eot?dl3ibj#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?dl3ibj') format('truetype'),
+    url('fonts/icomoon.woff?dl3ibj') format('woff'),
+    url('fonts/icomoon.svg?dl3ibj#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,54 +25,75 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-chart:before {
+.icon-bar-chart:before {
   content: "\e900";
 }
-.icon-chevron-left:before {
+.icon-calendar:before {
   content: "\e901";
 }
-.icon-chevron-up:before {
+.icon-edit:before {
   content: "\e902";
 }
-.icon-chevron-down:before {
+.icon-close:before {
   content: "\e903";
 }
-.icon-star:before {
+.icon-delete:before {
   content: "\e904";
 }
-.icon-settings:before {
+.icon-filter:before {
   content: "\e905";
 }
-.icon-info:before {
+.icon-qr-code:before {
   content: "\e906";
 }
-.icon-rewrite:before {
+.icon-chart:before {
   content: "\e907";
 }
-.icon-click:before {
+.icon-chevron-left:before {
   content: "\e908";
 }
-.icon-chevron-right:before {
+.icon-chevron-up:before {
   content: "\e909";
 }
-.icon-link:before {
+.icon-chevron-down:before {
   content: "\e90a";
 }
-.icon-copy:before {
+.icon-star:before {
   content: "\e90b";
 }
-.icon-slack:before {
+.icon-settings:before {
   content: "\e90c";
 }
-.icon-facebook:before {
+.icon-info:before {
   content: "\e90d";
 }
-.icon-github:before {
+.icon-rewrite:before {
   content: "\e90e";
 }
-.icon-google:before {
+.icon-click:before {
   content: "\e90f";
 }
-.icon-grassway-text:before {
+.icon-chevron-right:before {
   content: "\e910";
+}
+.icon-link:before {
+  content: "\e911";
+}
+.icon-copy:before {
+  content: "\e912";
+}
+.icon-slack:before {
+  content: "\e913";
+}
+.icon-facebook:before {
+  content: "\e914";
+}
+.icon-github:before {
+  content: "\e915";
+}
+.icon-google:before {
+  content: "\e916";
+}
+.icon-grassway-text:before {
+  content: "\e917";
 }

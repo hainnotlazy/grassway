@@ -20,6 +20,10 @@ $my-theme: mat.define-light-theme(
   padding: 0 !important;
 }
 
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+  .mdc-notched-outline__notch {
+  border-right-style: hidden;
+}
 
 // Tailwindcss
 @tailwind base;
