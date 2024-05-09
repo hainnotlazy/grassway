@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { loginRequirements } from 'src/app/core/constants/form-requirement.const';
 import { getObjectKeys } from 'src/app/core/helpers/utils';
-import { IValidationMessage } from 'src/app/core/interfaces/form.interface';
+import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 
 @Component({
   selector: 'login-form',
@@ -17,8 +17,8 @@ export class LoginFormComponent {
   passwordRequirements = loginRequirements.password.requirements;
 
   // Form validation messages
-  usernameValidationMessages: IValidationMessage = loginRequirements.username.validationMsg;
-  passwordValidationMessages: IValidationMessage = loginRequirements.password.validationMsg;
+  usernameValidationMessages: ValidationMessage = loginRequirements.username.validationMsg;
+  passwordValidationMessages: ValidationMessage = loginRequirements.password.validationMsg;
 
   getObjectKeys = getObjectKeys;
 

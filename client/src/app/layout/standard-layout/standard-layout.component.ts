@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./standard-layout.component.scss']
 })
 export class StandardLayout {
-
 }
