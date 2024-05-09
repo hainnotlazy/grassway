@@ -1,0 +1,2 @@
+POSTGRES_PASSWORD=verysecurepw
+POSTGRES_DB=grassway

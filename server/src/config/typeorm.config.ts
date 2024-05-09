@@ -13,11 +13,10 @@ export class TypeOrmConfigOptions implements TypeOrmOptionsFactory {
       username: this.configService.get<string>("DB_USERNAME", "postgres"),
       password: this.configService.get<string>("DB_PASSWORD", "postgres"),
       port: this.configService.get<number>("DB_PORT", 5432),
-      database: this.configService.get<string>("DB_DATABASE", "yuhat"),
+      database: this.configService.get<string>("DB_DATABASE", "grassway"),
       synchronize: process.env.NODE_ENV !== "production",
       entities: [__dirname + "/entities/*.ts"],
       autoLoadEntities: true
     }
   }
-  
 }

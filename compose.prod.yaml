@@ -1,53 +1,54 @@
 version: "3"
 
-name: grassway-app-development
+name: grassway-app-production
 
 services:
   client:
-    container_name: client-dev
+    container_name: client-prod
     build:
       context: ./client
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
-      - 4200:4200 
+      - 80:80
+      - 443:443 
     networks:
-      - devnet
+      - mainnet
     depends_on:
       - server
 
   server:
-    container_name: server-dev
+    container_name: server-prod
     build:
       context: ./server
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - 3000:3000
     networks:
-      - devnet
+      - mainnet
     depends_on:
       database:
         condition: service_healthy
 
   database: 
-    container_name: database-dev
+    container_name: database-prod
     image: postgres:alpine
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
       - 5433:5432
     env_file:
-      - .database-env.development
+      - .database-env.production
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 1s
+      interval: 10s
       timeout: 20s
       retries: 5
       start_period: 30s  
     networks:
-      - devnet
+      - mainnet
 
 networks:
-  devnet:
+  mainnet:
 
 volumes:
   db-data:
