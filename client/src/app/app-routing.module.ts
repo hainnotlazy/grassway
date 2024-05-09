@@ -5,11 +5,11 @@ import { FullLayout } from './layout/full-layout/full-layout.component';
 
 const routes: Routes = [
   {
-    path: "",
+    path: "link",
     component: FullLayout,
     children: [
       {
-        path: "link",
+        path: "",
         loadChildren: () => import('./modules/url/url.module').then(m => m.UrlModule)
       },
     ]
