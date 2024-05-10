@@ -11,7 +11,6 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  // FIXME: find email null
   async findUser(id: string) {
     // Try to parse id's type to number
     let userId = parseInt(id);
@@ -45,7 +44,7 @@ export class UsersService {
     const { username, email } = registerUserDto;
     if (await this.userRepository.findOneBy({ username })) {
       throw new BadRequestException('Username already exists');
-    } else if (await this.userRepository.findOneBy({ email })) {
+    } else if (email && await this.userRepository.findOneBy({ email })) {
       throw new BadRequestException('Email already exists');
     }
 

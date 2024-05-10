@@ -4,29 +4,46 @@ import { RegisterUserDto } from './dtos/register-user.dto';
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { GithubProfile } from 'src/common/models/github-profile.model';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { PublicRoute } from 'src/common/decorators/public-route.decorator';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { User } from 'src/entities/user.entity';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    private userService: UsersService
+    private userService: UsersService,
+    private authService: AuthService
   ) {}
 
+  @PublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post("login")
   @HttpCode(200)
   async login(@Request() req) {
-    return req.user;
+    const user: User = req.user;
+
+    return {
+      access_token: await this.authService.generateAccessToken(user),
+    }
   }
 
+  @PublicRoute()
   @Post("register")
   async registerAccount(@Body() body: RegisterUserDto) {
-    return await this.userService.createUser(body);
+    const newUser = await this.userService.createUser(body);
+
+    return {
+      access_token: await this.authService.generateAccessToken(newUser),
+    }
   }
 
+  @PublicRoute()
   @UseGuards(GithubAuthGuard)
   @Get("github")
   async githubAuthenticate() {}
 
+  @PublicRoute()
   @UseGuards(GithubAuthGuard)
   @Get("github/callback")
   async githubAuthenticateCallback(@Req() req: any, @Res() res: any) {
@@ -35,8 +52,14 @@ export class AuthController {
     return res.redirect("/api/auth/callback/success");
   }
 
+  @PublicRoute()
   @Get("callback/success")
   async callbackSuccess() {
     return "callback success!";
+  }
+
+  @Get("whoami")
+  async whoami(@CurrentUser() currentUser) {
+    return currentUser;
   }
 }

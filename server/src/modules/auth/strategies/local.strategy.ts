@@ -1,6 +1,6 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthService } from "../auth.service";
 
 @Injectable()
@@ -14,7 +14,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     
     if (!user) {
       throw new UnauthorizedException();
+    } else if (!user.is_active) {
+      throw new ForbiddenException("Account is inactive");
     }
+
     return user;
   }
 }
