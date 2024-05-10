@@ -1,14 +1,22 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Req, Request, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { RegisterUserDto } from './dtos/register-user.dto';
-import { GithubAuthGuard } from './guards/github.guard';
+import { GithubAuthGuard } from './guards/github-auth.guard';
 import { GithubProfile } from 'src/common/models/github-profile.model';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private userService: UsersService
   ) {}
+
+  @UseGuards(LocalAuthGuard)
+  @Post("login")
+  @HttpCode(200)
+  async login(@Request() req) {
+    return req.user;
+  }
 
   @Post("register")
   async registerAccount(@Body() body: RegisterUserDto) {

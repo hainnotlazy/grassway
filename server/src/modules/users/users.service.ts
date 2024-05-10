@@ -11,6 +11,7 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
+  // FIXME: find email null
   async findUser(id: string) {
     // Try to parse id's type to number
     let userId = parseInt(id);
@@ -20,6 +21,18 @@ export class UsersService {
 
     // Find user
     const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    return user;
+  }
+
+  /** Describe: Find user by username or email */
+  async findUserByUsername(username: string) {
+    const user = await this.userRepository.findOneBy({ username }) 
+      || await this.userRepository.findOneBy({ email: username });
+    
     if (!user) {
       throw new NotFoundException("User not found");
     }
