@@ -11,6 +11,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const MatModules = [
   MatFormFieldModule,
@@ -20,7 +21,8 @@ const MatModules = [
   MatIconModule,
   MatTooltipModule,
   MatCheckboxModule,
-  MatSelectModule
+  MatSelectModule,
+  MatSnackBarModule
 ]
 
 @NgModule({

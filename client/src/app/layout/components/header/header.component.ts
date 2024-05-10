@@ -13,6 +13,10 @@ export class HeaderComponent {
     private dialog: MatDialog
   ) {}
 
+  ngOnInit() {
+    this.openLoginDialog();
+  }
+
   openLoginDialog() {
     this.dialog.open(LoginDialogComponent, {
       width: "400px",
