@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { registerRequirements } from 'src/app/core/constants/form-requirement.const';
 import { getObjectKeys } from 'src/app/core/helpers/utils';
-import { IValidationMessage } from 'src/app/core/interfaces/form.interface';
+import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 import { RegisterFormValidator } from 'src/app/core/validators/register-form.validator';
 
 @Component({
@@ -22,13 +22,13 @@ export class RegisterFormComponent {
   confirmPasswordRequirements = registerRequirements.confirmPassword.requirements;
 
   // Form validation messages
-  formValidationMessages: IValidationMessage = {
+  formValidationMessages: ValidationMessage = {
     passwordNotMatch: "Confirm password is not matched"
   }
-  usernameValidationMessages: IValidationMessage = registerRequirements.username.validationMsg;
-  emailValidationMessages: IValidationMessage = registerRequirements.email.validationMsg;
-  passwordValidationMessages: IValidationMessage = registerRequirements.password.validationMsg;
-  confirmPasswordValidationMessages: IValidationMessage = registerRequirements.confirmPassword.validationMsg;
+  usernameValidationMessages: ValidationMessage = registerRequirements.username.validationMsg;
+  emailValidationMessages: ValidationMessage = registerRequirements.email.validationMsg;
+  passwordValidationMessages: ValidationMessage = registerRequirements.password.validationMsg;
+  confirmPasswordValidationMessages: ValidationMessage = registerRequirements.confirmPassword.validationMsg;
 
   getObjectKeys = getObjectKeys;
 

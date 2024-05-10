@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -10,6 +10,22 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
+  async findUser(id: string) {
+    // Try to parse id's type to number
+    let userId = parseInt(id);
+    if (isNaN(userId)) {
+      throw new BadRequestException('Invalid user id');
+    }
+
+    // Find user
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    return user;
+  }
 
   async createUser(registerUserDto: RegisterUserDto) {
     // Check if username or email already exists
