@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { RedisModule } from '@nestjs-modules/ioredis';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     TypeOrmModule.forRootAsync({
       useClass: config.TypeOrmConfigOptions
     }),
+    RedisModule.forRoot(config.RedisConfigOptions),
     UsersModule,
     AuthModule,
   ],

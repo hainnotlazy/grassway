@@ -9,13 +9,15 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigOptions } from 'src/config';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   imports: [
     JwtModule.registerAsync({
       useClass: JwtConfigOptions
     }),
-    UsersModule
+    UsersModule,
+    SharedModule
   ],
   controllers: [AuthController],
   providers: [

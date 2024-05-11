@@ -56,7 +56,10 @@
         <span>Settings</span>
       </button>
 
-      <button class="hover:bg-gray-200 px-4 py-2.5 text-left border-t border-gray-300 flex items-center gap-2 text-gray-700 hover:text-black">
+      <button
+        (click)="onSignOut()"
+        class="hover:bg-gray-200 px-4 py-2.5 text-left border-t border-gray-300 flex items-center gap-2 text-gray-700 hover:text-black"
+      >
         <i class="icon-logout text-lg"></i>
         <span>Sign out</span>
       </button>

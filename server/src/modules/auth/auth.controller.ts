@@ -4,8 +4,7 @@ import { RegisterUserDto } from './dtos/register-user.dto';
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { GithubProfile } from 'src/common/models/github-profile.model';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { PublicRoute } from 'src/common/decorators/public-route.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { CurrentUser, PublicRoute, TokenExpirationTime } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 
@@ -36,6 +35,17 @@ export class AuthController {
     return {
       access_token: await this.authService.generateAccessToken(newUser),
     }
+  }
+
+  @Post("logout")
+  @HttpCode(204)
+  async logout(
+    @Request() request,
+    @CurrentUser() currentUser: User,
+    @TokenExpirationTime() tokenExpirationTime: number
+  ) {
+    const accessToken = request.headers.authorization.split(" ")[1];
+    return this.authService.logout(currentUser, accessToken, tokenExpirationTime);
   }
 
   @PublicRoute()

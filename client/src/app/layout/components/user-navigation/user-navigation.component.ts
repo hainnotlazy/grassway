@@ -3,7 +3,12 @@ import { map } from 'rxjs';
 import { UsersService } from 'src/app/core/services/users.service';
 import { createAvatar } from '@dicebear/core';
 import { funEmoji } from '@dicebear/collection';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { Router } from '@angular/router';
+import { removeAccessToken } from 'src/app/core/helpers/local-storage.helper';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-user-navigation',
   templateUrl: './user-navigation.component.html',
@@ -26,7 +31,21 @@ export class UserNavigationComponent {
       return currentUser;
     })
   );
+
   constructor(
-    private usersService: UsersService
+    private usersService: UsersService,
+    private authService: AuthService,
+    private router: Router
   ) {}
+
+  onSignOut() {
+    return this.authService.logout().pipe(
+      untilDestroyed(this)
+    ).subscribe(
+      () => {
+        removeAccessToken();
+        this.router.navigate(['/']);
+      }
+    );
+  }
 }
