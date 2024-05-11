@@ -28,6 +28,8 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
   database: 
     container_name: database-prod
@@ -47,8 +49,25 @@ services:
     networks:
       - mainnet
 
+  redis:
+    container_name: redis-prod
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6389:6379
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 10s
+      timeout: 20s
+      retries: 5
+      start_period: 30s  
+    networks:
+      - mainnet
+
 networks:
   mainnet:
 
 volumes:
   db-data:
+  redis-data:

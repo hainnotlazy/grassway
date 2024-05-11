@@ -8,8 +8,12 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile.dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     ports:
       - 4200:4200 
+      - 49153:49153
     networks:
       - devnet
     depends_on:
@@ -20,12 +24,17 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile.dev
+    volumes:
+      - ./server:/app
+      - /app/node_modules
     ports:
       - 3000:3000
     networks:
       - devnet
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   database: 
@@ -45,9 +54,26 @@ services:
       start_period: 30s  
     networks:
       - devnet
+  
+  redis:
+    container_name: redis-dev
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6389:6379
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 1s
+      timeout: 20s
+      retries: 5
+      start_period: 30s  
+    networks:
+      - devnet
 
 networks:
   devnet:
 
 volumes:
   db-data:
+  redis-data:

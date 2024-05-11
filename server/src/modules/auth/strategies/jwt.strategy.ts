@@ -20,18 +20,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(request: any, payload: any) {
+    // Check if token is blacklisted
     const accessToken = request.headers.authorization.split(" ")[1];
-    const { userId, exp: expirationTime } = payload;
+    if (await this.authService.isTokenBlacklisted(accessToken)) {
+      throw new UnauthorizedException("Token is invalid");
+    }
 
     // Find user from token
+    const { userId, exp: expirationTime } = payload;
     const user =  await this.usersService.findUser(userId);
 
     // Validate user
     if (!user.is_active) {
       throw new ForbiddenException("Account is inactive");
-    } else if (await this.authService.isTokenBlacklisted(accessToken)) {
-      throw new UnauthorizedException("Token is invalid");
-    }
+    } 
 
     request.expirationTime = expirationTime;
     return user;
