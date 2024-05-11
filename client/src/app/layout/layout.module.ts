@@ -12,6 +12,7 @@ import { RegisterDialogComponent } from './components/register-dialog/register-d
 import { RegisterFormComponent } from './components/register-form/register-form.component';
 import { FullLayout } from './full-layout/full-layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { UserNavigationComponent } from './components/user-navigation/user-navigation.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     RegisterDialogComponent,
     RegisterFormComponent,
     FullLayout,
-    SidebarComponent
+    SidebarComponent,
+    UserNavigationComponent
   ],
   imports: [
     CommonModule,

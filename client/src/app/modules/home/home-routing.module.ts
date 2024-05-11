@@ -5,6 +5,7 @@ import { HomePage } from './pages/home/home.component';
 const routes: Routes = [
   {
     path: "",
+    title: "Let's shorten your link | Grassway",
     component: HomePage
   },
   {

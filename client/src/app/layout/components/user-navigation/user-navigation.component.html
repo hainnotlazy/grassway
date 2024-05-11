@@ -1,0 +1,65 @@
+<ng-container *ngIf="(currentUser$ | async) as currentUser">
+  <button
+    class="flex items-center gap-3 px-3 hover:bg-gray-100 py-1.5 rounded hover:shadow group text-gray-500 hover:text-secondary"
+    [class]="{ 'bg-gray-100': isUserMenuOpen, 'text-secondary': isUserMenuOpen }"
+    [matMenuTriggerFor]="userMenu"
+    (menuOpened)="isUserMenuOpen = true"
+    (menuClosed)="isUserMenuOpen = false"
+    type="button"
+  >
+    <img
+      class="border-primary border rounded-full"
+      [src]="currentUser.avatar"
+      [alt]="currentUser.fullname + '\'s avatar'"
+      width="40"
+      height="40"
+      loading="eager"
+      draggable="false"
+    >
+    <span class="sm:block hidden font-semibold">
+      {{ currentUser.fullname }}
+    </span>
+    <i
+      class="icon-chevron-down transition-all duration-500"
+      [class]="{'rotate-180': isUserMenuOpen}"
+    ></i>
+  </button>
+
+  <mat-menu
+    #userMenu="matMenu"
+    xPosition="before"
+    class="text-roboto-condensed mt-1"
+  >
+    <div class="border-b-gray-300 flex gap-2 px-4 border-b py-2.5">
+      <div>
+        <img
+          class="border-primary border-2 rounded-md"
+          [src]="currentUser.avatar"
+          [alt]="currentUser.fullname + '\'s avatar'"
+        >
+      </div>
+      <div class="flex flex-col justify-center">
+        <span class="text-primary font-semibold">{{ currentUser.fullname }}</span>
+        <small
+          *ngIf="currentUser.email"
+          class="text-gray-600">{{ currentUser.email }}</small>
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <button class="hover:bg-gray-200 px-4 py-2.5 text-left flex items-center gap-2 text-gray-700 hover:text-black">
+        <i class="icon-account text-lg"></i>
+        <span>My account</span>
+      </button>
+
+      <button class="hover:bg-gray-200 px-4 py-2.5 text-left flex items-center gap-2 text-gray-700 hover:text-black">
+        <i class="icon-settings text-lg"></i>
+        <span>Settings</span>
+      </button>
+
+      <button class="hover:bg-gray-200 px-4 py-2.5 text-left border-t border-gray-300 flex items-center gap-2 text-gray-700 hover:text-black">
+        <i class="icon-logout text-lg"></i>
+        <span>Sign out</span>
+      </button>
+    </div>
+  </mat-menu>
+</ng-container>

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?dl3ibj');
-  src:  url('fonts/icomoon.eot?dl3ibj#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?dl3ibj') format('truetype'),
-    url('fonts/icomoon.woff?dl3ibj') format('woff'),
-    url('fonts/icomoon.svg?dl3ibj#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?welsx3');
+  src:  url('fonts/icomoon.eot?welsx3#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?welsx3') format('truetype'),
+    url('fonts/icomoon.woff?welsx3') format('woff'),
+    url('fonts/icomoon.svg?welsx3#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,75 +25,81 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-bar-chart:before {
+.icon-account:before {
   content: "\e900";
 }
-.icon-calendar:before {
+.icon-logout:before {
   content: "\e901";
 }
-.icon-edit:before {
+.icon-bar-chart:before {
   content: "\e902";
 }
-.icon-close:before {
+.icon-calendar:before {
   content: "\e903";
 }
-.icon-delete:before {
+.icon-edit:before {
   content: "\e904";
 }
-.icon-filter:before {
+.icon-close:before {
   content: "\e905";
 }
-.icon-qr-code:before {
+.icon-delete:before {
   content: "\e906";
 }
-.icon-chart:before {
+.icon-filter:before {
   content: "\e907";
 }
-.icon-chevron-left:before {
+.icon-qr-code:before {
   content: "\e908";
 }
-.icon-chevron-up:before {
+.icon-chart:before {
   content: "\e909";
 }
-.icon-chevron-down:before {
+.icon-chevron-left:before {
   content: "\e90a";
 }
-.icon-star:before {
+.icon-chevron-up:before {
   content: "\e90b";
 }
-.icon-settings:before {
+.icon-chevron-down:before {
   content: "\e90c";
 }
-.icon-info:before {
+.icon-star:before {
   content: "\e90d";
 }
-.icon-rewrite:before {
+.icon-settings:before {
   content: "\e90e";
 }
-.icon-click:before {
+.icon-info:before {
   content: "\e90f";
 }
-.icon-chevron-right:before {
+.icon-rewrite:before {
   content: "\e910";
 }
-.icon-link:before {
+.icon-click:before {
   content: "\e911";
 }
-.icon-copy:before {
+.icon-chevron-right:before {
   content: "\e912";
 }
-.icon-slack:before {
+.icon-link:before {
   content: "\e913";
 }
-.icon-facebook:before {
+.icon-copy:before {
   content: "\e914";
 }
-.icon-github:before {
+.icon-slack:before {
   content: "\e915";
 }
-.icon-google:before {
+.icon-facebook:before {
   content: "\e916";
 }
-.icon-grassway-text:before {
+.icon-github:before {
   content: "\e917";
+}
+.icon-google:before {
+  content: "\e918";
+}
+.icon-grassway-text:before {
+  content: "\e919";
 }

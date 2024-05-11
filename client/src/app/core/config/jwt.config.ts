@@ -1,4 +1,4 @@
-import { getAccessToken } from "../utils/local-storage.util";
+import { getAccessToken } from "../helpers/local-storage.helper";
 
 export const JwtConfigOptions = {
   config: {

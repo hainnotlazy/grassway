@@ -33,6 +33,10 @@ export class User {
   })
   gender: string;
 
+  // TODO: Add to db erd
+  @Column({ nullable: true })
+  avatar: string;
+
   @Column({ nullable: true })
   phone: string;
 

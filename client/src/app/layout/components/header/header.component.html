@@ -15,7 +15,7 @@
       <i class="sm:block icon-grassway-text hidden mt-1 text-4xl"></i>
     </a>
 
-    <div class="flex items-center gap-3">
+    <div *ngIf="!isLogin; else loggedIn" class="flex items-center gap-3">
       <button
         type="button"
         class="hover:text-black text-gray-600"
@@ -31,5 +31,9 @@
         Register
       </button>
     </div>
+
+    <ng-template #loggedIn>
+      <app-user-navigation></app-user-navigation>
+    </ng-template>
   </div>
 </header>

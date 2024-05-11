@@ -3,14 +3,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { noop } from 'rxjs';
 import { loginRequirements } from 'src/app/core/constants/form-requirement.const';
+import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
 import { getObjectKeys } from 'src/app/core/helpers/utils';
 import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
-import { AuthService } from 'src/app/core/serivces/auth.service';
-import { setAccessToken } from 'src/app/core/utils/local-storage.util';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @UntilDestroy()
 @Component({
@@ -59,7 +58,6 @@ export class LoginFormComponent {
       ).pipe(
         untilDestroyed(this)
       ).subscribe(
-        // TODO: Handle if login success
         this.handleLoginSuccess.bind(this),
         this.handleLoginFail.bind(this)
       );
@@ -70,8 +68,7 @@ export class LoginFormComponent {
     const accessToken = data.access_token;
 
     setAccessToken(accessToken);
-    // TODO: Navigate to user home page
-    // this.router.navigate(['/']);
+    this.router.navigate(['/u/link']);
   }
 
   handleLoginFail(error: any) {
