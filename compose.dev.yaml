@@ -27,6 +27,7 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+      - server-data:/app/resources 
     ports:
       - 3000:3000
     networks:
@@ -75,5 +76,6 @@ networks:
   devnet:
 
 volumes:
+  server-data:
   db-data:
   redis-data:

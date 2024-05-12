@@ -1,16 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from "uuid";
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entities/user.entity';
 import { RedisService } from 'src/shared/services/redis/redis.service';
+import { GithubProfile } from 'src/common/models/github-profile.model';
+import { DownloadFileService } from 'src/shared/services/download-file/download-file.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private redisService: RedisService
+    private redisService: RedisService,
+    private downloadFileServer: DownloadFileService
   ) {}
 
   async validateLogin(username: string, password: string) {
@@ -21,6 +25,31 @@ export class AuthService {
     }
 
     throw new BadRequestException("Username or password is incorrect");
+  }
+
+  async handleGithubAuthentication(githubProfile: GithubProfile) {
+    const { id, username, fullname, github, avatar } = githubProfile;
+
+    // Handle when user authenticating via github to link account
+    if (id) {}
+    // Handle when user authenticating via github to login/register
+    const userExisted = await this.usersService.findUserByThirdParty("github", github);
+
+    // Login
+    if (userExisted) {
+      return userExisted;
+    }
+    
+    // Register
+    const avatarSaved = await this.downloadFileServer.downloadAvatar(avatar);
+    const newUser = await this.usersService.createUser({
+      username,
+      password: uuidv4(),
+      fullname,
+      github,
+      avatar: avatarSaved,
+    })
+    return newUser;
   }
 
   async generateAccessToken(user: Partial<User>) {

@@ -3,5 +3,6 @@ WORKDIR /app
 COPY package*.json /app
 RUN npm install
 COPY . .
+VOLUME VOLUME [ "/app/resources" ]
 EXPOSE 3000
 CMD ["npm", "run", "start:dev"]

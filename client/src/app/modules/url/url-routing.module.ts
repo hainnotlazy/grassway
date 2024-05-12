@@ -5,6 +5,7 @@ import { IndexPage } from './pages/index/index.component';
 const routes: Routes = [
   {
     path: "",
+    title: "My links | Grassway",
     component: IndexPage
   },
   {

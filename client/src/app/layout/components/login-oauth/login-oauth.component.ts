@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-oauth',
@@ -9,5 +10,7 @@ import { Component } from '@angular/core';
   }
 })
 export class LoginOauthComponent {
-
+  navigateToAuthenticationPage(provider: "google" | "github" | "facebook" | "slack") {
+    window.location.href = `${environment.server}/api/auth/${provider}`
+  }
 }

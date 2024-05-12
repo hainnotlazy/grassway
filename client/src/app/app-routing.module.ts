@@ -7,19 +7,25 @@ import { authGuard } from './core/guards/auth.guard';
 const routes: Routes = [
   {
     path: "",
+    title: "Grassway",
     component: StandardLayout,
-    pathMatch: "full",
     canActivate: [authGuard],
     children: [
       {
-        path: "",
-        loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+        path: "auth",
+        loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
       },
+      {
+        path: "",
+        pathMatch: "full",
+        loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+      }
     ]
   },
   {
     path: "u",
     component: FullLayout,
+    title: "Grassway",
     canActivate: [authGuard],
     children: [
       {
@@ -27,7 +33,7 @@ const routes: Routes = [
         loadChildren: () => import('./modules/url/url.module').then(m => m.UrlModule)
       },
     ]
-  }
+  },
 ];
 
 @NgModule({

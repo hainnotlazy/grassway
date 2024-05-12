@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpCode, Post, Req, Request, Res, UseGuards } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
 import { RegisterUserDto } from './dtos/register-user.dto';
 import { GithubAuthGuard } from './guards/github-auth.guard';
@@ -12,7 +13,8 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(
     private userService: UsersService,
-    private authService: AuthService
+    private authService: AuthService,
+    private configService: ConfigService
   ) {}
 
   @PublicRoute()
@@ -29,7 +31,7 @@ export class AuthController {
 
   @PublicRoute()
   @Post("register")
-  async registerAccount(@Body() body: RegisterUserDto) {
+  async register(@Body() body: RegisterUserDto) {
     const newUser = await this.userService.createUser(body);
 
     return {
@@ -59,13 +61,16 @@ export class AuthController {
   async githubAuthenticateCallback(@Req() req: any, @Res() res: any) {
     const githubProfile: GithubProfile = req.user;
 
-    return res.redirect("/api/auth/callback/success");
-  }
+    const user = await this.authService.handleGithubAuthentication(githubProfile);
 
-  @PublicRoute()
-  @Get("callback/success")
-  async callbackSuccess() {
-    return "callback success!";
+    const accessToken = await this.authService.generateAccessToken(user);
+    res.cookie("access_token", accessToken, {
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 1000
+    })
+    
+    return res.redirect(`${this.configService.get('CLIENT')}/auth/success-authentication`);
   }
 
   @Get("whoami")

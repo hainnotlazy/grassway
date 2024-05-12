@@ -21,6 +21,8 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile.prod
+    volumes:
+      - server-data:/app/resources 
     ports:
       - 3000:3000
     networks:
@@ -85,6 +87,7 @@ networks:
   mainnet:
 
 volumes:
+  server-data:
   db-data:
   db-admin-data:
   redis-data:

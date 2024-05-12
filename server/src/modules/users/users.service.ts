@@ -39,7 +39,15 @@ export class UsersService {
     return user;
   }
 
-  async createUser(registerUserDto: RegisterUserDto) {
+  /** Describe: Find user by email, github, facebook or slack */
+  async findUserByThirdParty(
+    provider: "email" | "github" | "facebook" | "slack", 
+    value: string
+  ) {
+    return await this.userRepository.findOneBy({ [provider]: value });
+  }
+
+  async createUser(registerUserDto: Partial<User>) {
     // Check if username or email already exists
     const { username, email } = registerUserDto;
     if (await this.userRepository.findOneBy({ username })) {

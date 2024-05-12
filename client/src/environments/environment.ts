@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  message: "Hello, I'm production environment"
+  server: "http://grassway.hainkone.com:3000",
 };

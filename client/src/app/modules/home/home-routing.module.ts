@@ -6,6 +6,7 @@ const routes: Routes = [
   {
     path: "",
     title: "Let's shorten your link | Grassway",
+    pathMatch: "full",
     component: HomePage
   },
   {

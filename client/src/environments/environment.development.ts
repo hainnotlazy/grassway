@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  message: "Hello, I'm development environment"
+  server: "http://localhost:3000",
 };

@@ -8,6 +8,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { RedisModule } from '@nestjs-modules/ioredis';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RedisModule } from '@nestjs-modules/ioredis';
       useClass: config.TypeOrmConfigOptions
     }),
     RedisModule.forRoot(config.RedisConfigOptions),
+    ServeStaticModule.forRoot(config.ServeStaticConfigOptions),
     UsersModule,
     AuthModule,
   ],
