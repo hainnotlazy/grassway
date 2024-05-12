@@ -20,7 +20,7 @@ export class UserNavigationComponent {
     map((currentUser) => {
       if (!currentUser.avatar) {
         currentUser.avatar = createAvatar(funEmoji, {
-          seed: currentUser.fullname,
+          seed: currentUser.username,
           eyes: ["closed", "closed2", "glasses", "cute", "love", "pissed", "shades", "stars"],
           mouth: ["cute", "lilSmile", "kissHeart", "tongueOut", "wideSmile", "smileTeeth", "smileLol"],
           size: 40,

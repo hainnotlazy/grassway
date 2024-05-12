@@ -49,6 +49,22 @@ services:
     networks:
       - mainnet
 
+  database-admin:
+    container_name: database-admin-prod
+    image: dpage/pgadmin4:8.6
+    volumes:
+      - db-admin-data:/var/lib/pgadmin
+    ports:
+      - 15432:80
+      - 15433:443
+    env_file:
+      - .database-env.production
+    networks:
+      - mainnet
+    depends_on:
+      database:
+        condition: service_healthy
+
   redis:
     container_name: redis-prod
     image: redis:alpine
@@ -70,4 +86,5 @@ networks:
 
 volumes:
   db-data:
+  db-admin-data:
   redis-data:

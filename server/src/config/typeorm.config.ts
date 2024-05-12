@@ -14,7 +14,8 @@ export class TypeOrmConfigOptions implements TypeOrmOptionsFactory {
       password: this.configService.get<string>("DB_PASSWORD", "postgres"),
       port: this.configService.get<number>("DB_PORT", 5432),
       database: this.configService.get<string>("DB_DATABASE", "grassway"),
-      synchronize: process.env.NODE_ENV !== "production",
+      // synchronize: process.env.NODE_ENV !== "production",
+      synchronize: true,
       entities: [__dirname + "/entities/*.ts"],
       autoLoadEntities: true
     }

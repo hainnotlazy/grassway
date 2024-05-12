@@ -63,3 +63,16 @@ body {
   font-family: "Roboto Condensed", sans-serif !important;
   font-optical-sizing: auto;
 }
+
+.spinning {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

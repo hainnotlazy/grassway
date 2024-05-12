@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { tap, finalize } from 'rxjs';
 import { loginRequirements } from 'src/app/core/constants/form-requirement.const';
 import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
-import { getObjectKeys } from 'src/app/core/helpers/utils';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
@@ -20,6 +21,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class LoginFormComponent {
   formError = "";
   hidePassword = true;
+  isProcessing = false;
 
   constructor(
     private authService: AuthService,
@@ -52,15 +54,21 @@ export class LoginFormComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.isProcessing = changeStatus(this.isProcessing);
       this.authService.login(
         this.loginForm.value.username as string,
         this.loginForm.value.password as string
       ).pipe(
+        tap((data) => {
+          this.handleLoginSuccess(data);
+        }, (error) => {
+          this.handleLoginFail(error);
+        }),
+        finalize(() => {
+          this.isProcessing = changeStatus(this.isProcessing);
+        }),
         untilDestroyed(this)
-      ).subscribe(
-        this.handleLoginSuccess.bind(this),
-        this.handleLoginFail.bind(this)
-      );
+      ).subscribe();
     }
   }
 
@@ -73,7 +81,14 @@ export class LoginFormComponent {
 
   handleLoginFail(error: any) {
     const errorResponse: ErrorResponse = error.error;
-    const errorMessage = errorResponse.message ?? "Unexpected error happened";
+    let errorMessage = errorResponse.message ?? "Unexpected error happened";
+
+    // Handle if server return more than 1 error
+    if (typeof errorMessage === "object") {
+      errorMessage = errorMessage[0];
+    }
+
+    // Show error message
     this.formError = errorMessage;
     this.snackbar.open(errorMessage, "x", {
       duration: 4000,

@@ -5,3 +5,7 @@ export function getObjectKeys(arg: any): string[] {
     return [];
   }
 }
+
+export function changeStatus(status: boolean) {
+  return !status;
+}

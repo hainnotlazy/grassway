@@ -1,2 +1,6 @@
 POSTGRES_PASSWORD=verysecurepw
 POSTGRES_DB=grassway
+
+# Only set these for production mode
+PGADMIN_DEFAULT_EMAIL=grassway@gmail.com
+PGADMIN_DEFAULT_PASSWORD=verysecurepw

@@ -1,10 +1,19 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { finalize, tap } from 'rxjs';
 import { registerRequirements } from 'src/app/core/constants/form-requirement.const';
-import { getObjectKeys } from 'src/app/core/helpers/utils';
+import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
+import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
+import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { RegisterFormValidator } from 'src/app/core/validators/register-form.validator';
 
+@UntilDestroy()
 @Component({
   selector: 'register-form',
   templateUrl: './register-form.component.html',
@@ -14,6 +23,13 @@ export class RegisterFormComponent {
   formError = "";
   hidePassword = true;
   hidePasswordConfirmation = true;
+  isProcessing = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private snackbar: MatSnackBar
+  ) {}
 
   // Form requirements
   usernameRequirements = registerRequirements.username.requirements;
@@ -59,5 +75,49 @@ export class RegisterFormComponent {
         this.formError = this.formValidationMessages[error];
       }
     }
+
+    if (this.registerForm.valid) {
+      this.isProcessing = changeStatus(this.isProcessing);
+      this.authService.register(
+        this.registerForm.value.username as string,
+        this.registerForm.value.password as string,
+        this.registerForm.value.email as string
+      ).pipe(
+        tap((data) => {
+          this.handleRegisterSuccess(data);
+        }, (error) => {
+          this.handleRegisterFail(error);
+        }),
+        finalize(() => {
+          this.isProcessing = changeStatus(this.isProcessing);
+        }),
+        untilDestroyed(this)
+      ).subscribe();
+    }
+  }
+
+  handleRegisterSuccess(data: AuthResponse) {
+    const accessToken = data.access_token;
+
+    setAccessToken(accessToken);
+    this.router.navigate(['/u/link']);
+  }
+
+  handleRegisterFail(error: any) {
+    const errorResponse: ErrorResponse = error.error;
+    let errorMessage = errorResponse.message ?? "Unexpected error happened";
+
+    // Handle if server return more than 1 error
+    if (typeof errorMessage === "object") {
+      errorMessage = errorMessage[0];
+    }
+
+    // Show error message
+    this.formError = errorMessage;
+    this.snackbar.open(errorMessage, "x", {
+      duration: 4000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    })
   }
 }
