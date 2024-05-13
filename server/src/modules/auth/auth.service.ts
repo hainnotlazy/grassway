@@ -68,7 +68,7 @@ export class AuthService {
 
     // Handle when user authenticating via google to link account
     if (id) {
-      this.linkAccountWithGoogle(id, email);
+      return await this.linkAccountWithGoogle(id, email);
     }
     
     /** Handle when user authenticating via github to login/register 
@@ -110,9 +110,9 @@ export class AuthService {
      * - Email was taken by other user (email isn't verified)
     */
     const user = await this.usersService.findUserByThirdParty("email", email);
-    if (userExisted.id !== user.id && user.is_email_verified) {
+    if (user && userExisted.id !== user.id && user.is_email_verified) {
       throw new BadRequestException("Email already linked with another account");
-    } else if (userExisted.id !== user.id && !user.is_email_verified) {
+    } else if (user &&  userExisted.id !== user.id && !user.is_email_verified) {
       user.email = null;
       await this.usersService.saveUser(user);
     }
