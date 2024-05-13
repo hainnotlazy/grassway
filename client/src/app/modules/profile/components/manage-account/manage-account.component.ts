@@ -1,9 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 import { profileRequirements } from 'src/app/core/constants/form-requirement.const';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
+import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
+import { UserProfile } from 'src/app/core/interfaces/manage-account.interface';
 import { UsersService } from 'src/app/core/services/users.service';
 
 @UntilDestroy()
@@ -17,6 +21,7 @@ export class ManageAccountComponent implements OnInit {
 
   formError = "";
   avatarUrl = "";
+  isProcessing = false;
 
   // Form Requirements
   fullnameRequirements = profileRequirements.fullname.requirements;
@@ -25,6 +30,8 @@ export class ManageAccountComponent implements OnInit {
   // Form Validation Messages
   fullnameValidationMessages: ValidationMessage = profileRequirements.fullname.validationMsg;
   bioValidationMessages: ValidationMessage = profileRequirements.bio.validationMsg;
+
+  getObjectKeys = getObjectKeys;
 
   manageAccountForm = new FormGroup({
     fullname: new FormControl("", [
@@ -42,7 +49,8 @@ export class ManageAccountComponent implements OnInit {
   })
 
   constructor(
-    private usersService: UsersService
+    private usersService: UsersService,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -78,7 +86,51 @@ export class ManageAccountComponent implements OnInit {
         this.avatarUrl = e.target.result;
       };
       reader.readAsDataURL(file);
+
       this.manageAccountForm.patchValue({ avatar: file as any });
+      this.manageAccountForm.controls.avatar.markAsDirty();
     }
+  }
+
+  onSubmit() {
+    if (this.manageAccountForm.valid) {
+      this.isProcessing = true;
+      this.usersService.updateCurrentUser(this.manageAccountForm.value as UserProfile).pipe(
+        tap(() => {
+          this.handleUpdateSuccess();
+        }, (error) => {
+          this.handleUpdateFail(error);
+        }),
+        finalize(() => {
+          this.isProcessing = changeStatus(this.isProcessing);
+        })
+      ).subscribe();
+    }
+  }
+
+  private handleUpdateSuccess() {
+    this.snackbar.open("Update account successfully", "x", {
+      duration: 3000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    })
+  }
+
+  private handleUpdateFail(error: any) {
+    const errorResponse: ErrorResponse = error.error;
+    let errorMessage = errorResponse.message ?? "Unexpected error happened";
+
+    // Handle if server return more than 1 error
+    if (typeof errorMessage === "object") {
+      errorMessage = errorMessage[0];
+    }
+
+    // Show error message
+    this.formError = errorMessage;
+    this.snackbar.open(errorMessage, "x", {
+      duration: 3000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    })
   }
 }

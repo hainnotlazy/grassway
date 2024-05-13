@@ -8,7 +8,7 @@
     type="button"
   >
     <img
-      class="border-primary border rounded-full"
+      class="avatar border-primary border rounded-full"
       [src]="currentUser.avatar"
       [alt]="currentUser.fullname + '\'s avatar'"
       width="40"
@@ -33,7 +33,7 @@
     <div class="border-b-gray-300 flex gap-3 px-4 border-b py-2.5">
       <div>
         <img
-          class="border-primary border-2 rounded-md"
+          class="navigation-avatar border-primary border-2 rounded-md"
           [src]="currentUser.avatar"
           [alt]="currentUser.fullname + '\'s avatar'"
           width="50"
@@ -42,7 +42,7 @@
           draggable="false"
         >
       </div>
-      <div class="flex flex-col justify-center">
+      <div class="flex flex-col justify-center cursor-default">
         <span class="text-primary font-semibold">{{ currentUser.fullname | truncate:20 }}</span>
         <small
           *ngIf="currentUser.email"

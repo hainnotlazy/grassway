@@ -2,13 +2,15 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import { RegisterUserDto } from '../auth/dtos/register-user.dto';
+import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private uploadFileService: UploadFileService
   ) {}
 
   async findUser(id: string) {
@@ -59,5 +61,19 @@ export class UsersService {
     // Handled hash password in entity layer
     const newUser = this.userRepository.create(registerUserDto);
     return await this.userRepository.save(newUser);
+  }
+
+  async updateUserProfile(currentUser: User, updateProfileDto: UpdateProfileDto, avatar: Express.Multer.File) {
+    // Save new avatar & remove old one
+    if (avatar) {
+      const savedAvatar = this.uploadFileService.saveAvatar(avatar);
+      currentUser.avatar && this.uploadFileService.removeOldAvatar(currentUser.avatar);
+      currentUser.avatar = savedAvatar;
+    }
+
+    // Update user
+    Object.assign(currentUser, updateProfileDto);
+
+    return await this.userRepository.save(currentUser);
   }
 }

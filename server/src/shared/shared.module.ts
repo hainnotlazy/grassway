@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { RedisService } from './services/redis/redis.service';
 import { HttpModule } from '@nestjs/axios';
 import { DownloadFileService } from './services/download-file/download-file.service';
+import { UploadFileService } from './services/upload-file/upload-file.service';
 
 @Module({
   imports: [
@@ -9,11 +10,13 @@ import { DownloadFileService } from './services/download-file/download-file.serv
   ],
   providers: [
     RedisService,
-    DownloadFileService
+    DownloadFileService,
+    UploadFileService
   ],
   exports: [
     RedisService,
-    DownloadFileService
+    DownloadFileService,
+    UploadFileService
   ]
 })
 export class SharedModule {}

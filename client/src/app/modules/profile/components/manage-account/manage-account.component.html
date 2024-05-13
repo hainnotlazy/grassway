@@ -21,6 +21,8 @@
       <button
         class="right-4 bottom-4 hover:shadow hover:text-black absolute px-2 py-1 text-gray-600 bg-white border-2 rounded-full"
         type="button"
+        matTooltip="Upload avatar"
+        matTooltipPosition="right"
         (click)="openSelectAvatar()"
       >
         <i class="icon-camera text-2xl"></i>
@@ -53,6 +55,7 @@
   <form
     [formGroup]="manageAccountForm"
     class="flex flex-col flex-grow px-2"
+    (submit)="onSubmit()"
   >
     <div class="flex flex-col gap-2">
       <label class="text-gray-600" for="fullname">Full name:</label>
@@ -68,6 +71,9 @@
           matInput
           placeholder="Your full name"
         >
+        <mat-error *ngFor="let error of getObjectKeys(manageAccountForm.get('fullname')?.errors)">
+          {{ fullnameValidationMessages[error] }}
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -128,6 +134,9 @@
           placeholder="Your bio"
           rows="5"
         ></textarea>
+        <mat-error *ngFor="let error of getObjectKeys(manageAccountForm.get('bio')?.errors)">
+          {{ bioValidationMessages[error] }}
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -135,10 +144,11 @@
       <button
         type="submit"
         class="px-4 py-2.5 bg-secondary text-white rounded shadow ml-auto flex items-center gap-2 hover:bg-secondary/80 disabled:bg-gray-400"
-        [disabled]="!manageAccountForm.dirty || !manageAccountForm.valid"
+        [class]="{'disabled:bg-sky-400': isProcessing}"
+        [disabled]="!manageAccountForm.dirty || !manageAccountForm.valid || isProcessing"
       >
-        <i class="icon-edit"></i>
-        <span>Save updates</span>
+        <i [class]="isProcessing ? 'icon-spinner spinning' : 'icon-edit'"></i>
+        {{ isProcessing ? "Processing..." : "Save updates" }}
       </button>
     </div>
 

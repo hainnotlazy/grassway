@@ -96,14 +96,14 @@ export class RegisterFormComponent {
     }
   }
 
-  handleRegisterSuccess(data: AuthResponse) {
+  private handleRegisterSuccess(data: AuthResponse) {
     const accessToken = data.access_token;
 
     setAccessToken(accessToken);
     this.router.navigate(['/u/link']);
   }
 
-  handleRegisterFail(error: any) {
+  private handleRegisterFail(error: any) {
     const errorResponse: ErrorResponse = error.error;
     let errorMessage = errorResponse.message ?? "Unexpected error happened";
 

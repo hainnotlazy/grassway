@@ -81,6 +81,7 @@ export class User {
 
   @BeforeInsert()
   handleBeforeInsert() {
+    console.log(4567)
     // Hash Password
     if (this.password) {
       this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
@@ -101,7 +102,7 @@ export class User {
   handleBeforeUpdate() {
     // Hash password
     if (this.password) {
-      this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
+      // this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
     }
   }
 }

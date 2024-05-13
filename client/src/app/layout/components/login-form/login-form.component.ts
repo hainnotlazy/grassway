@@ -72,14 +72,14 @@ export class LoginFormComponent {
     }
   }
 
-  handleLoginSuccess(data: AuthResponse) {
+  private handleLoginSuccess(data: AuthResponse) {
     const accessToken = data.access_token;
 
     setAccessToken(accessToken);
     this.router.navigate(['/u/link']);
   }
 
-  handleLoginFail(error: any) {
+  private handleLoginFail(error: any) {
     const errorResponse: ErrorResponse = error.error;
     let errorMessage = errorResponse.message ?? "Unexpected error happened";
 
