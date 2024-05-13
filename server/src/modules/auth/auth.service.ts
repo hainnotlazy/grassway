@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from "uuid";
@@ -31,7 +31,17 @@ export class AuthService {
     const { id, username, fullname, github, avatar } = githubProfile;
 
     // Handle when user authenticating via github to link account
-    if (id) {}
+    if (id) {
+      const userExisted = await this.usersService.findUser(id);
+
+      if (!userExisted) {
+        throw new NotFoundException("User not found");
+      }
+
+      await this.usersService.updateUserLinkedAccount(userExisted, "github", github);
+      return null;
+    }
+    
     // Handle when user authenticating via github to login/register
     const userExisted = await this.usersService.findUserByThirdParty("github", github);
 

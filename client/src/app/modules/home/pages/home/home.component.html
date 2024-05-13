@@ -15,6 +15,8 @@
     <p class="text-poetsen-one space-x-2 font-semibold">
       <button
         class="hover:text-black text-gray-600"
+        #infoTooltip="matTooltip"
+        (click)="infoTooltip.toggle()"
         matTooltip="Login to customize your shortened link"
         matTooltipPosition="above"
         type="button"

@@ -102,6 +102,7 @@ export class User {
   handleBeforeUpdate() {
     // Hash password
     if (this.password) {
+      console.log("was here");
       // this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
     }
   }

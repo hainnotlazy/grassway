@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { funEmoji } from '@dicebear/collection';
+import { createAvatar } from '@dicebear/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { finalize, tap } from 'rxjs';
+import { finalize, map, tap } from 'rxjs';
 import { profileRequirements } from 'src/app/core/constants/form-requirement.const';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
@@ -12,11 +14,11 @@ import { UsersService } from 'src/app/core/services/users.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-manage-account',
-  templateUrl: './manage-account.component.html',
-  styleUrls: ['./manage-account.component.scss']
+  selector: 'app-manage-account-form',
+  templateUrl: './manage-account-form.component.html',
+  styleUrls: ['./manage-account-form.component.scss']
 })
-export class ManageAccountComponent implements OnInit {
+export class ManageAccountFormComponent implements OnInit {
   @ViewChild("avatarInput") avatarInput?: ElementRef;
 
   formError = "";
@@ -55,6 +57,19 @@ export class ManageAccountComponent implements OnInit {
 
   ngOnInit() {
     this.usersService.getCurrentUser().pipe(
+      map((currentUser) => {
+        if (!currentUser.avatar) {
+          currentUser.avatar = createAvatar(funEmoji, {
+            seed: currentUser.username,
+            eyes: ["closed", "closed2", "glasses", "cute", "love", "pissed", "shades", "stars"],
+            mouth: ["cute", "lilSmile", "kissHeart", "tongueOut", "wideSmile", "smileTeeth", "smileLol"],
+            size: 40,
+            backgroundType: ["gradientLinear"],
+            backgroundColor: ["b6e3f4","c0aede","d1d4f9"]
+          }).toDataUriSync();
+        }
+        return currentUser;
+      }),
       tap((currentUser) => {
         this.manageAccountForm.patchValue({
           fullname: currentUser.fullname,

@@ -58,10 +58,13 @@ export class AuthController {
   @PublicRoute()
   @UseGuards(GithubAuthGuard)
   @Get("github/callback")
-  async githubAuthenticateCallback(@Req() req: any, @Res() res: any) {
+  async githubAuthenticateCallback(@CurrentUser() currentUser: User | null, @Req() req: any, @Res() res: any) {
     const githubProfile: GithubProfile = req.user;
-
     const user = await this.authService.handleGithubAuthentication(githubProfile);
+
+    if (!user) {
+      return res.redirect(`${this.configService.get('CLIENT')}/u/my-account`);
+    }
 
     const accessToken = await this.authService.generateAccessToken(user);
     res.cookie("access_token", accessToken, {

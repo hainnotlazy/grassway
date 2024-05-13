@@ -1,0 +1,26 @@
+<div class="space-y-2" *ngIf="currentUser$ | async as currentUser">
+  <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+    <i class="icon-google text-rose-600"></i>
+    <span>Link with Google</span>
+  </button>
+
+  <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+    <i class="icon-facebook text-blue-600"></i>
+    <span>Link with Facebook</span>
+  </button>
+
+  <button
+    class="text-primary border-primary disabled:bg-slate-300 disabled:text-black hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow"
+    [disabled]="currentUser.github"
+    (click)="linkAccount('github', currentUser.id)"
+    type="button"
+  >
+    <i class="icon-github text-gray-800"></i>
+    <span>{{ currentUser.github ? (currentUser.github | getThirdPartyName) : 'Link with Github' }}</span>
+  </button>
+
+  <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+    <i class="icon-slack text-violet-800"></i>
+    <span>Link with Slack</span>
+  </button>
+</div>

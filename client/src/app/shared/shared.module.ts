@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { GetThirdPartyNamePipe } from './pipes/get-third-party-name.pipe';
 
 /* Angular Material Modules */
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +40,8 @@ const MatModules = [
 
 @NgModule({
   declarations: [
-    TruncatePipe
+    TruncatePipe,
+    GetThirdPartyNamePipe
   ],
   imports: [
     CommonModule,
@@ -49,6 +51,7 @@ const MatModules = [
   exports: [
     ReactiveFormsModule,
     TruncatePipe,
+    GetThirdPartyNamePipe,
     ...MatModules,
   ]
 })

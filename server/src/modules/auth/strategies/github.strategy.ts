@@ -18,11 +18,14 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(request: any, accessToken: string, refreshToken: string, profile: any, done: any) {
-    const rawHeaders = request.rawHeaders;
+    const requestRawHeaders = request.rawHeaders;
+    const userId = requestRawHeaders.find(header => header.includes("userId="));
+    const userIdValue = userId?.split("=")[1] || null;
+    request.res.clearCookie("userId");
 
     const { avatar_url, html_url, name, login } = profile._json;
     const user: GithubProfile = {
-      id: null,
+      id: userIdValue,
       username: login,
       fullname: name,
       github: html_url,
