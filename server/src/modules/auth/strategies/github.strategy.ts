@@ -19,7 +19,11 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
 
   async validate(request: any, accessToken: string, refreshToken: string, profile: any, done: any) {
     const requestRawHeaders = request.rawHeaders;
-    const userId = requestRawHeaders.find(header => header.includes("userId="));
+    let userId = requestRawHeaders.find(header => header.includes("userId="));
+    // Handle to get userId cookie if more than 1 cookie existing
+    if (userId) {
+      userId = userId.slice(userId.indexOf("userId="));
+    }
     const userIdValue = userId?.split("=")[1] || null;
     request.res.clearCookie("userId");
 
