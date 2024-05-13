@@ -32,6 +32,10 @@ const routes: Routes = [
         path: "link",
         loadChildren: () => import('./modules/url/url.module').then(m => m.UrlModule)
       },
+      {
+        path: "my-account",
+        loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule)
+      }
     ]
   },
 ];

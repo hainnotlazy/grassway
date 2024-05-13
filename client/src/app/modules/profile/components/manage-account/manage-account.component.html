@@ -1,0 +1,146 @@
+<div class="md:flex-row flex flex-col gap-4 my-4">
+  <div class="flex flex-col gap-4 px-4">
+    <div class="md:my-0 relative inline-flex m-auto">
+      <img
+        class="border-secondary border-2 rounded-full"
+        [src]="avatarUrl"
+        alt="User's avatar"
+        width="250"
+        height="250"
+        loading="eager"
+        draggable="false"
+      >
+      <input
+        #avatarInput
+        class="absolute top-0 bottom-0 left-0 right-0 opacity-0 cursor-pointer"
+        (change)="onAvatarChange($event)"
+        type="file"
+        title=""
+        accept="image/*"
+      >
+      <button
+        class="right-4 bottom-4 hover:shadow hover:text-black absolute px-2 py-1 text-gray-600 bg-white border-2 rounded-full"
+        type="button"
+        (click)="openSelectAvatar()"
+      >
+        <i class="icon-camera text-2xl"></i>
+      </button>
+    </div>
+
+    <div class="space-y-2">
+      <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+        <i class="icon-google text-rose-600"></i>
+        <span>Link with Google</span>
+      </button>
+
+      <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+        <i class="icon-facebook text-blue-600"></i>
+        <span>Link with Facebook</span>
+      </button>
+
+      <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+        <i class="icon-github text-gray-800"></i>
+        <span>Link with Github</span>
+      </button>
+
+      <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+        <i class="icon-slack text-violet-800"></i>
+        <span>Link with Slack</span>
+      </button>
+    </div>
+  </div>
+
+  <form
+    [formGroup]="manageAccountForm"
+    class="flex flex-col flex-grow px-2"
+  >
+    <div class="flex flex-col gap-2">
+      <label class="text-gray-600" for="fullname">Full name:</label>
+      <mat-form-field
+        class="md:w-1/2 w-full"
+        color="accent"
+        appearance="outline"
+      >
+        <input
+          id="fullname"
+          formControlName="fullname"
+          type="text"
+          matInput
+          placeholder="Your full name"
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="md:flex-row flex flex-col gap-4">
+      <div class="md:w-1/2 flex flex-col w-full gap-2">
+        <label class="text-gray-600" for="dob">Date of birth:</label>
+        <mat-form-field appearance="outline" color="accent">
+          <input
+            id="dob"
+            formControlName="dob"
+            matInput
+            [matDatepicker]="picker"
+            placeholder="Your date of birth"
+          >
+          <mat-hint class="italic text-gray-400">MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="md:w-1/2 flex flex-col w-full gap-2">
+        <label class="text-gray-600" for="phone">Phone number:</label>
+        <mat-form-field appearance="outline" color="accent">
+          <input
+            id="phone"
+            formControlName="phone"
+            type="text"
+            matInput
+            placeholder="Your phone number"
+          >
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex flex-col mt-2">
+      <p class="text-gray-600">Gender:</p>
+      <mat-radio-group
+        formControlName="gender"
+        class="gap-x-4 gap-y-2 flex flex-wrap"
+        color="accent"
+      >
+        <mat-radio-button value="male">Male</mat-radio-button>
+        <mat-radio-button value="female">Female</mat-radio-button>
+        <mat-radio-button value="other">Other</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="flex flex-col gap-2 mt-2">
+      <label class="text-gray-600" for="bio">Bio:</label>
+      <mat-form-field
+        class="w-full"
+        appearance="outline"
+        color="accent"
+      >
+        <textarea
+          formControlName="bio"
+          matInput
+          placeholder="Your bio"
+          rows="5"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <button
+        type="submit"
+        class="px-4 py-2.5 bg-secondary text-white rounded shadow ml-auto flex items-center gap-2 hover:bg-secondary/80 disabled:bg-gray-400"
+        [disabled]="!manageAccountForm.dirty || !manageAccountForm.valid"
+      >
+        <i class="icon-edit"></i>
+        <span>Save updates</span>
+      </button>
+    </div>
+
+  </form>
+</div>

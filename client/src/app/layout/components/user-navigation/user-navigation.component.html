@@ -30,7 +30,7 @@
     xPosition="before"
     class="text-roboto-condensed mt-1"
   >
-    <div class="border-b-gray-300 flex gap-2 px-4 border-b py-2.5">
+    <div class="border-b-gray-300 flex gap-3 px-4 border-b py-2.5">
       <div>
         <img
           class="border-primary border-2 rounded-md"
@@ -43,7 +43,7 @@
         >
       </div>
       <div class="flex flex-col justify-center">
-        <span class="text-primary font-semibold">{{ currentUser.fullname }}</span>
+        <span class="text-primary font-semibold">{{ currentUser.fullname | truncate:20 }}</span>
         <small
           *ngIf="currentUser.email"
           class="text-gray-600">{{ currentUser.email }}</small>

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { TruncatePipe } from './pipes/truncate.pipe';
+
 /* Angular Material Modules */
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +15,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 const MatModules = [
   MatFormFieldModule,
@@ -24,11 +30,17 @@ const MatModules = [
   MatCheckboxModule,
   MatSelectModule,
   MatSnackBarModule,
-  MatMenuModule
+  MatMenuModule,
+  MatTabsModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatRadioModule
 ]
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    TruncatePipe
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -36,6 +48,7 @@ const MatModules = [
   ],
   exports: [
     ReactiveFormsModule,
+    TruncatePipe,
     ...MatModules,
   ]
 })

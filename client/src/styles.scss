@@ -3,7 +3,13 @@
 @include mat.core();
 
 $my-primary: mat.define-palette(mat.$indigo-palette, 500);
-$my-accent: mat.define-palette(mat.$green-palette, 500);
+$my-accent-color: (
+  500: #4caf50,
+  contrast: (
+    500: #ffffff,
+  )
+);
+$my-accent: mat.define-palette($my-accent-color, 500, 500, 500);
 
 $my-theme: mat.define-light-theme(
   (

@@ -65,7 +65,7 @@ export class AuthController {
 
     const accessToken = await this.authService.generateAccessToken(user);
     res.cookie("access_token", accessToken, {
-      secure: true,
+      // secure: true,
       sameSite: 'strict',
       maxAge: 60 * 1000
     })

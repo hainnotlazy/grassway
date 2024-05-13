@@ -18,6 +18,16 @@ const confirmPasswordRequirements = {
   require: true
 }
 
+const fullnameRequirements = {
+  required: true,
+  minlength: 3,
+  maxlength: 255
+}
+
+const bioRequirements = {
+  maxlength: 255
+}
+
 export const loginRequirements = {
   username: {
     requirements: {
@@ -76,6 +86,27 @@ export const registerRequirements = {
     },
     validationMsg: {
       required: "Please confirm your password"
+    }
+  }
+}
+
+export const profileRequirements = {
+  fullname: {
+    requirements: {
+      ...fullnameRequirements
+    },
+    validationMsg: {
+      required: "Fullname is required",
+      minlength: `Fullname must be at least ${fullnameRequirements.minlength} characters`,
+      maxlength: `Fullname must be at most ${fullnameRequirements.maxlength} characters`
+    }
+  },
+  bio: {
+    requirements: {
+      ...bioRequirements
+    },
+    validationMsg: {
+      maxlength: `Bio must be at most ${bioRequirements.maxlength} characters`
     }
   }
 }
