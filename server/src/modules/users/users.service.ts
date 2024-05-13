@@ -77,8 +77,11 @@ export class UsersService {
     return await this.userRepository.save(currentUser);
   }
 
-  async updateUserLinkedAccount(user: User, provider: "google" | "facebook" | "github" | "slack", value: string) {
-    // TODO: Fix google => email
+  async saveUser(user: User) {
+    return await this.userRepository.save(user);
+  }
+
+  async updateUserLinkedAccount(user: User, provider: "email" | "facebook" | "github" | "slack", value: string) {
     user[provider] = value;
     return this.userRepository.save(user);
   }

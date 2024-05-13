@@ -10,6 +10,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigOptions } from 'src/config';
 import { SharedModule } from 'src/shared/shared.module';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SharedModule } from 'src/shared/shared.module';
     LocalStrategy,
     JwtStrategy,
     GithubStrategy,
+    GoogleStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard

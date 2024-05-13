@@ -1,0 +1,18 @@
+import { ExecutionContext, Injectable } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+
+@Injectable()
+export class GoogleAuthGuard extends AuthGuard("google") {
+  canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest();
+    const response = context.switchToHttp().getResponse();
+    const userId = request.query.userId;
+
+    if (userId) {
+      response.cookie("userId", userId, { 
+        expires: new Date(Date.now() + 5 * 60 * 1000) 
+      });
+    }
+    return super.canActivate(context);
+  }
+}

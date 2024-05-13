@@ -43,16 +43,16 @@ export class User {
   @Column({ nullable: true })
   bio: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   email: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   github: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   slack: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   facebook: string;
 
   @Column({ default: true })
@@ -81,7 +81,6 @@ export class User {
 
   @BeforeInsert()
   handleBeforeInsert() {
-    console.log(4567)
     // Hash Password
     if (this.password) {
       this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);

@@ -1,7 +1,13 @@
 <div class="space-y-2" *ngIf="currentUser$ | async as currentUser">
-  <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+  <!-- TODO: Show action to verify email if email is not verified -->
+  <button
+    class="text-primary border-primary hover:bg-gray-300 disabled:bg-slate-300 disabled:text-black flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow"
+    [disabled]="currentUser.email"
+    (click)="linkAccount('google', currentUser.id)"
+    type="button"
+  >
     <i class="icon-google text-rose-600"></i>
-    <span>Link with Google</span>
+    <span>{{ currentUser.email ? currentUser.email : 'Link with Google' }}</span>
   </button>
 
   <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">

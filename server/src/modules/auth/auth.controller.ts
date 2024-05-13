@@ -8,6 +8,8 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser, PublicRoute, TokenExpirationTime } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { GoogleProfile } from 'src/common/models/google-profile.model';
 
 @Controller('auth')
 export class AuthController {
@@ -58,9 +60,35 @@ export class AuthController {
   @PublicRoute()
   @UseGuards(GithubAuthGuard)
   @Get("github/callback")
-  async githubAuthenticateCallback(@CurrentUser() currentUser: User | null, @Req() req: any, @Res() res: any) {
+  async githubAuthenticateCallback(@Req() req: any, @Res() res: any) {
     const githubProfile: GithubProfile = req.user;
     const user = await this.authService.handleGithubAuthentication(githubProfile);
+
+    if (!user) {
+      return res.redirect(`${this.configService.get('CLIENT')}/u/my-account`);
+    }
+
+    const accessToken = await this.authService.generateAccessToken(user);
+    res.cookie("access_token", accessToken, {
+      // secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 1000
+    })
+    
+    return res.redirect(`${this.configService.get('CLIENT')}/auth/success-authentication`);
+  }
+
+  @PublicRoute()
+  @UseGuards(GoogleAuthGuard)
+  @Get("google")
+  async googleAuthenticate() {}
+
+  @PublicRoute()
+  @UseGuards(GoogleAuthGuard)
+  @Get("google/callback")
+  async googleAuthenticateCallback(@Req() req: any, @Res() res: any) {
+    const googleProfile: GoogleProfile = req.user;
+    const user = await this.authService.handleGoogleAuthentication(googleProfile);
 
     if (!user) {
       return res.redirect(`${this.configService.get('CLIENT')}/u/my-account`);
