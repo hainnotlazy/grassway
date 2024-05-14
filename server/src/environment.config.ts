@@ -4,6 +4,7 @@ import helmet from "helmet";
 
 export function configEnvironment(app: INestApplication) {
   app.use(helmet());
+  app.getHttpAdapter().getInstance().disable('x-powered-by')
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true

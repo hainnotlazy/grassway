@@ -12,7 +12,7 @@ export class UsersService {
   ) { }
 
   getCurrentUser() {
-    return this.httpClient.get<User>("api/users/my-profile");
+    return this.httpClient.get<User>("api/users");
   }
 
   updateCurrentUser(userProfile: UserProfile) {
@@ -34,6 +34,6 @@ export class UsersService {
       }
     }
 
-    return this.httpClient.put<User>("api/users/update-profile", formData);
+    return this.httpClient.put<User>("api/users", formData);
   }
 }

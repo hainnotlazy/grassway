@@ -13,7 +13,7 @@ export class UsersController {
     private usersService: UsersService
   ) {}
 
-  @Get("my-profile")
+  @Get("")
   @ApiOperation({
     summary: "Get current user profile",
   })
@@ -95,7 +95,7 @@ export class UsersController {
     return await this.usersService.findUser(id);
   }
 
-  @Put("update-profile")
+  @Put("")
   @ApiOperation({
     summary: "Update current user profile",
   })
