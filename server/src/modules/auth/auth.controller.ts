@@ -10,7 +10,9 @@ import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { GoogleProfile } from 'src/common/models/google-profile.model';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Auth")
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -23,6 +25,21 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post("login")
   @HttpCode(200)
+  @ApiBody({
+    schema: {
+      type: "object", 
+      properties: {
+        username: {
+          type: "string",
+          default: "hainkone"
+        },
+        password: {
+          type: "string",
+          default: "verysecurepw"
+        }
+      },
+    }
+  })
   async login(@Request() req) {
     const user: User = req.user;
 
@@ -33,6 +50,9 @@ export class AuthController {
 
   @PublicRoute()
   @Post("register")
+  @ApiBody({
+    type: RegisterUserDto,
+  })
   async register(@Body() body: RegisterUserDto) {
     const newUser = await this.userService.createUser(body);
 

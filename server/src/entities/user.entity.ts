@@ -2,6 +2,7 @@ import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGe
 import * as bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "src/common/constants/bcrypt.const";
 import { Exclude } from "class-transformer";
+import { ApiProperty } from "@nestjs/swagger";
 
 enum GenderTypes {
   MALE = "male",
@@ -10,9 +11,11 @@ enum GenderTypes {
 }
 @Entity()
 export class User {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
   @Column({ unique: true })
   username: string;
 
@@ -20,12 +23,15 @@ export class User {
   @Exclude()
   password: string;
 
+  @ApiProperty()
   @Column({ nullable: true })
   fullname: string;
 
+  @ApiProperty()
   @Column({ nullable: true, type: "date" })
   dob: Date;
   
+  @ApiProperty()
   @Column({
     type: "enum",
     enum: GenderTypes,
@@ -34,24 +40,31 @@ export class User {
   gender: string;
 
   // TODO: Add to db erd
+  @ApiProperty()
   @Column({ nullable: true })
   avatar: string;
 
+  @ApiProperty()
   @Column({ nullable: true })
   phone: string;
 
+  @ApiProperty()
   @Column({ nullable: true })
   bio: string;
 
+  @ApiProperty()
   @Column({ nullable: true, unique: true })
   email: string;
 
+  @ApiProperty()
   @Column({ nullable: true, unique: true })
   github: string;
 
+  @ApiProperty()
   @Column({ nullable: true, unique: true })
   slack: string;
 
+  @ApiProperty()
   @Column({ nullable: true, unique: true })
   facebook: string;
 

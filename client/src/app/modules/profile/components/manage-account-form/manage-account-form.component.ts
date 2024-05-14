@@ -63,7 +63,7 @@ export class ManageAccountFormComponent implements OnInit {
             seed: currentUser.username,
             eyes: ["closed", "closed2", "glasses", "cute", "love", "pissed", "shades", "stars"],
             mouth: ["cute", "lilSmile", "kissHeart", "tongueOut", "wideSmile", "smileTeeth", "smileLol"],
-            size: 40,
+            size: 250,
             backgroundType: ["gradientLinear"],
             backgroundColor: ["b6e3f4","c0aede","d1d4f9"]
           }).toDataUriSync();
