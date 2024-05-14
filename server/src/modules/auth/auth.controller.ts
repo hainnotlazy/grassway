@@ -10,10 +10,12 @@ import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { GoogleProfile } from 'src/common/models/google-profile.model';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiExtraModels, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOAuth2, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { LoginUserDto } from './dtos/login-user.dto';
 
 @ApiTags("Auth")
 @Controller('auth')
+@ApiExtraModels(LoginUserDto)
 export class AuthController {
   constructor(
     private userService: UsersService,
@@ -25,20 +27,37 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post("login")
   @HttpCode(200)
+  @ApiOperation({
+    summary: "Login route"
+  })
   @ApiBody({
+    type: LoginUserDto
+  })
+  @ApiOkResponse({
     schema: {
-      type: "object", 
+      type: "object",
       properties: {
-        username: {
-          type: "string",
-          default: "hainkone"
-        },
-        password: {
-          type: "string",
-          default: "verysecurepw"
+        access_token: {
+          type: "string"
         }
-      },
-    }
+      }
+    },
+    description: "Login success"
+  })
+  @ApiBadRequestResponse({
+    description: "Username or password is incorrect",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Unauthorized",
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
   })
   async login(@Request() req) {
     const user: User = req.user;
@@ -50,8 +69,41 @@ export class AuthController {
 
   @PublicRoute()
   @Post("register")
+  @ApiOperation({
+    summary: "Register route"
+  })
   @ApiBody({
     type: RegisterUserDto,
+  })
+  @ApiOkResponse({
+    schema: {
+      type: "object",
+      properties: {
+        access_token: {
+          type: "string"
+        }
+      }
+    },
+    description: "Register success"
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Bad request",
+    content: {
+      "application/json": { 
+        examples: {
+          "Username already exists": {
+            value: "Username already exists"
+          },
+          "Email already exists": {
+            value: "Email already exists"
+          }
+        }
+      }
+    }
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
   })
   async register(@Body() body: RegisterUserDto) {
     const newUser = await this.userService.createUser(body);
@@ -63,6 +115,41 @@ export class AuthController {
 
   @Post("logout")
   @HttpCode(204)
+  @ApiOperation({
+    summary: "Logout route"
+  })
+  @ApiBearerAuth()
+  @ApiNoContentResponse({
+    description: "Logout success"
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid user id",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async logout(
     @Request() request,
     @CurrentUser() currentUser: User,
@@ -75,11 +162,17 @@ export class AuthController {
   @PublicRoute()
   @UseGuards(GithubAuthGuard)
   @Get("github")
+  @ApiOperation({
+    summary: "Github authentication route"
+  })
   async githubAuthenticate() {}
 
   @PublicRoute()
   @UseGuards(GithubAuthGuard)
   @Get("github/callback")
+  @ApiOperation({
+    summary: "Github authentication callback route"
+  })
   async githubAuthenticateCallback(@Req() req: any, @Res() res: any) {
     const githubProfile: GithubProfile = req.user;
     const user = await this.authService.handleGithubAuthentication(githubProfile);
@@ -101,11 +194,17 @@ export class AuthController {
   @PublicRoute()
   @UseGuards(GoogleAuthGuard)
   @Get("google")
+  @ApiOperation({
+    summary: "Google authentication route"
+  })
   async googleAuthenticate() {}
 
   @PublicRoute()
   @UseGuards(GoogleAuthGuard)
   @Get("google/callback")
+  @ApiOperation({
+    summary: "Google authentication callback route"
+  })
   async googleAuthenticateCallback(@Req() req: any, @Res() res: any) {
     const googleProfile: GoogleProfile = req.user;
     const user = await this.authService.handleGoogleAuthentication(googleProfile);

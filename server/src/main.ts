@@ -32,8 +32,11 @@ async function bootstrap() {
       .setTitle("Grassway REST API")
       .setDescription("This document lists paths (endpoints) of Grassway")
       .setVersion('1.0.0')
+      .addTag("Users", "Endpoints for users interaction")
+      .addTag("Auth", "Endpoints for authentication")
       .addBearerAuth()
       .build();
+
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup("swagger", app, swaggerDocument); 
   }

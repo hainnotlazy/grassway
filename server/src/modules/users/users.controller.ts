@@ -4,7 +4,7 @@ import { CurrentUser } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags("Users")
 @Controller('users')
@@ -14,6 +14,9 @@ export class UsersController {
   ) {}
 
   @Get("my-profile")
+  @ApiOperation({
+    summary: "Get current user profile",
+  })
   @ApiBearerAuth()
   @ApiOkResponse({
     description: "Get current user profile",
@@ -22,8 +25,21 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: "Invalid user id",
   })
-  @ApiUnauthorizedResponse({
-    description: "Unauthorized || Token is invalid",
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
   })
   @ApiForbiddenResponse({
     description: "Account is inactive",
@@ -31,11 +47,17 @@ export class UsersController {
   @ApiNotFoundResponse({
     description: "User not found",
   })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async getCurrentUser(@CurrentUser() currentUser: User) {
     return currentUser;
   }
 
   @Get("/:id")
+  @ApiOperation({
+    summary: "Get user's profile by id",
+  })
   @ApiBearerAuth()
   @ApiOkResponse({
     description: "Get user by id",
@@ -44,8 +66,21 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: "Invalid user id",
   })
-  @ApiUnauthorizedResponse({
-    description: "Unauthorized || Token is invalid",
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
   })
   @ApiForbiddenResponse({
     description: "Account is inactive",
@@ -53,11 +88,17 @@ export class UsersController {
   @ApiNotFoundResponse({
     description: "User not found",
   })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async getUserById(@Param("id") id: string) {
     return await this.usersService.findUser(id);
   }
 
   @Put("update-profile")
+  @ApiOperation({
+    summary: "Update current user profile",
+  })
   @ApiBearerAuth()
   @UseInterceptors(FileInterceptor("avatar")) 
   @ApiConsumes("multipart/form-data")
@@ -72,14 +113,30 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: "Invalid user id",
   })
-  @ApiUnauthorizedResponse({
-    description: "Unauthorized || Token is invalid",
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
   })
   @ApiForbiddenResponse({
     description: "Account is inactive",
   })
   @ApiNotFoundResponse({
     description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
   })
   async updateProfile(
     @CurrentUser() currentUser: User, 
