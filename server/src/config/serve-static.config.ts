@@ -1,6 +1,6 @@
 import { join } from "path";
 
 export const ServeStaticConfigOptions = {
-  rootPath: join(__dirname, "..", "..", "resources"),
+  rootPath: join(__dirname, "..", "..", "..", "resources"),
   serveRoot: "/public"  
 }
