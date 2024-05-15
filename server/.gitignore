@@ -34,6 +34,9 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Migration db files
+/db/migrations
+
 # .env files
 .env*
 !.env.example
