@@ -12,6 +12,8 @@ import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { GoogleProfile } from 'src/common/models/google-profile.model';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiExtraModels, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOAuth2, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { LoginUserDto } from './dtos/login-user.dto';
+import { FacebookAuthGuard } from './guards/facebook-auth.guard';
+import { FacebookProfile } from 'src/common/models/facebook-profile.model';
 
 @ApiTags("Auth")
 @Controller('auth')
@@ -221,6 +223,38 @@ export class AuthController {
     })
     
     return res.redirect(`${this.configService.get('CLIENT')}/auth/success-authentication`);
+  }
+
+  @PublicRoute()
+  @Get("facebook")
+  @UseGuards(FacebookAuthGuard)
+  async facebookAuthenticate() {}
+
+  @PublicRoute()
+  @Get("facebook/callback")
+  @UseGuards(FacebookAuthGuard)
+  async facebookAuthenticateCallback(@Req() req: any, @Res() res: any) {
+    const facebookProfile: FacebookProfile = req.user;
+    const user = await this.authService.handleFacebookAuthentication(facebookProfile);
+
+    if (!user) {
+      return res.redirect(`${this.configService.get('CLIENT')}/u/my-account`);
+    }
+
+    const accessToken = await this.authService.generateAccessToken(user);
+    res.cookie("access_token", accessToken, {
+      // secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 1000
+    })
+
+    return res.redirect(`${this.configService.get('CLIENT')}/auth/success-authentication`);
+  }
+
+  @PublicRoute()
+  @Get("success-authentication")
+  successAuthentication() {
+    return "success";
   }
 
   @Get("whoami")

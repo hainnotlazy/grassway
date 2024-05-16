@@ -8,6 +8,7 @@ import { RedisService } from 'src/shared/services/redis/redis.service';
 import { GithubProfile } from 'src/common/models/github-profile.model';
 import { DownloadFileService } from 'src/shared/services/download-file/download-file.service';
 import { GoogleProfile } from 'src/common/models/google-profile.model';
+import { FacebookProfile } from 'src/common/models/facebook-profile.model';
 
 @Injectable()
 export class AuthService {
@@ -93,6 +94,41 @@ export class AuthService {
       is_email_verified: true,
       email_verification_code: null,
       avatar: avatarSaved,
+    })
+    return newUser;
+  }
+
+  async handleFacebookAuthentication(facebookProfile: FacebookProfile) {
+    const { id, fullname, facebookId, avatar } = facebookProfile;
+
+    // Handle when user authenticating via facebook to link account
+    if (id) {
+      const userExisted = await this.usersService.findUser(id);
+
+      if (!userExisted) {
+        throw new NotFoundException("User not found");
+      }
+
+      await this.usersService.updateUserLinkedAccount(userExisted, "facebook", facebookId);
+      return null;
+    }
+
+    // Handle when user authenticating via facebook to login/register    
+    const userExisted = await this.usersService.findUserByThirdParty("facebook", facebookId);
+
+    // Login
+    if (userExisted) {
+      return userExisted;
+    }
+
+    // Register
+    const savedAvatar = await this.downloadFileServer.downloadAvatar(avatar);
+    const newUser = await this.usersService.createUser({
+      username: facebookId,
+      password: uuidv4(),
+      fullname,
+      facebook: facebookId,
+      avatar: savedAvatar
     })
     return newUser;
   }

@@ -25,9 +25,14 @@
     </button>
   </ng-template>
 
-  <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
+  <button
+    class="text-primary border-primary hover:bg-gray-300 disabled:bg-slate-300 disabled:text-black flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow"
+    [disabled]="currentUser.facebook"
+    (click)="linkAccount('facebook', currentUser.id)"
+    type="button"
+  >
     <i class="icon-facebook text-blue-600"></i>
-    <span>Link with Facebook</span>
+    <span>{{ currentUser.facebook ? currentUser.facebook : 'Link with Facebook' }}</span>
   </button>
 
   <button
