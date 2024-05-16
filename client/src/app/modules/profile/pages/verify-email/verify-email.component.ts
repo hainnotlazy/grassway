@@ -39,6 +39,11 @@ export class VerifyEmailPage {
     this.usersService.getCurrentUser(),
     this.remainingTime$
   ]).pipe(
+    tap(([currentUser, remainingTime]) => {
+      if (currentUser.is_email_verified) {
+        this.router.navigate(['/u/my-account']);
+      }
+    }),
     map(([currentUser, remainingTime]) => {
       if (remainingTime) {
         currentUser.next_email_verification_time = remainingTime;

@@ -1,3 +1,4 @@
+import { ChangePasswordDto } from './dtos/change-password.dto';
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
@@ -6,6 +7,8 @@ import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { VerifyEmailDto } from './dtos/verify-email.dto';
+import * as bcrypt from 'bcrypt';
+import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
 
 @Injectable()
 export class UsersService {
@@ -80,6 +83,17 @@ export class UsersService {
     return await this.userRepository.save(currentUser);
   }
 
+  async changePassword(user: User, changePasswordDto: ChangePasswordDto) {
+    const { password, newPassword } = changePasswordDto;
+
+    if (!bcrypt.compareSync(password, user.password)) {
+      throw new BadRequestException("Password is incorrect");
+    }
+
+    user.password = bcrypt.hashSync(newPassword, SALT_ROUNDS);
+    return await this.userRepository.save(user);
+  }
+
   async sendVerificationEmailMail(user: User) {
     if (!user.email) {
       throw new BadRequestException("User don't have email to verify");
@@ -110,7 +124,7 @@ export class UsersService {
     throw new InternalServerErrorException("Somethings went wrong when sending verification mail!");
   }
 
-  async verifyEmail(currentUser: User, verifyEmailDto: VerifyEmailDto) {
+  async verifyEmail(user: User, verifyEmailDto: VerifyEmailDto) {
     const { code } = verifyEmailDto;
 
     // Validate verification code
@@ -119,20 +133,20 @@ export class UsersService {
       throw new BadRequestException("Invalid verification code");
     }
 
-    if (!currentUser.email) {
+    if (!user.email) {
       throw new BadRequestException("User don't have email to verify");
-    } else if (currentUser.is_email_verified) {
+    } else if (user.is_email_verified) {
       throw new BadRequestException("Email already verified");
-    } else if (currentUser.email_verification_code !== codeNumber) {
+    } else if (user.email_verification_code !== codeNumber) {
       throw new BadRequestException("Verification code is incorrect");
     }
 
     // Update user
-    currentUser.is_email_verified = true;
-    currentUser.email_verification_code = null;
-    currentUser.next_email_verification_time = null;
+    user.is_email_verified = true;
+    user.email_verification_code = null;
+    user.next_email_verification_time = null;
 
-    return await this.userRepository.save(currentUser);
+    return await this.userRepository.save(user);
   }
 
   async saveUser(user: User) {

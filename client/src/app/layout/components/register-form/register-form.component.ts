@@ -11,7 +11,7 @@ import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { RegisterFormValidator } from 'src/app/core/validators/register-form.validator';
+import { FormValidator } from 'src/app/core/validators/form.validator';
 
 @UntilDestroy()
 @Component({
@@ -66,7 +66,7 @@ export class RegisterFormComponent {
       Validators.required
     ])
   }, [
-    RegisterFormValidator.passwordMatched
+    FormValidator.passwordMatched
   ]);
 
   onSubmit() {

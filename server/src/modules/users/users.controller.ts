@@ -6,6 +6,7 @@ import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { VerifyEmailDto } from './dtos/verify-email.dto';
+import { ChangePasswordDto } from './dtos/change-password.dto';
 
 @ApiTags("Users")
 @Controller('users')
@@ -295,4 +296,58 @@ export class UsersController {
     return "";
   }
 
+  @Put("/change-password")
+  @HttpCode(204)
+  @ApiOperation({
+    summary: "Change password",
+  })
+  @ApiBearerAuth()
+  @ApiNoContentResponse({
+    description: "Verify email successfully",
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Bad request",
+    content: {
+      "application/json": { 
+        examples: {
+          "Invalid user id": {
+            value: "Invalid user id"
+          },
+          "Password is incorrect": {
+            value: "Password is incorrect"
+          }
+        }
+      }
+    }
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
+  async changePassword(@CurrentUser() currentUser: User, @Body() body: ChangePasswordDto) {
+    await this.usersService.changePassword(currentUser, body);
+    return "";
+  }
 }

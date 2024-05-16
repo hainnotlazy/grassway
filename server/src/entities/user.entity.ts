@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "src/common/constants/bcrypt.const";
 import { Exclude } from "class-transformer";
@@ -105,15 +105,6 @@ export class User {
     // Generate email verification code if email is provided
     if (this.email && !this.is_email_verified) {
       this.email_verification_code = Math.floor(100000 + Math.random() * 900000);
-    }
-  }
-
-  @BeforeUpdate()
-  handleBeforeUpdate() {
-    // Hash password
-    if (this.password) {
-      console.log("was here");
-      // this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
     }
   }
 }

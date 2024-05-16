@@ -110,3 +110,34 @@ export const profileRequirements = {
     }
   }
 }
+
+export const changePasswordRequirements = {
+  password: {
+    requirements: {
+      ...passwordRequirements
+    },
+    validationMsg: {
+      required: "Password is required",
+      minlength: `Password is invalid`,
+      maxlength: `Password is invalid`
+    }
+  },
+  newPassword: {
+    requirements: {
+      ...passwordRequirements
+    },
+    validationMsg: {
+      required: "New password is required",
+      minlength: `New password is invalid`,
+      maxlength: `New password is invalid`
+    }
+  },
+  passwordConfirmation: {
+    requirements: {
+      ...confirmPasswordRequirements
+    },
+    validationMsg: {
+      required: "Please confirm your password"
+    }
+  }
+}

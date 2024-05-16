@@ -1,6 +1,6 @@
 import { AbstractControl } from "@angular/forms";
 
-export class RegisterFormValidator {
+export class FormValidator {
   static passwordMatched(form: AbstractControl) {
     const { password, confirmPassword } = form.value;
 

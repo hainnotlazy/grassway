@@ -47,4 +47,11 @@ export class UsersService {
       code
     });
   }
+
+  changePassword(password: string, newPassword: string) {
+    return this.httpClient.put<void>("api/users/change-password", {
+      password,
+      newPassword
+    });
+  }
 }
