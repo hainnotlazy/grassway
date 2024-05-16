@@ -1,16 +1,19 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
+import { MailerService } from '@nestjs-modules/mailer';
+import { VerifyEmailDto } from './dtos/verify-email.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private uploadFileService: UploadFileService
+    private uploadFileService: UploadFileService,
+    private mailerServer: MailerService
   ) {}
 
   async findUser(id: string) {
@@ -73,6 +76,61 @@ export class UsersService {
 
     // Update user
     Object.assign(currentUser, updateProfileDto);
+
+    return await this.userRepository.save(currentUser);
+  }
+
+  async sendVerificationEmailMail(user: User) {
+    if (!user.email) {
+      throw new BadRequestException("User don't have email to verify");
+    } else if (user.is_email_verified) {
+      throw new BadRequestException("Email already verified");
+    }
+
+    // Check if user can resend verification code
+    const remainingTimeToResendCode = Math.max(0, new Date(user.next_email_verification_time).getTime() - new Date().getTime());
+    if (remainingTimeToResendCode !== 0) {
+      throw new BadRequestException("Please wait a while before requesting a resend of the verification code!");
+    }
+
+    const sentMail = await this.mailerServer.sendMail({
+      to: user.email,
+      subject: "[Grassway] Verify your email",
+      template: "verification-email",
+      context: {
+        username: user.username,
+        verificationCode: user.email_verification_code
+      }
+    });
+
+    if (sentMail?.accepted?.length > 0) {
+      user.next_email_verification_time = new Date(new Date().getTime() + (15 * 60 * 1000));
+      return await this.userRepository.save(user);
+    } 
+    throw new InternalServerErrorException("Somethings went wrong when sending verification mail!");
+  }
+
+  async verifyEmail(currentUser: User, verifyEmailDto: VerifyEmailDto) {
+    const { code } = verifyEmailDto;
+
+    // Validate verification code
+    const codeNumber = parseInt(code);
+    if (isNaN(codeNumber)) {
+      throw new BadRequestException("Invalid verification code");
+    }
+
+    if (!currentUser.email) {
+      throw new BadRequestException("User don't have email to verify");
+    } else if (currentUser.is_email_verified) {
+      throw new BadRequestException("Email already verified");
+    } else if (currentUser.email_verification_code !== codeNumber) {
+      throw new BadRequestException("Verification code is incorrect");
+    }
+
+    // Update user
+    currentUser.is_email_verified = true;
+    currentUser.email_verification_code = null;
+    currentUser.next_email_verification_time = null;
 
     return await this.userRepository.save(currentUser);
   }

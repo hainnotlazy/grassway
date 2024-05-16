@@ -1,14 +1,29 @@
 <div class="space-y-2" *ngIf="currentUser$ | async as currentUser">
   <!-- TODO: Show action to verify email if email is not verified -->
-  <button
-    class="text-primary border-primary hover:bg-gray-300 disabled:bg-slate-300 disabled:text-black flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow"
-    [disabled]="currentUser.email"
-    (click)="linkAccount('google', currentUser.id)"
-    type="button"
-  >
-    <i class="icon-google text-rose-600"></i>
-    <span>{{ currentUser.email ? currentUser.email : 'Link with Google' }}</span>
-  </button>
+  <!-- Show button if user's email is not verified -->
+  <ng-container *ngIf="currentUser.email && !currentUser.is_email_verified; else buttonLinkEmail">
+    <a
+      class="text-primary border-primary hover:bg-rose-200 bg-rose-100 flex items-center justify-center w-full gap-2 p-2 font-semibold border rounded shadow"
+      routerLink="./verify-email"
+      matTooltip="Click to verify your email"
+      matTooltipPosition="above"
+    >
+      <i class="icon-google text-rose-600"></i>
+      <span>{{ currentUser.email }}</span>
+    </a>
+  </ng-container>
+  <!-- Show button if user's email is verified or null -->
+  <ng-template #buttonLinkEmail>
+    <button
+      class="text-primary border-primary hover:bg-gray-300 disabled:bg-slate-300 disabled:text-black flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow"
+      [disabled]="currentUser.email"
+      (click)="linkAccount('google', currentUser.id)"
+      type="button"
+    >
+      <i class="icon-google text-rose-600"></i>
+      <span>{{ currentUser.email ? currentUser.email : 'Link with Google' }}</span>
+    </button>
+  </ng-template>
 
   <button class="text-primary border-primary hover:bg-gray-300 flex items-center justify-center w-full gap-2 p-2 font-semibold bg-gray-200 border rounded shadow">
     <i class="icon-facebook text-blue-600"></i>

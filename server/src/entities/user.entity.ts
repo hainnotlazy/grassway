@@ -73,7 +73,6 @@ export class User {
   is_active: boolean;
 
   @Column({ default: false })
-  @Exclude()
   is_email_verified: boolean;
 
   @Column({ nullable: true })
@@ -81,7 +80,6 @@ export class User {
   email_verification_code: number;
 
   @Column({ nullable: true })
-  @Exclude()
   next_email_verification_time: Date;
 
   @CreateDateColumn()

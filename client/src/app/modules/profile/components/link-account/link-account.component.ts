@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,7 +11,6 @@ export class LinkAccountComponent {
   currentUser$ = this.usersService.getCurrentUser();
 
   constructor(
-    private router: Router,
     private usersService: UsersService
   ) {}
 

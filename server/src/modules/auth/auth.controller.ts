@@ -42,7 +42,7 @@ export class AuthController {
         }
       }
     },
-    description: "Login success"
+    description: "Login successfully"
   })
   @ApiBadRequestResponse({
     description: "Username or password is incorrect",
@@ -84,7 +84,7 @@ export class AuthController {
         }
       }
     },
-    description: "Register success"
+    description: "Register successfully"
   })
   @ApiResponse({
     status: 400,
@@ -120,7 +120,7 @@ export class AuthController {
   })
   @ApiBearerAuth()
   @ApiNoContentResponse({
-    description: "Logout success"
+    description: "Logout successfully"
   })
   @ApiBadRequestResponse({
     description: "Invalid user id",

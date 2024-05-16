@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { GetThirdPartyNamePipe } from './pipes/get-third-party-name.pipe';
+import { CountdownPipe } from './pipes/countdown.pipe';
 
 /* Angular Material Modules */
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -41,7 +42,8 @@ const MatModules = [
 @NgModule({
   declarations: [
     TruncatePipe,
-    GetThirdPartyNamePipe
+    GetThirdPartyNamePipe,
+    CountdownPipe
   ],
   imports: [
     CommonModule,
@@ -52,6 +54,7 @@ const MatModules = [
     ReactiveFormsModule,
     TruncatePipe,
     GetThirdPartyNamePipe,
+    CountdownPipe,
     ...MatModules,
   ]
 })

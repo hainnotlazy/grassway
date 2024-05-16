@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CurrentUser } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { VerifyEmailDto } from './dtos/verify-email.dto';
 
 @ApiTags("Users")
 @Controller('users')
@@ -19,7 +20,7 @@ export class UsersController {
   })
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: "Get current user profile",
+    description: "Get current user profile successfully",
     type: User
   })
   @ApiBadRequestResponse({
@@ -60,7 +61,7 @@ export class UsersController {
   })
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: "Get user by id",
+    description: "Get user by id successfully",
     type: User
   })
   @ApiBadRequestResponse({
@@ -96,18 +97,18 @@ export class UsersController {
   }
 
   @Put("")
+  @UseInterceptors(FileInterceptor("avatar")) 
   @ApiOperation({
     summary: "Update current user profile",
   })
   @ApiBearerAuth()
-  @UseInterceptors(FileInterceptor("avatar")) 
   @ApiConsumes("multipart/form-data")
   @ApiBody({
     description: "Update current user form data",
     type: UpdateProfileDto
   })
   @ApiOkResponse({
-    description: "Update current user",
+    description: "Update current user successfully",
     type: User
   })
   @ApiBadRequestResponse({
@@ -145,4 +146,153 @@ export class UsersController {
   ) {
     return this.usersService.updateUserProfile(currentUser, body, avatar);
   }
+
+  @Post("/resend-verification-code")
+  @HttpCode(200)
+  @ApiOperation({
+    summary: "Resend verification code",
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: "Resend verification code successfully",
+    content: {
+      "application/json": { 
+        examples: {
+          "Response": {
+            value: {
+              "next_email_verification_time": "2024-05-05T00:00:00.000Z"  
+            }
+          }
+        }
+      }
+    }
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Bad request",
+    content: {
+      "application/json": { 
+        examples: {
+          "Invalid user id": {
+            value: "Invalid user id"
+          },
+          "User don't have email to verify": {
+            value: "User don't have email to verify"
+          },
+          "Email already verified": {
+            value: "Email already verified"
+          },
+        }
+      }
+    }
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiResponse({
+    status: 500,
+    description: "Internal Server Error",
+    content: {
+      "application/json": { 
+        examples: {
+          "Internal Server Error": {
+            value: "Internal Server Error"
+          },
+          "Error when send mail": {
+            value: "Somethings went wrong when sending verification mail!"
+          }
+        }
+      }
+    }
+  })
+  async resendVerificationCode(@CurrentUser() currentUser: User) {
+    const userSentMail = await this.usersService.sendVerificationEmailMail(currentUser);
+    return {
+      "next_email_verification_time": userSentMail.next_email_verification_time
+    };
+  }
+
+  @Put("/verify-email")
+  @HttpCode(204)
+  @ApiOperation({
+    summary: "Verify email",
+  })
+  @ApiBearerAuth()
+  @ApiNoContentResponse({
+    description: "Verify email successfully",
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Bad request",
+    content: {
+      "application/json": { 
+        examples: {
+          "Invalid user id": {
+            value: "Invalid user id"
+          },
+          "Invalid verification code": {
+            value: "Invalid verification code"
+          },
+          "User don't have email to verify": {
+            value: "User don't have email to verify"
+          },
+          "Email already verified": {
+            value: "Email already verified"
+          },
+          "Verification code is incorrect": {
+            value: "Verification code is incorrect"
+          }
+        }
+      }
+    }
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
+  async verifyEmail(@CurrentUser() currentUser: User, @Body() body: VerifyEmailDto) {
+    await this.usersService.verifyEmail(currentUser, body);
+    return "";
+  }
+
 }

@@ -1,3 +1,4 @@
+import { MailerConfigOptions } from './mailer.config';
 import { ServeStaticConfigOptions } from './serve-static.config';
 import { RedisConfigOptions } from './redis.config';
 import { JwtConfigOptions } from './jwt.config';
@@ -9,5 +10,6 @@ export {
   JwtConfigOptions,
   TypeOrmConfigOptions,
   RedisConfigOptions,
-  ServeStaticConfigOptions
+  ServeStaticConfigOptions,
+  MailerConfigOptions
 };
