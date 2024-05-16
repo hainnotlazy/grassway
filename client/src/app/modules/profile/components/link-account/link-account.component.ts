@@ -15,7 +15,7 @@ export class LinkAccountComponent {
   ) {}
 
   linkAccount(
-    provider: "google" | "github" | "facebook" | "slack",
+    provider: "google" | "github" | "facebook" | "twitter",
     userId: number
   ) {
     window.location.href = `${environment.server}/api/auth/${provider}?userId=${userId}`;

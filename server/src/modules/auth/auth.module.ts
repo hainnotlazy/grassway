@@ -12,6 +12,7 @@ import { JwtConfigOptions } from 'src/config';
 import { SharedModule } from 'src/shared/shared.module';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
+import { TwitterStrategy } from './strategies/twitter.strategy';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { FacebookStrategy } from './strategies/facebook.strategy';
     GithubStrategy,
     GoogleStrategy,
     FacebookStrategy,
+    TwitterStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard

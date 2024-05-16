@@ -1,10 +1,23 @@
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import helmet from "helmet";
+import * as session from 'express-session';
+import { config } from "dotenv";
+
+config({
+  path: `${__dirname}/../.env.${process.env.NODE_ENV}`
+});
 
 export function configEnvironment(app: INestApplication) {
   app.use(helmet());
-  app.getHttpAdapter().getInstance().disable('x-powered-by')
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || 'grassway-session-secret',
+      resave: false,
+      saveUninitialized: true,
+    }),
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true

@@ -47,9 +47,9 @@ export class UsersService {
     return user;
   }
 
-  /** Describe: Find user by email, github, facebook or slack */
+  /** Describe: Find user by email, github, facebook or twitter */
   async findUserByThirdParty(
-    provider: "email" | "github" | "facebook" | "slack", 
+    provider: "email" | "github" | "facebook" | "twitter", 
     value: string
   ) {
     return await this.userRepository.findOneBy({ [provider]: value });
@@ -153,7 +153,7 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
-  async updateUserLinkedAccount(user: User, provider: "email" | "facebook" | "github" | "slack", value: string) {
+  async updateUserLinkedAccount(user: User, provider: "email" | "facebook" | "github" | "twitter", value: string) {
     user[provider] = value;
     return this.userRepository.save(user);
   }

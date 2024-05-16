@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
   }
 })
 export class LoginOauthComponent {
-  navigateToAuthenticationPage(provider: "google" | "github" | "facebook" | "slack") {
+  navigateToAuthenticationPage(provider: "google" | "github" | "facebook" | "twitter") {
     window.location.href = `${environment.server}/api/auth/${provider}`
   }
 }

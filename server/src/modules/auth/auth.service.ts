@@ -9,6 +9,7 @@ import { GithubProfile } from 'src/common/models/github-profile.model';
 import { DownloadFileService } from 'src/shared/services/download-file/download-file.service';
 import { GoogleProfile } from 'src/common/models/google-profile.model';
 import { FacebookProfile } from 'src/common/models/facebook-profile.model';
+import { TwitterProfile } from 'src/common/models/twitter-profile.model';
 
 @Injectable()
 export class AuthService {
@@ -98,6 +99,30 @@ export class AuthService {
     return newUser;
   }
 
+  async linkAccountWithGoogle(id: string, email: string) {
+    const userExisted = await this.usersService.findUser(id);
+
+    if (!userExisted) {
+      throw new NotFoundException("User not found");
+    }
+
+    /**
+     * Check if email was taken by other user
+     * - Email was taken by other user (email is verified)
+     * - Email was taken by other user (email isn't verified)
+    */
+    const user = await this.usersService.findUserByThirdParty("email", email);
+    if (user && userExisted.id !== user.id && user.is_email_verified) {
+      throw new BadRequestException("Email already linked with another account");
+    } else if (user &&  userExisted.id !== user.id && !user.is_email_verified) {
+      user.email = null;
+      await this.usersService.saveUser(user);
+    }
+
+    await this.usersService.updateUserLinkedAccount(userExisted, "email", email);
+    return null;
+  }
+
   async handleFacebookAuthentication(facebookProfile: FacebookProfile) {
     const { id, fullname, facebookId, avatar } = facebookProfile;
 
@@ -133,28 +158,39 @@ export class AuthService {
     return newUser;
   }
 
-  async linkAccountWithGoogle(id: string, email: string) {
-    const userExisted = await this.usersService.findUser(id);
+  async handleTwitterAuthentication(twitterProfile: TwitterProfile) {
+    const { id, username, fullname, twitterId, avatar } = twitterProfile;
 
-    if (!userExisted) {
-      throw new NotFoundException("User not found");
+    // Handle when user authenticating via facebook to link account
+    if (id) {
+      const userExisted = await this.usersService.findUser(id);
+
+      if (!userExisted) {
+        throw new NotFoundException("User not found");
+      }
+
+      await this.usersService.updateUserLinkedAccount(userExisted, "twitter", twitterId);
+      return null;
     }
 
-    /**
-     * Check if email was taken by other user
-     * - Email was taken by other user (email is verified)
-     * - Email was taken by other user (email isn't verified)
-    */
-    const user = await this.usersService.findUserByThirdParty("email", email);
-    if (user && userExisted.id !== user.id && user.is_email_verified) {
-      throw new BadRequestException("Email already linked with another account");
-    } else if (user &&  userExisted.id !== user.id && !user.is_email_verified) {
-      user.email = null;
-      await this.usersService.saveUser(user);
+    // Handle when user authenticating via facebook to login/register    
+    const userExisted = await this.usersService.findUserByThirdParty("twitter", twitterId);
+
+    // Login
+    if (userExisted) {
+      return userExisted;
     }
 
-    await this.usersService.updateUserLinkedAccount(userExisted, "email", email);
-    return null;
+    // Register
+    const savedAvatar = await this.downloadFileServer.downloadAvatar(avatar);
+    const newUser = await this.usersService.createUser({
+      username,
+      password: uuidv4(),
+      fullname,
+      twitter: twitterId,
+      avatar: savedAvatar
+    })
+    return newUser;
   }
 
   async generateAccessToken(user: Partial<User>) {

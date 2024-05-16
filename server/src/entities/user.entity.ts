@@ -62,7 +62,7 @@ export class User {
 
   @ApiProperty()
   @Column({ nullable: true, unique: true })
-  slack: string;
+  twitter: string;
 
   @ApiProperty()
   @Column({ nullable: true, unique: true })

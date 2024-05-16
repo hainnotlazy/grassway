@@ -10,7 +10,7 @@ export interface User {
   bio: string
   email: string
   github: string
-  slack: string
+  twitter: string
   facebook: string
   is_active?: boolean
   is_email_verified: boolean
