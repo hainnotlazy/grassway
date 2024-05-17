@@ -21,6 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 const MatModules = [
   MatFormFieldModule,
@@ -36,7 +37,8 @@ const MatModules = [
   MatTabsModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatRadioModule
+  MatRadioModule,
+  ClipboardModule
 ]
 
 @NgModule({

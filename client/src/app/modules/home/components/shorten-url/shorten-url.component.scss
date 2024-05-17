@@ -1,0 +1,21 @@
+:host {
+  input {
+    width: 130px;
+  }
+
+  .shortened-link {
+    width: 200px;
+  }
+
+  @media (min-width: 350px) {
+    .form-shorten-url input {
+      width: 150px;
+    }
+  }
+
+  @media (min-width: 400px) {
+    .shortened-link {
+      width: auto;
+    }
+  }
+}

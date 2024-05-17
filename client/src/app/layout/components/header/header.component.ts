@@ -8,6 +8,9 @@ import { isAuthenticated } from 'src/app/core/helpers/local-storage.helper';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  host: {
+    class: "select-none"
+  }
 })
 export class HeaderComponent implements OnDestroy {
   isLogin = isAuthenticated();

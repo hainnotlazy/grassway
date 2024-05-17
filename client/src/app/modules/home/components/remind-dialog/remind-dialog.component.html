@@ -1,0 +1,38 @@
+<h3
+  class="text-poetsen-one"
+  align="center"
+  mat-dialog-title
+>
+  Join us to unlock more features 👻
+</h3>
+
+<mat-dialog-content class="text-jost !text-black space-y-5 !pb-0">
+  <ul class="mx-4 space-y-2 list-disc italic !text-gray-500">
+    <li>Customize your shortened links</li>
+    <li>Tracking your shortened links</li>
+    <li>And all for free</li>
+  </ul>
+</mat-dialog-content>
+
+<div
+  mat-dialog-actions
+  align="end"
+>
+  <button
+    type="button"
+    mat-button
+    mat-dialog-close
+  >
+    No, thanks
+  </button>
+  <button
+    class="!bg-secondary !text-white hover:!bg-secondary/80"
+    type="button"
+    (click)="openRegisterDialog()"
+    mat-button
+    mat-dialog-close
+    cdkFocusInitial
+  >
+    Join now
+  </button>
+</div>

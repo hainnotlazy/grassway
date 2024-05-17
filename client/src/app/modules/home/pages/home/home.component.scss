@@ -1,22 +1,8 @@
 :host  {
   min-height: inherit;
 
-  .form-shorten-url input {
-    width: 150px;
-  }
-
-  .shortened-link {
-    width: 200px;
-  }
-
   .summary > div {
     width: 200px;
-  }
-
-  @media (min-width: 400px) {
-    .shortened-link {
-      width: auto;
-    }
   }
 
   @media (min-width: 640px) {

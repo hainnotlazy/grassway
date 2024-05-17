@@ -9,6 +9,17 @@
 <mat-dialog-content class="text-jost !text-black space-y-5">
   <login-form></login-form>
 
+  <p class="text-gray-500">
+    Don't have an account?
+    <button
+      class="hover:text-primary text-black"
+      (click)="openRegisterDialog()"
+      type="button"
+    >
+      Register now
+    </button>
+  </p>
+
   <div class="grid items-center grid-cols-3">
     <hr class="border-gray-600">
     <span class="text-roboto-condensed text-center text-gray-600">OR</span>

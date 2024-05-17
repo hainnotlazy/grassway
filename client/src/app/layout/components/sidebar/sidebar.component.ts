@@ -4,6 +4,9 @@ import { Component } from '@angular/core';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
+  host: {
+    class: "select-none"
+  }
 })
 export class SidebarComponent {
 

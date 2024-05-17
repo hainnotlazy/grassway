@@ -12,7 +12,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-user-navigation',
   templateUrl: './user-navigation.component.html',
-  styleUrls: ['./user-navigation.component.scss']
+  styleUrls: ['./user-navigation.component.scss'],
+  host: {
+    class: "select-none"
+  }
 })
 export class UserNavigationComponent {
   isUserMenuOpen = false;

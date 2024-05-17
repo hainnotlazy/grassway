@@ -1,53 +1,6 @@
-<div class="form-shorten-url space-y-4">
-  <h1 class="text-poetsen-one sm:text-4xl sm:mt-0 mt-8 mb-12 text-3xl text-center">Shorten your URL</h1>
-  <div class="focus-within:border-primary sm:w-2/3 flex w-full p-1 mx-auto bg-white border border-gray-400 rounded-full">
-    <input
-      class="focus:outline-none placeholder:italic flex-grow pl-4 pr-2 rounded-tl-full rounded-bl-full"
-      [formControl]="urlControl"
-      (keydown)="onPressEnter($event)"
-      type="text"
-      placeholder="https://example.com/shorten-me"
-    >
-    <button
-      class="px-4 py-2.5 rounded-full bg-primary text-white font-semibold hover:shadow-lg hover:bg-secondary whitespace-nowrap disabled:bg-sky-400 disabled:shadow-none flex items-center justify-center gap-2"
-      type="button"
-      [disabled]="isProcessing"
-      (click)="onShortenUrl()"
-    >
-      <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
-      {{ isProcessing ? "Processing..." : "Shorten it" }}
-    </button>
-  </div>
-  <p *ngIf="formError" class="md:w-2/3 text-rose-500 md:text-start w-full px-8 mx-auto font-semibold text-center">
-    {{ formError }}
-  </p>
-  <div
-    *ngIf="shortenUrl"
-    class="md:w-2/3 sm:flex-row flex flex-col items-center justify-between w-full gap-4 px-8 mx-auto"
-  >
-    <p class="text-poetsen-one space-x-2 font-semibold">
-      <button
-        class="hover:text-black text-gray-600"
-        #infoTooltip="matTooltip"
-        (click)="infoTooltip.toggle()"
-        matTooltip="Login to customize link's back-half"
-        matTooltipPosition="above"
-        type="button"
-      >
-        <i class="icon-info"></i>
-      </button>
-      <span>Your Shortened Link:</span>
-    </p>
-    <button
-      matTooltip="Click to copy to clipboard"
-      matTooltipPosition="above"
-      class="rounded-xl flex items-center flex-grow gap-4 border border-gray-600 px-4 py-2.5 border-dashed hover:text-secondary"
-      type="button"
-    >
-      <p class="text-start shortened-link flex-grow overflow-x-auto">{{ shortenUrl }}</p>
-      <i class="icon-copy text-lg"></i>
-    </button>
-  </div>
+<div class="space-y-4">
+  <h1 class="text-poetsen-one sm:text-4xl sm:mt-0 mt-8 mb-12 text-3xl text-center select-none">Shorten your URL</h1>
+  <app-shorten-url></app-shorten-url>
 </div>
 
 <div class="summary sm:flex-row flex flex-col items-center justify-around gap-6 mb-4">
