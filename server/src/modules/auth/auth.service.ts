@@ -31,7 +31,8 @@ export class AuthService {
   }
 
   async handleGithubAuthentication(githubProfile: GithubProfile) {
-    const { id, username, fullname, github, avatar } = githubProfile;
+    const { id, fullname, github, avatar } = githubProfile;
+    let { username } = githubProfile;
 
     // Handle when user authenticating via github to link account
     if (id) {
@@ -39,6 +40,14 @@ export class AuthService {
 
       if (!userExisted) {
         throw new NotFoundException("User not found");
+      }
+
+      /**
+       * Check if github was linked by other user
+      */
+      const user = await this.usersService.findUserByThirdParty("github", github);
+      if (user && userExisted.id !== user.id) {
+        throw new BadRequestException("Github already linked with another account");
       }
 
       await this.usersService.updateUserLinkedAccount(userExisted, "github", github);
@@ -54,6 +63,13 @@ export class AuthService {
     }
     
     // Register
+    // Check if username was taken
+    if (await this.usersService.findUserByUsername(username, false, false)) {
+      const randomNumber = Math.floor(Math.random() * 100000);
+      username = `anonymous_user_${randomNumber}`;
+    }
+
+    // Create new user
     const avatarSaved = await this.downloadFileServer.downloadAvatar(avatar);
     const newUser = await this.usersService.createUser({
       username,
@@ -86,9 +102,17 @@ export class AuthService {
     }
     
     // Register
+    // Check if username was taken
+    let username = null;
+    if (await this.usersService.findUserByUsername(email, false, false)) {
+      const randomNumber = Math.floor(Math.random() * 100000);
+      username = `anonymous_user_${randomNumber}`;
+    }
+
+    // Create new user
     const avatarSaved = await this.downloadFileServer.downloadAvatar(avatar);
     const newUser = await this.usersService.createUser({
-      username: email,
+      username: username ?? email,
       password: uuidv4(),
       fullname,
       email,
@@ -134,6 +158,14 @@ export class AuthService {
         throw new NotFoundException("User not found");
       }
 
+      /**
+       * Check if facebook was linked by other user
+      */
+      const user = await this.usersService.findUserByThirdParty("facebook", facebookId);
+      if (user && userExisted.id !== user.id) {
+        throw new BadRequestException("Facebook already linked with another account");
+      }
+
       await this.usersService.updateUserLinkedAccount(userExisted, "facebook", facebookId);
       return null;
     }
@@ -147,9 +179,16 @@ export class AuthService {
     }
 
     // Register
+    // Check if username was taken
+    let username = null;
+    if (await this.usersService.findUserByUsername(facebookId, false, false)) {
+      const randomNumber = Math.floor(Math.random() * 100000);
+      username = `anonymous_user_${randomNumber}`;
+    }
+
     const savedAvatar = await this.downloadFileServer.downloadAvatar(avatar);
     const newUser = await this.usersService.createUser({
-      username: facebookId,
+      username: username ?? facebookId,
       password: uuidv4(),
       fullname,
       facebook: facebookId,
@@ -159,7 +198,8 @@ export class AuthService {
   }
 
   async handleTwitterAuthentication(twitterProfile: TwitterProfile) {
-    const { id, username, fullname, twitterId, avatar } = twitterProfile;
+    const { id, fullname, twitterId, avatar } = twitterProfile;
+    let { username } = twitterProfile;
 
     // Handle when user authenticating via facebook to link account
     if (id) {
@@ -167,6 +207,14 @@ export class AuthService {
 
       if (!userExisted) {
         throw new NotFoundException("User not found");
+      }
+
+      /**
+       * Check if twitter was linked by other user
+      */
+      const user = await this.usersService.findUserByThirdParty("twitter", twitterId);
+      if (user && userExisted.id !== user.id) {
+        throw new BadRequestException("Twitter already linked with another account");
       }
 
       await this.usersService.updateUserLinkedAccount(userExisted, "twitter", twitterId);
@@ -182,6 +230,12 @@ export class AuthService {
     }
 
     // Register
+    // Check if username was taken
+    if (await this.usersService.findUserByUsername(username, false, false)) {
+      const randomNumber = Math.floor(Math.random() * 100000);
+      username = `anonymous_user_${randomNumber}`;
+    }
+
     const savedAvatar = await this.downloadFileServer.downloadAvatar(avatar);
     const newUser = await this.usersService.createUser({
       username,

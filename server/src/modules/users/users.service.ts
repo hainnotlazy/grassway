@@ -35,12 +35,21 @@ export class UsersService {
     return user;
   }
 
-  /** Describe: Find user by username or email */
-  async findUserByUsername(username: string) {
-    const user = await this.userRepository.findOneBy({ username }) 
+  /** Describe: Find user by username or email 
+   * @param findByEmail - If true, find the user by both username and email; otherwise, find by username only.
+   * @param throwError - If true, throw an error if the user is not found.
+  */
+  async findUserByUsername(username: string, findByEmail: boolean = true, throwError: boolean = true) {
+    let user: User = null;
+
+    if (findByEmail) {
+      user = await this.userRepository.findOneBy({ username }) 
       || await this.userRepository.findOneBy({ email: username });
-    
-    if (!user) {
+    } else {
+      user = await this.userRepository.findOneBy({ username });
+    }
+
+    if (!user && throwError === true) {
       throw new NotFoundException("User not found");
     }
 
@@ -55,9 +64,9 @@ export class UsersService {
     return await this.userRepository.findOneBy({ [provider]: value });
   }
 
-  async createUser(registerUserDto: Partial<User>) {
+  async createUser(registerUser: Partial<User>) {
     // Check if username or email already exists
-    const { username, email } = registerUserDto;
+    const { username, email } = registerUser;
     if (await this.userRepository.findOneBy({ username })) {
       throw new BadRequestException('Username already exists');
     } else if (email && await this.userRepository.findOneBy({ email })) {
@@ -65,8 +74,23 @@ export class UsersService {
     }
 
     // Handled hash password in entity layer
-    const newUser = this.userRepository.create(registerUserDto);
-    return await this.userRepository.save(newUser);
+    const newUser = this.userRepository.create(registerUser);
+    const savedUser = await this.userRepository.save(newUser);
+
+    // Handle sending verification email
+    if (email && !savedUser.is_email_verified) {
+      await this.mailerServer.sendMail({
+        to: savedUser.email,
+        subject: "[Grassway] Verify your email",
+        template: "verification-email",
+        context: {
+          username: savedUser.username,
+          verificationCode: savedUser.email_verification_code
+        }
+      });
+    }
+
+    return savedUser;
   }
 
   async updateUserProfile(currentUser: User, updateProfileDto: UpdateProfileDto, avatar: Express.Multer.File) {

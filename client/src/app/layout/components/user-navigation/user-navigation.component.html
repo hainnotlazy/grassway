@@ -44,9 +44,7 @@
       </div>
       <div class="flex flex-col justify-center cursor-default">
         <span class="text-primary font-semibold">{{ currentUser.fullname | truncate:20 }}</span>
-        <small
-          *ngIf="currentUser.email"
-          class="text-gray-600">{{ currentUser.email }}</small>
+        <small class="text-gray-600">{{ currentUser.username }}</small>
       </div>
     </div>
     <div class="flex flex-col">
