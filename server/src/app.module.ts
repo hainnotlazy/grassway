@@ -10,6 +10,13 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { UrlsModule } from './modules/urls/urls.module';
+
+const appModules = [
+  UsersModule,
+  AuthModule,
+  UrlsModule
+]
 
 @Module({
   imports: [
@@ -22,8 +29,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     MailerModule.forRootAsync({
       useClass: config.MailerConfigOptions
     }),
-    UsersModule,
-    AuthModule,
+    ...appModules,
   ],
   controllers: [AppController],
   providers: [

@@ -141,3 +141,16 @@ export const changePasswordRequirements = {
     }
   }
 }
+
+export const shortenUrlRequirements = {
+  url: {
+    requirements: {
+      required: true,
+      validUrl: true
+    },
+    validationMsg: {
+      required: "Give me a link to shorten 🍑",
+      validUrl: "Look like this is not a valid link ☝"
+    }
+  }
+}

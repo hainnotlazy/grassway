@@ -76,7 +76,7 @@ export class VerifyEmailPage {
   ) {}
 
   onPressEnter(event: KeyboardEvent) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !this.isProcessing) {
       this.onVerify();
     }
   }
