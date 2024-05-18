@@ -1,8 +1,9 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "src/common/constants/bcrypt.const";
 import { Exclude } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
+import { Url } from "./url.entity";
 
 enum GenderTypes {
   MALE = "male",
@@ -14,6 +15,9 @@ export class User {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(() => Url, url => url.owner)
+  urls: Url[];
 
   @ApiProperty()
   @Column({ unique: true })
