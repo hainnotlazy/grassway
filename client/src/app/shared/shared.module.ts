@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { GetThirdPartyNamePipe } from './pipes/get-third-party-name.pipe';
@@ -51,6 +52,7 @@ const MatModules = [
     CommonModule,
     ReactiveFormsModule,
     ...MatModules,
+    InfiniteScrollModule
   ],
   exports: [
     ReactiveFormsModule,
@@ -58,6 +60,7 @@ const MatModules = [
     GetThirdPartyNamePipe,
     CountdownPipe,
     ...MatModules,
+    InfiniteScrollModule
   ]
 })
 export class SharedModule { }

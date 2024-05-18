@@ -15,6 +15,7 @@ import { UrlsService } from 'src/app/core/services/urls.service';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 import { environment } from 'src/environments/environment';
 import { RemindDialogComponent } from '../remind-dialog/remind-dialog.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @UntilDestroy()
 @Component({
@@ -47,6 +48,7 @@ export class ShortenUrlComponent {
 
   constructor(
     private urlsService: UrlsService,
+    private cookieService: CookieService,
     private snackbar: MatSnackBar,
     private clipboard: Clipboard,
     private dialog: MatDialog
@@ -102,14 +104,18 @@ export class ShortenUrlComponent {
         this.dialog.open(RemindDialogComponent, {
           width: "400px",
           disableClose: true,
+          data: {
+            shortenedUrl: this.shortenUrl
+          }
         });
-
-        this.promptWhenUserCloseTab();
-      }, 5000);
+      }, 2000);
     }
   }
 
   private handleShortenSuccess(url: Url, saveCache: boolean = true) {
+    // Add url to cookie for ref when authentication
+    this.setCookie("ref", url.id);
+
     if (saveCache) {
       this.cachedUrls.push(url);
     }
@@ -140,21 +146,13 @@ export class ShortenUrlComponent {
     })
   }
 
-  private isShortened(url: string) {
-    return this.cachedUrls.find(cachedUrl => cachedUrl.origin_url === url);
+  private setCookie(cookieName: string, cookieValue: string) {
+    const now = new Date();
+    const expires = new Date(now.getTime() + 1 * 60 * 60 * 1000); // 1 hour
+    this.cookieService.set(cookieName, cookieValue, expires);
   }
 
-  private promptWhenUserCloseTab() {
-    window.onbeforeunload = function (e) {
-      e = e || window.event;
-
-      // For IE and Firefox prior to version 4
-      if (e) {
-        e.returnValue = 'Are you leaving?';
-      }
-
-      // For Safari
-      return 'Are you leaving?';
-    };
+  private isShortened(url: string) {
+    return this.cachedUrls.find(cachedUrl => cachedUrl.origin_url === url);
   }
 }

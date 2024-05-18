@@ -9,11 +9,10 @@ import { RegisterDialogComponent } from 'src/app/layout/components/register-dial
 })
 export class RemindDialogComponent {
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   openRegisterDialog() {
-    // this.dialog.closeAll();
     this.dialog.open(RegisterDialogComponent, {
       width: "400px",
     });

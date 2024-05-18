@@ -3,8 +3,10 @@ export interface Url {
   origin_url: string;
   back_half: string;
   custom_back_half: string;
+  title: string;
+  description?: string;
   password?: string;
   is_active: boolean;
-  created_at?: Date;
+  created_at: Date;
   updated_at?: Date;
 }

@@ -9,6 +9,7 @@ import { LayoutModule } from './layout/layout.module';
 import { JwtModule } from '@auth0/angular-jwt';
 import { JwtConfigOptions } from "./core/config/jwt.config";
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     JwtModule.forRoot(JwtConfigOptions)
   ],
   providers: [
+    CookieService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
