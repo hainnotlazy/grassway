@@ -67,7 +67,7 @@ export class ChangePasswordFormComponent {
       }
     }
 
-    if (this.changePasswordForm.valid) {
+    if (this.changePasswordForm.valid && !this.isProcessing) {
       this.isProcessing = true;
       this.usersService.changePassword(
         this.changePasswordForm.get("password")?.value as string,

@@ -40,33 +40,21 @@ export class UrlsService {
 
   async shortenUrl(currentUser: User, url: Partial<Url>) {
     // TODO: add http/https to origin url if origin_url is youtube.com
-    const { origin_url } = url;
-
-    // Check if origin_url is a real link
-    if (!this.isValidUrl(origin_url)) {
-      throw new BadRequestException("Invalid URL");
-    }
+    const { origin_url, title, description, custom_back_half, password } = url;
 
     const backHalf = await this.generateBackHalf();
 
     const shortenedUrl = this.urlRepository.create({ 
       origin_url, 
       owner: currentUser,
-      back_half: backHalf 
+      back_half: backHalf ,
+      title,
+      description,
+      custom_back_half,
+      password
     });
 
     return this.urlRepository.save(shortenedUrl);
-  }
-
-  private isValidUrl(url: string) {
-    const regexPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-
-    return regexPattern.test(url);
   }
 
   private checkBackHalf(backHalf: string) {

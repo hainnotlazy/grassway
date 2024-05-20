@@ -53,7 +53,7 @@ export class LoginFormComponent {
   });
 
   onSubmit() {
-    if (this.loginForm.valid) {
+    if (this.loginForm.valid && !this.isProcessing) {
       this.isProcessing = changeStatus(this.isProcessing);
       this.authService.login(
         this.loginForm.value.username as string,

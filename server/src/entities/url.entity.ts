@@ -2,6 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
 import { BeforeInsert, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./user.entity";
+import * as bcrypt from "bcrypt";
+import { SALT_ROUNDS } from "src/common/constants/bcrypt.const";
 
 @Entity()
 export class Url {
@@ -51,6 +53,11 @@ export class Url {
 
   @BeforeInsert() 
   handleBeforeInsert() {
+    // Hash Password
+    if (this.password) {
+      this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
+    }
+
     // Generate title if not provided
     if (!this.title) {
       this.title = `Unnamed title ${Math.floor(Math.random() * 100000)}`;

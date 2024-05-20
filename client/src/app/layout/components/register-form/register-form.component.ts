@@ -76,7 +76,7 @@ export class RegisterFormComponent {
       }
     }
 
-    if (this.registerForm.valid) {
+    if (this.registerForm.valid && !this.isProcessing) {
       this.isProcessing = changeStatus(this.isProcessing);
       this.authService.register(
         this.registerForm.value.username as string,

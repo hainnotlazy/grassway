@@ -1,0 +1,60 @@
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { Transform, TransformFnParams } from "class-transformer";
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from "class-validator";
+
+/** This DTO used for authenticated users to shorten url */
+export class CreateShortenUrlDto {
+  @ApiProperty({
+    description: "Origin url",
+    type: String
+  })
+  @IsString()
+  @IsUrl()
+  @IsNotEmpty()
+  @Transform(({ value }: TransformFnParams) => {
+    value = value?.trim();
+    
+    // Add prefix http|https if not present
+    if (!value.startsWith("http://") && !value.startsWith("https://")) {
+      return `https://${value}`;
+    }
+    return value;
+  })
+  origin_url: string;
+  
+  @ApiPropertyOptional({
+    description: "Title of shortened url",
+    type: String
+  })
+  @IsString()
+  @IsOptional()
+  @Transform(({ value }: TransformFnParams) => value?.trim())
+  title: string;
+
+  @ApiPropertyOptional({
+    description: "Description of shortened url",
+    type: String
+  })
+  @IsString()
+  @IsOptional()
+  @Transform(({ value }: TransformFnParams) => value?.trim())
+  description: string;
+
+  @ApiPropertyOptional({
+    description: "Custom back half of shortened url",
+    type: String
+  })
+  @IsString()
+  @IsOptional()
+  @Transform(({ value }: TransformFnParams) => value?.trim())
+  custom_back_half: string;
+
+  @ApiPropertyOptional({
+    description: "Password of shortened url",
+    type: String
+  })
+  @IsString()
+  @IsOptional()
+  @Transform(({ value }: TransformFnParams) => value?.trim())
+  password: string;
+}

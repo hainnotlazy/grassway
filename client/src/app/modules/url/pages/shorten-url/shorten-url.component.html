@@ -1,6 +1,7 @@
 <form
   [formGroup]="form"
   class="md:w-2/3 xl:w-1/2 w-full mx-auto my-4 space-y-2"
+  (submit)="onSubmit()"
 >
   <h4 class="text-poetsen-one text-3xl">Shorten new link</h4>
 
@@ -11,7 +12,7 @@
         id="originUrl"
         formControlName="originUrl"
         matInput
-        placeholder="https://example.com"
+        placeholder="https://example.com/long-url"
         type="text"
       >
       <mat-error
@@ -92,9 +93,18 @@
     </div>
   </div>
 
-  <div class="flex items-center justify-end gap-4">
+  <div class="gap-x-4 gap-y-2 flex flex-wrap items-center justify-end">
+    <p *ngIf="formError" class="text-rose-500 w-full font-semibold text-center">{{ formError }}</p>
     <a class="text-gray-600" routerLink="/u/links">Cancel</a>
-    <button class="bg-secondary text-white px-4 py-2.5 rounded-md font-semibold hover:bg-secondary/80">Create</button>
+    <button
+      class="bg-secondary text-white hover:bg-secondary/80 text-center py-2.5 px-4 rounded-md shadow-md disabled:bg-gray-400 flex items-center justify-center gap-2"
+      type="submit"
+      [class]="{'disabled:bg-sky-400': isProcessing}"
+      [disabled]="!form.valid || isProcessing"
+    >
+      <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
+      {{ isProcessing ? "Processing..." : "Create" }}
+    </button>
   </div>
 
 </form>

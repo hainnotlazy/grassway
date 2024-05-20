@@ -108,7 +108,7 @@ export class ManageAccountFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.manageAccountForm.valid) {
+    if (this.manageAccountForm.valid && !this.isProcessing) {
       this.isProcessing = true;
       this.usersService.updateCurrentUser(this.manageAccountForm.value as UserProfile).pipe(
         tap(() => {

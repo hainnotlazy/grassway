@@ -1,4 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { Transform, TransformFnParams } from "class-transformer";
 import { IsEnum, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 enum Gender {
@@ -17,6 +18,7 @@ export class UpdateProfileDto {
   @IsString()
   @MinLength(3, { message: "Fullname must have more than 3 characters" })
   @MaxLength(255, { message: "Fullname must have less than 255 characters" })
+  @Transform(({ value }: TransformFnParams) => value?.trim())
   fullname: string;
 
   @ApiPropertyOptional({
@@ -27,6 +29,7 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsString()
   @MaxLength(255, { message: "Bio must have less than 255 characters" })
+  @Transform(({ value }: TransformFnParams) => value?.trim())
   bio: string;
 
   @ApiPropertyOptional({
@@ -36,6 +39,7 @@ export class UpdateProfileDto {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }: TransformFnParams) => value?.trim())
   phone: string;
 
   @ApiPropertyOptional({

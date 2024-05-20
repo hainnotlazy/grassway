@@ -61,7 +61,7 @@ export class ShortenUrlComponent {
   }
 
   onShortenUrl() {
-    if (this.urlControl.valid) {
+    if (this.urlControl.valid && !this.isProcessing) {
       this.isProcessing = true;
 
       // If url has been shortened
