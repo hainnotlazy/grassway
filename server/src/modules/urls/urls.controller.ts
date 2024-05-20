@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, ParseBoolPipe, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { ShortenUrlDto } from './dtos/shorten-url.dto';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
@@ -16,8 +16,16 @@ export class UrlsController {
 
   // Get paginated urls by user id
   @Get()
-  async getUrls(@CurrentUser() currentUser: User, @Query("page") page: number) {
-    return this.urlsService.getUrls(currentUser, 10, page);
+  async getUrls(
+    @CurrentUser() currentUser: User, 
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("is_active", new DefaultValuePipe(true), ParseBoolPipe) isActive: boolean
+  ) {
+    return this.urlsService.getUrls(currentUser, {
+      limit: 20,
+      page: page || 1,
+      isActive: isActive
+    });
   }
 
   // Get url by back-half

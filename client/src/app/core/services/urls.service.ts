@@ -4,6 +4,7 @@ import { Url } from '../models/url.model';
 import { UrlsResponse } from '../interfaces/urls-response.interface';
 import { ShortenUrl } from '../interfaces/shorten-url.interface';
 import { Observable } from 'rxjs';
+import { GetUrlsOptions } from '../interfaces/get-urls-options.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,8 @@ export class UrlsService {
     }
   }
 
-  listUrls(page: number) {
-    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}`)
+  listUrls(options: GetUrlsOptions) {
+    const { page, isActive = true } = options;
+    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}`)
   }
 }

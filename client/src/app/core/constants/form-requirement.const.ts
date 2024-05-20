@@ -142,16 +142,3 @@ export const changePasswordRequirements = {
   }
 }
 
-// TODO: Move this url validation to url-form-requirement.const.ts
-export const shortenUrlRequirements = {
-  url: {
-    requirements: {
-      required: true,
-      validUrl: true
-    },
-    validationMsg: {
-      required: "Give me a link to shorten 🍑",
-      validUrl: "Look like this is not a valid link ☝"
-    }
-  }
-}

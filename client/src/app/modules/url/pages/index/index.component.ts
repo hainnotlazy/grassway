@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatSelectChange } from '@angular/material/select';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, map, scan, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, scan, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
@@ -13,20 +14,29 @@ import { environment } from 'src/environments/environment';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class IndexPage {
+export class IndexPage implements OnInit {
   isLoading = false;
   currentPage = 1;
   totalPage = 1;
+
+  newFilterApplied = false;
+  filterOptions = {
+    isActive: true
+  };
+
+  private initialLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
+  private initialLoad$ = this.initialLoadSubject.asObservable();
 
   private infiniteLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
   private infiniteLoad$ = this.infiniteLoadSubject.asObservable();
 
   myUrls$ = combineLatest([
-    this.urlsService.listUrls(1),
+    this.initialLoad$,
     this.infiniteLoad$
   ]).pipe(
+    filter(([initialResponse]) => !!initialResponse),
     tap(([initialResponse, infiniteResponse]) => {
-      const response = infiniteResponse || initialResponse;
+      const response = infiniteResponse || (initialResponse as UrlsResponse);
       this.currentPage = this.getValueInNumber(response.meta.currentPage);
       this.totalPage = this.getValueInNumber(response.meta.totalPages);
     }),
@@ -36,12 +46,17 @@ export class IndexPage {
       }
     }),
     scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse]) => {
-      return infiniteResponse ? [...accumulatorResponse, ...infiniteResponse.data] : initialResponse.data;
+      if (this.newFilterApplied) {
+        this.newFilterApplied = false;
+        return (initialResponse as UrlsResponse).data;
+      } else {
+        return infiniteResponse ? [...accumulatorResponse, ...infiniteResponse.data] : (initialResponse as UrlsResponse).data;
+      }
     }, []),
     map(data => {
       return data.map(url => ({
         ...url,
-        back_half: `${environment.client}/${url.back_half}`
+        client: `${environment.client}/l/`
       }))
     }),
   );
@@ -50,16 +65,44 @@ export class IndexPage {
     private urlsService: UrlsService
   ) {}
 
+  ngOnInit() {
+    this.urlsService.listUrls({ page: 1 }).pipe(
+      tap((response) => {
+        this.initialLoadSubject.next(response);
+      }),
+      untilDestroyed(this)
+    ).subscribe()
+  }
+
   onScrollDown() {
     if (this.currentPage < this.totalPage && !this.isLoading) {
       this.isLoading = true;
-      this.urlsService.listUrls(this.currentPage + 1).pipe(
+      this.urlsService.listUrls({
+        page: this.currentPage + 1,
+        isActive: this.filterOptions.isActive
+      }).pipe(
         tap((response) => {
           this.infiniteLoadSubject.next(response);
         }),
         untilDestroyed(this)
       ).subscribe()
     }
+  }
+
+  onFilterChange(data: MatSelectChange) {
+    const value = data.value;
+    this.filterOptions.isActive = value === "active";
+
+    this.urlsService.listUrls({
+      page: 1,
+      isActive: this.filterOptions.isActive
+    }).pipe(
+      tap((response) => {
+        this.newFilterApplied = true;
+        this.initialLoadSubject.next(response);
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   private getValueInNumber(value: string | number) {

@@ -6,7 +6,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, tap } from 'rxjs';
-import { shortenUrlRequirements } from 'src/app/core/constants/form-requirement.const';
+import { shortenUrlRequirements } from 'src/app/core/constants/url-form-requirement.const';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
@@ -37,7 +37,7 @@ export class ShortenUrlComponent {
   @ViewChild("copyTooltip") copyTooltip!: MatTooltip;
 
   // Form validation messages
-  urlValidationMessages: ValidationMessage = shortenUrlRequirements.url.validationMsg;
+  urlValidationMessages: ValidationMessage = shortenUrlRequirements.originUrl.validationMsg;
 
   urlControl = new FormControl("", [
     Validators.required,

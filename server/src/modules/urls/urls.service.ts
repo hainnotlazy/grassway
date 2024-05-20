@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-paginate';
+import { FilterOperator, paginate } from 'nestjs-paginate';
+import { GetUrlsOptions } from 'src/common/models/get-urls-options.model';
 import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -14,11 +15,18 @@ export class UrlsService {
   ) {}
 
   /** Describe: Get paginated urls by user */
-  async getUrls(currentUser: User, limit: number, page: number) {
+  async getUrls(currentUser: User, options: GetUrlsOptions) {
+    const { limit, page, isActive, backHalfOptions, endDate, startDate } = options;
+
+    // Create query builder
     const queryBuilder = this.urlRepository.createQueryBuilder("urls")
       .leftJoinAndSelect("urls.owner", "owner")
-      .where("urls.owner = :ownerId", { ownerId: currentUser.id });
-
+      .where("urls.owner = :ownerId", { ownerId: currentUser.id })
+      .andWhere("urls.is_active = :isActive", { isActive })
+      // .andWhere("urls.custom_back_half != ''")
+      // .andWhere("urls.created_at > :startDate", { startDate: new Date(Date.now() - 24 * 60 * 60 * 1000) })
+      // .andWhere("urls.created_at < :endDate", { endDate: new Date() })
+    
     return paginate({
       limit,
       page,
@@ -35,6 +43,7 @@ export class UrlsService {
       ]
     }, queryBuilder, {
       sortableColumns: ["id"],
+      maxLimit: 50
     })
   }
 

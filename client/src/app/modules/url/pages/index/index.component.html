@@ -31,7 +31,7 @@
 
     <mat-form-field appearance="outline" color="accent">
       <mat-label>Show links</mat-label>
-      <mat-select value="active">
+      <mat-select value="active" (selectionChange)="onFilterChange($event)">
         <mat-option value="active">Active</mat-option>
         <mat-option value="inactive">Inactive</mat-option>
       </mat-select>
@@ -63,8 +63,13 @@
       </div>
       <div class="flex flex-col flex-grow gap-6">
         <div class="link-info flex-grow space-y-1">
-          <h6 class="text-jost text-secondary text-lg font-semibold cursor-default">{{ url.title }}</h6>
-          <a class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500" routerLink="">{{ url.back_half }}</a>
+          <h6 class="text-jost text-secondary text-lg font-semibold cursor-default">{{ url.id }}</h6>
+          <a
+            class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500"
+            [routerLink]="'/l/' + (url.custom_back_half ? url.custom_back_half : url.back_half)"
+          >
+            {{ url.client + (url.custom_back_half || url.back_half) }}
+          </a>
           <a class="hover:underline hover:text-black block text-sm text-gray-500" [href]="url.origin_url">{{ url.origin_url }}</a>
         </div>
         <div class="flex items-center gap-2">

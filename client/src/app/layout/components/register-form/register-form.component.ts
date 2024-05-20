@@ -100,7 +100,7 @@ export class RegisterFormComponent {
     const accessToken = data.access_token;
 
     setAccessToken(accessToken);
-    this.router.navigate(['/u/link']);
+    this.router.navigate(['/u/links']);
   }
 
   private handleRegisterFail(error: any) {

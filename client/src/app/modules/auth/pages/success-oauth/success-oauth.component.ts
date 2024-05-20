@@ -18,7 +18,7 @@ export class SuccessOauthPage implements OnInit {
     if (accessToken) {
       setAccessToken(accessToken);
       this.removeCookie('access_token');
-      this.router.navigate(["/u/link"]);
+      this.router.navigate(["/u/links"]);
     } else {
       this.router.navigate(["/"]);
     }
