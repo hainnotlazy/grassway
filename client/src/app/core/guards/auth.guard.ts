@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   // TODO: Use public routes array
   if (currentUrl === "/" || currentUrl === "/auth/success-authentication") {
     if (isAuthenticated() && !jwtService.isTokenExpired()) {
-      router.navigate(["/u/link"]);
+      router.navigate(["/u/links"]);
       return false;
     }
     return true;

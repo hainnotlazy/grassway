@@ -2,15 +2,16 @@
   <div class="flex items-center justify-between">
     <h1 class="text-poetsen-one text-3xl">My Links</h1>
     <!-- TODO: Show tooltip on button shorten new link whenever screen < 640 -->
-    <button
+    <a
       matTooltip="Shorten new link"
       matTooltipPosition="above"
       matTooltipHideDelay="2000"
       type="button"
       class="bg-white px-3 py-1.5 rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black flex items-center gap-1"
+      routerLink="shorten-url"
     >
       <i class="icon-rewrite"></i> <span class="md:inline hidden">Shorten new link</span>
-    </button>
+    </a>
   </div>
   <div>
     <button type="button" class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black">
@@ -94,10 +95,20 @@
       </div>
     </div>
 
-    <div class="lg:w-2/3 grid items-center w-full grid-cols-4 mx-auto">
+    <div
+      *ngIf="currentPage === totalPage || totalPage === 0; else loading"
+      class="lg:w-2/3 grid items-center w-full grid-cols-4 mx-auto"
+    >
       <hr class="border-gray-400">
       <p class="text-rubik sm:text-base col-span-2 text-sm text-center text-gray-600">You've reached the end of your links</p>
       <hr class="border-gray-400">
     </div>
+
+    <ng-template #loading>
+      <div class="text-primary animate-pulse flex items-center justify-center gap-2">
+        <i class="icon-spinner spinning text-xl"></i>
+        <span class="font-semibold">Loading your links...</span>
+      </div>
+    </ng-template>
   </div>
 </div>

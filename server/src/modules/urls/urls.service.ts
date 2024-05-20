@@ -39,6 +39,7 @@ export class UrlsService {
   }
 
   async shortenUrl(currentUser: User, url: Partial<Url>) {
+    // TODO: add http/https to origin url if origin_url is youtube.com
     const { origin_url } = url;
 
     // Check if origin_url is a real link

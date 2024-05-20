@@ -1,0 +1,100 @@
+<form
+  [formGroup]="form"
+  class="md:w-2/3 xl:w-1/2 w-full mx-auto my-4 space-y-2"
+>
+  <h4 class="text-poetsen-one text-3xl">Shorten new link</h4>
+
+  <div class="flex flex-col gap-2">
+    <label class="font-semibold text-gray-600" for="originUrl">Destination</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="originUrl"
+        formControlName="originUrl"
+        matInput
+        placeholder="https://example.com"
+        type="text"
+      >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(form.get('originUrl')?.errors)"
+      >
+        {{ originUrlValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="font-semibold text-gray-600" for="title">Title</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="title"
+        formControlName="title"
+        matInput
+        placeholder="Set title for shortened link"
+        type="text"
+      >
+    </mat-form-field>
+  </div>
+
+
+  <div class="flex flex-col gap-2">
+    <label class="font-semibold text-gray-600" for="description">Description</label>
+    <mat-form-field
+      class="w-full"
+      appearance="outline"
+      color="accent"
+    >
+      <textarea
+        id="description"
+        formArrayName="description"
+        matInput
+        placeholder="Set description for shortened link"
+        rows="2"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <h6 class="text-poetsen-one list-item ml-4 text-lg">Custom your link</h6>
+  <div class="sm:flex-row flex flex-col gap-4">
+    <div class="sm:w-1/2 flex flex-col gap-2">
+      <label class="font-semibold text-gray-600" for="backHalf">Custom back-half</label>
+      <mat-form-field appearance="outline" color="accent">
+        <input
+          id="backHalf"
+          formControlName="customBackHalf"
+          matInput
+          placeholder="Set a custom back-half"
+          type="text"
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="sm:w-1/2 flex flex-col gap-2">
+      <label class="font-semibold text-gray-600" for="password">Set password</label>
+      <mat-form-field appearance="outline" color="accent">
+        <input
+          id="password"
+          formControlName="password"
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+        >
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword"
+          type="button"
+        >
+          <mat-icon class="text-lg">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-4">
+    <a class="text-gray-600" routerLink="/u/links">Cancel</a>
+    <button class="bg-secondary text-white px-4 py-2.5 rounded-md font-semibold hover:bg-secondary/80">Create</button>
+  </div>
+
+</form>

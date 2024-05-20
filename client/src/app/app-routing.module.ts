@@ -29,7 +29,7 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: "link",
+        path: "links",
         loadChildren: () => import('./modules/url/url.module').then(m => m.UrlModule)
       },
       {

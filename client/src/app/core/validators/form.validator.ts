@@ -3,6 +3,7 @@ import { AbstractControl } from "@angular/forms";
 export class FormValidator {
   static validUrl(control: AbstractControl) {
     const value = control.value;
+    if (value === "") return null;
 
     // Check value is valid url
     const regexPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
