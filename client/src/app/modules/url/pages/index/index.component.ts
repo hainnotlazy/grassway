@@ -1,4 +1,3 @@
-import { FilterDialogData } from './../../components/filter-dialog/filter-dialog.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
@@ -78,7 +77,7 @@ export class IndexPage implements OnInit {
         this.initialLoadSubject.next(response);
       }),
       untilDestroyed(this)
-    ).subscribe()
+    ).subscribe();
   }
 
   onScrollDown() {
@@ -121,9 +120,9 @@ export class IndexPage implements OnInit {
     });
 
     dialogRef.afterClosed().pipe(
-      filter(data => !!data),
-      tap((data: FilterDialogData) => {
-        this.filterOptions.linkTypeOptions = data.linkType;
+      filter(data => !!data && this.isFilterOptionsChanged(this.filterOptions, data)),
+      tap((data: GetUrlsOptions) => {
+        Object.assign(this.filterOptions, data);
         this.numberFilterApplied = filtersApplied(this.filterOptions);
       }),
       switchMap(() => this.urlsService.listUrls({
@@ -137,6 +136,18 @@ export class IndexPage implements OnInit {
       }),
       untilDestroyed(this)
     ).subscribe()
+  }
+
+  /** Compare props linkTypeOptions, startDate, endDate of 2 filter options */
+  private isFilterOptionsChanged(baseOption: GetUrlsOptions, filterOptions: GetUrlsOptions) {
+    if (baseOption.linkTypeOptions !== filterOptions.linkTypeOptions) {
+      return true;
+    } else if (baseOption.startDate !== filterOptions.startDate) {
+      return true;
+    } else if (baseOption.endDate !== filterOptions.endDate) {
+      return true;
+    }
+    return false;
   }
 
   private getValueInNumber(value: string | number) {

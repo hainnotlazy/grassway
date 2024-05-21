@@ -8,20 +8,26 @@ export interface GetUrlsOptions {
   page?: number;
   isActive?: boolean;
   linkTypeOptions?: LinkTypeOptions;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | string;
+  endDate?: Date | string;
 }
 
 const BaseFilterOptions: GetUrlsOptions = {
   page: 1,
   isActive: true,
-  linkTypeOptions: LinkTypeOptions.ALL
+  linkTypeOptions: LinkTypeOptions.ALL,
+  startDate: "",
+  endDate: ""
 }
 
 export function filtersApplied(options: GetUrlsOptions) {
   let count = 0;
 
   if (options.linkTypeOptions !== BaseFilterOptions.linkTypeOptions) {
+    count ++;
+  }
+
+  if (options.startDate || options.endDate) {
     count ++;
   }
 

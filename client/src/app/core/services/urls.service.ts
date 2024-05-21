@@ -30,9 +30,11 @@ export class UrlsService {
     const {
       page = 1,
       isActive = true,
-      linkTypeOptions = LinkTypeOptions.ALL
+      linkTypeOptions = LinkTypeOptions.ALL,
+      startDate = "",
+      endDate = ""
     } = options;
 
-    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}`);
+    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}`);
   }
 }

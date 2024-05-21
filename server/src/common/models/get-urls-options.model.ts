@@ -9,6 +9,6 @@ export interface GetUrlsOptions {
   page: number;
   isActive?: boolean;
   linkTypeOptions?: LinkTypeOptions;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | string;
+  endDate?: Date | string;
 }

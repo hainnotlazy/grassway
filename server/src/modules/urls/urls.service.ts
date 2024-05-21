@@ -16,7 +16,7 @@ export class UrlsService {
 
   /** Describe: Get paginated urls by user */
   async getUrls(currentUser: User, options: GetUrlsOptions) {
-    const { limit, page, isActive, linkTypeOptions, endDate, startDate } = options;
+    const { limit, page, isActive, linkTypeOptions, startDate, endDate  } = options;
 
     // Create query builder
     const queryBuilder = this.urlRepository.createQueryBuilder("urls")
@@ -24,15 +24,21 @@ export class UrlsService {
       .where("urls.owner = :ownerId", { ownerId: currentUser.id })
       .andWhere("urls.is_active = :isActive", { isActive })
     
+    // Add filter link type
     if (linkTypeOptions === LinkTypeOptions.WITH_CUSTOM_BACK_HALVES) {
       queryBuilder.andWhere("urls.custom_back_half != ''");
     } else if (linkTypeOptions === LinkTypeOptions.WITHOUT_CUSTOM_BACK_HALVES) {
-      queryBuilder.andWhere("urls.custom_back_half is null"); // = null
+      queryBuilder.andWhere("urls.custom_back_half is null");
     }
 
-      // .andWhere("urls.created_at > :startDate", { startDate: new Date(Date.now() - 24 * 60 * 60 * 1000) })
-      // .andWhere("urls.created_at < :endDate", { endDate: new Date() })
-    
+    // Add filter date
+    if (startDate) {
+      queryBuilder.andWhere("urls.created_at > :startDate", { startDate });
+    }
+    if (endDate) {
+      queryBuilder.andWhere("urls.created_at < :endDate", { endDate });
+    }
+
     return paginate({
       limit,
       page,

@@ -22,13 +22,17 @@ export class UrlsController {
     @CurrentUser() currentUser: User, 
     @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query("is_active", new DefaultValuePipe(true), ParseBoolPipe) isActive: boolean,
-    @Query("link_type", new DefaultValuePipe(LinkTypeOptions.ALL), LinkTypeValidationPipe) linkType: LinkTypeOptions
+    @Query("link_type", new DefaultValuePipe(LinkTypeOptions.ALL), LinkTypeValidationPipe) linkType: LinkTypeOptions,
+    @Query("start_date") startDate: string,
+    @Query("end_date") endDate: string
   ) {
     return this.urlsService.getUrls(currentUser, {
       limit: 10,
       page: page || 1,
       isActive: isActive,
-      linkTypeOptions: linkType
+      linkTypeOptions: linkType,
+      startDate: startDate,
+      endDate: endDate
     });
   }
 
