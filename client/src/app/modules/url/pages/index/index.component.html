@@ -14,8 +14,13 @@
     </a>
   </div>
   <div>
-    <button type="button" class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black">
-      <i class="icon-filter"></i> Filter
+    <button
+      class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black"
+      type="button"
+      [ngClass]="{'text-secondary font-semibold hover:text-secondary': numberFilterApplied}"
+      (click)="openFilterDialog()"
+    >
+      <i class="icon-filter"></i> {{ numberFilterApplied ? numberFilterApplied + " filter applied" : "Filter" }}
     </button>
   </div>
   <hr class="border-gray-400">

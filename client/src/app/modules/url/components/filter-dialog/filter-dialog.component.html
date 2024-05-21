@@ -1,0 +1,76 @@
+<h6
+  class="text-poetsen-one !text-2xl !pl-4"
+  mat-dialog-title
+>
+  Filter
+</h6>
+
+<mat-dialog-content>
+  <form [formGroup]="filterForm">
+    <div class="flex flex-col gap-2">
+      <label for="" class="text-sm">Tags:</label>
+      <mat-form-field appearance="outline" color="accent">
+        <mat-select value="all" >
+          <mat-option value="all">Select tag</mat-option>
+          <mat-option>One</mat-option>
+          <mat-option>Two</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-sm">Link type:</label>
+      <mat-form-field appearance="outline" color="accent">
+        <mat-select formControlName="linkType">
+          <mat-option value="all">All</mat-option>
+          <mat-option value="with-custom-back-halves">Links with custom back-halves</mat-option>
+          <mat-option value="without-custom-back-halves">Links without custom back-halves</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="" class="text-sm">Filter by created date:</label>
+      <mat-form-field appearance="outline" color="accent">
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date">
+          <input matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint class="italic">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<div
+  mat-dialog-actions
+  align="end"
+  class="!p-4 space-x-3"
+>
+  <button
+    class="hover:text-primary flex items-center gap-2 font-semibold text-gray-500"
+    type="button"
+    mat-dialog-close
+    >
+    <i class="icon-close"></i>
+    Clear all filter
+  </button>
+  <button
+    class="hover:shadow px-3 py-2 border rounded-md"
+    type="button"
+    mat-dialog-close
+  >
+    Cancel
+  </button>
+  <button
+    class="!bg-secondary !text-white hover:!bg-secondary/80 px-3 py-2 rounded-md focus:outline-none hover:shadow"
+    type="button"
+    mat-dialog-close
+    cdkFocusInitial
+    (click)="onFilterApply()"
+  >
+    Apply
+  </button>
+</div>

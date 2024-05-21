@@ -6,6 +6,8 @@ import { User } from 'src/entities/user.entity';
 import { CreateShortenUrlDto } from './dtos/create-shorten-url.dto';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Url } from 'src/entities/url.entity';
+import { LinkTypeValidationPipe } from 'src/shared/pipes/link-type-validation/link-type-validation.pipe';
+import { LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 
 @ApiTags("Urls")
 @Controller('urls')
@@ -19,12 +21,14 @@ export class UrlsController {
   async getUrls(
     @CurrentUser() currentUser: User, 
     @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query("is_active", new DefaultValuePipe(true), ParseBoolPipe) isActive: boolean
+    @Query("is_active", new DefaultValuePipe(true), ParseBoolPipe) isActive: boolean,
+    @Query("link_type", new DefaultValuePipe(LinkTypeOptions.ALL), LinkTypeValidationPipe) linkType: LinkTypeOptions
   ) {
     return this.urlsService.getUrls(currentUser, {
-      limit: 20,
+      limit: 10,
       page: page || 1,
-      isActive: isActive
+      isActive: isActive,
+      linkTypeOptions: linkType
     });
   }
 

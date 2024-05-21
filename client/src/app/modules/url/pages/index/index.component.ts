@@ -1,12 +1,16 @@
+import { FilterDialogData } from './../../components/filter-dialog/filter-dialog.component';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, map, scan, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, scan, switchMap, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { environment } from 'src/environments/environment';
+import { FilterDialogComponent } from '../../components/filter-dialog/filter-dialog.component';
+import { GetUrlsOptions, LinkTypeOptions, filtersApplied } from 'src/app/core/interfaces/get-urls-options.interface';
 
 @UntilDestroy()
 @Component({
@@ -20,9 +24,11 @@ export class IndexPage implements OnInit {
   totalPage = 1;
 
   newFilterApplied = false;
-  filterOptions = {
-    isActive: true
+  filterOptions: GetUrlsOptions = {
+    isActive: true,
+    linkTypeOptions: LinkTypeOptions.ALL
   };
+  numberFilterApplied = 0;
 
   private initialLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
   private initialLoad$ = this.initialLoadSubject.asObservable();
@@ -62,7 +68,8 @@ export class IndexPage implements OnInit {
   );
 
   constructor(
-    private urlsService: UrlsService
+    private urlsService: UrlsService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -79,7 +86,7 @@ export class IndexPage implements OnInit {
       this.isLoading = true;
       this.urlsService.listUrls({
         page: this.currentPage + 1,
-        isActive: this.filterOptions.isActive
+        ...this.filterOptions
       }).pipe(
         tap((response) => {
           this.infiniteLoadSubject.next(response);
@@ -95,14 +102,41 @@ export class IndexPage implements OnInit {
 
     this.urlsService.listUrls({
       page: 1,
-      isActive: this.filterOptions.isActive
+      ...this.filterOptions
     }).pipe(
       tap((response) => {
         this.newFilterApplied = true;
+        this.infiniteLoadSubject.next(null);
         this.initialLoadSubject.next(response);
       }),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  openFilterDialog() {
+    this.dialog.closeAll();
+    const dialogRef = this.dialog.open(FilterDialogComponent, {
+      width: "500px",
+      data: this.filterOptions
+    });
+
+    dialogRef.afterClosed().pipe(
+      filter(data => !!data),
+      tap((data: FilterDialogData) => {
+        this.filterOptions.linkTypeOptions = data.linkType;
+        this.numberFilterApplied = filtersApplied(this.filterOptions);
+      }),
+      switchMap(() => this.urlsService.listUrls({
+        page: 1,
+        ...this.filterOptions
+      })),
+      tap(response => {
+        this.newFilterApplied = true;
+        this.infiniteLoadSubject.next(null);
+        this.initialLoadSubject.next(response);
+      }),
+      untilDestroyed(this)
+    ).subscribe()
   }
 
   private getValueInNumber(value: string | number) {
