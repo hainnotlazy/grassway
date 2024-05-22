@@ -9,14 +9,21 @@ import { LinkAccountComponent } from './components/link-account/link-account.com
 import { VerifyEmailPage } from './pages/verify-email/verify-email.component';
 import { ChangePasswordFormComponent } from './components/change-password-form/change-password-form.component';
 
+const pages = [
+  MyAccountPage,
+  VerifyEmailPage,
+];
+
+const components = [
+  ManageAccountFormComponent,
+  LinkAccountComponent,
+  ChangePasswordFormComponent
+]
 
 @NgModule({
   declarations: [
-    MyAccountPage,
-    ManageAccountFormComponent,
-    LinkAccountComponent,
-    VerifyEmailPage,
-    ChangePasswordFormComponent
+    ...pages,
+    ...components
   ],
   imports: [
     CommonModule,

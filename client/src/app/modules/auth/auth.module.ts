@@ -4,8 +4,6 @@ import { SuccessOauthPage } from './pages/success-oauth/success-oauth.component'
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AuthRoutingModule } from './auth-routing.module';
 
-
-
 @NgModule({
   declarations: [
     SuccessOauthPage

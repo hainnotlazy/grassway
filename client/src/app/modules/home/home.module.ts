@@ -7,12 +7,19 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ShortenUrlComponent } from './components/shorten-url/shorten-url.component';
 import { RemindDialogComponent } from './components/remind-dialog/remind-dialog.component';
 
+const pages = [
+  HomePage,
+];
+
+const components = [
+  ShortenUrlComponent,
+  RemindDialogComponent,
+]
 
 @NgModule({
   declarations: [
-    HomePage,
-    ShortenUrlComponent,
-    RemindDialogComponent,
+    ...pages,
+    ...components
   ],
   imports: [
     CommonModule,

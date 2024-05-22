@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, map, scan, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, scan, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { environment } from 'src/environments/environment';
-import { FilterDialogComponent } from '../../components/filter-dialog/filter-dialog.component';
-import { GetUrlsOptions, LinkTypeOptions, filtersApplied } from 'src/app/core/interfaces/get-urls-options.interface';
+import { GetUrlsOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 
 @UntilDestroy()
 @Component({
@@ -27,12 +24,11 @@ export class IndexPage implements OnInit {
     isActive: true,
     linkTypeOptions: LinkTypeOptions.ALL
   };
-  numberFilterApplied = 0;
 
-  private initialLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
+  initialLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
   private initialLoad$ = this.initialLoadSubject.asObservable();
 
-  private infiniteLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
+  infiniteLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
   private infiniteLoad$ = this.infiniteLoadSubject.asObservable();
 
   myUrls$ = combineLatest([
@@ -68,7 +64,6 @@ export class IndexPage implements OnInit {
 
   constructor(
     private urlsService: UrlsService,
-    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -95,59 +90,14 @@ export class IndexPage implements OnInit {
     }
   }
 
-  onFilterChange(data: MatSelectChange) {
-    const value = data.value;
-    this.filterOptions.isActive = value === "active";
-
-    this.urlsService.listUrls({
-      page: 1,
-      ...this.filterOptions
-    }).pipe(
-      tap((response) => {
-        this.newFilterApplied = true;
-        this.infiniteLoadSubject.next(null);
-        this.initialLoadSubject.next(response);
-      }),
-      untilDestroyed(this)
-    ).subscribe();
+  onStatusFilterChanged(status: boolean) {
+    this.filterOptions.isActive = status;
+    this.newFilterApplied = true;
   }
 
-  openFilterDialog() {
-    this.dialog.closeAll();
-    const dialogRef = this.dialog.open(FilterDialogComponent, {
-      width: "500px",
-      data: this.filterOptions
-    });
-
-    dialogRef.afterClosed().pipe(
-      filter(data => !!data && this.isFilterOptionsChanged(this.filterOptions, data)),
-      tap((data: GetUrlsOptions) => {
-        Object.assign(this.filterOptions, data);
-        this.numberFilterApplied = filtersApplied(this.filterOptions);
-      }),
-      switchMap(() => this.urlsService.listUrls({
-        page: 1,
-        ...this.filterOptions
-      })),
-      tap(response => {
-        this.newFilterApplied = true;
-        this.infiniteLoadSubject.next(null);
-        this.initialLoadSubject.next(response);
-      }),
-      untilDestroyed(this)
-    ).subscribe()
-  }
-
-  /** Compare props linkTypeOptions, startDate, endDate of 2 filter options */
-  private isFilterOptionsChanged(baseOption: GetUrlsOptions, filterOptions: GetUrlsOptions) {
-    if (baseOption.linkTypeOptions !== filterOptions.linkTypeOptions) {
-      return true;
-    } else if (baseOption.startDate !== filterOptions.startDate) {
-      return true;
-    } else if (baseOption.endDate !== filterOptions.endDate) {
-      return true;
-    }
-    return false;
+  onAdvancedFilterChanged(advancedFilter: GetUrlsOptions) {
+    Object.assign(this.filterOptions, advancedFilter);
+    this.newFilterApplied = true;
   }
 
   private getValueInNumber(value: string | number) {

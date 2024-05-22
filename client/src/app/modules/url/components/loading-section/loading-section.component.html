@@ -1,0 +1,15 @@
+<div
+  *ngIf="currentPage === totalPage || totalPage === 0; else loading"
+  class="lg:w-2/3 grid items-center w-full grid-cols-4 mx-auto"
+>
+  <hr class="border-gray-400">
+  <p class="text-rubik sm:text-base col-span-2 text-sm text-center text-gray-600">You've reached the end of your links</p>
+  <hr class="border-gray-400">
+</div>
+
+<ng-template #loading>
+  <div class="text-primary animate-pulse flex items-center justify-center gap-2">
+    <i class="icon-spinner spinning text-xl"></i>
+    <span class="font-semibold">Loading your links...</span>
+  </div>
+</ng-template>

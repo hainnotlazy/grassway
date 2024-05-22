@@ -1,0 +1,55 @@
+<div
+  class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow"
+>
+  <mat-checkbox></mat-checkbox>
+  <div class="self-center -mt-12 -ml-2">
+    <img
+      class="w-8 h-8 border border-gray-500 rounded-full"
+      [src]="'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=' + url.origin_url + '&size=32'"
+      [alt]="'Link of ' + url.origin_url"
+      width="32"
+      height="32"
+      draggable="false"
+    >
+  </div>
+  <div class="flex flex-col flex-grow gap-6">
+    <div class="link-info flex-grow space-y-1">
+      <h6 class="text-jost text-secondary text-lg font-semibold cursor-default">
+        {{ url.title }}
+        <small *ngIf="!url.is_active" class="text-gray-500">(Inactive)</small>
+      </h6>
+      <a
+        class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500"
+        [routerLink]="'/l/' + (url.custom_back_half ? url.custom_back_half : url.back_half)"
+      >
+        {{ url.client + (url.custom_back_half || url.back_half) }}
+      </a>
+      <a class="hover:underline hover:text-black block text-sm text-gray-500" [href]="url.origin_url">{{ url.origin_url }}</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="flex items-center gap-1 px-2 py-0.5 rounded-md text-gray-700 bg-gray-300 border border-gray-300 hover:text-black hover:shadow">
+          <i class="icon-bar-chart"></i> View statics
+      </button>
+      <p class="flex items-center gap-1">
+        <i class="icon-calendar"></i>
+        <span>{{ url.created_at | date:"MMM dd, yyyy" }}</span>
+      </p>
+    </div>
+  </div>
+  <div class="self-start space-x-3">
+    <button type="button" matTooltip="Copy" matTooltipPosition="above">
+      <i class="hover:text-black hover:shadow icon-copy p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+    <button type="button" matTooltip="View QR Code" matTooltipPosition="above">
+      <i class="hover:text-black hover:shadow icon-qr-code p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+    <button type="button" matTooltip="Edit" matTooltipPosition="above">
+      <i class="hover:text-black hover:shadow icon-edit p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+    <button type="button" matTooltip="Delete" matTooltipPosition="above">
+      <i class="hover:text-black hover:shadow icon-delete p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+  </div>
+</div>
