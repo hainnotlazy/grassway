@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-paginate';
 import { GetUrlsOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
@@ -13,6 +13,17 @@ export class UrlsService {
     @InjectRepository(Url)
     private urlRepository: Repository<Url>,
   ) {}
+
+  async getUrlByBackHalf(backHalf: string) {
+    const url = await this.urlRepository.findOneBy({ back_half: backHalf })
+      || await this.urlRepository.findOneBy({ custom_back_half: backHalf });
+
+    if (!url) {
+      throw new NotFoundException("Url not found");
+    }
+
+    return url;
+  }
 
   /** Describe: Get paginated urls by user */
   async getUrls(currentUser: User, options: GetUrlsOptions) {

@@ -26,6 +26,10 @@ export class UrlsService {
     }
   }
 
+  getUrlByBackHalf(backHalf: string) {
+    return this.httpClient.get<Url>(`api/urls/${backHalf}/information`);
+  }
+
   listUrls(options: GetUrlsOptions) {
     const {
       page = 1,

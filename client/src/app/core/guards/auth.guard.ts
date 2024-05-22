@@ -11,6 +11,12 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const currentUrl = state.url;
 
+  // Check if redirect page
+  const isRedirectPage = currentUrl.split("/")[1] === "l";
+  if (isRedirectPage) {
+    return true;
+  }
+
   // Public routes
   // TODO: Use public routes array
   if (currentUrl === "/" || currentUrl === "/auth/success-authentication") {

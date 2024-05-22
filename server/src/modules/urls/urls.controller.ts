@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Get, ParseBoolPipe, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { ShortenUrlDto } from './dtos/shorten-url.dto';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
@@ -37,6 +37,10 @@ export class UrlsController {
   }
   
   // Get url by back-half
+  @Get("/:backHalf/information")
+  getUrlByBackHalf(@Param("backHalf") backHalf: string) {
+    return this.urlsService.getUrlByBackHalf(backHalf);
+  }
 
   @Get("validate-custom-back-half")
   validateCustomBackHalf(@Query("back_half") backHalf: string) {

@@ -1,0 +1,38 @@
+<div class="flex flex-col items-center justify-center gap-8 text-center select-none">
+
+  <ng-container *ngIf="isLoading; else result">
+    <div class="animate-bounce flex items-center justify-center">
+      <div class="spinning bg-secondary w-14 h-14 rounded shadow-xl"></div>
+    </div>
+    <h1 class="text-poetsen-one text-primary text-4xl">Preparing...</h1>
+    <p class="animate-pulse flex items-center justify-center gap-2 text-lg text-gray-600">
+      <i class="icon-spinner spinning text-xl"></i>
+      Please wait, we're setting up your link
+    </p>
+  </ng-container>
+
+  <ng-template #result>
+    <ng-container *ngIf="url; else notFound">
+      <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
+      <p>
+        You will be automatically redirected to
+        <span class="text-primary font-semibold break-all">{{ url.origin_url | truncate:50 }}</span>
+      </p>
+      <a
+        class="px-4 py-2.5 bg-secondary rounded-md text-white hover:bg-secondary/80 hover:shadow-md border border-gray-200 cursor-pointer animate-pulse"
+        [href]="url.origin_url"
+      >
+        {{ countdownTime ? 'Go to destination in ' + countdownTime + 's' : 'Go to destination' }}
+      </a>
+    </ng-container>
+
+    <ng-template #notFound>
+      <h1 class="text-poetsen-one text-primary text-4xl">Oops!</h1>
+      <p class="text-lg text-gray-600">
+        Look like your link doesn't exist 💔! Double check it or
+        <a class="text-primary hover:text-secondary font-semibold" routerLink="/">create new one</a>
+      </p>
+    </ng-template>
+  </ng-template>
+
+</div>
