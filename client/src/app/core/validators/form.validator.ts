@@ -1,4 +1,6 @@
-import { AbstractControl } from "@angular/forms";
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from "@angular/forms";
+import { UrlsService } from "../services/urls.service";
+import { Observable, debounceTime, distinctUntilChanged, first, map, of, switchMap } from "rxjs";
 
 export class FormValidator {
   static validUrl(control: AbstractControl) {
@@ -14,6 +16,21 @@ export class FormValidator {
     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
 
     return regexPattern.test(value) ? null : { validUrl: true };
+  }
+
+  // Check if custom back half is existed
+  static customBackHalfExisted(urlsService: UrlsService): AsyncValidatorFn {
+    return control => {
+      if (!control.value) return of(null);
+
+      return control.valueChanges.pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        switchMap(value => urlsService.validateCustomBackHalf(value)),
+        map(response => response ? null : { existed: true }),
+        first()
+      );
+    }
   }
 
   static passwordMatched(form: AbstractControl) {

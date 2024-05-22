@@ -18,7 +18,7 @@ export class UrlsController {
 
   // Get paginated urls by user id
   @Get()
-  async getUrls(
+  getUrls(
     @CurrentUser() currentUser: User, 
     @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query("is_active", new DefaultValuePipe(true), ParseBoolPipe) isActive: boolean,
@@ -35,8 +35,14 @@ export class UrlsController {
       endDate: endDate
     });
   }
-
+  
   // Get url by back-half
+
+  @Get("validate-custom-back-half")
+  validateCustomBackHalf(@Query("back_half") backHalf: string) {
+    return this.urlsService.validateCustomBackHalf(backHalf);
+  }
+
 
   @PublicRoute()
   @Post()
@@ -45,7 +51,7 @@ export class UrlsController {
     description: "Shortened url successfully",
     type: Url
   })
-  async shortenUrl(@Body() body: ShortenUrlDto) {
+  shortenUrl(@Body() body: ShortenUrlDto) {
     return this.urlsService.shortenUrl(null, body);
   }
 
@@ -84,7 +90,7 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async shortenUrlByUser(@CurrentUser() currentUser: User, @Body() body: CreateShortenUrlDto) {
+  shortenUrlByUser(@CurrentUser() currentUser: User, @Body() body: CreateShortenUrlDto) {
     return this.urlsService.shortenUrl(currentUser, body);
   }
 }

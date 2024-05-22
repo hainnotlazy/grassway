@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FilterOperator, paginate } from 'nestjs-paginate';
+import { paginate } from 'nestjs-paginate';
 import { GetUrlsOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
@@ -60,10 +60,14 @@ export class UrlsService {
   }
 
   async shortenUrl(currentUser: User, url: Partial<Url>) {
-    // TODO: add http/https to origin url if origin_url is youtube.com
     const { origin_url, title, description, custom_back_half, password } = url;
 
     const backHalf = await this.generateBackHalf();
+
+    // Check if custom_back_half is existed
+    if (custom_back_half && !(await this.validateCustomBackHalf(backHalf))) {
+      return null;
+    }
 
     const shortenedUrl = this.urlRepository.create({ 
       origin_url, 
@@ -72,10 +76,21 @@ export class UrlsService {
       title,
       description,
       custom_back_half,
-      password
+      password  // Handled to hash password in entity layer
     });
 
     return this.urlRepository.save(shortenedUrl);
+  }
+
+  /** 
+   * Describe: Validate custom back half
+   * @output: boolean, true if custom_back_half isn't existed, otherwise false
+  */
+  async validateCustomBackHalf(backHalf: string) {
+    if (!backHalf) {
+      return true;
+    }
+    return !(await this.urlRepository.findOneBy({ custom_back_half: backHalf }));
   }
 
   private checkBackHalf(backHalf: string) {

@@ -67,6 +67,12 @@
           placeholder="Set a custom back-half"
           type="text"
         >
+        <mat-error
+          class="text-jost text-sm"
+          *ngFor="let error of getObjectKeys(form.get('customBackHalf')?.errors)"
+        >
+          {{ customBackHalfValidationMessages[error] }}
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -106,5 +112,4 @@
       {{ isProcessing ? "Processing..." : "Create" }}
     </button>
   </div>
-
 </form>

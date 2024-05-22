@@ -37,4 +37,8 @@ export class UrlsService {
 
     return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}`);
   }
+
+  validateCustomBackHalf(customBackHalf: string) {
+    return this.httpClient.get<boolean>(`api/urls/validate-custom-back-half?back_half=${customBackHalf}`);
+  }
 }

@@ -24,7 +24,7 @@ export class Url {
   back_half: string;
   
   @ApiProperty()
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   custom_back_half: string;
 
   @Column()

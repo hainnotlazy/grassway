@@ -27,6 +27,7 @@ export class ShortenUrlPage {
 
   // Form validation messages
   originUrlValidationMessages: ValidationMessage = shortenUrlRequirements.originUrl.validationMsg;
+  customBackHalfValidationMessages: ValidationMessage = shortenUrlRequirements.customBackHalf.validationMsg;
 
   getObjectKeys = getObjectKeys;
 
@@ -37,7 +38,7 @@ export class ShortenUrlPage {
     ]),
     title: new FormControl(""),
     description: new FormControl(""),
-    customBackHalf: new FormControl(""),
+    customBackHalf: new FormControl("", [], FormValidator.customBackHalfExisted(this.urlsService)),
     password: new FormControl("")
   })
 

@@ -11,5 +11,11 @@ export const shortenUrlRequirements = {
       required: "Give me a link to shorten 🍑",
       validUrl: "Look like this is not a valid link ☝"
     }
+  },
+  customBackHalf: {
+    requirements: {},
+    validationMsg: {
+      existed: "This back half is existed"
+    }
   }
 }
