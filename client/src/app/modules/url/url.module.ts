@@ -10,6 +10,7 @@ import { StatusFilterComponent } from './components/status-filter/status-filter.
 import { LoadingSectionComponent } from './components/loading-section/loading-section.component';
 import { AdvancedFilterComponent } from './components/advanced-filter/advanced-filter.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
+import { QrcodeDialogComponent } from './components/qrcode-dialog/qrcode-dialog.component';
 
 const pages = [
   IndexPage,
@@ -28,7 +29,8 @@ const components = [
   declarations: [
     ...pages,
     ...components,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    QrcodeDialogComponent
   ],
   imports: [
     CommonModule,

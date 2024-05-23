@@ -61,7 +61,12 @@
     >
       <i class="hover:text-black hover:shadow icon-copy p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
-    <button type="button" matTooltip="View QR Code" matTooltipPosition="above">
+    <button
+      matTooltip="View QR Code"
+      matTooltipPosition="above"
+      (click)="onOpenQRCodeDialog()"
+      type="button"
+    >
       <i class="hover:text-black hover:shadow icon-qr-code p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
     <button type="button" matTooltip="Edit" matTooltipPosition="above">

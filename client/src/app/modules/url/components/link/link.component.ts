@@ -8,8 +8,9 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 
-interface ExtendedUrl extends Url {
+export interface ExtendedUrl extends Url {
   client: string;
 }
 
@@ -45,6 +46,13 @@ export class LinkComponent {
     setTimeout(() => {
       this.copyTooltip.message = "Copy";
     }, 500)
+  }
+
+  onOpenQRCodeDialog() {
+    this.dialog.closeAll();
+    this.dialog.open(QrcodeDialogComponent, {
+      data: this.url
+    })
   }
 
   onOpenDeleteDialog() {

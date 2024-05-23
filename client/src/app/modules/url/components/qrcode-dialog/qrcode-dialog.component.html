@@ -1,0 +1,41 @@
+<div mat-dialog-title class="!flex items-center !px-8 !pt-4 !pb-0">
+  <h6
+    class="text-poetsen-one text-primary text-2xl"
+  >
+    QR Code
+  </h6>
+
+  <button class="hover:text-gray-800 ml-auto text-gray-500" mat-dialog-close>
+    <i class="icon-close"></i>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <qrcode
+    #qrcode
+    [qrdata]="data.client + (data.custom_back_half || data.back_half)"
+    [alt]="'QR-Code of ' + data.title"
+    [colorDark]="'#000000ff'"
+    [colorLight]="'#ffffffff'"
+    [elementType]="'canvas'"
+    [errorCorrectionLevel]="'H'"
+    [imageSrc]="'./assets/images/grassway-logo.png'"
+    [imageHeight]="75"
+    [imageWidth]="75"
+    [width]="screenWidth < 450 ? 200 : 300"
+  ></qrcode>
+
+  <a
+    class="text-primary hover:text-secondary block mb-4 font-semibold text-center break-all"
+    [routerLink]="'l/' + (data.custom_back_half || data.back_half)"
+  >
+    {{ data.client + (data.custom_back_half || data.back_half) }}
+  </a>
+
+  <button
+    class="px-4 py-2.5 bg-secondary text-white hover:bg-secondary/80 rounded-md hover:shadow mx-auto block"
+    (click)="saveQRImage(qrcode)"
+  >
+    Download QR
+  </button>
+</mat-dialog-content>
