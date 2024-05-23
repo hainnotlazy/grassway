@@ -119,6 +119,23 @@ export class UrlsService {
     throw new BadRequestException("Password is incorrect");
   }
 
+  async deleteUrl(currentUser: User, urlId: string) {
+    const url = await this.urlRepository.findOne({
+      where: {
+        id: urlId,
+      },
+      relations: ["owner"],
+    });
+    if (!url) {
+      throw new BadRequestException("Url not found");
+    }
+    if (url.owner.id !== currentUser.id) {
+      throw new BadRequestException("You don't have permission to delete this url");
+    }
+
+    return await this.urlRepository.remove(url);
+  }
+
   private checkBackHalf(backHalf: string) {
     return this.urlRepository.findOneBy({ back_half: backHalf });
   }

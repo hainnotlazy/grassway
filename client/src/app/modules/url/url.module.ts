@@ -9,6 +9,7 @@ import { LinkComponent } from './components/link/link.component';
 import { StatusFilterComponent } from './components/status-filter/status-filter.component';
 import { LoadingSectionComponent } from './components/loading-section/loading-section.component';
 import { AdvancedFilterComponent } from './components/advanced-filter/advanced-filter.component';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 
 const pages = [
   IndexPage,
@@ -26,7 +27,8 @@ const components = [
 @NgModule({
   declarations: [
     ...pages,
-    ...components
+    ...components,
+    DeleteDialogComponent
   ],
   imports: [
     CommonModule,

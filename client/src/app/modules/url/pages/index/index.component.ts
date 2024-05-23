@@ -31,9 +31,14 @@ export class IndexPage implements OnInit {
   infiniteLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
   private infiniteLoad$ = this.infiniteLoadSubject.asObservable();
 
+  deleteUrlSubject = new BehaviorSubject<Url | null>(null);
+  private deleteUrl$ = this.deleteUrlSubject.asObservable();
+  private lastDeletedUrl?: Url;
+
   myUrls$ = combineLatest([
     this.initialLoad$,
-    this.infiniteLoad$
+    this.infiniteLoad$,
+    this.deleteUrl$
   ]).pipe(
     filter(([initialResponse]) => !!initialResponse),
     tap(([initialResponse, infiniteResponse]) => {
@@ -46,7 +51,14 @@ export class IndexPage implements OnInit {
         this.isLoading = changeStatus(this.isLoading);
       }
     }),
-    scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse]) => {
+    scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse, deletedUrl]) => {
+      /** Find & remove deleted url */
+      if (deletedUrl && this.lastDeletedUrl?.id !== deletedUrl.id) {
+        this.lastDeletedUrl = deletedUrl;
+        return accumulatorResponse.filter(url => url.id !== deletedUrl.id);
+      }
+
+      /** Combine initial response and infinite response */
       if (this.newFilterApplied) {
         this.newFilterApplied = false;
         return (initialResponse as UrlsResponse).data;

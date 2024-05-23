@@ -67,7 +67,12 @@
     <button type="button" matTooltip="Edit" matTooltipPosition="above">
       <i class="hover:text-black hover:shadow icon-edit p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
-    <button type="button" matTooltip="Delete" matTooltipPosition="above">
+    <button
+      matTooltip="Delete"
+      matTooltipPosition="above"
+      (click)="onOpenDeleteDialog()"
+      type="button"
+    >
       <i class="hover:text-black hover:shadow icon-delete p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
   </div>

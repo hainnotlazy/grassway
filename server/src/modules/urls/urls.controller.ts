@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { ShortenUrlDto } from './dtos/shorten-url.dto';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
@@ -116,5 +116,12 @@ export class UrlsController {
   @Put()
   updateUrl(@Body() body: ShortenUrlDto) {
     
+  }
+
+  @Delete("/:id")
+  @HttpCode(204)
+  async deleteUrl(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    await this.urlsService.deleteUrl(currentUser, id);
+    return "";
   }
 }

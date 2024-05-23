@@ -51,4 +51,8 @@ export class UrlsService {
   validateCustomBackHalf(customBackHalf: string) {
     return this.httpClient.get<boolean>(`api/urls/validate-custom-back-half?back_half=${customBackHalf}`);
   }
+
+  deleteUrl(id: string) {
+    return this.httpClient.delete(`api/urls/${id}`)
+  }
 }

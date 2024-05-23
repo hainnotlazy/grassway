@@ -47,7 +47,12 @@
     [infiniteScrollThrottle]="150"
     (scrolled)="onScrollDown()"
   >
-    <app-link *ngFor="let url of myUrls$ | async" [url]="url"></app-link>
+    <app-link
+      *ngFor="let url of myUrls$ | async"
+      [url]="url"
+      [deleteUrlSubject]="deleteUrlSubject"
+    >
+    </app-link>
 
     <app-loading-section
       [currentPage]="currentPage"

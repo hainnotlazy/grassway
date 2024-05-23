@@ -38,7 +38,7 @@ export class StatusFilterComponent {
         this.filterChanged.emit(status);
       }),
       tap((response) => {
-        // Push new data too stream
+        // Push new data to stream
         this.infiniteLoadSubject.next(null);
         this.initialLoadSubject.next(response);
       }),
