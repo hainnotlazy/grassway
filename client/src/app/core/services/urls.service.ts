@@ -42,6 +42,12 @@ export class UrlsService {
     return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}`);
   }
 
+  accessProtectedUrl(id: string, password: string) {
+    return this.httpClient.post<Url>(`api/urls/${id}/access`, {
+      password
+    })
+  }
+
   validateCustomBackHalf(customBackHalf: string) {
     return this.httpClient.get<boolean>(`api/urls/validate-custom-back-half?back_half=${customBackHalf}`);
   }

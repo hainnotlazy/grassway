@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-paginate';
 import { GetUrlsOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
@@ -6,6 +6,7 @@ import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UrlsService {
@@ -102,6 +103,20 @@ export class UrlsService {
       return true;
     }
     return !(await this.urlRepository.findOneBy({ custom_back_half: backHalf }));
+  }
+
+  async accessProtectedUrl(url: Partial<Url>) {
+    const { id, password } = url;
+
+    const urlExisted = await this.urlRepository.findOneBy({ id });
+    if (!urlExisted) {
+      throw new BadRequestException("Url not found");
+    }
+
+    if (bcrypt.compareSync(password, urlExisted.password)) {
+      return urlExisted;
+    }
+    throw new BadRequestException("Password is incorrect");
   }
 
   private checkBackHalf(backHalf: string) {

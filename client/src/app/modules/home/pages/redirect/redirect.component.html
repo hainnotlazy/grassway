@@ -12,7 +12,7 @@
   </ng-container>
 
   <ng-template #result>
-    <ng-container *ngIf="url; else notFound">
+    <ng-container *ngIf="url && url.origin_url">
       <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
       <p>
         You will be automatically redirected to
@@ -26,13 +26,45 @@
       </a>
     </ng-container>
 
-    <ng-template #notFound>
+    <ng-container *ngIf="url && !url.origin_url">
+      <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
+      <p class="text-lg text-gray-500">This link is under protection and need password to access</p>
+      <div class="focus-within:border-primary flex items-center gap-2 bg-white border border-gray-300 rounded-full">
+        <input
+          class="pl-4 pr-0  py-2.5 outline-none rounded-tl-full rounded-bl-full"
+          [formControl]="passwordControl"
+          [type]="hidePassword ? 'password' : 'text'"
+          (keydown)="onPressEnter($event)"
+        >
+        <button
+          type="button"
+          class="flex items-center"
+          (click)="hidePassword = !hidePassword"
+        >
+          <i
+            class="text-gray-500"
+            [ngClass]="hidePassword ? 'icon-visibility-off' : 'icon-visibility'"
+          ></i>
+        </button>
+        <button
+          type="button"
+          class="bg-secondary hover:bg-secondary/80 hover:shadow-md disabled:bg-gray-500 text-white px-4 py-2.5 rounded-tr-full rounded-br-full"
+          [disabled]="!passwordControl.valid"
+          (click)="onAccessProtectedUrl()"
+        >
+          Access
+        </button>
+      </div>
+      <p *ngIf="controlError" class="font-semibold text-red-500">{{ controlError }}</p>
+    </ng-container>
+
+    <ng-container *ngIf="!url">
       <h1 class="text-poetsen-one text-primary text-4xl">Oops!</h1>
       <p class="text-lg text-gray-600">
         Look like your link doesn't exist 💔! Double check it or
         <a class="text-primary hover:text-secondary font-semibold" routerLink="/">create new one</a>
       </p>
-    </ng-template>
+    </ng-container>
   </ng-template>
 
 </div>
