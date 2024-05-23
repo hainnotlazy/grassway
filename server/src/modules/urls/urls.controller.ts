@@ -38,6 +38,7 @@ export class UrlsController {
   }
   
   // Get url by back-half
+  @PublicRoute()
   @Get("/:backHalf/information")
   async getUrlByBackHalf(@Param("backHalf") backHalf: string) {
     const url = await this.urlsService.getUrlByBackHalf(backHalf);
@@ -103,6 +104,7 @@ export class UrlsController {
     return this.urlsService.shortenUrl(currentUser, body);
   }
 
+  @PublicRoute()
   @Post("/:id/access")
   accessProtectedUrl(@Param("id") id: string, @Body() body: AccessProtectedUrlDto) {
     return this.urlsService.accessProtectedUrl({

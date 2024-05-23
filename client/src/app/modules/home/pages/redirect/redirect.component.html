@@ -12,7 +12,7 @@
   </ng-container>
 
   <ng-template #result>
-    <ng-container *ngIf="url && url.origin_url">
+    <ng-container *ngIf="url && !url.use_password">
       <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
       <p>
         You will be automatically redirected to
@@ -26,7 +26,7 @@
       </a>
     </ng-container>
 
-    <ng-container *ngIf="url && !url.origin_url">
+    <ng-container *ngIf="url && url.use_password">
       <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
       <p class="text-lg text-gray-500">This link is under protection and need password to access</p>
       <div class="focus-within:border-primary flex items-center gap-2 bg-white border border-gray-300 rounded-full">

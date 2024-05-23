@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Url } from 'src/app/core/models/url.model';
@@ -20,6 +21,7 @@ export class LinkComponent {
   @ViewChild("copyTooltip") copyTooltip!: MatTooltip;
 
   constructor(
+    private dialog: MatDialog,
     private snackbar: MatSnackBar
   ) {}
 
@@ -34,5 +36,9 @@ export class LinkComponent {
     setTimeout(() => {
       this.copyTooltip.message = "Copy";
     }, 500)
+  }
+
+  onOpenDeleteDialog() {
+
   }
 }

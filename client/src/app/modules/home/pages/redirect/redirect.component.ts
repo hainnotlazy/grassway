@@ -42,7 +42,7 @@ export class RedirectPage implements OnInit {
       this.urlsService.getUrlByBackHalf(backHalf).pipe(
         tap((data) => this.url = data),
         finalize(() => this.isLoading = false),
-        filter((data) => !!data && !!data.origin_url),
+        filter((data) => !!data && !data.use_password),
         switchMap(() => timer(0, 1000)),
         tap(() => {
           if (this.countdownTime <= 0) {

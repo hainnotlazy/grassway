@@ -23,6 +23,12 @@
         ></i>
         {{ url.title }}
         <small *ngIf="!url.is_active" class="text-gray-500">(Inactive)</small>
+        <i
+          *ngIf="url.use_password"
+          class="icon-key text-yellow-600 rotate-45"
+          matTooltip="Private link"
+          matTooltipPosition="above"
+        ></i>
       </h6>
       <a
         class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500"

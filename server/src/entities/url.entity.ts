@@ -27,11 +27,17 @@ export class Url {
   @Column({ nullable: true, unique: true })
   custom_back_half: string;
 
+  @ApiProperty()
   @Column()
   title: string;
 
+  @ApiProperty()
   @Column({ nullable: true })
   description: string;
+
+  @ApiProperty()
+  @Column({ default: false })
+  use_password: boolean;
 
   @ApiProperty()
   @Column({ nullable: true })
@@ -56,6 +62,7 @@ export class Url {
     // Hash Password
     if (this.password) {
       this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
+      this.use_password = true;
     }
 
     // Generate title if not provided
