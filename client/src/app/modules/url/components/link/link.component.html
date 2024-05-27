@@ -14,7 +14,7 @@
   </div>
   <div class="flex flex-col flex-grow gap-6">
     <div class="link-info flex-grow space-y-1">
-      <h6 class="text-jost text-secondary flex items-center gap-2 text-lg font-semibold cursor-default">
+      <h6 class="text-jost text-secondary flex items-center gap-2 text-lg font-semibold break-all cursor-default">
         <i
           *ngIf="url.description"
           class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
@@ -31,12 +31,12 @@
         ></i>
       </h6>
       <a
-        class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500"
+        class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500 break-all"
         [routerLink]="'/l/' + (url.custom_back_half ? url.custom_back_half : url.back_half)"
       >
         {{ url.client + (url.custom_back_half || url.back_half) }}
       </a>
-      <a class="hover:underline hover:text-black block text-sm text-gray-500" [href]="url.origin_url">{{ url.origin_url }}</a>
+      <a class="hover:underline hover:text-black block text-sm text-gray-500 break-all" [href]="url.origin_url">{{ url.origin_url }}</a>
     </div>
     <div class="flex items-center gap-2">
       <button
@@ -50,6 +50,7 @@
       </p>
     </div>
   </div>
+
   <div class="self-start space-x-3">
     <button
       [cdkCopyToClipboard]="url.client + (url.custom_back_half || url.back_half)"
@@ -69,7 +70,12 @@
     >
       <i class="hover:text-black hover:shadow icon-qr-code p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
-    <button type="button" matTooltip="Edit" matTooltipPosition="above">
+    <button
+      matTooltip="Edit"
+      matTooltipPosition="above"
+      (click)="onOpenEditDialog()"
+      type="button"
+    >
       <i class="hover:text-black hover:shadow icon-edit p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
     <button
@@ -81,4 +87,5 @@
       <i class="hover:text-black hover:shadow icon-delete p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
   </div>
+
 </div>

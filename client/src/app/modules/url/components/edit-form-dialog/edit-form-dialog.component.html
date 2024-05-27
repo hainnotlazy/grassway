@@ -1,0 +1,125 @@
+<div class="!flex items-center gap-2 !pt-4" mat-dialog-title>
+  <h6 class="text-poetsen-one text-2xl">Edit Link</h6>
+  <button
+    class="hover:text-gray-800 flex items-center ml-auto text-gray-500"
+    tabindex="-1"
+    mat-dialog-close>
+    <i class="icon-close"></i>
+  </button>
+</div>
+
+<form
+  [formGroup]="editForm"
+  class="space-y-2"
+  mat-dialog-content
+  (submit)="onSubmit()"
+>
+  <div class="sm:flex-row sm:items-center flex flex-col gap-4">
+    <div class="flex flex-col flex-grow gap-2">
+      <label class="text-gray-600" for="title">Title:</label>
+      <mat-form-field
+        class="w-full"
+        color="accent"
+        appearance="outline"
+      >
+        <input
+          id="title"
+          formControlName="title"
+          type="text"
+          matInput
+          placeholder="Link's title"
+        >
+        <mat-error
+          class="text-jost text-sm"
+          *ngFor="let error of getObjectKeys(editForm.get('title')?.errors)"
+        >
+          {{ titleValidationMessages[error] }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-slide-toggle formControlName="isActive" class="sm:mb-0 mb-4" [color]="'accent'">
+      {{ editForm.get("isActive")?.value ? "Active" : "Inactive" }}
+    </mat-slide-toggle>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-600" for="description">Description:</label>
+    <mat-form-field
+      class="w-full"
+      color="accent"
+      appearance="outline"
+    >
+      <textarea
+        formControlName="description"
+        matInput
+        placeholder="Link's description"
+        rows="2"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-4">
+    <div class="sm:w-1/2 flex flex-col gap-2">
+      <label class="text-gray-600" for="backHalf">Custom back-half:</label>
+      <mat-form-field appearance="outline" color="accent">
+        <input
+          id="backHalf"
+          formControlName="customBackHalf"
+          matInput
+          placeholder="Set a custom back-half"
+          type="text"
+        >
+        <mat-error
+          class="text-jost text-sm"
+          *ngFor="let error of getObjectKeys(editForm.get('customBackHalf')?.errors)"
+        >
+          {{ customBackHalfValidationMessages[error] }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="sm:w-1/2 flex flex-col gap-2">
+      <label class="text-gray-600" for="passwrod">Password:</label>
+      <mat-form-field appearance="outline" color="accent">
+        <input
+          id="password"
+          formControlName="password"
+          matInput
+          [placeholder]="data.use_password ? 'Change password' : 'Set password'"
+          [type]="hidePassword ? 'password' : 'text'"
+        >
+        <mat-hint *ngIf="data.use_password">Retype link's password</mat-hint>
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword"
+          type="button"
+        >
+          <mat-icon class="text-lg">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-4">
+    <button
+      class="hover:shadow-md hover:text-black px-3 py-2 text-gray-600 border rounded-md"
+      type="button"
+      mat-dialog-close
+    >
+      Cancel
+    </button>
+    <button
+      class="bg-secondary hover:bg-secondary/80 disabled:bg-gray-400 flex items-center justify-center gap-2 px-3 py-2 text-white rounded-md shadow-md"
+      [class]="{'disabled:bg-sky-400': isProcessing}"
+      [disabled]="!editForm.valid || isProcessing"
+      type="submit"
+    >
+      <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
+      {{ isProcessing ? "Processing..." : "Update" }}
+    </button>
+  </div>
+</form>

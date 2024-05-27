@@ -23,6 +23,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 const MatModules = [
@@ -40,6 +41,7 @@ const MatModules = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatRadioModule,
+  MatSlideToggleModule,
   ClipboardModule
 ]
 

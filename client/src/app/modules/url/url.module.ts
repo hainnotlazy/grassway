@@ -11,6 +11,7 @@ import { LoadingSectionComponent } from './components/loading-section/loading-se
 import { AdvancedFilterComponent } from './components/advanced-filter/advanced-filter.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { QrcodeDialogComponent } from './components/qrcode-dialog/qrcode-dialog.component';
+import { EditFormDialogComponent } from './components/edit-form-dialog/edit-form-dialog.component';
 
 const pages = [
   IndexPage,
@@ -30,7 +31,8 @@ const components = [
     ...pages,
     ...components,
     DeleteDialogComponent,
-    QrcodeDialogComponent
+    QrcodeDialogComponent,
+    EditFormDialogComponent
   ],
   imports: [
     CommonModule,

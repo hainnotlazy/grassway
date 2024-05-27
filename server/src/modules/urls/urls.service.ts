@@ -7,6 +7,7 @@ import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
 import * as bcrypt from "bcrypt";
+import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
 
 @Injectable()
 export class UrlsService {
@@ -117,6 +118,31 @@ export class UrlsService {
       return urlExisted;
     }
     throw new BadRequestException("Password is incorrect");
+  }
+
+  async updateUrl(currentUser: User, urlId: string, updateUrl: Partial<Url>) {
+    const url = await this.urlRepository.findOne({
+      where: {
+        id: urlId,
+        owner: {
+          id: currentUser.id
+        }
+      }
+    });
+
+    if (!url) {
+      throw new NotFoundException("Url not found");
+    }
+
+    if (updateUrl.password) {
+      updateUrl.password = bcrypt.hashSync(updateUrl.password, SALT_ROUNDS);
+      updateUrl.use_password = true;
+    } else {
+      updateUrl.use_password = false;
+    }
+
+    Object.assign(url, updateUrl);
+    return this.urlRepository.save(url);
   }
 
   async deleteUrl(currentUser: User, urlId: string) {

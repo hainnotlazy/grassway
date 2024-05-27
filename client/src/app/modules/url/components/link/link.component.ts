@@ -9,6 +9,7 @@ import { UrlsService } from 'src/app/core/services/urls.service';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
+import { EditFormDialogComponent } from '../edit-form-dialog/edit-form-dialog.component';
 
 export interface ExtendedUrl extends Url {
   client: string;
@@ -25,6 +26,7 @@ export interface ExtendedUrl extends Url {
 })
 export class LinkComponent {
   @Input() url!: ExtendedUrl;
+  @Input() updateUrlSubject = new BehaviorSubject<Url | null>(null);
   @Input() deleteUrlSubject = new BehaviorSubject<Url | null>(null);
 
   @ViewChild("copyTooltip") copyTooltip!: MatTooltip;
@@ -53,6 +55,22 @@ export class LinkComponent {
     this.dialog.open(QrcodeDialogComponent, {
       data: this.url
     })
+  }
+
+  onOpenEditDialog() {
+    this.dialog.closeAll();
+    const updateDialog = this.dialog.open(EditFormDialogComponent, {
+      width: "600px",
+      data: this.url
+    })
+
+    updateDialog.afterClosed().pipe(
+      filter(data => !!data),
+      tap(data => {
+        this.updateUrlSubject.next(data);
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   onOpenDeleteDialog() {

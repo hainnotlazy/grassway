@@ -9,6 +9,7 @@ import { Url } from 'src/entities/url.entity';
 import { LinkTypeValidationPipe } from 'src/shared/pipes/link-type-validation/link-type-validation.pipe';
 import { LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { AccessProtectedUrlDto } from './dtos/access-protected-url.dto';
+import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
 
 @ApiTags("Urls")
 @Controller('urls')
@@ -113,9 +114,13 @@ export class UrlsController {
     });
   }
 
-  @Put()
-  updateUrl(@Body() body: ShortenUrlDto) {
-    
+  @Put("/:id")
+  updateUrl(
+    @CurrentUser() currentUser: User, 
+    @Param("id") urlId: string,
+    @Body() body: UpdateShortenUrlDto
+  ) {
+    return this.urlsService.updateUrl(currentUser, urlId, body);
   }
 
   @Delete("/:id")

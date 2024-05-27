@@ -22,9 +22,6 @@ export class ShortenUrlPage {
   hidePassword = true;
   isProcessing = false;
 
-  // Form requirements
-  originUrlRequirements = shortenUrlRequirements.originUrl.requirements;
-
   // Form validation messages
   originUrlValidationMessages: ValidationMessage = shortenUrlRequirements.originUrl.validationMsg;
   customBackHalfValidationMessages: ValidationMessage = shortenUrlRequirements.customBackHalf.validationMsg;

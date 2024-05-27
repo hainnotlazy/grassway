@@ -5,6 +5,7 @@ import { UrlsResponse } from '../interfaces/urls-response.interface';
 import { ShortenUrl } from '../interfaces/shorten-url.interface';
 import { Observable } from 'rxjs';
 import { GetUrlsOptions, LinkTypeOptions } from '../interfaces/get-urls-options.interface';
+import { UpdateUrl } from '../interfaces/urls.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,10 @@ export class UrlsService {
 
   validateCustomBackHalf(customBackHalf: string) {
     return this.httpClient.get<boolean>(`api/urls/validate-custom-back-half?back_half=${customBackHalf}`);
+  }
+
+  updateUrl(updateUrl: UpdateUrl) {
+    return this.httpClient.put<Url>(`api/urls/${updateUrl.id}`, updateUrl)
   }
 
   deleteUrl(id: string) {

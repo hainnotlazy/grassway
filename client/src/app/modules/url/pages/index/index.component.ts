@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, map, scan, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, from, map, scan, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
@@ -31,6 +31,10 @@ export class IndexPage implements OnInit {
   infiniteLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
   private infiniteLoad$ = this.infiniteLoadSubject.asObservable();
 
+  updateUrlSubject = new BehaviorSubject<Url | null>(null);
+  private updateUrl$ = this.updateUrlSubject.asObservable();
+  private lastUpdatedUrl?: Url;
+
   deleteUrlSubject = new BehaviorSubject<Url | null>(null);
   private deleteUrl$ = this.deleteUrlSubject.asObservable();
   private lastDeletedUrl?: Url;
@@ -38,6 +42,7 @@ export class IndexPage implements OnInit {
   myUrls$ = combineLatest([
     this.initialLoad$,
     this.infiniteLoad$,
+    this.updateUrl$,
     this.deleteUrl$
   ]).pipe(
     filter(([initialResponse]) => !!initialResponse),
@@ -51,7 +56,15 @@ export class IndexPage implements OnInit {
         this.isLoading = changeStatus(this.isLoading);
       }
     }),
-    scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse, deletedUrl]) => {
+    scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse, updatedUrl, deletedUrl]) => {
+      /** Find & update updated url */
+      if (updatedUrl && this.compareTwoUrls(this.lastUpdatedUrl, updatedUrl)) {
+        this.lastUpdatedUrl = updatedUrl;
+        const updatedIndex = accumulatorResponse.findIndex(url => url.id === updatedUrl.id);
+        accumulatorResponse[updatedIndex] = updatedUrl;
+        return accumulatorResponse;
+      }
+
       /** Find & remove deleted url */
       if (deletedUrl && this.lastDeletedUrl?.id !== deletedUrl.id) {
         this.lastDeletedUrl = deletedUrl;
@@ -114,5 +127,21 @@ export class IndexPage implements OnInit {
 
   private getValueInNumber(value: string | number) {
     return typeof value === "string" ? parseInt(value) : value;
+  }
+
+  /** True if two urls are different, else false */
+  private compareTwoUrls(fromUrl: Url | undefined, toUrl: Url | undefined) {
+    if (
+      !fromUrl
+      || !toUrl
+      || fromUrl.title !== toUrl.title
+      || fromUrl.description !== toUrl.description
+      || fromUrl.is_active !== toUrl.is_active
+      || fromUrl.use_password !== toUrl.use_password
+      || fromUrl.custom_back_half !== toUrl.custom_back_half
+    ) {
+      return true;
+    }
+    return false;
   }
 }

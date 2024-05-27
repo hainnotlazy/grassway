@@ -19,7 +19,7 @@ export class FormValidator {
   }
 
   // Check if custom back half is existed
-  static customBackHalfExisted(urlsService: UrlsService): AsyncValidatorFn {
+  static customBackHalfExisted(urlsService: UrlsService, currentCustomBackHalf?: string): AsyncValidatorFn {
     return control => {
       if (!control.value) return of(null);
 

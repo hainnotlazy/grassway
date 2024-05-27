@@ -2,6 +2,14 @@ const originUrlRequirements = {
   required: true,
 }
 
+const titleRequirements = {
+  required: true
+}
+
+const customBackHalfRequirement = {
+  existed: true
+}
+
 export const shortenUrlRequirements = {
   originUrl: {
     requirements: {
@@ -12,8 +20,18 @@ export const shortenUrlRequirements = {
       validUrl: "Look like this is not a valid link ☝"
     }
   },
+  title: {
+    requirements: {
+      ...titleRequirements
+    },
+    validationMsg: {
+      required: "Give me a title"
+    }
+  },
   customBackHalf: {
-    requirements: {},
+    requirements: {
+      ...customBackHalfRequirement
+    },
     validationMsg: {
       existed: "This back half is existed"
     }

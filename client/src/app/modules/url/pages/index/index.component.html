@@ -50,6 +50,7 @@
     <app-link
       *ngFor="let url of myUrls$ | async"
       [url]="url"
+      [updateUrlSubject]="updateUrlSubject"
       [deleteUrlSubject]="deleteUrlSubject"
     >
     </app-link>
