@@ -111,7 +111,7 @@ export class UrlsService {
 
     const urlExisted = await this.urlRepository.findOneBy({ id });
     if (!urlExisted) {
-      throw new BadRequestException("Url not found");
+      throw new NotFoundException("Url not found");
     }
 
     if (bcrypt.compareSync(password, urlExisted.password)) {
@@ -153,7 +153,7 @@ export class UrlsService {
       relations: ["owner"],
     });
     if (!url) {
-      throw new BadRequestException("Url not found");
+      throw new NotFoundException("Url not found");
     }
     if (url.owner.id !== currentUser.id) {
       throw new BadRequestException("You don't have permission to delete this url");
