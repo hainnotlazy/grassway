@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsNotEmpty, IsOptional, IsString, IsUrl } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from "class-validator";
 
 /** This DTO used for authenticated users to shorten url */
 export class CreateShortenUrlDto {
@@ -28,6 +28,7 @@ export class CreateShortenUrlDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   title: string;
 
@@ -37,6 +38,7 @@ export class CreateShortenUrlDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   description: string;
 
@@ -46,6 +48,7 @@ export class CreateShortenUrlDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   custom_back_half: string;
 
@@ -55,6 +58,7 @@ export class CreateShortenUrlDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   password: string;
 }

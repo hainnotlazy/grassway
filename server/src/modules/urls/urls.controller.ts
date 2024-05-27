@@ -133,6 +133,7 @@ export class UrlsController {
 
   @Get("validate-custom-back-half")
   @ApiOperation({ summary: "Validate custom back half if it exists" })
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: "Validate custom back half if it exists successfully",
     type: Boolean
@@ -318,6 +319,7 @@ export class UrlsController {
 
   @Put("/:id")
   @ApiOperation({ summary: "Update url" })
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: "Update url successfully",
     type: Url
@@ -374,6 +376,7 @@ export class UrlsController {
   @Delete("/:id")
   @HttpCode(204)
   @ApiOperation({ summary: "Delete url" })
+  @ApiBearerAuth()
   @ApiNoContentResponse({
     description: "Delete url successfully",
   })
