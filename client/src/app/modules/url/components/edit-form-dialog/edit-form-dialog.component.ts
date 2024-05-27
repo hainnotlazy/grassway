@@ -35,7 +35,11 @@ export class EditFormDialogComponent implements OnInit {
     ]),
     description: new FormControl(""),
     isActive: new FormControl(true),
-    customBackHalf: new FormControl("", [], FormValidator.customBackHalfExisted(this.urlsService)),
+    customBackHalf: new FormControl(
+      "",
+      [],
+      FormValidator.customBackHalfExisted(this.urlsService, this.data.custom_back_half)
+    ),
     password: new FormControl("")
   });
 
