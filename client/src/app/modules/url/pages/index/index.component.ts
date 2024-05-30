@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, map, scan, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, scan, shareReplay, switchMap, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
@@ -18,6 +18,9 @@ export class IndexPage implements OnInit {
   isLoading = false;
   currentPage = 1;
   totalPage = 1;
+
+  selectedUrls: Url[] = [];
+  selectedAll = false;
 
   newFilterApplied = false;
   filterOptions: GetUrlsOptions = {
@@ -85,6 +88,7 @@ export class IndexPage implements OnInit {
         client: `${environment.client}/l/`
       }))
     }),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   constructor(
@@ -98,6 +102,44 @@ export class IndexPage implements OnInit {
       }),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  onSelectUrl(url: Url) {
+    if (this.selectedUrls.find(selectedUrl => selectedUrl.id === url.id)) {
+      this.selectedUrls = this.selectedUrls.filter(selectedUrl => selectedUrl.id !== url.id);
+      this.selectedAll = false;
+    } else {
+      this.selectedUrls.push(url);
+      this.myUrls$.pipe(
+        tap(data => {
+          this.selectedAll = data.length === this.selectedUrls.length;
+        }),
+        untilDestroyed(this)
+      ).subscribe();
+    }
+  }
+
+  onSelectAll() {
+    this.myUrls$.pipe(
+      tap(data => {
+        if (!this.selectedAll) {
+          this.selectedAll = true;
+          this.selectedUrls = data;
+        } else {
+          this.selectedAll = false;
+          this.selectedUrls = [];
+        }
+      }),
+      untilDestroyed(this)
+    ).subscribe();
+  }
+
+  selectedSome() {
+    return this.selectedUrls.length > 0 && !this.selectedAll ? true : false;
+  }
+
+  isSelected(url: Url) {
+    return !!this.selectedUrls.find(selectedUrl => selectedUrl.id === url.id);
   }
 
   onScrollDown() {

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -29,6 +29,9 @@ export class LinkComponent {
   @Input() updateUrlSubject = new BehaviorSubject<Url | null>(null);
   @Input() deleteUrlSubject = new BehaviorSubject<Url | null>(null);
 
+  @Input() isSelected = false;
+  @Output() onSelected = new EventEmitter<Url>();
+
   @ViewChild("copyTooltip") copyTooltip!: MatTooltip;
 
   constructor(
@@ -36,6 +39,10 @@ export class LinkComponent {
     private snackbar: MatSnackBar,
     private urlsService: UrlsService
   ) {}
+
+  onClickCheckbox() {
+    this.onSelected.emit(this.url);
+  }
 
   onCopy() {
     this.copyTooltip.message = "Copied";
