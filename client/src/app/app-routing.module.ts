@@ -33,6 +33,10 @@ const routes: Routes = [
         loadChildren: () => import('./modules/url/url.module').then(m => m.UrlModule)
       },
       {
+        path: "qr-codes",
+        loadChildren: () => import('./modules/qr-code/qr-code.module').then(m => m.QrCodeModule)
+      },
+      {
         path: "my-account",
         loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule)
       }

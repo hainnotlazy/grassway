@@ -1,11 +1,17 @@
 .sidebar {
-  .active::before {
-    content: "";
-    width: 5px;
-    height: 50%;
-    background-color: white;
-    position: absolute;
-    left: 0;
+  .active {
+    background: #6fb234;
+    font-weight: 600;
+    color: white;
+
+    &::before {
+      content: "";
+      width: 5px;
+      height: 50%;
+      background-color: white;
+      position: absolute;
+      left: 0;
+    }
   }
 
   @media (min-width: 1024px) {

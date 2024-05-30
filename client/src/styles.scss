@@ -4,7 +4,15 @@
 
 $my-primary: mat.define-palette(mat.$indigo-palette, 500);
 $my-accent-color: (
+  100: #4caf50,
+  200: #4caf50,
+  300: #4caf50,
+  400: #4caf50,
   500: #4caf50,
+  600: #4caf50,
+  700: #4caf50,
+  800: #4caf50,
+  900: #4caf50,
   contrast: (
     500: #ffffff,
   )
@@ -80,5 +88,21 @@ body {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.animate-seesaw {
+  animation: seesaw 1.5s ease-in-out infinite;
+}
+
+@keyframes seesaw {
+  0% {
+    transform: rotate(25deg);
+  }
+  50% {
+    transform: rotate(-25deg);
+  }
+  100% {
+    transform: rotate(25deg);
   }
 }

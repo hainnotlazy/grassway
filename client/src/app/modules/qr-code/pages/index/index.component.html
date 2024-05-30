@@ -1,0 +1,19 @@
+<div class="my-4 space-y-6">
+  <div class="space-y-2">
+    <h1 class="text-poetsen-one text-3xl">QR Code</h1>
+    <p class="text-gray-500">All your active links are presenting as QR Codes</p>
+  </div>
+
+  <div
+    class="sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 grid grid-cols-1 gap-4"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="150"
+    (scrolled)="onScrollDown()"
+  >
+    <app-link-card
+      *ngFor="let link of links$ | async"
+      [link]="link"
+    ></app-link-card>
+  </div>
+</div>

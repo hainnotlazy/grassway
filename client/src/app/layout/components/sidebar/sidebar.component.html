@@ -1,13 +1,21 @@
 <div class="sidebar bg-primary top-20 sticky text-gray-300 rounded-md shadow-lg">
   <ul>
     <li>
-      <a class="relative font-semibold text-white bg-secondary rounded-tl-md rounded-tr-md px-4 py-2.5 block active" routerLink="">
+      <a
+        class="relative hover:text-white hover:bg-secondary rounded-tl-md rounded-tr-md px-4 py-2.5 block"
+        routerLink="links"
+        routerLinkActive="active"
+      >
         <span class="flex items-center gap-1"><i class="icon-link rotate-45"></i> Links</span>
       </a>
     </li>
 
     <li>
-      <a class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block" routerLink="">
+      <a
+        class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block"
+        routerLink="qr-codes"
+        routerLinkActive="active"
+      >
         <span class="flex items-center gap-1"><i class="icon-qr-code"></i> QR Codes</span>
       </a>
     </li>
@@ -26,7 +34,17 @@
     </li>
 
     <li>
-      <a class="relative hover:text-white hover:bg-secondary rounded-bl-md rounded-br-md px-4 py-2.5 block border-t-2 border-gray-400" routerLink="">
+      <a
+        class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block border-t-2 border-gray-400"
+        routerLink="my-account"
+        routerLinkActive="active"
+      >
+        <span class="flex items-center gap-1"><i class="icon-account"></i> My Account</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="relative hover:text-white hover:bg-secondary rounded-bl-md rounded-br-md px-4 py-2.5 block " routerLink="">
         <span class="flex items-center gap-1"><i class="icon-settings"></i> Settings</span>
       </a>
     </li>
