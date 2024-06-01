@@ -24,7 +24,9 @@
   <hr class="border-gray-400">
   <div class="sm:flex-row flex flex-col-reverse items-baseline justify-between">
     <app-bulk-select
+      [filterOptions]="filterOptions"
       [myUrls$]="myUrls$"
+      [updateUrlSubject]="updateUrlSubject"
       [selectUrlSubject]="selectUrlSubject"
       (selectAll)="selectingAll = $event"
     ></app-bulk-select>

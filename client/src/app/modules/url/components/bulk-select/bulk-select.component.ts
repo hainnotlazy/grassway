@@ -1,7 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, Observable, filter, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, filter, finalize, take, tap } from 'rxjs';
+import { changeStatus } from 'src/app/core/helpers/utils';
+import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { GetUrlsOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 import { Url } from 'src/app/core/models/url.model';
+import { UrlsService } from 'src/app/core/services/urls.service';
 
 @UntilDestroy()
 @Component({
@@ -10,7 +15,11 @@ import { Url } from 'src/app/core/models/url.model';
   styleUrls: ['./bulk-select.component.scss']
 })
 export class BulkSelectComponent implements OnInit {
+  isProcessingUpdateStatus = false;
+
+  @Input() filterOptions!: GetUrlsOptions;
   @Input() myUrls$!: Observable<Url[]>;
+  @Input() updateUrlSubject!: BehaviorSubject<Url | null>;
   @Input() selectUrlSubject!: BehaviorSubject<Url | null>;
 
   @Output() selectAll = new EventEmitter<boolean | null>();
@@ -19,6 +28,11 @@ export class BulkSelectComponent implements OnInit {
 
   selectedUrls: Url[] = [];
   selectedAll = false;
+
+  constructor(
+    private urlsService: UrlsService,
+    private snackbar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     this.myUrls$.pipe(
@@ -37,6 +51,23 @@ export class BulkSelectComponent implements OnInit {
       }),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  onChangeStatusUrls() {
+    if (this.selectedUrls.length > 0 && !this.isProcessingUpdateStatus) {
+      this.isProcessingUpdateStatus = changeStatus(this.isProcessingUpdateStatus);
+      this.urlsService.setStatusUrls(this.selectedUrls, !this.filterOptions.isActive).pipe(
+        tap(() => {
+          this.handleUpdateStatusSuccess();
+        }, (error) => {
+          this.handleUpdateStatusFail(error);
+        }),
+        finalize(() => {
+          this.isProcessingUpdateStatus = changeStatus(this.isProcessingUpdateStatus);
+        }),
+        untilDestroyed(this)
+      ).subscribe();
+    }
   }
 
   selectedSome() {
@@ -77,5 +108,37 @@ export class BulkSelectComponent implements OnInit {
         untilDestroyed(this)
       ).subscribe();
     }
+  }
+
+  private handleUpdateStatusSuccess() {
+    for (let url of this.selectedUrls) {
+      url.is_active = !this.filterOptions.isActive;
+      this.updateUrlSubject.next(url);
+    }
+    this.selectedAll = false;
+    this.selectedUrls = [];
+    this.selectAll.emit(false);
+    this.snackbar.open("Updated successfully", "x", {
+      duration: 4000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    });
+  }
+
+  private handleUpdateStatusFail(error: any) {
+    const errorResponse: ErrorResponse = error.error;
+    let errorMessage = errorResponse.message ?? "Unexpected error happened";
+
+    // Handle if server return more than 1 error
+    if (typeof errorMessage === "object") {
+      errorMessage = errorMessage[0];
+    }
+
+    // Show error message
+    this.snackbar.open(errorMessage, "x", {
+      duration: 4000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    })
   }
 }

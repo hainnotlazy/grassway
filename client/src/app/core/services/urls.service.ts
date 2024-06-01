@@ -60,4 +60,12 @@ export class UrlsService {
   deleteUrl(id: string) {
     return this.httpClient.delete(`api/urls/${id}`)
   }
+
+  // Bulk actions
+  setStatusUrls(urls: Url[], active: boolean) {
+    return this.httpClient.put(`api/urls/bulk/update-status`, {
+      ids: urls.map(url => url.id),
+      active
+    })
+  }
 }

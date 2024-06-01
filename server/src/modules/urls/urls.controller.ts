@@ -10,6 +10,7 @@ import { LinkTypeValidationPipe } from 'src/shared/pipes/link-type-validation/li
 import { LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { AccessProtectedUrlDto } from './dtos/access-protected-url.dto';
 import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
+import { BulkInactiveUrlsDto } from './dtos/bulk-inactive-urls.dto';
 
 @ApiTags("Urls")
 @Controller('urls')
@@ -437,5 +438,15 @@ export class UrlsController {
   async deleteUrl(@CurrentUser() currentUser: User, @Param("id") id: string) {
     await this.urlsService.deleteUrl(currentUser, id);
     return "";
+  }
+
+  /** Route for making batch of urls inactive */
+  @Put("/bulk/update-status")
+  @HttpCode(204)
+  setStatusUrls(
+    @CurrentUser() currentUser: User, 
+    @Body() body: BulkInactiveUrlsDto
+  ) {
+    return this.urlsService.setStatusUrls(currentUser, body.ids, body.active);
   }
 }

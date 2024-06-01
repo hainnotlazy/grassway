@@ -56,11 +56,11 @@ export class IndexPage implements OnInit {
       const response = infiniteResponse || (initialResponse as UrlsResponse);
       this.currentPage = this.getValueInNumber(response.meta.currentPage);
       this.totalPage = this.getValueInNumber(response.meta.totalPages);
+      this.selectingAll = null;
     }),
     tap(([_, infiniteResponse]) => {
       if (infiniteResponse) {
         this.isLoading = changeStatus(this.isLoading);
-        this.selectingAll = null;
       }
     }),
     scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse, updatedUrl, deletedUrl]) => {

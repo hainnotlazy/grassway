@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-paginate';
 import { GetUrlsOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
 import * as bcrypt from "bcrypt";
 import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
@@ -14,6 +14,7 @@ export class UrlsService {
   constructor(
     @InjectRepository(Url)
     private urlRepository: Repository<Url>,
+    private dataSource: DataSource
   ) {}
 
   async getUrlByBackHalf(backHalf: string) {
@@ -160,6 +161,38 @@ export class UrlsService {
     }
 
     return await this.urlRepository.remove(url);
+  }
+
+  /** Bulk update active/inactive urls */
+  async setStatusUrls(currentUser: User, urlsId: string[], active: boolean) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      for (const urlId of urlsId) {
+        const url = await this.urlRepository.findOne({
+          where: {
+            id: urlId,
+            owner: {
+              id: currentUser.id
+            }
+          },
+        });
+        if (!url) { 
+          throw new Error("Url not found");
+        }
+
+        url.is_active = active;
+        await queryRunner.manager.save(url);
+      }
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException(error.message || `Failed when bulk ${active ? "active" : "inactive"} urls`);
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   private checkBackHalf(backHalf: string) {
