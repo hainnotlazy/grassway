@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -26,11 +26,11 @@ export interface ExtendedUrl extends Url {
 })
 export class LinkComponent {
   @Input() url!: ExtendedUrl;
-  @Input() updateUrlSubject = new BehaviorSubject<Url | null>(null);
-  @Input() deleteUrlSubject = new BehaviorSubject<Url | null>(null);
+  @Input() selectingAll!: boolean | null;
+  @Input() updateUrlSubject!: BehaviorSubject<Url | null>;
+  @Input() deleteUrlSubject!: BehaviorSubject<Url | null>;
 
-  @Input() isSelected = false;
-  @Output() onSelected = new EventEmitter<Url>();
+  @Input() selectUrlSubject!: BehaviorSubject<Url | null>;
 
   @ViewChild("copyTooltip") copyTooltip!: MatTooltip;
 
@@ -41,7 +41,7 @@ export class LinkComponent {
   ) {}
 
   onClickCheckbox() {
-    this.onSelected.emit(this.url);
+    this.selectUrlSubject.next(this.url);
   }
 
   onCopy() {

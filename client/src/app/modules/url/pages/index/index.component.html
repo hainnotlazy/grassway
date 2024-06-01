@@ -23,18 +23,11 @@
   </div>
   <hr class="border-gray-400">
   <div class="sm:flex-row flex flex-col-reverse items-baseline justify-between">
-    <div class="space-x-4">
-      <mat-checkbox
-        [checked]="selectedAll"
-        [indeterminate]="selectedSome()"
-        (change)="onSelectAll()"
-      >
-        <span class="text-gray-700">{{ selectedUrls.length }} <span class="sm:inline hidden">selected</span></span>
-      </mat-checkbox>
-      <button class="text-primary hover:text-secondary text-sm font-semibold">Export CSV</button>
-      <button class="text-primary hover:text-secondary text-sm font-semibold">Inactivate</button>
-      <button class="text-primary hover:text-secondary text-sm font-semibold">Tag</button>
-    </div>
+    <app-bulk-select
+      [myUrls$]="myUrls$"
+      [selectUrlSubject]="selectUrlSubject"
+      (selectAll)="selectingAll = $event"
+    ></app-bulk-select>
 
     <app-status-filter
       [filterOptions]="filterOptions"
@@ -54,10 +47,10 @@
     <app-link
       *ngFor="let url of myUrls$ | async"
       [url]="url"
+      [selectingAll]="selectingAll"
       [updateUrlSubject]="updateUrlSubject"
       [deleteUrlSubject]="deleteUrlSubject"
-      [isSelected]="isSelected(url)"
-      (onSelected)="onSelectUrl($event)"
+      [selectUrlSubject]="selectUrlSubject"
     >
     </app-link>
 

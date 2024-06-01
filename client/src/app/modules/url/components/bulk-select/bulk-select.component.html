@@ -1,0 +1,12 @@
+<div class="space-x-4">
+  <mat-checkbox
+    [checked]="selectedAll"
+    [indeterminate]="selectedSome()"
+    (change)="onSelectAll()"
+  >
+    <span class="text-gray-700">{{ selectedUrls.length }} <span class="sm:inline hidden">selected</span></span>
+  </mat-checkbox>
+  <button class="text-primary hover:text-secondary text-sm font-semibold">Export CSV</button>
+  <button class="text-primary hover:text-secondary text-sm font-semibold">Inactivate</button>
+  <button class="text-primary hover:text-secondary text-sm font-semibold">Tag</button>
+</div>
