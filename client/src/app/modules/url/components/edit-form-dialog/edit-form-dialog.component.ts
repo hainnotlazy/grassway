@@ -40,8 +40,11 @@ export class EditFormDialogComponent implements OnInit {
       [],
       FormValidator.customBackHalfExisted(this.urlsService, this.data.custom_back_half)
     ),
+    editPassword: new FormControl(false),
     password: new FormControl("")
   });
+
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -52,17 +55,44 @@ export class EditFormDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.data.use_password) {
+      this.editForm.get("password")?.disable();
+    }
+
     this.editForm.patchValue({
       title: this.data.title,
       description: this.data.description,
       customBackHalf: this.data.custom_back_half,
       isActive: this.data.is_active
     });
+
+    this.editForm.get("editPassword")?.valueChanges.pipe(
+      tap((value) => {
+        if (value) {
+          this.editForm.get("password")?.enable();
+        } else {
+          this.editForm.get("password")?.disable();
+        }
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   onSubmit() {
     if (this.editForm.valid && !this.isProcessing) {
       this.isProcessing = true;
+
+      // Handle to get password
+      let changePassword = false;
+      let password = "";
+
+      if (
+        (!this.data.use_password && this.editForm.value.password)
+        || (this.data.use_password && this.editForm.value.editPassword)
+      ) {
+        password = this.editForm.value.password as string;
+        changePassword = true;
+      }
 
       this.urlsService.updateUrl({
         id: this.data.id,
@@ -70,7 +100,8 @@ export class EditFormDialogComponent implements OnInit {
         description: this.editForm.value.description as string,
         custom_back_half: this.editForm.value.customBackHalf as string,
         is_active: this.editForm.value.isActive as boolean,
-        password: this.editForm.value.password as string
+        change_password: changePassword,
+        password
       }).pipe(
         tap((data) => {
           this.dialogRef.close(data);

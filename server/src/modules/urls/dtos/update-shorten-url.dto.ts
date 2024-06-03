@@ -33,6 +33,14 @@ export class UpdateShortenUrlDto {
   @Transform(({ value }: TransformFnParams) => value?.trim())
   custom_back_half: string;
 
+  @ApiProperty({
+    description: "Change password",
+    type: Boolean
+  })
+  @IsBoolean()
+  @IsNotEmpty()
+  change_password: boolean;
+
   @ApiPropertyOptional({
     description: "Password", 
     type: String

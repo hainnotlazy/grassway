@@ -4,5 +4,6 @@ export interface UpdateUrl {
   description?: string;
   is_active?: boolean;
   custom_back_half?: string;
+  change_password: boolean;
   password?: string;
 }

@@ -53,8 +53,8 @@ export class UrlsService {
     return this.httpClient.get<boolean>(`api/urls/validate-custom-back-half?back_half=${customBackHalf}`);
   }
 
-  updateUrl(updateUrl: UpdateUrl) {
-    return this.httpClient.put<Url>(`api/urls/${updateUrl.id}`, updateUrl)
+  updateUrl(updateUrlDto: UpdateUrl) {
+    return this.httpClient.put<Url>(`api/urls/${updateUrlDto.id}`, updateUrlDto);
   }
 
   deleteUrl(id: string) {

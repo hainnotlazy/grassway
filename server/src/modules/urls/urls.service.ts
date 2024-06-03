@@ -9,6 +9,7 @@ import { v4 as uuidiv4 } from "uuid";
 import * as CryptoJS from 'crypto-js';
 import { CsvService } from 'src/shared/services/csv/csv.service';
 import { ConfigService } from '@nestjs/config';
+import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
 
 @Injectable()
 export class UrlsService {
@@ -132,7 +133,7 @@ export class UrlsService {
     throw new BadRequestException("Password is incorrect");
   }
 
-  async updateUrl(currentUser: User, urlId: string, updateUrl: Partial<Url>) {
+  async updateUrl(currentUser: User, urlId: string, updateUrl: UpdateShortenUrlDto) {
     const url = await this.urlRepository.findOne({
       where: {
         id: urlId,
@@ -146,14 +147,20 @@ export class UrlsService {
       throw new NotFoundException("Url not found");
     }
 
-    if (updateUrl.password) {
-      updateUrl.password = CryptoJS.AES.encrypt(updateUrl.password, this.ENCRYPTION_SECRET).toString();
-      updateUrl.use_password = true;
+    if (updateUrl.change_password) {
+      Object.assign(url, updateUrl);
+      if (updateUrl.password) {
+        url.password = CryptoJS.AES.encrypt(updateUrl.password, this.ENCRYPTION_SECRET).toString();
+        url.use_password = true;
+      } else {
+        url.password = null;
+        url.use_password = false;
+      }
     } else {
-      updateUrl.use_password = false;
+      updateUrl.password = url.password;
+      Object.assign(url, updateUrl);
     }
 
-    Object.assign(url, updateUrl);
     return this.urlRepository.save(url);
   }
 

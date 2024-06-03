@@ -80,7 +80,16 @@
     </div>
 
     <div class="sm:w-1/2 flex flex-col gap-2">
-      <label class="text-gray-600" for="passwrod">Password:</label>
+      <ng-container *ngIf="!data.use_password; else changePassword">
+        <label class="text-gray-600" for="passwrod">Password:</label>
+      </ng-container>
+
+      <ng-template #changePassword>
+        <mat-slide-toggle formControlName="editPassword" class="sm:mb-0 mb-4 text-gray-600" [color]="'accent'">
+          Change password
+        </mat-slide-toggle>
+      </ng-template>
+
       <mat-form-field appearance="outline" color="accent">
         <input
           id="password"
@@ -89,7 +98,7 @@
           [placeholder]="data.use_password ? 'Change password' : 'Set password'"
           [type]="hidePassword ? 'password' : 'text'"
         >
-        <mat-hint *ngIf="data.use_password">Retype link's password</mat-hint>
+        <!-- <mat-hint *ngIf="data.use_password">Retype link's password</mat-hint> -->
         <button
           mat-icon-button
           matSuffix
