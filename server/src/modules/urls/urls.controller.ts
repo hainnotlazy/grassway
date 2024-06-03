@@ -66,7 +66,8 @@ export class UrlsController {
     @Query("is_active", new DefaultValuePipe(true), ParseBoolPipe) isActive: boolean,
     @Query("link_type", new DefaultValuePipe(LinkTypeOptions.ALL), LinkTypeValidationPipe) linkType: LinkTypeOptions,
     @Query("start_date") startDate: string,
-    @Query("end_date") endDate: string
+    @Query("end_date") endDate: string,
+    @Query("search", new DefaultValuePipe("")) search: string
   ) {
     return this.urlsService.getUrls(currentUser, {
       limit: 10,
@@ -74,7 +75,8 @@ export class UrlsController {
       isActive: isActive,
       linkTypeOptions: linkType,
       startDate: startDate,
-      endDate: endDate
+      endDate: endDate,
+      search
     });
   }
 

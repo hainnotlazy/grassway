@@ -13,7 +13,14 @@
       <i class="icon-rewrite"></i> <span class="md:inline hidden">Shorten new link</span>
     </a>
   </div>
-  <div>
+  <div class="sm:flex-row sm:items-center flex flex-col gap-4">
+    <app-search
+      [filterOptions]="filterOptions"
+      [initialLoadSubject]="initialLoadSubject"
+      [infiniteLoadSubject]="infiniteLoadSubject"
+      (filterChanged)="onSearchFilterChanged($event)"
+    ></app-search>
+
     <app-advanced-filter
       [filterOptions]="filterOptions"
       [initialLoadSubject]="initialLoadSubject"

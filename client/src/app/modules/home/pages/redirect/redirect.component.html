@@ -12,7 +12,7 @@
   </ng-container>
 
   <ng-template #result>
-    <ng-container *ngIf="url && !url.use_password">
+    <ng-container *ngIf="url && !url.use_password && url.is_active">
       <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
       <p>
         You will be automatically redirected to
@@ -26,8 +26,8 @@
       </a>
     </ng-container>
 
-    <ng-container *ngIf="url && url.use_password">
-      <i class="icon-key text-7xl text-yellow-500 animate-seesaw"></i>
+    <ng-container *ngIf="url && url.use_password && url.is_active">
+      <i class="icon-key text-7xl animate-seesaw text-yellow-500"></i>
       <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
       <p class="text-lg text-gray-500">This link is under protection and need password to access</p>
       <div class="focus-within:border-primary flex items-center gap-2 bg-white border border-gray-300 rounded-full">
@@ -57,6 +57,13 @@
         </button>
       </div>
       <p *ngIf="controlError" class="font-semibold text-red-500">{{ controlError }}</p>
+    </ng-container>
+
+    <ng-container *ngIf="url && !url.is_active">
+      <h1 class="text-poetsen-one text-primary text-4xl">Oh nooo!</h1>
+      <p class="text-lg text-gray-600">
+        Your link is currently inactive 🥺 Please contact the owner of this link!
+      </p>
     </ng-container>
 
     <ng-container *ngIf="!url">

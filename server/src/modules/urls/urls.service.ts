@@ -36,7 +36,7 @@ export class UrlsService {
 
   /** Describe: Get paginated urls by user */
   async getUrls(currentUser: User, options: GetUrlsOptions) {
-    const { limit, page, isActive, linkTypeOptions, startDate, endDate  } = options;
+    const { limit, page, isActive, linkTypeOptions, startDate, endDate, search } = options;
 
     // Create query builder
     const queryBuilder = this.urlRepository.createQueryBuilder("urls")
@@ -57,6 +57,14 @@ export class UrlsService {
     }
     if (endDate) {
       queryBuilder.andWhere("urls.created_at < :endDate", { endDate });
+    }
+
+    // Add filter search
+    if (search) {
+      queryBuilder.andWhere(
+        "(urls.origin_url ILIKE :search OR urls.custom_back_half ILIKE :search OR urls.title ILIKE :search)", 
+        { search: `%${search}%` }
+      );
     }
 
     return paginate({

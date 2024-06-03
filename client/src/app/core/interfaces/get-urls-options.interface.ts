@@ -10,6 +10,7 @@ export interface GetUrlsOptions {
   linkTypeOptions?: LinkTypeOptions;
   startDate?: Date | string;
   endDate?: Date | string;
+  search?: string;
 }
 
 const BaseFilterOptions: GetUrlsOptions = {

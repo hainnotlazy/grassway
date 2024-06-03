@@ -143,6 +143,11 @@ export class IndexPage implements OnInit {
     }
   }
 
+  onSearchFilterChanged(searchFilter: string) {
+    this.filterOptions.search = searchFilter;
+    this.newFilterApplied = true;
+  }
+
   onStatusFilterChanged(status: boolean) {
     this.filterOptions.isActive = status;
     this.newFilterApplied = true;

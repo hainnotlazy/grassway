@@ -13,6 +13,7 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
 import { QrcodeDialogComponent } from './components/qrcode-dialog/qrcode-dialog.component';
 import { EditFormDialogComponent } from './components/edit-form-dialog/edit-form-dialog.component';
 import { BulkSelectComponent } from './components/bulk-select/bulk-select.component';
+import { SearchComponent } from './components/search/search.component';
 
 const pages = [
   IndexPage,
@@ -34,7 +35,8 @@ const components = [
     DeleteDialogComponent,
     QrcodeDialogComponent,
     EditFormDialogComponent,
-    BulkSelectComponent
+    BulkSelectComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,

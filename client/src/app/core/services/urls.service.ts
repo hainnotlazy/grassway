@@ -37,10 +37,11 @@ export class UrlsService {
       isActive = true,
       linkTypeOptions = LinkTypeOptions.ALL,
       startDate = "",
-      endDate = ""
+      endDate = "",
+      search = ""
     } = options;
 
-    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}`);
+    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}&search=${search}`);
   }
 
   accessProtectedUrl(id: string, password: string) {
