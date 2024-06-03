@@ -60,10 +60,10 @@ export class Url {
   @BeforeInsert() 
   handleBeforeInsert() {
     // Hash Password
-    if (this.password) {
-      this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
-      this.use_password = true;
-    }
+    // if (this.password) {
+    //   this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
+    //   this.use_password = true;
+    // }
 
     // Generate title if not provided
     if (!this.title) {

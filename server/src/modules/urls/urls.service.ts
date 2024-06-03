@@ -6,17 +6,20 @@ import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
-import * as bcrypt from "bcrypt";
-import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
+import * as CryptoJS from 'crypto-js';
 import { CsvService } from 'src/shared/services/csv/csv.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UrlsService {
+  private readonly ENCRYPTION_SECRET = this.configService.get("ENCRYPTION_SECRET");
+
   constructor(
     @InjectRepository(Url)
     private urlRepository: Repository<Url>,
     private dataSource: DataSource,
-    private csvService: CsvService
+    private csvService: CsvService,
+    private configService: ConfigService
   ) {}
 
   async getUrlByBackHalf(backHalf: string) {
@@ -85,6 +88,10 @@ export class UrlsService {
       return null;
     }
 
+    let encryptedPassword = null;
+    if (password) {
+      encryptedPassword = CryptoJS.AES.encrypt(password, this.ENCRYPTION_SECRET).toString();
+    }
     const shortenedUrl = this.urlRepository.create({ 
       origin_url, 
       owner: currentUser,
@@ -92,7 +99,8 @@ export class UrlsService {
       title,
       description,
       custom_back_half,
-      password  // Handled to hash password in entity layer
+      password: password ? encryptedPassword : "",
+      use_password: !!password,
     });
 
     return this.urlRepository.save(shortenedUrl);
@@ -117,7 +125,8 @@ export class UrlsService {
       throw new NotFoundException("Url not found");
     }
 
-    if (bcrypt.compareSync(password, urlExisted.password)) {
+    const decryptedPassword = CryptoJS.AES.decrypt(urlExisted.password, this.ENCRYPTION_SECRET).toString(CryptoJS.enc.Utf8);
+    if (password === decryptedPassword) {
       return urlExisted;
     }
     throw new BadRequestException("Password is incorrect");
@@ -138,7 +147,7 @@ export class UrlsService {
     }
 
     if (updateUrl.password) {
-      updateUrl.password = bcrypt.hashSync(updateUrl.password, SALT_ROUNDS);
+      updateUrl.password = CryptoJS.AES.encrypt(updateUrl.password, this.ENCRYPTION_SECRET).toString();
       updateUrl.use_password = true;
     } else {
       updateUrl.use_password = false;
@@ -171,8 +180,16 @@ export class UrlsService {
       .leftJoinAndSelect("urls.owner", "owner")
       .where("urls.id IN (:...urlsId)", { urlsId })
       .andWhere("urls.owner = :ownerId", { ownerId: currentUser.id })
+      .orderBy("urls.id", "DESC")
       .getMany();
     
+    // Decrypt password before exporting csv
+    for (const url of urls) {
+      if (url.password) {
+        url.password = CryptoJS.AES.decrypt(url.password, this.ENCRYPTION_SECRET).toString(CryptoJS.enc.Utf8);
+      }
+    }
+
     const csvFileName = `urls-${currentUser.username}-${new Date().getTime()}.csv`;
     const csvFilePath = await this.csvService.writeUrlsCsv(csvFileName, urls);
 
