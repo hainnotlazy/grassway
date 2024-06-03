@@ -8,13 +8,15 @@ import { DataSource, Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
 import * as bcrypt from "bcrypt";
 import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
+import { CsvService } from 'src/shared/services/csv/csv.service';
 
 @Injectable()
 export class UrlsService {
   constructor(
     @InjectRepository(Url)
     private urlRepository: Repository<Url>,
-    private dataSource: DataSource
+    private dataSource: DataSource,
+    private csvService: CsvService
   ) {}
 
   async getUrlByBackHalf(backHalf: string) {
@@ -161,6 +163,20 @@ export class UrlsService {
     }
 
     return await this.urlRepository.remove(url);
+  }
+
+  async exportCsv(currentUser: User, urlsId: string[]) {
+    const urls = await this.urlRepository
+      .createQueryBuilder("urls")
+      .leftJoinAndSelect("urls.owner", "owner")
+      .where("urls.id IN (:...urlsId)", { urlsId })
+      .andWhere("urls.owner = :ownerId", { ownerId: currentUser.id })
+      .getMany();
+    
+    const csvFileName = `urls-${currentUser.username}-${new Date().getTime()}.csv`;
+    const csvFilePath = await this.csvService.writeUrlsCsv(csvFileName, urls);
+
+    return csvFilePath;
   }
 
   /** Bulk update active/inactive urls */

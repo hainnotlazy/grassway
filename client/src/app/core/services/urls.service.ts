@@ -68,4 +68,12 @@ export class UrlsService {
       active
     })
   }
+
+  exportCsv(urls: Url[]) {
+    const urlQuery = urls.map(url => `id=${url.id}`).join('&');
+    return this.httpClient.get(`api/urls/bulk/export-csv?${urlQuery}`, {
+      observe: 'response',
+      responseType: 'blob'
+    });
+  }
 }

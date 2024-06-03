@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, map, scan, shareReplay, take, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, scan, shareReplay, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
@@ -64,13 +64,33 @@ export class IndexPage implements OnInit {
       }
     }),
     scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse, updatedUrl, deletedUrl]) => {
+      // ENHANCE: enhance this later
       /** Find & update updated url */
-      if (updatedUrl && this.compareTwoUrls(this.lastUpdatedUrl, updatedUrl)) {
+      if (
+        updatedUrl
+        && (this.lastUpdatedUrl?.id !== updatedUrl.id
+          || (this.lastUpdatedUrl?.id === updatedUrl.id && this.compareTwoUrls(this.lastUpdatedUrl, updatedUrl))
+        )
+      )
+      {
         this.lastUpdatedUrl = updatedUrl;
+        if (updatedUrl.is_active !== this.filterOptions.isActive) {
+          return accumulatorResponse.filter(url => url.id !== updatedUrl.id);
+        }
         const updatedIndex = accumulatorResponse.findIndex(url => url.id === updatedUrl.id);
         accumulatorResponse[updatedIndex] = updatedUrl;
         return accumulatorResponse;
       }
+
+      // if (updatedUrl && this.compareTwoUrls(this.lastUpdatedUrl, updatedUrl)) {
+      //   this.lastUpdatedUrl = updatedUrl;
+      //   if (updatedUrl.is_active !== this.filterOptions.isActive) {
+      //     return accumulatorResponse.filter(url => url.id !== updatedUrl.id);
+      //   }
+      //   const updatedIndex = accumulatorResponse.findIndex(url => url.id === updatedUrl.id);
+      //   accumulatorResponse[updatedIndex] = updatedUrl;
+      //   return accumulatorResponse;
+      // }
 
       /** Find & remove deleted url */
       if (deletedUrl && this.lastDeletedUrl?.id !== deletedUrl.id) {

@@ -15,6 +15,7 @@ import { UrlsService } from 'src/app/core/services/urls.service';
   styleUrls: ['./bulk-select.component.scss']
 })
 export class BulkSelectComponent implements OnInit {
+  isProcessingExportCsv = false;
   isProcessingUpdateStatus = false;
 
   @Input() filterOptions!: GetUrlsOptions;
@@ -53,6 +54,23 @@ export class BulkSelectComponent implements OnInit {
     ).subscribe();
   }
 
+  onExportCsv() {
+    if (this.selectedUrls.length > 0 && !this.isProcessingExportCsv) {
+      this.isProcessingExportCsv = changeStatus(this.isProcessingExportCsv);
+      this.urlsService.exportCsv(this.selectedUrls).pipe(
+        tap((response) => {
+          this.handleExportCsvSuccess(response);
+        }, (error) => {
+          this.handleProcessFail(error);
+        }),
+        finalize(() => {
+          this.isProcessingExportCsv = changeStatus(this.isProcessingExportCsv);
+        }),
+        untilDestroyed(this)
+      ).subscribe();
+    }
+  }
+
   onChangeStatusUrls() {
     if (this.selectedUrls.length > 0 && !this.isProcessingUpdateStatus) {
       this.isProcessingUpdateStatus = changeStatus(this.isProcessingUpdateStatus);
@@ -60,7 +78,7 @@ export class BulkSelectComponent implements OnInit {
         tap(() => {
           this.handleUpdateStatusSuccess();
         }, (error) => {
-          this.handleUpdateStatusFail(error);
+          this.handleProcessFail(error);
         }),
         finalize(() => {
           this.isProcessingUpdateStatus = changeStatus(this.isProcessingUpdateStatus);
@@ -110,6 +128,35 @@ export class BulkSelectComponent implements OnInit {
     }
   }
 
+  private handleExportCsvSuccess(response: any) {
+    const contentDisposition = response.headers.get('Content-Disposition');
+    let fileName = 'urls.csv';
+
+    if (contentDisposition) {
+      const matches = /filename="([^"]*)"/.exec(contentDisposition);
+      if (matches !== null && matches[1]) {
+        fileName = matches[1];
+      }
+    }
+
+    const blob = response.body;
+    const a = document.createElement('a');
+    const objectUrl = URL.createObjectURL(blob);
+    a.href = objectUrl;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(objectUrl);
+
+    this.selectedAll = false;
+    this.selectedUrls = [];
+    this.selectAll.emit(false);
+    this.snackbar.open("Exported successfully", "x", {
+      duration: 4000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    });
+  }
+
   private handleUpdateStatusSuccess() {
     for (let url of this.selectedUrls) {
       url.is_active = !this.filterOptions.isActive;
@@ -125,7 +172,7 @@ export class BulkSelectComponent implements OnInit {
     });
   }
 
-  private handleUpdateStatusFail(error: any) {
+  private handleProcessFail(error: any) {
     const errorResponse: ErrorResponse = error.error;
     let errorMessage = errorResponse.message ?? "Unexpected error happened";
 

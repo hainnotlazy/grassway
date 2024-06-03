@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseArrayPipe, ParseBoolPipe, ParseIntPipe, Post, Put, Query, Res } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { ShortenUrlDto } from './dtos/shorten-url.dto';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
@@ -10,13 +10,16 @@ import { LinkTypeValidationPipe } from 'src/shared/pipes/link-type-validation/li
 import { LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { AccessProtectedUrlDto } from './dtos/access-protected-url.dto';
 import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
-import { BulkInactiveUrlsDto } from './dtos/bulk-inactive-urls.dto';
+import { BulkChangeStatusUrlsDto } from './dtos/bulk-inactive-urls.dto';
+import * as fs from "fs";
+import { CsvService } from 'src/shared/services/csv/csv.service';
 
 @ApiTags("Urls")
 @Controller('urls')
 export class UrlsController {
   constructor(
-    private urlsService: UrlsService
+    private urlsService: UrlsService,
+    private csvService: CsvService
   ) {}
 
   /** Get paginated urls by user id */ 
@@ -440,13 +443,32 @@ export class UrlsController {
     return "";
   }
 
-  /** Route for making batch of urls inactive */
+  /** Route for making batch of urls active/inactive */
   @Put("/bulk/update-status")
   @HttpCode(204)
   setStatusUrls(
     @CurrentUser() currentUser: User, 
-    @Body() body: BulkInactiveUrlsDto
+    @Body() body: BulkChangeStatusUrlsDto
   ) {
     return this.urlsService.setStatusUrls(currentUser, body.ids, body.active);
+  }
+
+  @Get("/bulk/export-csv")
+  async exportCsv(
+    @CurrentUser() currentUser: User,
+    @Query("id", new DefaultValuePipe([]),ParseArrayPipe) query,
+    @Res() res
+  ) {
+    const csvFilePath = await this.urlsService.exportCsv(currentUser, query);
+    const fileName = csvFilePath.split("/").pop();
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    const fileStream = fs.createReadStream(csvFilePath);
+
+    fileStream.pipe(res);
+    fileStream.on("end", () => {
+      this.csvService.removeUnusedFile(csvFilePath);
+    })
   }
 }

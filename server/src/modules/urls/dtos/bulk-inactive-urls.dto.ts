@@ -1,6 +1,6 @@
 import { IsArray, IsBoolean } from "class-validator";
 
-export class BulkInactiveUrlsDto {
+export class BulkChangeStatusUrlsDto {
   @IsArray()
   ids: string[];
 
