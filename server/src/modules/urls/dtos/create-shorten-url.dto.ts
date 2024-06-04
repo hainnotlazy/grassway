@@ -49,7 +49,7 @@ export class CreateShortenUrlDto {
   @IsString()
   @IsOptional()
   @MaxLength(255)
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value?.trim() : null)
   custom_back_half: string;
 
   @ApiPropertyOptional({
