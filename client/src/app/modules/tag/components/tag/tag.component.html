@@ -1,7 +1,7 @@
 <div
   [matTooltip]="tag.name"
   matTooltipPosition="above"
-  (click)="onEditTag()"
+  (click)="onEditTag($event)"
   class="flex items-center gap-4 bg-white px-4 py-2.5 rounded-md shadow break-all border-2 cursor-pointer hover:bg-gray-100"
 >
   <i
@@ -32,7 +32,7 @@
     <small class="text-gray-600">{{ tag.description | truncate:45 }}</small>
   </div>
 
-  <div>
+  <div #deleteButton>
     <button
       class="hover:text-red-300 disabled:text-sky-400 flex justify-end w-full p-2 text-red-500"
       type="button"

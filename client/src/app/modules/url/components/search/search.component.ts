@@ -34,7 +34,6 @@ export class SearchComponent implements OnInit {
         this.filterChanged.emit(value as string);
       }),
       switchMap(value => {
-        console.log("handling here");
         return this.urlsService.listUrls({
           page: 1,
           ...this.filterOptions,
