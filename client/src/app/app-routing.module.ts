@@ -37,6 +37,10 @@ const routes: Routes = [
         loadChildren: () => import('./modules/qr-code/qr-code.module').then(m => m.QrCodeModule)
       },
       {
+        path: "tags",
+        loadChildren: () => import('./modules/tag/tag.module').then(m => m.TagModule)
+      },
+      {
         path: "my-account",
         loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule)
       }

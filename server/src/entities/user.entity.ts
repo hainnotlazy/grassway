@@ -4,6 +4,7 @@ import { SALT_ROUNDS } from "src/common/constants/bcrypt.const";
 import { Exclude } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { Url } from "./url.entity";
+import { Tag } from "./tag.entity";
 
 enum GenderTypes {
   MALE = "male",
@@ -18,6 +19,9 @@ export class User {
 
   @OneToMany(() => Url, url => url.owner)
   urls: Url[];
+
+  @OneToMany(() => Tag, tag => tag.owner)
+  tags: Tag[];
 
   @ApiProperty()
   @Column({ unique: true })

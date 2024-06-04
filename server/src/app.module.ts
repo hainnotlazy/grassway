@@ -11,6 +11,7 @@ import { RedisModule } from '@nestjs-modules/ioredis';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { UrlsModule } from './modules/urls/urls.module';
+import { TagsModule } from './modules/tags/tags.module';
 
 const appModules = [
   UsersModule,
@@ -30,6 +31,7 @@ const appModules = [
       useClass: config.MailerConfigOptions
     }),
     ...appModules,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [
