@@ -1,24 +1,29 @@
-import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { tagFormRequirements } from 'src/app/core/constants/tag-form-requirement.constant';
-import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
-import { TagsService } from 'src/app/core/services/tags.service';
-import { finalize, tap } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { finalize, tap } from 'rxjs';
+import { tagFormRequirements } from 'src/app/core/constants/tag-form-requirement.constant';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
+import { Tag } from 'src/app/core/models/tag.model';
+import { TagsService } from 'src/app/core/services/tags.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-create-form',
-  templateUrl: './create-form.component.html',
-  styleUrls: ['./create-form.component.scss'],
+  selector: 'app-update-tag-form',
+  templateUrl: './update-tag-form.component.html',
+  styleUrls: ['./update-tag-form.component.scss'],
   host: {
-    class: 'flex-grow'
+    class: "flex-grow"
   }
 })
-export class CreateFormComponent {
+export class UpdateTagFormComponent implements OnInit, OnChanges {
+  @Input() tag!: Tag;
+
+  @Output() updated = new EventEmitter();
+
   formError = "";
   isProcessing = false;
 
@@ -49,18 +54,29 @@ export class CreateFormComponent {
     private snackbar: MatSnackBar
   ) {}
 
+  ngOnInit() {
+    this.form.patchValue(this.tag);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["tag"]) {
+      this.form.patchValue(this.tag);
+    }
+  }
+
   onSubmit() {
     if (this.form.valid && !this.isProcessing) {
       this.isProcessing = changeStatus(this.isProcessing);
 
-      this.tagsService.createTag(
+      this.tagsService.updateTag(
+        this.tag.id,
         this.form.value.name as string,
         this.form.value.icon as string,
         this.form.value.description as string,
       ).pipe(
         tap(() => {
-          this.form.reset();
-          this.snackbar.open("Tag created successfully", "x", {
+          this.updated.emit()
+          this.snackbar.open("Tag updated successfully", "x", {
             duration: 3000,
             horizontalPosition: "right",
             verticalPosition: "top"

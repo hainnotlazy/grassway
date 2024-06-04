@@ -1,7 +1,7 @@
 import { Transform } from "class-transformer";
 import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class CreateTagDto {
+export class UpdateTagDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)

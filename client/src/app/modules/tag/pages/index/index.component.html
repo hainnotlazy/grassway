@@ -2,43 +2,38 @@
   <div class="space-y-2">
     <div class="flex justify-between gap-4">
       <h1 class="text-poetsen-one text-3xl">Tags</h1>
-      <button class="hover:bg-primary/80 hover:shadow-md bg-primary flex items-center gap-2 px-3 py-2 text-white rounded-md shadow">
-        <i class="icon-close rotate-45"></i>
+      <button
+        class="hover:bg-primary/80 hover:shadow-md bg-primary flex items-center gap-2 px-3 py-2 text-white rounded-md shadow"
+        (click)="editingTag = null"
+        type="button"
+      >
+        <i class="icon-add"></i>
         Create new tag
       </button>
     </div>
     <p class="text-gray-500">Tags are used to organize your links</p>
   </div>
 
-  <div class="flex gap-6">
-    <div class="space-y-3">
-      <div class="flex items-center gap-4 bg-gray-300 px-4 py-2.5 rounded-md shadow">
-        <i class="icon-tags text-secondary text-xl"></i>
-
-        <div>
-          <p class="text-secondary font-semibold">Projects</p>
-          <small class="text-gray-600">My personal projects</small>
-        </div>
-
-        <div>
-          <button><i class="icon-delete text-xl text-red-500"></i></button>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-4 bg-gray-300 px-4 py-2.5 rounded-md shadow">
-        <i class="icon-tags text-secondary text-xl"></i>
-
-        <div>
-          <p class="text-secondary font-semibold">Events</p>
-          <small class="text-gray-600">Customers's event</small>
-        </div>
-
-        <div>
-          <button><i class="icon-delete text-xl text-red-500"></i></button>
-        </div>
-      </div>
+  <div class="sm:flex-row flex flex-col gap-6">
+    <div class="tags space-y-3">
+      <app-tag
+        *ngFor="let tag of tags$ | async"
+        [tag]="tag"
+        (editing)="editingTag = $event"
+        (deleted)="onDeleteTag()"
+      ></app-tag>
+      <button
+        *ngIf="(tags$ | async)?.length === 0"
+        class="px-4 py-2.5 flex gap-4 items-center bg-white rounded-md shadow w-full border hover:shadow-md"
+        (click)="editingTag = null"
+        type="button"
+      >
+        <i class="icon-add p-4 text-gray-500 border-2 border-gray-400 border-dashed rounded-md"></i>
+        <span class="text-gray-500">Create new tag</span>
+      </button>
     </div>
 
-    <app-create-form></app-create-form>
+    <app-create-tag-form *ngIf="!editingTag" (created)="onCreateTag()"></app-create-tag-form>
+    <app-update-tag-form *ngIf="editingTag" [tag]="editingTag" (updated)="onUpdateTag()"></app-update-tag-form>
   </div>
 </div>

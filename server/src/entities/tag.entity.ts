@@ -11,6 +11,11 @@ export enum TagIcon {
   PROJECTS = "projects",
 }
 
+/** 
+ * Requirements:
+ * - User can create tags if they have less than 10 tags.
+ * - Their tag name is unique.
+ */
 @Entity()
 export class Tag {
   @PrimaryGeneratedColumn()

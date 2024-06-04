@@ -4,13 +4,17 @@ import { CommonModule } from '@angular/common';
 import { TagRoutingModule } from './tag-routing.module';
 import { IndexComponent } from './pages/index/index.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CreateFormComponent } from './components/create-form/create-form.component';
+import { TagComponent } from './components/tag/tag.component';
+import { CreateTagFormComponent } from './components/create-tag-form/create-tag-form.component';
+import { UpdateTagFormComponent } from './components/update-tag-form/update-tag-form.component';
 
 
 @NgModule({
   declarations: [
     IndexComponent,
-    CreateFormComponent
+    CreateTagFormComponent,
+    TagComponent,
+    UpdateTagFormComponent,
   ],
   imports: [
     CommonModule,

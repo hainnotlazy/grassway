@@ -1,0 +1,102 @@
+<form
+  [formGroup]="form"
+  (submit)="onSubmit()"
+  class="space-y-2"
+>
+  <h6 class="text-poetsen-one text-xl font-semibold">Edit tag</h6>
+  <div class="flex flex-col gap-2">
+    <label class="font-semibold text-gray-700" for="name">Name:</label>
+    <mat-form-field appearance="outline" color="accent">
+      <input
+        id="name"
+        matInput
+        formControlName="name"
+        placeholder="Enter tag name"
+        type="text"
+      >
+
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(form.get('name')?.errors)"
+      >
+        {{ nameValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="font-semibold text-gray-700" for="description">Description:</label>
+    <mat-form-field appearance="outline" color="accent">
+      <textarea
+        id="description"
+        matInput
+        formControlName="description"
+        placeholder="Enter tag description"
+        rows="3"
+      ></textarea>
+
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(form.get('description')?.errors)"
+      >
+        {{ descriptionValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="font-semibold text-gray-700" for="icon">Icon:</label>
+    <mat-form-field appearance="outline" color="accent" class="max-w-52">
+      <mat-select id="icon" formControlName="icon">
+        <mat-option value="none">-- None --</mat-option>
+
+        <mat-option value="personal">
+          <div class="flex items-center gap-2">
+            <i class="icon-brain text-xl text-pink-300"></i>
+            <span>Personal</span>
+          </div>
+        </mat-option>
+
+        <mat-option value="events">
+          <div class="flex items-center gap-2">
+            <i class="icon-public text-sky-300 text-xl"></i>
+            <span>Events</span>
+          </div>
+        </mat-option>
+
+        <mat-option value="projects">
+          <div class="flex items-center gap-2">
+            <i class="icon-project text-slate-500 text-xl"></i>
+            <span>Projects</span>
+          </div>
+        </mat-option>
+
+        <mat-option value="important">
+          <div class="flex items-center gap-2">
+            <i class="icon-bookmark text-xl text-orange-300"></i>
+            <span>Important</span>
+          </div>
+        </mat-option>
+
+        <mat-option value="work">
+          <div class="flex items-center gap-2">
+            <i class="icon-work text-xl text-purple-500"></i>
+            <span>Work</span>
+          </div>
+        </mat-option>
+
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <p *ngIf="formError" class="font-semibold text-center text-red-500">{{ formError }}</p>
+  <button
+    class="bg-secondary hover:bg-secondary/80 hover:shadow-md disabled:bg-gray-400 flex items-center gap-2 px-3 py-2 ml-auto text-white rounded shadow"
+    type="submit"
+    [disabled]="!form.dirty || !form.valid || isProcessing"
+    [class]="{'disabled:bg-sky-400': isProcessing}"
+  >
+    <i class="icon-spinner spinning" *ngIf="isProcessing"></i>
+    {{ isProcessing ? 'Processing...' : 'Save' }}
+  </button>
+</form>

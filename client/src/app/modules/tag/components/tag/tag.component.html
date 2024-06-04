@@ -1,0 +1,51 @@
+<div
+  [matTooltip]="tag.name"
+  matTooltipPosition="above"
+  (click)="onEditTag()"
+  class="flex items-center gap-4 bg-white px-4 py-2.5 rounded-md shadow break-all border-2 cursor-pointer hover:bg-gray-100"
+>
+  <i
+    class="text-xl"
+    [ngClass]="{
+      'icon-tags text-secondary': tag.icon === 'none',
+      'icon-brain text-pink-300': tag.icon === 'personal',
+      'icon-events text-sky-300': tag.icon === 'events',
+      'icon-project text-slate-500': tag.icon === 'projects',
+      'icon-bookmark text-orange-300': tag.icon === 'important',
+      'icon-work text-purple-500': tag.icon === 'work'
+    }"
+  ></i>
+
+  <div class="flex-grow">
+    <p class="font-semibold"
+      [class]="{
+        'text-pink-300': tag.icon === 'personal',
+        'text-sky-300': tag.icon === 'events',
+        'text-slate-500': tag.icon === 'projects',
+        'text-orange-300': tag.icon === 'important',
+        'text-purple-500': tag.icon === 'work',
+        'text-secondary': tag.icon === 'none'
+      }"
+    >
+      {{ tag.name | truncate:20 }}
+    </p>
+    <small class="text-gray-600">{{ tag.description | truncate:45 }}</small>
+  </div>
+
+  <div>
+    <button
+      class="hover:text-red-300 disabled:text-sky-400 flex justify-end w-full p-2 text-red-500"
+      type="button"
+      (click)="onDelete()"
+      [disabled]="isDeleting"
+    >
+      <i
+        class="icon-delete text-xl"
+        [ngClass]="{
+          'icon-delete': !isDeleting,
+          'icon-spinner spinning': isDeleting
+        }"
+      ></i>
+    </button>
+  </div>
+</div>
