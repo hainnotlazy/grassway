@@ -1,7 +1,7 @@
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import helmet from "helmet";
-import * as session from 'express-session';
+import * as session from 'cookie-session';
 import { config } from "dotenv";
 
 config({
