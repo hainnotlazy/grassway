@@ -1,13 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { finalize, tap } from 'rxjs';
+import { filter, finalize, tap } from 'rxjs';
 import { shortenUrlRequirements } from 'src/app/core/constants/url-form-requirement.const';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
+import { Tag } from 'src/app/core/models/tag.model';
 import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { FormValidator } from 'src/app/core/validators/form.validator';
@@ -22,6 +24,13 @@ export class EditFormDialogComponent implements OnInit {
   formError = "";
   hidePassword = true;
   isProcessing = false;
+
+  @ViewChild("tagInput") tagInput!: ElementRef<HTMLInputElement>;
+
+  // Link's tags
+  selectedTags: Tag[] = [];
+  tags: Tag[] = [];
+  filteredTags: Tag[] = [];
 
   // Form validation messages
   titleValidationMessages: ValidationMessage = shortenUrlRequirements.title.validationMsg;
@@ -38,32 +47,45 @@ export class EditFormDialogComponent implements OnInit {
     customBackHalf: new FormControl(
       "",
       [],
-      FormValidator.customBackHalfExisted(this.urlsService, this.data.custom_back_half)
+      FormValidator.customBackHalfExisted(this.urlsService, this.data.url.custom_back_half)
     ),
     editPassword: new FormControl(false),
-    password: new FormControl("")
+    password: new FormControl(""),
+    tags: new FormControl("")
   });
-
-
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: Url,
+    public data: {
+      url: Url;
+      tags: Tag[]
+    },
     private dialogRef: MatDialogRef<EditFormDialogComponent>,
     private urlsService: UrlsService,
     private snackbar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    if (this.data.use_password) {
+    this.tags = [...this.data.tags];
+    this.data.url.tags.forEach((tag) => {
+      const foundTag = this.tags.find((t) => t.id === tag.tag_id);
+
+      if (foundTag) {
+        this.selectedTags.push(foundTag);
+        this.tags.splice(this.tags.indexOf(foundTag), 1);
+      }
+    });
+    this.filteredTags = [...this.tags];
+
+    if (this.data.url.use_password) {
       this.editForm.get("password")?.disable();
     }
 
     this.editForm.patchValue({
-      title: this.data.title,
-      description: this.data.description,
-      customBackHalf: this.data.custom_back_half,
-      isActive: this.data.is_active
+      title: this.data.url.title,
+      description: this.data.url.description,
+      customBackHalf: this.data.url.custom_back_half,
+      isActive: this.data.url.is_active
     });
 
     this.editForm.get("editPassword")?.valueChanges.pipe(
@@ -76,6 +98,13 @@ export class EditFormDialogComponent implements OnInit {
       }),
       untilDestroyed(this)
     ).subscribe();
+
+    this.editForm.get("tags")?.valueChanges.pipe(
+      filter((value) => typeof value === "string"),
+      tap((value) => {
+        this.filterOption(value as string);
+      })
+    ).subscribe();
   }
 
   onSubmit() {
@@ -87,21 +116,22 @@ export class EditFormDialogComponent implements OnInit {
       let password = "";
 
       if (
-        (!this.data.use_password && this.editForm.value.password)
-        || (this.data.use_password && this.editForm.value.editPassword)
+        (!this.data.url.use_password && this.editForm.value.password)
+        || (this.data.url.use_password && this.editForm.value.editPassword)
       ) {
         password = this.editForm.value.password as string;
         changePassword = true;
       }
 
       this.urlsService.updateUrl({
-        id: this.data.id,
+        id: this.data.url.id,
         title: this.editForm.value.title as string,
         description: this.editForm.value.description as string,
         custom_back_half: this.editForm.value.customBackHalf as string,
         is_active: this.editForm.value.isActive as boolean,
         change_password: changePassword,
-        password
+        password,
+        tags: this.selectedTags.map(tag => tag.id as unknown as string)
       }).pipe(
         tap((data) => {
           this.dialogRef.close(data);
@@ -116,7 +146,47 @@ export class EditFormDialogComponent implements OnInit {
     }
   }
 
-  handleEditFail(error: any) {
+  // Functions for handling select tags
+  removeSelectedTag(tag: Tag) {
+    this.selectedTags = this.selectedTags.filter(selectedTag => selectedTag.id !== tag.id);
+    this.addOption(tag);
+  }
+
+  selectTag(event: MatAutocompleteSelectedEvent) {
+    if (!this.selectedTags.find(selectedTag => selectedTag.id === event.option.value.id)) {
+      this.clearTagInput();
+      const selectedTag = event.option.value;
+      this.removeOption(selectedTag);
+      this.selectedTags.push(selectedTag);
+    }
+  }
+
+  private addOption(tag: Tag) {
+    this.tags.push(tag);
+    this.filteredTags = [...this.tags];
+  }
+
+  private removeOption(tag: Tag) {
+    this.tags.splice(this.tags.indexOf(tag), 1);
+    this.filteredTags = [...this.tags];
+  }
+
+  private filterOption(value: string): void {
+    if (value == "") {
+      this.filteredTags = this.tags;
+      return;
+    }
+
+    const filterValue = value.toLowerCase();
+    this.filteredTags = this.tags.filter(tag => tag.name.toLowerCase().includes(filterValue));
+  }
+
+  private clearTagInput() {
+    this.editForm.get("tags")?.setValue(null);
+    this.tagInput.nativeElement.value = "";
+  }
+
+  private handleEditFail(error: any) {
     const errorResponse: ErrorResponse = error.error;
     let errorMessage = errorResponse.message ?? "Unexpected error happened";
 

@@ -12,8 +12,19 @@ export class TagsService {
     private tagRepository: Repository<Tag>,
   ) {}
 
+  async findTag(currentUser: User, id: string) {
+    return await this.tagRepository.findOne({ 
+      where: { 
+        id,
+        owner: {
+          id: currentUser.id
+        }
+      } 
+    });
+  }
+
   async listTags(currentUser: User) {
-    return this.tagRepository.find({ 
+    return await this.tagRepository.find({ 
       where: { 
         owner: {
           id: currentUser.id

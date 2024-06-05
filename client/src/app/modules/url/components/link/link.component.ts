@@ -10,6 +10,7 @@ import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 import { EditFormDialogComponent } from '../edit-form-dialog/edit-form-dialog.component';
+import { Tag } from 'src/app/core/models/tag.model';
 
 export interface ExtendedUrl extends Url {
   client: string;
@@ -26,6 +27,7 @@ export interface ExtendedUrl extends Url {
 })
 export class LinkComponent {
   @Input() url!: ExtendedUrl;
+  @Input() tags!: Tag[];
   @Input() selectingAll!: boolean | null;
   @Input() updateUrlSubject!: BehaviorSubject<Url | null>;
   @Input() deleteUrlSubject!: BehaviorSubject<Url | null>;
@@ -68,7 +70,10 @@ export class LinkComponent {
     this.dialog.closeAll();
     const updateDialog = this.dialog.open(EditFormDialogComponent, {
       width: "600px",
-      data: this.url
+      data: {
+        url: this.url,
+        tags: this.tags
+      }
     })
 
     updateDialog.afterClosed().pipe(

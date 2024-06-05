@@ -80,7 +80,7 @@
     </div>
 
     <div class="sm:w-1/2 flex flex-col gap-2">
-      <ng-container *ngIf="!data.use_password; else changePassword">
+      <ng-container *ngIf="!data.url.use_password; else changePassword">
         <label class="text-gray-600" for="passwrod">Password:</label>
       </ng-container>
 
@@ -95,10 +95,9 @@
           id="password"
           formControlName="password"
           matInput
-          [placeholder]="data.use_password ? 'Change password' : 'Set password'"
+          [placeholder]="data.url.use_password ? 'Change password' : 'Set password'"
           [type]="hidePassword ? 'password' : 'text'"
         >
-        <!-- <mat-hint *ngIf="data.use_password">Retype link's password</mat-hint> -->
         <button
           mat-icon-button
           matSuffix
@@ -111,6 +110,36 @@
         </button>
       </mat-form-field>
     </div>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="">Tags:</label>
+    <mat-form-field appearance="outline" color="accent">
+      <mat-chip-grid #tagChipGrid>
+        <mat-chip-row
+          *ngFor="let tag of selectedTags"
+          (removed)="removeSelectedTag(tag)"
+          class="!bg-white border border-gray-300"
+        >
+          <app-option-tag [tag]="tag"></app-option-tag>
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-grid>
+      <input
+        #tagInput
+        placeholder="Select tag"
+        formControlName="tags"
+        [matChipInputFor]="tagChipGrid"
+        [matAutocomplete]="tagAuto"
+      />
+      <mat-autocomplete #tagAuto="matAutocomplete" (optionSelected)="selectTag($event)">
+        <mat-option *ngFor="let tag of filteredTags" [value]="tag">
+          <app-option-tag [tag]="tag"></app-option-tag>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
   </div>
 
   <div class="flex items-center justify-end gap-4">

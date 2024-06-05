@@ -59,6 +59,13 @@
         <span>{{ url.created_at | date:"MMM dd, yyyy" }}</span>
       </p>
     </div>
+    <div *ngIf="tags.length > 0 && url.tags.length > 0" class="!-mt-4 flex gap-2 items-center flex-wrap">
+      <app-tag-badge
+        *ngFor="let tag of url.tags"
+        [tags]="tags"
+        [targetTagId]="tag.tag_id"
+      ></app-tag-badge>
+    </div>
   </div>
 
   <div class="self-start space-x-3">

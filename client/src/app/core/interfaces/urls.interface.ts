@@ -6,4 +6,5 @@ export interface UpdateUrl {
   custom_back_half?: string;
   change_password: boolean;
   password?: string;
+  tags?: string[];
 }

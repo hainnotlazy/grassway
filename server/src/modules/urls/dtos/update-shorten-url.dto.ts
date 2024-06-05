@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class UpdateShortenUrlDto {
   @ApiProperty({
@@ -58,4 +58,12 @@ export class UpdateShortenUrlDto {
   @IsBoolean()
   @IsOptional()
   is_active: boolean;
+
+  @ApiPropertyOptional({
+    description: "Tags", 
+    type: Array
+  })
+  @IsArray()
+  @IsOptional()
+  tags: string[]
 }

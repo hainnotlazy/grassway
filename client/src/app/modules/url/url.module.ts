@@ -14,6 +14,8 @@ import { QrcodeDialogComponent } from './components/qrcode-dialog/qrcode-dialog.
 import { EditFormDialogComponent } from './components/edit-form-dialog/edit-form-dialog.component';
 import { BulkSelectComponent } from './components/bulk-select/bulk-select.component';
 import { SearchComponent } from './components/search/search.component';
+import { OptionTagComponent } from './components/option-tag/option-tag.component';
+import { TagBadgeComponent } from './components/tag-badge/tag-badge.component';
 
 const pages = [
   IndexPage,
@@ -36,7 +38,9 @@ const components = [
     QrcodeDialogComponent,
     EditFormDialogComponent,
     BulkSelectComponent,
-    SearchComponent
+    SearchComponent,
+    OptionTagComponent,
+    TagBadgeComponent
   ],
   imports: [
     CommonModule,

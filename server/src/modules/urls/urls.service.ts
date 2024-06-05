@@ -10,6 +10,8 @@ import * as CryptoJS from 'crypto-js';
 import { CsvService } from 'src/shared/services/csv/csv.service';
 import { ConfigService } from '@nestjs/config';
 import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
+import { TaggedUrl } from 'src/entities/tagged-url.entity';
+import { TagsService } from '../tags/tags.service';
 
 @Injectable()
 export class UrlsService {
@@ -18,9 +20,12 @@ export class UrlsService {
   constructor(
     @InjectRepository(Url)
     private urlRepository: Repository<Url>,
+    @InjectRepository(TaggedUrl)
+    private taggedUrlRepository: Repository<TaggedUrl>,
     private dataSource: DataSource,
     private csvService: CsvService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private tagsService: TagsService
   ) {}
 
   async getUrlByBackHalf(backHalf: string) {
@@ -41,6 +46,7 @@ export class UrlsService {
     // Create query builder
     const queryBuilder = this.urlRepository.createQueryBuilder("urls")
       .leftJoinAndSelect("urls.owner", "owner")
+      .leftJoinAndSelect("urls.tags", "tags")
       .where("urls.owner = :ownerId", { ownerId: currentUser.id })
       .andWhere("urls.is_active = :isActive", { isActive })
     
@@ -76,13 +82,16 @@ export class UrlsService {
         "origin_url",
         "back_half",
         "shortened_url",
-        "is_active"
+        "is_active",
+        "tags"
       ],
       sortBy: [
-        ["id", "DESC"]
+        ["id", "DESC"],
+        ["tags.tag_id", "ASC"]
       ]
     }, queryBuilder, {
-      sortableColumns: ["id"],
+      relations: ["tags"],
+      sortableColumns: ["id", "tags.tag_id"],
       maxLimit: 50
     })
   }
@@ -142,34 +151,77 @@ export class UrlsService {
   }
 
   async updateUrl(currentUser: User, urlId: string, updateUrl: UpdateShortenUrlDto) {
-    const url = await this.urlRepository.findOne({
+    let url = await this.urlRepository.findOne({
       where: {
         id: urlId,
         owner: {
           id: currentUser.id
         }
-      }
+      },
+      relations: ["tags"]
     });
 
     if (!url) {
       throw new NotFoundException("Url not found");
     }
 
-    if (updateUrl.change_password) {
-      Object.assign(url, updateUrl);
-      if (updateUrl.password) {
-        url.password = CryptoJS.AES.encrypt(updateUrl.password, this.ENCRYPTION_SECRET).toString();
-        url.use_password = true;
-      } else {
-        url.password = null;
-        url.use_password = false;
-      }
-    } else {
-      updateUrl.password = url.password;
-      Object.assign(url, updateUrl);
-    }
+    // Start transaction
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    return this.urlRepository.save(url);
+    try {
+      const existedTags = url.tags;
+      if (updateUrl.change_password) {
+        Object.assign(url, updateUrl);
+        if (updateUrl.password) {
+          url.password = CryptoJS.AES.encrypt(updateUrl.password, this.ENCRYPTION_SECRET).toString();
+          url.use_password = true;
+        } else {
+          url.password = null;
+          url.use_password = false;
+        }
+      } else {
+        updateUrl.password = url.password;
+        Object.assign(url, updateUrl);
+      }
+
+      // Handle to save/update url's tags
+      const newTagsId = updateUrl.tags || [];
+      for (const existedTag of existedTags) {
+        if (newTagsId.includes(existedTag.tag_id)) {
+          newTagsId.splice(newTagsId.indexOf(existedTag.tag_id), 1);
+        } else {
+          await queryRunner.manager.remove(TaggedUrl, existedTag);
+        }
+      }
+
+      for (const newTagId of newTagsId) {
+        // Validate if tag id is valid
+        if (!(await this.tagsService.findTag(currentUser, newTagId))) {
+          continue;
+        }
+
+        const newTaggedUrl = this.taggedUrlRepository.create({
+          tag_id: newTagId,
+          url_id: url.id
+        });
+        const taggedUrl = await queryRunner.manager.save(TaggedUrl, newTaggedUrl);
+        existedTags.push(taggedUrl);
+      }
+
+      url.tags = existedTags;
+      url = await queryRunner.manager.save(Url, url);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed when updating url");
+    } finally {
+      await queryRunner.release();
+      url.tags = url.tags.filter((tag) => tag.url_id);
+      return url;
+    }
   }
 
   async deleteUrl(currentUser: User, urlId: string) {

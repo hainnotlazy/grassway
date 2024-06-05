@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./user.entity";
 import { Exclude } from "class-transformer";
+import { TaggedUrl } from "./tagged-url.entity";
 
 export enum TagIcon {
   NONE = "none",
@@ -22,7 +23,12 @@ export class Tag {
   id: string;
 
   @ManyToOne(() => User, (user) => user.tags)
+  @JoinColumn({ name: "owner_id" })
+  @Exclude()
   owner: User;
+
+  @OneToMany(() => TaggedUrl, (taggedUrl) => taggedUrl.tag)
+  tagged_urls: TaggedUrl[];
 
   @Column()
   name: string;

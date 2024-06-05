@@ -1,0 +1,24 @@
+<span
+  class="inline-flex items-center gap-1 text-white px-2 py-0.5 rounded-md shadow"
+  [ngClass]="{
+    'bg-secondary': targetTag?.icon === 'none',
+    'bg-pink-300': targetTag?.icon === 'personal',
+    'bg-sky-300': targetTag?.icon === 'events',
+    'bg-slate-500': targetTag?.icon === 'projects',
+    'bg-orange-300': targetTag?.icon === 'important',
+    'bg-purple-500': targetTag?.icon === 'work'
+  }"
+>
+  <i
+    class="text-lg"
+    [ngClass]="{
+      'icon-tags': targetTag?.icon === 'none',
+      'icon-brain': targetTag?.icon === 'personal',
+      'icon-public': targetTag?.icon === 'events',
+      'icon-project': targetTag?.icon === 'projects',
+      'icon-bookmark': targetTag?.icon === 'important',
+      'icon-work': targetTag?.icon === 'work'
+    }"
+  ></i>
+  {{ targetTag?.name }}
+</span>

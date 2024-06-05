@@ -11,6 +11,7 @@ import { Tag } from 'src/entities/tag.entity';
     SharedModule
   ],
   controllers: [TagsController],
-  providers: [TagsService]
+  providers: [TagsService],
+  exports: [TagsService]
 })
 export class TagsModule {}

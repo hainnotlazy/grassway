@@ -1,0 +1,22 @@
+<div class="flex items-center gap-2">
+  <i
+    [ngClass]="{
+      'icon-tags text-secondary': tag.icon === 'none',
+      'icon-brain text-pink-300': tag.icon === 'personal',
+      'icon-public text-sky-300': tag.icon === 'events',
+      'icon-project text-slate-500': tag.icon === 'projects',
+      'icon-bookmark text-orange-300': tag.icon === 'important',
+      'icon-work text-purple-500': tag.icon === 'work'
+    }"
+  ></i>
+  <span
+    [class]="{
+      '!text-pink-300': tag.icon === 'personal',
+      '!text-sky-300': tag.icon === 'events',
+      '!text-slate-500': tag.icon === 'projects',
+      '!text-orange-300': tag.icon === 'important',
+      '!text-purple-500': tag.icon === 'work',
+      '!text-secondary': tag.icon === 'none'
+    }"
+  >{{ tag.name }}</span>
+</div>

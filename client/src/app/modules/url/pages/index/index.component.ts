@@ -7,6 +7,8 @@ import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { environment } from 'src/environments/environment';
 import { GetUrlsOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { TagsService } from 'src/app/core/services/tags.service';
+import { Tag } from 'src/app/core/models/tag.model';
 
 @UntilDestroy()
 @Component({
@@ -18,6 +20,7 @@ export class IndexPage implements OnInit {
   isLoading = false;
   currentPage = 1;
   totalPage = 1;
+  tags: Tag[] = [];
 
   selectingAll: boolean | null = null;
 
@@ -117,12 +120,20 @@ export class IndexPage implements OnInit {
 
   constructor(
     private urlsService: UrlsService,
+    private tagsService: TagsService
   ) {}
 
   ngOnInit() {
     this.urlsService.listUrls({ page: 1 }).pipe(
       tap((response) => {
         this.initialLoadSubject.next(response);
+      }),
+      untilDestroyed(this)
+    ).subscribe();
+
+    this.tagsService.getTags().pipe(
+      tap((tags) => {
+        this.tags = tags;
       }),
       untilDestroyed(this)
     ).subscribe();

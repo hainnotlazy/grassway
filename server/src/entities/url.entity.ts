@@ -1,9 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
-import { BeforeInsert, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./user.entity";
-import * as bcrypt from "bcrypt";
-import { SALT_ROUNDS } from "src/common/constants/bcrypt.const";
+import { TaggedUrl } from "./tagged-url.entity";
 
 @Entity()
 export class Url {
@@ -12,8 +11,12 @@ export class Url {
   id: string;
 
   @ManyToOne(() => User, user => user.urls)
+  @JoinColumn({ name: "owner_id" })
   @Exclude()
   owner: User;
+
+  @OneToMany(() => TaggedUrl, taggedUrl => taggedUrl.url)
+  tags: TaggedUrl[];
 
   @ApiProperty()
   @Column()
