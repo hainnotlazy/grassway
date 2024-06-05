@@ -87,11 +87,10 @@ export class UrlsService {
       ],
       sortBy: [
         ["id", "DESC"],
-        ["tags.tag_id", "ASC"]
       ]
     }, queryBuilder, {
       relations: ["tags"],
-      sortableColumns: ["id", "tags.tag_id"],
+      sortableColumns: ["id"],
       maxLimit: 50
     })
   }

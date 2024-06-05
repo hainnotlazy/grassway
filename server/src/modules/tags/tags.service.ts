@@ -2,14 +2,16 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tag } from 'src/entities/tag.entity';
 import { User } from 'src/entities/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateTagDto } from './dtos/create-tag.dto';
+import { TaggedUrl } from 'src/entities/tagged-url.entity';
 
 @Injectable()
 export class TagsService {
   constructor(
     @InjectRepository(Tag)
     private tagRepository: Repository<Tag>,
+    private dataSource: DataSource
   ) {}
 
   async findTag(currentUser: User, id: string) {
@@ -94,6 +96,20 @@ export class TagsService {
       throw new NotFoundException("Tag not found!");
     }
 
-    return this.tagRepository.remove(tag);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.delete(TaggedUrl, { tag: { id: tag.id } });
+      await queryRunner.manager.delete(Tag, { id: tag.id });
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new BadRequestException(error.message);
+    } finally {
+      await queryRunner.release();
+    } 
   }
 }
