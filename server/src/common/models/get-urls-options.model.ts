@@ -12,4 +12,5 @@ export interface GetUrlsOptions {
   startDate?: Date | string;
   endDate?: Date | string;
   search: string;
+  tagId?: string;
 }

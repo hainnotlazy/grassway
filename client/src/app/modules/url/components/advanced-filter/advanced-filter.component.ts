@@ -6,6 +6,7 @@ import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component'
 import { GetUrlsOptions, filtersApplied } from 'src/app/core/interfaces/get-urls-options.interface';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
+import { Tag } from 'src/app/core/models/tag.model';
 
 @UntilDestroy()
 @Component({
@@ -14,6 +15,7 @@ import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
   styleUrls: ['./advanced-filter.component.scss']
 })
 export class AdvancedFilterComponent {
+  @Input() tags!: Tag[];
   @Input() filterOptions!: GetUrlsOptions;
 
   @Input() initialLoadSubject!: BehaviorSubject<UrlsResponse | null>;
@@ -32,7 +34,10 @@ export class AdvancedFilterComponent {
     this.dialog.closeAll();
     const dialogRef = this.dialog.open(FilterDialogComponent, {
       width: "500px",
-      data: this.filterOptions
+      data: {
+        filterOptions: this.filterOptions,
+        tags: this.tags
+      }
     });
 
     dialogRef.afterClosed().pipe(
@@ -59,6 +64,7 @@ export class AdvancedFilterComponent {
       baseOption.linkTypeOptions !== filterOptions.linkTypeOptions
       || baseOption.startDate !== filterOptions.startDate
       || baseOption.endDate !== filterOptions.endDate
+      || baseOption.tagId !== filterOptions.tagId
     ) {
       return true;
     }

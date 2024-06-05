@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GetUrlsOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { Tag } from 'src/app/core/models/tag.model';
 
 @Component({
   selector: 'app-filter-dialog',
@@ -10,6 +11,7 @@ import { GetUrlsOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-url
 })
 export class FilterDialogComponent implements OnInit {
   filterForm = new FormGroup({
+    tagId: new FormControl(""),
     linkTypeOptions: new FormControl("all"),
     startDate: new FormControl(""),
     endDate: new FormControl("")
@@ -18,14 +20,18 @@ export class FilterDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<FilterDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: GetUrlsOptions
+    public data: {
+      filterOptions: GetUrlsOptions,
+      tags: Tag[]
+    }
   ) {}
 
   ngOnInit() {
     this.filterForm.patchValue({
-      linkTypeOptions: this.data.linkTypeOptions,
-      startDate: this.data.startDate?.toString(),
-      endDate: this.data.endDate?.toString()
+      tagId: this.data.filterOptions.tagId || "",
+      linkTypeOptions: this.data.filterOptions.linkTypeOptions,
+      startDate: this.data.filterOptions.startDate?.toString(),
+      endDate: this.data.filterOptions.endDate?.toString()
     });
   }
 
@@ -41,6 +47,7 @@ export class FilterDialogComponent implements OnInit {
 
   onClearFilter() {
     this.dialogRef.close({
+      tagId: "",
       linkTypeOptions: LinkTypeOptions.ALL,
       startDate: "",
       endDate: ""

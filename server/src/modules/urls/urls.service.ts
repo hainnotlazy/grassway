@@ -41,7 +41,7 @@ export class UrlsService {
 
   /** Describe: Get paginated urls by user */
   async getUrls(currentUser: User, options: GetUrlsOptions) {
-    const { limit, page, isActive, linkTypeOptions, startDate, endDate, search } = options;
+    const { limit, page, isActive, linkTypeOptions, startDate, endDate, search, tagId } = options;
 
     // Create query builder
     const queryBuilder = this.urlRepository.createQueryBuilder("urls")
@@ -71,6 +71,11 @@ export class UrlsService {
         "(urls.origin_url ILIKE :search OR urls.custom_back_half ILIKE :search OR urls.title ILIKE :search)", 
         { search: `%${search}%` }
       );
+    }
+
+    // Add filter tag
+    if (tagId) {
+      queryBuilder.andWhere("tags.tag_id = :tagId", { tagId });
     }
 
     return paginate({

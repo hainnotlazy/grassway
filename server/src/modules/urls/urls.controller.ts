@@ -67,16 +67,18 @@ export class UrlsController {
     @Query("link_type", new DefaultValuePipe(LinkTypeOptions.ALL), LinkTypeValidationPipe) linkType: LinkTypeOptions,
     @Query("start_date") startDate: string,
     @Query("end_date") endDate: string,
-    @Query("search", new DefaultValuePipe("")) search: string
+    @Query("search", new DefaultValuePipe("")) search: string,
+    @Query("tag_id", new DefaultValuePipe("")) tagId: string,
   ) {
     return this.urlsService.getUrls(currentUser, {
       limit: 10,
       page: page || 1,
       isActive: isActive,
       linkTypeOptions: linkType,
-      startDate: startDate,
-      endDate: endDate,
-      search
+      startDate,
+      endDate,
+      search,
+      tagId
     });
   }
 

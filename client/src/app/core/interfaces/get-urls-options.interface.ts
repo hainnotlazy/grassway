@@ -11,6 +11,7 @@ export interface GetUrlsOptions {
   startDate?: Date | string;
   endDate?: Date | string;
   search?: string;
+  tagId?: string;
 }
 
 const BaseFilterOptions: GetUrlsOptions = {
@@ -29,6 +30,10 @@ export function filtersApplied(options: GetUrlsOptions) {
   }
 
   if (options.startDate || options.endDate) {
+    count ++;
+  }
+
+  if (options.tagId) {
     count ++;
   }
 

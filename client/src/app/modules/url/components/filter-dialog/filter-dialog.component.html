@@ -10,10 +10,13 @@
     <div class="flex flex-col gap-2">
       <label class="text-sm">Tags:</label>
       <mat-form-field appearance="outline" color="accent">
-        <mat-select value="all" >
-          <mat-option value="all">Select tag</mat-option>
-          <mat-option>One</mat-option>
-          <mat-option>Two</mat-option>
+        <mat-select formControlName="tagId">
+          <mat-option value="">Select tag</mat-option>
+          <mat-option *ngFor="let tag of data.tags" [value]="tag.id">
+            <app-option-tag
+              [tag]="tag"
+            ></app-option-tag>
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -55,7 +58,7 @@
 <div
   mat-dialog-actions
   align="end"
-  class="!p-4 space-x-3 space-y-3"
+  class="!p-4 flex items-center gap-3 flex-wrap"
 >
   <button
     class="hover:text-primary flex items-center gap-2 font-semibold text-gray-500"
