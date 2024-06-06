@@ -176,7 +176,7 @@ export class BulkSelectComponent implements OnInit {
   taggedAll(tag: Tag) {
     if (this.selectedUrls.length > 0) {
       for (let url of this.selectedUrls) {
-        if (url.tags.length > 0 && !url.tags.find(t => t.tag_id === tag.id)) {
+        if (url.tags.length === 0 || (url.tags.length > 0 && !url.tags.find(t => t.tag_id === tag.id))) {
           return false;
         }
       }
