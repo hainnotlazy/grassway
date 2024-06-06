@@ -37,6 +37,7 @@
       [updateUrlSubject]="updateUrlSubject"
       [selectUrlSubject]="selectUrlSubject"
       (selectAll)="selectingAll = $event"
+      (bulkChangeStatus)="onBulkChangeStatus()"
     ></app-bulk-select>
 
     <app-status-filter

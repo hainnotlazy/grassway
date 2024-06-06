@@ -24,6 +24,7 @@ export class BulkSelectComponent implements OnInit {
   @Input() selectUrlSubject!: BehaviorSubject<Url | null>;
 
   @Output() selectAll = new EventEmitter<boolean | null>();
+  @Output() bulkChangeStatus = new EventEmitter();
 
   private selectUrl$?: Observable<Url | null>;
 
@@ -75,6 +76,9 @@ export class BulkSelectComponent implements OnInit {
     if (this.selectedUrls.length > 0 && !this.isProcessingUpdateStatus) {
       this.isProcessingUpdateStatus = changeStatus(this.isProcessingUpdateStatus);
       this.urlsService.setStatusUrls(this.selectedUrls, !this.filterOptions.isActive).pipe(
+        tap(() => {
+          this.bulkChangeStatus.emit();
+        }),
         tap(() => {
           this.handleUpdateStatusSuccess();
         }, (error) => {

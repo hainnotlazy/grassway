@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, map, scan, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, scan, shareReplay, take, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
@@ -146,6 +146,7 @@ export class IndexPage implements OnInit {
         page: this.currentPage + 1,
         ...this.filterOptions
       }).pipe(
+        take(1),
         tap((response) => {
           this.infiniteLoadSubject.next(response);
         }),
@@ -167,6 +168,20 @@ export class IndexPage implements OnInit {
   onAdvancedFilterChanged(advancedFilter: GetUrlsOptions) {
     Object.assign(this.filterOptions, advancedFilter);
     this.newFilterApplied = true;
+  }
+
+  onBulkChangeStatus() {
+    this.urlsService.listUrls({
+      ...this.filterOptions,
+      page: 1
+    }).pipe(
+      take(1),
+      tap(response => {
+        this.initialLoadSubject.next(response);
+        this.infiniteLoadSubject.next(null);
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   private getValueInNumber(value: string | number) {
