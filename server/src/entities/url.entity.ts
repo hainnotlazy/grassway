@@ -52,6 +52,14 @@ export class Url {
   is_active: boolean;
   
   @ApiProperty()
+  @Column({ default: 0 })
+  visited: number;
+
+  @ApiProperty()
+  @Column({ default: 0 })
+  redirect_success: number;
+
+  @ApiProperty()
   @CreateDateColumn()
   created_at: Date;
 
@@ -62,12 +70,6 @@ export class Url {
 
   @BeforeInsert() 
   handleBeforeInsert() {
-    // Hash Password
-    // if (this.password) {
-    //   this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
-    //   this.use_password = true;
-    // }
-
     // Generate title if not provided
     if (!this.title) {
       this.title = `Unnamed title ${Math.floor(Math.random() * 100000)}`;

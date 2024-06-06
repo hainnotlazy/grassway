@@ -1,7 +1,7 @@
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, finalize, switchMap, tap, timer } from 'rxjs';
+import { filter, finalize, switchMap, take, tap, timer } from 'rxjs';
 import { Url } from 'src/app/core/models/url.model';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormControl, Validators } from '@angular/forms';
@@ -40,14 +40,19 @@ export class RedirectPage implements OnInit {
       this.isLoading = false;
     } else {
       this.urlsService.getUrlByBackHalf(backHalf).pipe(
-        tap((data) => this.url = data),
+        tap((data) => {
+          this.url = data;
+          this.handleCountingAccess(this.url.id, "visit").subscribe();
+        }),
         finalize(() => this.isLoading = false),
         filter(data => data.is_active),
         filter((data) => !!data && !data.use_password),
         switchMap(() => timer(0, 1000)),
         tap(() => {
           if (this.countdownTime <= 0) {
-            window.location.href = this.url?.origin_url as string;
+            this.handleCountingAccess(this.url?.id as string, "redirected").pipe(
+              tap(() => window.location.href = this.url?.origin_url as string)
+            ).subscribe();
           } else {
             this.countdownTime -= 1;
           }
@@ -71,7 +76,9 @@ export class RedirectPage implements OnInit {
         this.passwordControl.value as string
       ).pipe(
         tap(data => {
-          window.location.href = data.origin_url;
+          this.handleCountingAccess(this.url?.id as string, "redirected").pipe(
+            tap(() => window.location.href = data.origin_url)
+          ).subscribe();
         }, error => {
           this.handleAccessFail(error);
         }),
@@ -86,6 +93,26 @@ export class RedirectPage implements OnInit {
       } else if (this.passwordControl.hasError("maxlength")) {
         this.controlError = "Password is invalid";
       }
+    }
+  }
+
+  onClickRedirectUrl() {
+    this.handleCountingAccess(this.url?.id as string, "redirected").pipe(
+      tap(() => window.location.href = this.url?.origin_url as string),
+    ).subscribe();
+  }
+
+  private handleCountingAccess(urlId: string, type: "visit" | "redirected") {
+    if (type === "visit") {
+      return this.urlsService.visitUrl(urlId).pipe(
+        take(1),
+        untilDestroyed(this)
+      );
+    } else {
+      return this.urlsService.redirectSuccess(urlId).pipe(
+        take(1),
+        untilDestroyed(this)
+      );
     }
   }
 

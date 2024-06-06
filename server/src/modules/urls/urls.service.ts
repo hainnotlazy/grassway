@@ -155,6 +155,22 @@ export class UrlsService {
     throw new BadRequestException("Password is incorrect");
   }
 
+  async visitUrl(urlId: string) {
+    return this.urlRepository.createQueryBuilder()
+      .update(Url)
+      .set({ visited: () => "visited + 1" })
+      .where("id = :id", { id: urlId })
+      .execute();
+  }
+
+  async redirectSuccessUrl(urlId: string) {
+    return this.urlRepository.createQueryBuilder()
+      .update(Url)
+      .set({ redirect_success: () => "redirect_success + 1" })
+      .where("id = :id", { id: urlId })
+      .execute();
+  }
+
   async updateUrl(currentUser: User, urlId: string, updateUrl: UpdateShortenUrlDto) {
     let url = await this.urlRepository.findOne({
       where: {

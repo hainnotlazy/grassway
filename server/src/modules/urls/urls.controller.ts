@@ -448,7 +448,24 @@ export class UrlsController {
     return "";
   }
 
+  @PublicRoute()
+  @Put(":id/visit")
+  @HttpCode(204)
+  async visitUrl(@Param("id") id: string) {
+    await this.urlsService.visitUrl(id);
+    return "";
+  }
+
+  @PublicRoute()
+  @Put(":id/redirect-success")
+  @HttpCode(204)
+  async redirectSuccessUrl(@Param("id") id: string) {
+    await this.urlsService.redirectSuccessUrl(id);
+    return "";
+  }
+
   /** Route for making batch of urls active/inactive */
+  // -------------------------------------------------
   @Put("/bulk/update-status")
   @HttpCode(204)
   setStatusUrls(

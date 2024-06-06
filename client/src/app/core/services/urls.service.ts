@@ -63,6 +63,14 @@ export class UrlsService {
     return this.httpClient.delete(`api/urls/${id}`)
   }
 
+  visitUrl(urlId: string) {
+    return this.httpClient.put(`api/urls/${urlId}/visit`, null);
+  }
+
+  redirectSuccess(urlId: string) {
+    return this.httpClient.put(`api/urls/${urlId}/redirect-success`, null);
+  }
+
   // Bulk actions
   setStatusUrls(urls: Url[], active: boolean) {
     return this.httpClient.put(`api/urls/bulk/update-status`, {

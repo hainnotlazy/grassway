@@ -18,12 +18,13 @@
         You will be automatically redirected to
         <span class="text-primary font-semibold break-all">{{ url.origin_url | truncate:50 }}</span>
       </p>
-      <a
+      <button
         class="px-4 py-2.5 bg-secondary rounded-md text-white hover:bg-secondary/80 hover:shadow-md border border-gray-200 cursor-pointer animate-pulse"
-        [href]="url.origin_url"
+        (click)="onClickRedirectUrl()"
+        type="button"
       >
         {{ countdownTime ? 'Go to destination in ' + countdownTime + 's' : 'Go to destination' }}
-      </a>
+      </button>
     </ng-container>
 
     <ng-container *ngIf="url && url.use_password && url.is_active">
