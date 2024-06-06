@@ -78,4 +78,12 @@ export class UrlsService {
       responseType: 'blob'
     });
   }
+
+  setTagUrls(urls: Url[], tagId: string, addTag: boolean = true) {
+    return this.httpClient.put<Url[]>(`api/urls/bulk/set-tag`, {
+      ids: urls.map(url => url.id),
+      tag_id: tagId,
+      add_tag: addTag
+    })
+  }
 }

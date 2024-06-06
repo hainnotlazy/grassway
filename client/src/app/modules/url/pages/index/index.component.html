@@ -10,7 +10,7 @@
       class="bg-white px-3 py-1.5 rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black flex items-center gap-1"
       routerLink="shorten-url"
     >
-      <i class="icon-rewrite"></i> <span class="md:inline hidden">Shorten new link</span>
+      <i class="icon-add"></i> <span class="md:inline hidden">Shorten new link</span>
     </a>
   </div>
   <div class="sm:flex-row sm:items-center flex flex-col gap-4">
@@ -34,6 +34,7 @@
     <app-bulk-select
       [filterOptions]="filterOptions"
       [myUrls$]="myUrls$"
+      [tags]="tags"
       [updateUrlSubject]="updateUrlSubject"
       [selectUrlSubject]="selectUrlSubject"
       (selectAll)="selectingAll = $event"

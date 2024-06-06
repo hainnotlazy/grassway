@@ -13,6 +13,7 @@ import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
 import { BulkChangeStatusUrlsDto } from './dtos/bulk-inactive-urls.dto';
 import * as fs from "fs";
 import { CsvService } from 'src/shared/services/csv/csv.service';
+import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
 
 @ApiTags("Urls")
 @Controller('urls')
@@ -474,5 +475,13 @@ export class UrlsController {
     fileStream.on("end", () => {
       this.csvService.removeUnusedFile(csvFilePath);
     })
+  }
+
+  @Put("/bulk/set-tag")
+  async setTagUrls(
+    @CurrentUser() currentUser: User,
+    @Body() body: BulkSetTagUrlsDto
+  ) {
+    return this.urlsService.setTagUrls(currentUser, body);
   }
 }

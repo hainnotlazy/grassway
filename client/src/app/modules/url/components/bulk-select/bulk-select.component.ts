@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, filter, finalize, take, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { GetUrlsOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { Tag } from 'src/app/core/models/tag.model';
 import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
 
@@ -17,9 +19,13 @@ import { UrlsService } from 'src/app/core/services/urls.service';
 export class BulkSelectComponent implements OnInit {
   isProcessingExportCsv = false;
   isProcessingUpdateStatus = false;
+  isProcessingSetTag = false;
+
+  @ViewChild('menuTrigger') menuTrigger!: MatMenuTrigger;
 
   @Input() filterOptions!: GetUrlsOptions;
   @Input() myUrls$!: Observable<Url[]>;
+  @Input() tags!: Tag[];
   @Input() updateUrlSubject!: BehaviorSubject<Url | null>;
   @Input() selectUrlSubject!: BehaviorSubject<Url | null>;
 
@@ -132,6 +138,52 @@ export class BulkSelectComponent implements OnInit {
     }
   }
 
+  // Functions for bulk set tag
+  onSetTag(tag: Tag) {
+    if (this.selectedUrls.length > 0 && !this.isProcessingSetTag) {
+      this.isProcessingSetTag = changeStatus(this.isProcessingSetTag);
+      const addTag = !this.taggedAll(tag);
+
+      this.urlsService.setTagUrls(
+        this.selectedUrls,
+        tag.id.toString(),
+        addTag
+      ).pipe(
+        tap((data) => {
+          this.handleSetTagSuccess(data);
+        }, (error) => {
+          this.handleProcessFail(error);
+        }),
+        finalize(() => {
+          this.isProcessingSetTag = changeStatus(this.isProcessingSetTag);
+        }),
+        untilDestroyed(this)
+      ).subscribe();
+    }
+  }
+
+  taggedSome(tag: Tag) {
+    if (this.selectedUrls.length > 0 && !this.taggedAll(tag)) {
+      for (let url of this.selectedUrls) {
+        if (url.tags.length > 0 && url.tags.find(t => t.tag_id === tag.id)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  taggedAll(tag: Tag) {
+    if (this.selectedUrls.length > 0) {
+      for (let url of this.selectedUrls) {
+        if (url.tags.length > 0 && !url.tags.find(t => t.tag_id === tag.id)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   private handleExportCsvSuccess(response: any) {
     const contentDisposition = response.headers.get('Content-Disposition');
     let fileName = 'urls.csv';
@@ -170,6 +222,22 @@ export class BulkSelectComponent implements OnInit {
     this.selectedUrls = [];
     this.selectAll.emit(false);
     this.snackbar.open("Updated successfully", "x", {
+      duration: 4000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    });
+  }
+
+  private handleSetTagSuccess(data: Url[]) {
+    this.menuTrigger.closeMenu();
+    data.forEach(url => {
+      this.updateUrlSubject.next(url);
+    });
+
+    this.selectedAll = false;
+    this.selectedUrls = [];
+    this.selectAll.emit(false);
+    this.snackbar.open("Set tag successfully", "x", {
       duration: 4000,
       horizontalPosition: "right",
       verticalPosition: "top"

@@ -4,7 +4,7 @@ import { paginate } from 'nestjs-paginate';
 import { GetUrlsOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
 import * as CryptoJS from 'crypto-js';
 import { CsvService } from 'src/shared/services/csv/csv.service';
@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
 import { TaggedUrl } from 'src/entities/tagged-url.entity';
 import { TagsService } from '../tags/tags.service';
+import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
 
 @Injectable()
 export class UrlsService {
@@ -294,6 +295,74 @@ export class UrlsService {
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException(error.message || `Failed when bulk ${active ? "active" : "inactive"} urls`);
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  /** Bulk set/remove tag for urls */
+  async setTagUrls(currentUser: User, bulkSetTagUrlsDto: BulkSetTagUrlsDto) {
+    const { 
+      ids: urlsId, 
+      tag_id: tagId, 
+      add_tag: addTag 
+    } = bulkSetTagUrlsDto;
+
+    const existedTag = await this.tagsService.findTag(currentUser, tagId);
+    if (!existedTag) {
+      throw new NotFoundException("Tag not found");
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      for (const urlId of urlsId) {
+        const existedUrl = await this.urlRepository.findOne({
+          where: {
+            id: urlId,
+            owner: {
+              id: currentUser.id
+            }
+          },
+          relations: ["tags"],
+        });
+        
+        if (!existedUrl) { 
+          throw new Error("Url not found");
+        }
+
+        if (addTag && !existedUrl.tags.find(t => t.tag_id == tagId)) {
+          const newTaggedUrl = this.taggedUrlRepository.create({
+            tag_id: tagId,
+            url_id: urlId
+          });
+          await queryRunner.manager.save(newTaggedUrl);
+        } else if (!addTag && existedUrl.tags.find(t => t.tag_id == tagId)) {
+          await queryRunner.manager.delete(TaggedUrl, { 
+            url_id: urlId, 
+            tag_id: tagId
+          });
+        }
+      }
+
+      await queryRunner.commitTransaction();
+
+      // Find and return updated urls
+      const updatedUrls = await this.urlRepository.find({
+        where: {
+          id: In(urlsId),
+          owner: {
+            id: currentUser.id
+          }
+        },
+        relations: ["tags"],
+      });
+      return updatedUrls;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException(error.message || "Failed when bulk set tag urls");
     } finally {
       await queryRunner.release();
     }

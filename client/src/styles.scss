@@ -78,6 +78,10 @@ body {
   font-optical-sizing: auto;
 }
 
+.z-max {
+  z-index: 9999;
+}
+
 .spinning {
   animation: rotate 2s linear infinite;
 }

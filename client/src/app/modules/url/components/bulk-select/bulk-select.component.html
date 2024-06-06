@@ -7,8 +7,9 @@
     <span class="text-gray-700">{{ selectedUrls.length }} <span class="sm:inline hidden">selected</span></span>
   </mat-checkbox>
   <button
-    class="text-primary hover:text-secondary disabled:text-sky-500 inline-flex items-baseline gap-2 text-sm font-semibold"
-    [disabled]="isProcessingExportCsv"
+    class="text-primary hover:text-secondary disabled:cursor-not-allowed disabled:text-gray-400 inline-flex items-baseline gap-2 text-sm font-semibold"
+    [class]="{'disabled:!text-sky-400': isProcessingExportCsv}"
+    [disabled]="isProcessingExportCsv || selectedUrls.length === 0"
     (click)="onExportCsv()"
     type="button"
   >
@@ -16,13 +17,43 @@
     {{ isProcessingUpdateStatus ? "Exporting..." : "Export CSV" }}
   </button>
   <button
-    class="text-primary hover:text-secondary disabled:text-sky-500 inline-flex items-baseline gap-2 text-sm font-semibold"
-    [disabled]="isProcessingUpdateStatus"
+    class="text-primary hover:text-secondary disabled:cursor-not-allowed disabled:text-gray-400 inline-flex items-baseline gap-2 text-sm font-semibold"
+    [class]="{'disabled:!text-sky-400': isProcessingUpdateStatus}"
+    [disabled]="isProcessingUpdateStatus || selectedUrls.length === 0"
     (click)="onChangeStatusUrls()"
     type="button"
   >
     <i *ngIf="isProcessingUpdateStatus" class='icon-spinner spinning'></i>
     {{ isProcessingUpdateStatus ? "Updating..." : filterOptions.isActive ? "Inactive" : "Active" }}
   </button>
-  <button class="text-primary hover:text-secondary text-sm font-semibold">Tag</button>
+
+  <button
+    class="text-primary hover:text-secondary disabled:cursor-not-allowed disabled:text-gray-400 inline-flex items-baseline gap-2 text-sm font-semibold"
+    [disabled]="selectedUrls.length === 0"
+    #menuTrigger="matMenuTrigger"
+    [matMenuTriggerFor]="tagMenu"
+    type="button"
+  >
+    Tag
+  </button>
+
+  <mat-menu class="mt-2" #tagMenu="matMenu" xPosition="after">
+    <p
+      *ngFor="let tag of tags"
+      class="hover:bg-gray-300 flex items-center w-full gap-1 px-3 py-1"
+      (click)="$event.stopPropagation()"
+    >
+      <ng-container *ngIf="isProcessingSetTag; else setTag">
+        <i class="icon-spinner spinning text-sky-500 !mr-1.5 text-lg"></i>
+      </ng-container>
+      <ng-template #setTag>
+        <mat-checkbox
+          [checked]="taggedAll(tag)"
+          [indeterminate]="taggedSome(tag)"
+          (change)="onSetTag(tag)"
+        ></mat-checkbox>
+      </ng-template>
+      <app-option-tag [tag]="tag"></app-option-tag>
+    </p>
+  </mat-menu>
 </div>
