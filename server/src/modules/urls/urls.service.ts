@@ -13,6 +13,7 @@ import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
 import { TaggedUrl } from 'src/entities/tagged-url.entity';
 import { TagsService } from '../tags/tags.service';
 import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
+import { DeviceType } from './dtos/visit-url.dto';
 
 @Injectable()
 export class UrlsService {
@@ -155,11 +156,18 @@ export class UrlsService {
     throw new BadRequestException("Password is incorrect");
   }
 
-  async visitUrl(urlId: string) {
-    return this.urlRepository.createQueryBuilder()
-      .update(Url)
-      .set({ visited: () => "visited + 1" })
-      .where("id = :id", { id: urlId })
+  async visitUrl(urlId: string, deviceType: DeviceType) {
+    const query = this.urlRepository.createQueryBuilder().update(Url);
+
+    if (deviceType === DeviceType.Desktop) {
+      query.set({ visited_by_desktop: () => "visited_by_desktop + 1" });
+    } else if (deviceType === DeviceType.Tablet) {
+      query.set({ visited_by_tablet: () => "visited_by_tablet + 1" });
+    } else if (deviceType === DeviceType.Mobile) {
+      query.set({ visited_by_mobile: () => "visited_by_mobile + 1" });
+    }
+
+    return query.where("id = :id", { id: urlId })
       .execute();
   }
 

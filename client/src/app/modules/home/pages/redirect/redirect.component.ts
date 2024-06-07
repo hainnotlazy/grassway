@@ -7,6 +7,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @UntilDestroy()
 @Component({
@@ -29,6 +30,7 @@ export class RedirectPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private deviceService: DeviceDetectorService,
     private urlsService: UrlsService,
     private snackbar: MatSnackBar
   ) {}
@@ -104,7 +106,12 @@ export class RedirectPage implements OnInit {
 
   private handleCountingAccess(urlId: string, type: "visit" | "redirected") {
     if (type === "visit") {
-      return this.urlsService.visitUrl(urlId).pipe(
+      const deviceDetected =
+        this.deviceService.isDesktop() ? "desktop"
+        : this.deviceService.isTablet() ? "tablet"
+        : "mobile";
+
+      return this.urlsService.visitUrl(urlId, deviceDetected).pipe(
         take(1),
         untilDestroyed(this)
       );

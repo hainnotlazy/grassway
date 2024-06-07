@@ -50,10 +50,18 @@ export class Url {
   @ApiProperty()
   @Column({ default: true })
   is_active: boolean;
-  
+
   @ApiProperty()
   @Column({ default: 0 })
-  visited: number;
+  visited_by_desktop: number;
+
+  @ApiProperty()
+  @Column({ default: 0 })
+  visited_by_tablet: number;
+
+  @ApiProperty()
+  @Column({ default: 0 })
+  visited_by_mobile: number;
 
   @ApiProperty()
   @Column({ default: 0 })

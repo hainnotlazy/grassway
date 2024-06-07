@@ -63,8 +63,10 @@ export class UrlsService {
     return this.httpClient.delete(`api/urls/${id}`)
   }
 
-  visitUrl(urlId: string) {
-    return this.httpClient.put(`api/urls/${urlId}/visit`, null);
+  visitUrl(urlId: string, deviceType: "desktop" | "mobile" | "tablet") {
+    return this.httpClient.put(`api/urls/${urlId}/visit`, {
+      deviceType
+    });
   }
 
   redirectSuccess(urlId: string) {

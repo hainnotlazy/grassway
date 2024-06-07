@@ -8,8 +8,10 @@ export interface Url {
   password?: string;
   use_password: boolean;
   is_active: boolean;
-  visited: number;
   redirect_success: number;
+  visited_by_desktop: number;
+  visited_by_tablet: number;
+  visited_by_mobile: number;
   tags: {
     tag_id: number;
     url_id: number;

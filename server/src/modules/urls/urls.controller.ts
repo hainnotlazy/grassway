@@ -14,6 +14,7 @@ import { BulkChangeStatusUrlsDto } from './dtos/bulk-inactive-urls.dto';
 import * as fs from "fs";
 import { CsvService } from 'src/shared/services/csv/csv.service';
 import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
+import { VisitUrlDto } from './dtos/visit-url.dto';
 
 @ApiTags("Urls")
 @Controller('urls')
@@ -451,8 +452,8 @@ export class UrlsController {
   @PublicRoute()
   @Put(":id/visit")
   @HttpCode(204)
-  async visitUrl(@Param("id") id: string) {
-    await this.urlsService.visitUrl(id);
+  async visitUrl(@Param("id") id: string, @Body() body: VisitUrlDto) {
+    await this.urlsService.visitUrl(id, body.deviceType);
     return "";
   }
 
