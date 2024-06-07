@@ -21,21 +21,32 @@ export class TwitterStrategy extends PassportStrategy(Strategy) {
 
   async validate(request: any, accessToken: string, refreshToken: string, profile: any, done: any) {
     const requestRawHeaders = request.rawHeaders;
-    let userId = requestRawHeaders.find(header => header.includes("userId="));
+    let refLinksRaw = requestRawHeaders.find(header => header.includes("refLinks="));
+    let userIdRaw: string | undefined = requestRawHeaders.find(header => header.includes("userId="));
+
     // Handle to get userId cookie if more than 1 cookie existing
-    if (userId) {
-      userId = userId.slice(userId.indexOf("userId="));
+    if (userIdRaw) {
+      userIdRaw = userIdRaw.split(";")
+        .find(param => param.includes("userId="));
+      request.res.clearCookie("userId");
+    } else if (refLinksRaw) {
+      refLinksRaw = refLinksRaw.split(";")
+        .find(param => param.includes("refLinks="));
+      request.res.clearCookie("refLinks");
     }
-    const userIdValue = userId?.split("=")[1] || null;
-    request.res.clearCookie("userId");
+    const userId = userIdRaw?.split("=")[1] || null;
+    const refLinks: string[] = refLinksRaw 
+      ? JSON.parse(decodeURIComponent(refLinksRaw.split("=")[1])) 
+      : [];
 
     const { id: twitterId, name, username, profile_image_url: avatar } = profile._json;
     const user: TwitterProfile = {
-      id: userIdValue,
+      id: userId,
       username,
       fullname: name,
       twitterId,
-      avatar
+      avatar,
+      refLinks
     }
 
     done(null, user);

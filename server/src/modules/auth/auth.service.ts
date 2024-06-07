@@ -90,9 +90,9 @@ export class AuthService {
   }
 
   async handleGoogleAuthentication(googleProfile: GoogleProfile) {
-    const { id, fullname, email, avatar } = googleProfile;
+    const { id, fullname, email, avatar, refLinks } = googleProfile;
 
-    // Handle when user authenticating via google to link account
+    // *Handle when user authenticating via google to link account
     if (id) {
       return await this.linkAccountWithGoogle(id, email);
     }
@@ -109,7 +109,7 @@ export class AuthService {
       await this.usersService.saveUser(userExisted);
     }
     
-    // Register
+    // *Register
     // Check if username was taken
     let username = null;
     if (await this.usersService.findUserByUsername(email, false, false)) {
@@ -128,10 +128,16 @@ export class AuthService {
       email_verification_code: null,
       avatar: avatarSaved,
     })
+
+    // Handle to save ref links
+    if (refLinks.length > 0) {
+      await this.urlsService.saveRefLinks(newUser, refLinks);
+    }
+    
     return newUser;
   }
 
-  async linkAccountWithGoogle(id: string, email: string) {
+  private async linkAccountWithGoogle(id: string, email: string) {
     const userExisted = await this.usersService.findUser(id);
 
     if (!userExisted) {
@@ -156,9 +162,9 @@ export class AuthService {
   }
 
   async handleFacebookAuthentication(facebookProfile: FacebookProfile) {
-    const { id, fullname, facebookId, avatar } = facebookProfile;
+    const { id, fullname, facebookId, avatar, refLinks } = facebookProfile;
 
-    // Handle when user authenticating via facebook to link account
+    // *Handle when user authenticating via facebook to link account
     if (id) {
       const userExisted = await this.usersService.findUser(id);
 
@@ -181,12 +187,12 @@ export class AuthService {
     // Handle when user authenticating via facebook to login/register    
     const userExisted = await this.usersService.findUserByThirdParty("facebook", facebookId);
 
-    // Login
+    // *Login
     if (userExisted) {
       return userExisted;
     }
 
-    // Register
+    // *Register
     // Check if username was taken
     let username = null;
     if (await this.usersService.findUserByUsername(facebookId, false, false)) {
@@ -201,15 +207,21 @@ export class AuthService {
       fullname,
       facebook: facebookId,
       avatar: savedAvatar
-    })
+    });
+
+    // Handle to save ref links
+    if (refLinks.length > 0) {
+      await this.urlsService.saveRefLinks(newUser, refLinks);
+    }
+
     return newUser;
   }
 
   async handleTwitterAuthentication(twitterProfile: TwitterProfile) {
-    const { id, fullname, twitterId, avatar } = twitterProfile;
+    const { id, fullname, twitterId, avatar, refLinks } = twitterProfile;
     let { username } = twitterProfile;
 
-    // Handle when user authenticating via facebook to link account
+    // *Handle when user authenticating via facebook to link account
     if (id) {
       const userExisted = await this.usersService.findUser(id);
 
@@ -232,12 +244,12 @@ export class AuthService {
     // Handle when user authenticating via facebook to login/register    
     const userExisted = await this.usersService.findUserByThirdParty("twitter", twitterId);
 
-    // Login
+    // *Login
     if (userExisted) {
       return userExisted;
     }
 
-    // Register
+    // *Register
     // Check if username was taken
     if (await this.usersService.findUserByUsername(username, false, false)) {
       const randomNumber = Math.floor(Math.random() * 100000);
@@ -252,6 +264,11 @@ export class AuthService {
       twitter: twitterId,
       avatar: savedAvatar
     })
+
+    if (refLinks.length > 0) {
+      await this.urlsService.saveRefLinks(newUser, refLinks);
+    }
+
     return newUser;
   }
 

@@ -20,13 +20,23 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 
   async validate(request: any, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
     const requestRawHeaders = request.rawHeaders;
-    let userId = requestRawHeaders.find(header => header.includes("userId="));
+    let refLinksRaw = requestRawHeaders.find(header => header.includes("refLinks="));
+    let userIdRaw: string | undefined = requestRawHeaders.find(header => header.includes("userId="));
+
     // Handle to get userId cookie if more than 1 cookie existing
-    if (userId) {
-      userId = userId.slice(userId.indexOf("userId="));
+    if (userIdRaw) {
+      userIdRaw = userIdRaw.split(";")
+        .find(param => param.includes("userId="));
+      request.res.clearCookie("userId");
+    } else if (refLinksRaw) {
+      refLinksRaw = refLinksRaw.split(";")
+        .find(param => param.includes("refLinks="));
+      request.res.clearCookie("refLinks");
     }
-    const userIdValue = userId?.split("=")[1] || null;
-    request.res.clearCookie("userId");
+    const userId = userIdRaw?.split("=")[1] || null;
+    const refLinks: string[] = refLinksRaw 
+      ? JSON.parse(decodeURIComponent(refLinksRaw.split("=")[1])) 
+      : [];
 
     const { name, picture, email } = profile._json;
     
@@ -34,10 +44,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     const pictureIncreasedSize = picture.replace("=s96-c", "=s500-c");
     
     const user: GoogleProfile = {
-      id: userIdValue,
+      id: userId,
       fullname: name,
       email,
-      avatar: pictureIncreasedSize
+      avatar: pictureIncreasedSize,
+      refLinks
     }
 
     done(null, user);

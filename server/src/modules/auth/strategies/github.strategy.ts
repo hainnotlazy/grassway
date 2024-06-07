@@ -27,11 +27,11 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
       userIdRaw = userIdRaw.split(";")
         .find(param => param.includes("userId="));
       request.res.clearCookie("userId");
-    } else {
+    } else if (refLinksRaw) {
       refLinksRaw = refLinksRaw.split(";")
         .find(param => param.includes("refLinks="));
-        request.res.clearCookie("refLinks");
-      }
+      request.res.clearCookie("refLinks");
+    }
     const userId = userIdRaw?.split("=")[1] || null;
     const refLinks: string[] = refLinksRaw 
       ? JSON.parse(decodeURIComponent(refLinksRaw.split("=")[1])) 
