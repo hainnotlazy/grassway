@@ -8,6 +8,8 @@ export interface Url {
   password?: string;
   use_password: boolean;
   is_active: boolean;
+  visited: number;
+  redirect_success: number;
   tags: {
     tag_id: number;
     url_id: number;

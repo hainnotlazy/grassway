@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Req, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, HttpCode, Param, ParseArrayPipe, Post, Query, Req, Request, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
 import { RegisterUserDto } from './dtos/register-user.dto';
@@ -109,8 +109,11 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async register(@Body() body: RegisterUserDto) {
-    const newUser = await this.userService.createUser(body);
+  async register(
+    @Query("ref_links", new DefaultValuePipe([]), ParseArrayPipe) refLinksId: string[], 
+    @Body() body: RegisterUserDto
+  ) {
+    const newUser = await this.userService.createUser(body, refLinksId);
 
     return {
       access_token: await this.authService.generateAccessToken(newUser),

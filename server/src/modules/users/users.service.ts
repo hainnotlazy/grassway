@@ -9,12 +9,14 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { VerifyEmailDto } from './dtos/verify-email.dto';
 import * as bcrypt from 'bcrypt';
 import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
+import { UrlsService } from '../urls/urls.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private urlService: UrlsService,
     private uploadFileService: UploadFileService,
     private mailerServer: MailerService
   ) {}
@@ -64,7 +66,7 @@ export class UsersService {
     return await this.userRepository.findOneBy({ [provider]: value });
   }
 
-  async createUser(registerUser: Partial<User>) {
+  async createUser(registerUser: Partial<User>, refLinksId: string[] = []) {
     // Check if username or email already exists
     const { username, email } = registerUser;
     if (await this.userRepository.findOneBy({ username })) {
@@ -76,6 +78,11 @@ export class UsersService {
     // Handled hash password in entity layer
     const newUser = this.userRepository.create(registerUser);
     const savedUser = await this.userRepository.save(newUser);
+
+    // Handle to save referral links
+    if (refLinksId.length > 0) {
+      await this.urlService.saveRefLinks(savedUser, refLinksId);
+    }
 
     // Handle sending verification email
     if (email && !savedUser.is_email_verified) {

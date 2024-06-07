@@ -284,6 +284,21 @@ export class UrlsService {
     return csvFilePath;
   }
 
+  async saveRefLinks(user: User, refLinksId: string[]) {
+    for (const refLinkId of refLinksId) {
+      const refLink = await this.urlRepository.findOne({
+        where: {
+          id: refLinkId
+        }
+      })
+
+      if (refLink) {
+        refLink.owner = user;
+      }
+      await this.urlRepository.save(refLink);
+    }
+  }
+
   /** Bulk update active/inactive urls */
   async setStatusUrls(currentUser: User, urlsId: string[], active: boolean) {
     const queryRunner = this.dataSource.createQueryRunner();

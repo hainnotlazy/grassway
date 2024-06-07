@@ -46,7 +46,7 @@
     (click)="onCopy()"
     type="button"
   >
-    <p class="text-start shortened-link flex-grow overflow-x-auto">{{ shortenUrl }}</p>
+    <p class="text-start shortened-link flex-grow overflow-x-auto">{{ shortenUrl.client + "/l/" + shortenUrl.back_half }}</p>
     <i class="icon-copy text-lg"></i>
   </button>
 </div>

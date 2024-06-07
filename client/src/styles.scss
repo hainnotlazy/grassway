@@ -14,7 +14,7 @@ $my-accent-color: (
   800: #4caf50,
   900: #4caf50,
   contrast: (
-    500: #ffffff,
+    500: white,
   )
 );
 $my-accent: mat.define-palette($my-accent-color, 500, 500, 500);
@@ -37,6 +37,14 @@ $my-theme: mat.define-light-theme(
 .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
   .mdc-notched-outline__notch {
   border-right-style: hidden;
+}
+
+.mdc-checkbox__checkmark {
+  color: white !important;
+}
+
+.mdc-checkbox__mixedmark {
+  border-color: white !important;
 }
 
 // Tailwindcss

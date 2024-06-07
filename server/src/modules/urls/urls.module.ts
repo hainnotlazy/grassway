@@ -14,6 +14,7 @@ import { TagsModule } from '../tags/tags.module';
     SharedModule
   ],
   controllers: [UrlsController],
-  providers: [UrlsService]
+  providers: [UrlsService],
+  exports: [UrlsService]
 })
 export class UrlsModule {}

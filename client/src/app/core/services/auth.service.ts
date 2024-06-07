@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthResponse } from '../interfaces/auth-response.interface';
-import { CookieService } from 'ngx-cookie-service';
+import { RefService } from './ref.service';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,26 +10,43 @@ import { CookieService } from 'ngx-cookie-service';
 export class AuthService {
   constructor(
     private httpClient: HttpClient,
-    private cookieService: CookieService
+    private refService: RefService
   ) { }
 
   login(username: string, password: string) {
-    return this.httpClient.post<AuthResponse>(`api/auth/login?ref=${this.getCookie('ref')}`, { username, password });
+    return this.httpClient.post<AuthResponse>(`api/auth/login`, { username, password }).pipe(
+      tap(
+        () => {
+          // Login success => remove ref links (for details on RefService)
+          this.refService.removeRefLinks();
+        }
+      )
+    );
   }
 
   register(username: string, password: string, email?: string) {
-    return this.httpClient.post<AuthResponse>(`api/auth/register?ref=${this.getCookie('ref')}`, {
+    // Get ref links
+    const refLinks = this.refService.getRefLinks();
+    const refLinksQuery =
+      refLinks.length > 0
+      ? refLinks.map(linkId => `ref_links=${linkId}`).join("&")
+      : "";
+
+    return this.httpClient.post<AuthResponse>(`api/auth/register?${refLinksQuery}`, {
       username,
       password,
       email: email || undefined,
-    })
+    }).pipe(
+      tap(
+        () => {
+          // Authenticated success => remove ref links (for details on RefService)
+          this.refService.removeRefLinks();
+        }
+      )
+    )
   }
 
   logout() {
     return this.httpClient.post("api/auth/logout", null);
-  }
-
-  private getCookie(cookieName: string) {
-    return this.cookieService.get(cookieName);
   }
 }

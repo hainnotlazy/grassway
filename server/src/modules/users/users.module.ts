@@ -4,11 +4,13 @@ import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { SharedModule } from 'src/shared/shared.module';
+import { UrlsModule } from '../urls/urls.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    SharedModule
+    UrlsModule,
+    SharedModule,
   ],
   controllers: [
     UsersController

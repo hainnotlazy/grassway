@@ -1,0 +1,16 @@
+{
+  "name": "Grassway",
+  "author": "hain6621.dev@gmail.com",
+  "version": "1.0.0",
+  "description": "An Url Shortener web application",
+  "scripts": {
+    "start": "npm run down:prod && npm run start:prod",
+    "dev": "npm run down:dev && npm run start:dev",
+    "start:dev": "docker compose -f compose.dev.yaml up --build",
+    "down:dev": "docker compose -f compose.dev.yaml down",
+    "start:prod": "docker compose -f compose.prod.yaml up --build -d",
+    "down:prod": "docker compose -f compose.prod.yaml down"
+  },
+  "keywords": [],
+  "license": "ISC"
+}

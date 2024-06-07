@@ -31,9 +31,9 @@
       <i class="icon-key text-7xl animate-seesaw text-yellow-500"></i>
       <h1 class="text-poetsen-one text-primary text-4xl">Your link is ready!</h1>
       <p class="text-lg text-gray-500">This link is under protection and need password to access</p>
-      <div class="focus-within:border-primary flex items-center gap-2 bg-white border border-gray-300 rounded-full">
+      <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-md">
         <input
-          class="pl-4 pr-0  py-2.5 outline-none rounded-tl-full rounded-bl-full"
+          class="pl-4 pr-0  py-2.5 outline-none rounded-tl-md rounded-bl-md"
           [formControl]="passwordControl"
           [type]="hidePassword ? 'password' : 'text'"
           (keydown)="onPressEnter($event)"
@@ -50,7 +50,7 @@
         </button>
         <button
           type="button"
-          class="bg-secondary hover:bg-secondary/80 hover:shadow-md disabled:bg-gray-500 text-white px-4 py-2.5 rounded-tr-full rounded-br-full"
+          class="bg-secondary hover:bg-secondary/80 hover:shadow-md disabled:bg-gray-500 text-white px-4 py-2.5 rounded-tr-md rounded-br-md"
           [disabled]="!passwordControl.valid"
           (click)="onAccessProtectedUrl()"
         >

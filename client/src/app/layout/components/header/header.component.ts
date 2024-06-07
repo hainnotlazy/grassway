@@ -21,12 +21,14 @@ export class HeaderComponent implements OnDestroy {
   ) {}
 
   openLoginDialog() {
+    this.dialog.closeAll();
     this.dialog.open(LoginDialogComponent, {
       width: "400px",
     });
   }
 
   openRegisterDialog() {
+    this.dialog.closeAll();
     this.dialog.open(RegisterDialogComponent, {
       width: "400px",
     });

@@ -478,7 +478,7 @@ export class UrlsController {
   @Get("/bulk/export-csv")
   async exportCsv(
     @CurrentUser() currentUser: User,
-    @Query("id", new DefaultValuePipe([]),ParseArrayPipe) query,
+    @Query("id", new DefaultValuePipe([]), ParseArrayPipe) query,
     @Res() res
   ) {
     const csvFilePath = await this.urlsService.exportCsv(currentUser, query);

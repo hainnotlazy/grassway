@@ -1,3 +1,4 @@
+import { RefService } from './../../../../core/services/ref.service';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,7 +16,7 @@ import { UrlsService } from 'src/app/core/services/urls.service';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 import { environment } from 'src/environments/environment';
 import { RemindDialogComponent } from '../remind-dialog/remind-dialog.component';
-import { CookieService } from 'ngx-cookie-service';
+import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component';
 
 @UntilDestroy()
 @Component({
@@ -27,7 +28,7 @@ import { CookieService } from 'ngx-cookie-service';
   }
 })
 export class ShortenUrlComponent {
-  shortenUrl = "";
+  shortenUrl?: ExtendedUrl;
   formError = "";
   isProcessing = false;
 
@@ -48,7 +49,7 @@ export class ShortenUrlComponent {
 
   constructor(
     private urlsService: UrlsService,
-    private cookieService: CookieService,
+    private refService: RefService,
     private snackbar: MatSnackBar,
     private clipboard: Clipboard,
     private dialog: MatDialog
@@ -89,7 +90,7 @@ export class ShortenUrlComponent {
   }
 
   onCopy() {
-    if (this.clipboard.copy(this.shortenUrl)) {
+    if (this.clipboard.copy(`${this.shortenUrl?.client}/l/${this.shortenUrl?.back_half}`)) {
       // Copy to clipboard then show notification
       this.copyTooltip.disabled = false;
       this.copyTooltip.show();
@@ -113,14 +114,17 @@ export class ShortenUrlComponent {
   }
 
   private handleShortenSuccess(url: Url, saveCache: boolean = true) {
-    // Add url to cookie for ref when authentication
-    this.setCookie("ref", url.id);
+    // Add this link to ref links for ref when authentication
+    this.refService.insertRefLink(url.id);
 
     if (saveCache) {
       this.cachedUrls.push(url);
     }
     this.formError = "";
-    this.shortenUrl = `${environment.server}/${url.back_half}`;
+    this.shortenUrl = {
+      ...url,
+      client: environment.client
+    };
     this.snackbar.open("Shorten url successfully", "x", {
       duration: 3000,
       horizontalPosition: "right",
@@ -144,12 +148,6 @@ export class ShortenUrlComponent {
       horizontalPosition: "right",
       verticalPosition: "top"
     })
-  }
-
-  private setCookie(cookieName: string, cookieValue: string) {
-    const now = new Date();
-    const expires = new Date(now.getTime() + 1 * 60 * 60 * 1000); // 1 hour
-    this.cookieService.set(cookieName, cookieValue, expires);
   }
 
   private isShortened(url: string) {
