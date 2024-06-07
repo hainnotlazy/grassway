@@ -19,21 +19,32 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
 
   async validate(request: any, accessToken: string, refreshToken: string, profile: any, done: any) {
     const requestRawHeaders = request.rawHeaders;
-    let userId = requestRawHeaders.find(header => header.includes("userId="));
+    let refLinksRaw = requestRawHeaders.find(header => header.includes("refLinks="));
+    let userIdRaw: string | undefined = requestRawHeaders.find(header => header.includes("userId="));
+
     // Handle to get userId cookie if more than 1 cookie existing
-    if (userId) {
-      userId = userId.slice(userId.indexOf("userId="));
-    }
-    const userIdValue = userId?.split("=")[1] || null;
-    request.res.clearCookie("userId");
+    if (userIdRaw) {
+      userIdRaw = userIdRaw.split(";")
+        .find(param => param.includes("userId="));
+      request.res.clearCookie("userId");
+    } else {
+      refLinksRaw = refLinksRaw.split(";")
+        .find(param => param.includes("refLinks="));
+        request.res.clearCookie("refLinks");
+      }
+    const userId = userIdRaw?.split("=")[1] || null;
+    const refLinks: string[] = refLinksRaw 
+      ? JSON.parse(decodeURIComponent(refLinksRaw.split("=")[1])) 
+      : [];
 
     const { avatar_url, html_url, name, login } = profile._json;
     const user: GithubProfile = {
-      id: userIdValue,
+      id: userId,
       username: login,
       fullname: name,
       github: html_url,
-      avatar: avatar_url
+      avatar: avatar_url,
+      refLinks
     }
 
     done(null, user);

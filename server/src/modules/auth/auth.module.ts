@@ -13,6 +13,7 @@ import { SharedModule } from 'src/shared/shared.module';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
 import { TwitterStrategy } from './strategies/twitter.strategy';
+import { UrlsModule } from '../urls/urls.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TwitterStrategy } from './strategies/twitter.strategy';
       useClass: JwtConfigOptions
     }),
     UsersModule,
+    UrlsModule,
     SharedModule
   ],
   controllers: [AuthController],

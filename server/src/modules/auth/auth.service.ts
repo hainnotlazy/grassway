@@ -10,11 +10,13 @@ import { DownloadFileService } from 'src/shared/services/download-file/download-
 import { GoogleProfile } from 'src/common/models/google-profile.model';
 import { FacebookProfile } from 'src/common/models/facebook-profile.model';
 import { TwitterProfile } from 'src/common/models/twitter-profile.model';
+import { UrlsService } from '../urls/urls.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
+    private urlsService: UrlsService,
     private jwtService: JwtService,
     private redisService: RedisService,
     private downloadFileServer: DownloadFileService
@@ -31,10 +33,10 @@ export class AuthService {
   }
 
   async handleGithubAuthentication(githubProfile: GithubProfile) {
-    const { id, fullname, github, avatar } = githubProfile;
+    const { id, fullname, github, avatar, refLinks } = githubProfile;
     let { username } = githubProfile;
 
-    // Handle when user authenticating via github to link account
+    // *Handle when user authenticating via github to link account
     if (id) {
       const userExisted = await this.usersService.findUser(id);
 
@@ -57,12 +59,12 @@ export class AuthService {
     // Handle when user authenticating via github to login/register
     const userExisted = await this.usersService.findUserByThirdParty("github", github);
 
-    // Login
+    // *Login
     if (userExisted) {
       return userExisted;
     }
     
-    // Register
+    // *Register
     // Check if username was taken
     if (await this.usersService.findUserByUsername(username, false, false)) {
       const randomNumber = Math.floor(Math.random() * 100000);
@@ -78,6 +80,12 @@ export class AuthService {
       github,
       avatar: avatarSaved,
     })
+
+    // Handle to save ref links
+    if (refLinks.length > 0) {
+      await this.urlsService.saveRefLinks(newUser, refLinks);
+    }
+
     return newUser;
   }
 

@@ -8,7 +8,15 @@ export class GithubAuthGuard extends AuthGuard("github") {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
 
+    const refLinks = request.query.refLinks;
     const userId = request.query.userId;
+
+    // Handle when user register with ref links
+    if (refLinks) {
+      response.cookie("refLinks", JSON.stringify(refLinks), { 
+        expires: new Date(Date.now() + 5 * 60 * 1000) 
+      });
+    }
 
     // Handle when user authenticating via github to link account
     if (userId) {

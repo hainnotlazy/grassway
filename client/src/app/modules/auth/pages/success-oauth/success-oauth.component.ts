@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
+import { RefService } from 'src/app/core/services/ref.service';
 
 @Component({
   selector: 'success-oauth-page',
@@ -9,11 +10,13 @@ import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
 })
 export class SuccessOauthPage implements OnInit {
   constructor(
+    private refService: RefService,
     private router: Router
   ) {}
 
   ngOnInit() {
     const accessToken = this.getCookie('access_token');
+    this.refService.removeRefLinks();
 
     if (accessToken) {
       setAccessToken(accessToken);
