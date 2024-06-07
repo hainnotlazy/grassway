@@ -41,6 +41,10 @@ const routes: Routes = [
         loadChildren: () => import('./modules/tag/tag.module').then(m => m.TagModule)
       },
       {
+        path: "analytics",
+        loadChildren: () => import('./modules/analytic/analytic.module').then(m => m.AnalyticModule)
+      },
+      {
         path: "my-account",
         loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule)
       }

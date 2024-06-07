@@ -6,7 +6,7 @@ import { ShortenUrlPage } from './pages/shorten-url/shorten-url.component';
 const routes: Routes = [
   {
     path: "",
-    title: "My links | Grassway",
+    title: "My Links | Grassway",
     component: IndexPage
   },
   {
