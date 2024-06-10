@@ -186,6 +186,11 @@ export class UsersService {
 
   async updateUserLinkedAccount(user: User, provider: "email" | "facebook" | "github" | "twitter", value: string) {
     user[provider] = value;
+
+    if (provider === "email") {
+      user.is_email_verified = true;
+    }
+
     return this.userRepository.save(user);
   }
 }

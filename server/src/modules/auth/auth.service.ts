@@ -149,12 +149,12 @@ export class AuthService {
      * - Email was taken by other user (email is verified)
      * - Email was taken by other user (email isn't verified)
     */
-    const user = await this.usersService.findUserByThirdParty("email", email);
-    if (user && userExisted.id !== user.id && user.is_email_verified) {
+    const otherUser = await this.usersService.findUserByThirdParty("email", email);
+    if (otherUser && userExisted.id !== otherUser.id && otherUser.is_email_verified) {
       throw new BadRequestException("Email already linked with another account");
-    } else if (user &&  userExisted.id !== user.id && !user.is_email_verified) {
-      user.email = null;
-      await this.usersService.saveUser(user);
+    } else if (otherUser &&  userExisted.id !== otherUser.id && !otherUser.is_email_verified) {
+      otherUser.email = null;
+      await this.usersService.saveUser(otherUser);
     }
 
     await this.usersService.updateUserLinkedAccount(userExisted, "email", email);
