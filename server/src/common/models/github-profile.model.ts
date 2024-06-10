@@ -4,5 +4,5 @@ export interface GithubProfile {
   fullname: string;
   avatar: string;
   github: string;
-  refLinks: string[];
+  refLinks: number[];
 }

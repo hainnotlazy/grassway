@@ -106,25 +106,6 @@ export class UrlsController {
     return url;
   }
 
-  @PublicRoute()
-  @Get(":id")
-  @ApiOperation({
-    summary: "Get url by id",
-  })
-  @ApiOkResponse({
-    description: "Get url by id successfully",
-    type: Url
-  })
-  @ApiNotFoundResponse({
-    description: "Url not found",
-  })
-  @ApiInternalServerErrorResponse({
-    description: "Internal server error",
-  })
-  getUrlById(@Param("id") id: string) {
-    return this.urlsService.getUrlById(id);
-  }
-
   @Get("validate-custom-back-half")
   @ApiOperation({ summary: "Validate custom back half if it exists" })
   @ApiBearerAuth()
@@ -160,7 +141,7 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  validateCustomBackHalf(@Query("back_half") backHalf: string) {
+  validateCustomBackHalf(@CurrentUser() currentUser: User, @Query("back_half") backHalf: string) {
     return this.urlsService.validateCustomBackHalf(backHalf);
   }
 
@@ -234,7 +215,7 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  accessProtectedUrl(@Param("id") id: string, @Body() body: AccessProtectedUrlDto) {
+  accessProtectedUrl(@Param("id", ParseIntPipe) id: number, @Body() body: AccessProtectedUrlDto) {
     return this.urlsService.accessProtectedUrl({
       id,
       password: body.password
@@ -291,7 +272,7 @@ export class UrlsController {
   })
   updateUrl(
     @CurrentUser() currentUser: User, 
-    @Param("id") urlId: string,
+    @Param("id", ParseIntPipe) urlId: number,
     @Body() body: UpdateShortenUrlDto
   ) {
     return this.urlsService.updateUrl(currentUser, urlId, body);
@@ -358,7 +339,7 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async deleteUrl(@CurrentUser() currentUser: User, @Param("id") id: string) {
+  async deleteUrl(@CurrentUser() currentUser: User, @Param("id", ParseIntPipe) id: number) {
     await this.urlsService.deleteUrl(currentUser, id);
     return "";
   }
@@ -392,6 +373,25 @@ export class UrlsController {
   async redirectSuccessUrl(@Param("id") id: string) {
     await this.urlsService.redirectSuccessUrl(id);
     return "";
+  }
+
+  @PublicRoute()
+  @Get(":id")
+  @ApiOperation({
+    summary: "Get url by id",
+  })
+  @ApiOkResponse({
+    description: "Get url by id successfully",
+    type: Url
+  })
+  @ApiNotFoundResponse({
+    description: "Url not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
+  getUrlById(@Param("id", ParseIntPipe) id: number) {
+    return this.urlsService.getUrlById(id);
   }
 
   /** Routes for bulk actions */

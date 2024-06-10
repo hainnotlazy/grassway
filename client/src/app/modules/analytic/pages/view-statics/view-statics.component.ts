@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map, tap } from 'rxjs';
 import { Tag } from 'src/app/core/models/tag.model';
@@ -21,14 +21,20 @@ export class ViewStaticsPage implements OnInit {
   constructor(
     private urlsService: UrlsService,
     private tagsService: TagsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
     const urlId = this.route.snapshot.paramMap.get("linkId");
 
+    // Check if urlId is number
+    if (urlId && isNaN(parseInt(urlId))) {
+      this.router.navigate(["/"]);
+    }
+
     if (urlId) {
-      this.urlsService.getUrlById(urlId).pipe(
+      this.urlsService.getUrlById(parseInt(urlId)).pipe(
         tap((data) => {
           this.url = {
             ...data,

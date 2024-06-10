@@ -20,7 +20,7 @@ export enum TagIcon {
 @Entity()
 export class Tag {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @ManyToOne(() => User, (user) => user.tags)
   @JoinColumn({ name: "owner_id" })

@@ -52,7 +52,7 @@ export class RedirectPage implements OnInit {
         switchMap(() => timer(0, 1000)),
         tap(() => {
           if (this.countdownTime <= 0) {
-            this.handleCountingAccess(this.url?.id as string, "redirected").pipe(
+            this.handleCountingAccess(this.url?.id as number, "redirected").pipe(
               tap(() => window.location.href = this.url?.origin_url as string)
             ).subscribe();
           } else {
@@ -74,11 +74,11 @@ export class RedirectPage implements OnInit {
     if (this.passwordControl.valid && !this.isProgressing) {
       this.isProgressing = true;
       this.urlsService.accessProtectedUrl(
-        this.url?.id as string,
+        this.url?.id as number,
         this.passwordControl.value as string
       ).pipe(
         tap(data => {
-          this.handleCountingAccess(this.url?.id as string, "redirected").pipe(
+          this.handleCountingAccess(this.url?.id as number, "redirected").pipe(
             tap(() => window.location.href = data.origin_url)
           ).subscribe();
         }, error => {
@@ -99,12 +99,12 @@ export class RedirectPage implements OnInit {
   }
 
   onClickRedirectUrl() {
-    this.handleCountingAccess(this.url?.id as string, "redirected").pipe(
+    this.handleCountingAccess(this.url?.id as number, "redirected").pipe(
       tap(() => window.location.href = this.url?.origin_url as string),
     ).subscribe();
   }
 
-  private handleCountingAccess(urlId: string, type: "visit" | "redirected") {
+  private handleCountingAccess(urlId: number, type: "visit" | "redirected") {
     if (type === "visit") {
       const deviceDetected =
         this.deviceService.isDesktop() ? "desktop"

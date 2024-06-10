@@ -8,7 +8,7 @@ import { TaggedUrl } from "./tagged-url.entity";
 export class Url {
   @ApiProperty()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @ManyToOne(() => User, user => user.urls)
   @JoinColumn({ name: "owner_id" })

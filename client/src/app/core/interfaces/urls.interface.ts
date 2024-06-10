@@ -1,5 +1,5 @@
 export interface UpdateUrl {
-  id: string;
+  id: number;
   title: string;
   description?: string;
   is_active?: boolean;

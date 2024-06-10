@@ -66,7 +66,7 @@ export class UsersService {
     return await this.userRepository.findOneBy({ [provider]: value });
   }
 
-  async createUser(registerUser: Partial<User>, refLinksId: string[] = []) {
+  async createUser(registerUser: Partial<User>, refLinksId: number[] = []) {
     // Check if username or email already exists
     const { username, email } = registerUser;
     if (await this.userRepository.findOneBy({ username })) {

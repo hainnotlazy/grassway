@@ -5,10 +5,10 @@ import { Tag } from "./tag.entity";
 @Entity()
 export class TaggedUrl {
   @PrimaryColumn()
-  url_id: string;
+  url_id: number;
 
   @PrimaryColumn()
-  tag_id: string;
+  tag_id: number;
 
   @ManyToOne(() => Url, url => url.tags)
   @JoinColumn({ name: "url_id" })

@@ -3,5 +3,5 @@ export interface FacebookProfile {
   facebookId: string;
   fullname: string;
   avatar: string;
-  refLinks: string[];
+  refLinks: number[];
 }

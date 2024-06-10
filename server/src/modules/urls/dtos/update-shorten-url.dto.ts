@@ -65,5 +65,5 @@ export class UpdateShortenUrlDto {
   })
   @IsArray()
   @IsOptional()
-  tags: string[]
+  tags: number[]
 }

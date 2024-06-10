@@ -3,12 +3,12 @@ import { IsArray, IsBoolean, IsNotEmpty, IsString } from "class-validator";
 
 export class BulkSetTagUrlsDto {
   @IsArray()
-  ids: string[];
+  ids: number[];
 
   @IsString()
   @IsNotEmpty()
   @Transform(({ value }: TransformFnParams) => value.trim())
-  tag_id: string;
+  tag_id: number;
 
   @IsBoolean()
   @IsNotEmpty()

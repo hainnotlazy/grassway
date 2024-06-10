@@ -14,7 +14,7 @@ export class TagsService {
     private dataSource: DataSource
   ) {}
 
-  async findTag(currentUser: User, id: string) {
+  async findTag(currentUser: User, id: number) {
     return await this.tagRepository.findOne({ 
       where: { 
         id,
@@ -63,7 +63,7 @@ export class TagsService {
     return this.tagRepository.save(tag);
   }
 
-  async updateTag(currentUser: User, id: string, updateTagDto: CreateTagDto) {
+  async updateTag(currentUser: User, id: number, updateTagDto: CreateTagDto) {
     const existedTag = await this.tagRepository.findOne({ 
       where: {
         id,
@@ -82,7 +82,7 @@ export class TagsService {
     return this.tagRepository.save(existedTag);
   }
 
-  async deleteTag(currentUser: User, id: string) {
+  async deleteTag(currentUser: User, id: number) {
     const tag = await this.tagRepository.findOne({ 
       where: {
         id,

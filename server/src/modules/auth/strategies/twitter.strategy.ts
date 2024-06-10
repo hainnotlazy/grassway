@@ -35,7 +35,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy) {
       request.res.clearCookie("refLinks");
     }
     const userId = userIdRaw?.split("=")[1] || null;
-    const refLinks: string[] = refLinksRaw 
+    const refLinks: number[] = refLinksRaw 
       ? JSON.parse(decodeURIComponent(refLinksRaw.split("=")[1])) 
       : [];
 

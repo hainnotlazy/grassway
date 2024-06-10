@@ -41,7 +41,7 @@ export class UrlsService {
     return url;
   }
 
-  async getUrlById(id: string) {
+  async getUrlById(id: number) {
     const url = await this.urlRepository.findOne({
       where: {
         id
@@ -194,7 +194,7 @@ export class UrlsService {
       .execute();
   }
 
-  async updateUrl(currentUser: User, urlId: string, updateUrl: UpdateShortenUrlDto) {
+  async updateUrl(currentUser: User, urlId: number, updateUrl: UpdateShortenUrlDto) {
     let url = await this.urlRepository.findOne({
       where: {
         id: urlId,
@@ -268,7 +268,7 @@ export class UrlsService {
     }
   }
 
-  async deleteUrl(currentUser: User, urlId: string) {
+  async deleteUrl(currentUser: User, urlId: number) {
     const url = await this.urlRepository.findOne({
       where: {
         id: urlId,
@@ -307,7 +307,7 @@ export class UrlsService {
     return csvFilePath;
   }
 
-  async saveRefLinks(user: User, refLinksId: string[]) {
+  async saveRefLinks(user: User, refLinksId: number[]) {
     for (const refLinkId of refLinksId) {
       const refLink = await this.urlRepository.findOne({
         where: {
@@ -323,7 +323,7 @@ export class UrlsService {
   }
 
   /** Bulk update active/inactive urls */
-  async setStatusUrls(currentUser: User, urlsId: string[], active: boolean) {
+  async setStatusUrls(currentUser: User, urlsId: number[], active: boolean) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { CurrentUser } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
@@ -174,7 +174,7 @@ export class TagsController {
   })
   updateTag(
     @CurrentUser() currentUser: User, 
-    @Param("id") id: string,
+    @Param("id", ParseIntPipe) id: number,
     @Body() updateTagDto: UpdateTagDto, 
   ) {
     return this.tagsService.updateTag(currentUser, id, updateTagDto);
@@ -241,7 +241,7 @@ export class TagsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async deleteTag(@CurrentUser() currentUser: User, @Param('id') id: string) {
+  async deleteTag(@CurrentUser() currentUser: User, @Param('id', ParseIntPipe) id: number) {
     await this.tagsService.deleteTag(currentUser, id);
     return "";
   }

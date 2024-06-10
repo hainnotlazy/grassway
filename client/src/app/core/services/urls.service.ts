@@ -31,7 +31,7 @@ export class UrlsService {
     return this.httpClient.get<Url>(`api/urls/${backHalf}/information`);
   }
 
-  getUrlById(id: string) {
+  getUrlById(id: number) {
     return this.httpClient.get<Url>(`api/urls/${id}`);
   }
 
@@ -49,7 +49,7 @@ export class UrlsService {
     return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}&search=${search}&tag_id=${tagId}`);
   }
 
-  accessProtectedUrl(id: string, password: string) {
+  accessProtectedUrl(id: number, password: string) {
     return this.httpClient.post<Url>(`api/urls/${id}/access`, {
       password
     })
@@ -63,17 +63,17 @@ export class UrlsService {
     return this.httpClient.put<Url>(`api/urls/${updateUrlDto.id}`, updateUrlDto);
   }
 
-  deleteUrl(id: string) {
+  deleteUrl(id: number) {
     return this.httpClient.delete(`api/urls/${id}`)
   }
 
-  visitUrl(urlId: string, deviceType: "desktop" | "mobile" | "tablet") {
+  visitUrl(urlId: number, deviceType: "desktop" | "mobile" | "tablet") {
     return this.httpClient.put(`api/urls/${urlId}/visit`, {
       deviceType
     });
   }
 
-  redirectSuccess(urlId: string) {
+  redirectSuccess(urlId: number) {
     return this.httpClient.put(`api/urls/${urlId}/redirect-success`, null);
   }
 

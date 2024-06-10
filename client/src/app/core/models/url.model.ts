@@ -1,5 +1,5 @@
 export interface Url {
-  id: string;
+  id: number;
   origin_url: string;
   back_half: string;
   custom_back_half: string;

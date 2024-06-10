@@ -12,17 +12,17 @@ export class RefService {
   */
   constructor() {}
 
-  insertRefLink(linkId: string) {
+  insertRefLink(linkId: number) {
     const refLinks = this.getRefLinks();
     refLinks.push(linkId);
     this.saveRefLinks(refLinks);
   }
 
-  saveRefLinks(links: string[]) {
+  saveRefLinks(links: number[]) {
     localStorage.setItem("ref_links", JSON.stringify(links));
   }
 
-  getRefLinks(): string[] {
+  getRefLinks(): number[] {
     return JSON.parse(localStorage.getItem("ref_links") || "[]");
   }
 

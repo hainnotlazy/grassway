@@ -3,5 +3,5 @@ export interface GoogleProfile {
   fullname: string;
   email: string;
   avatar: string;
-  refLinks: string[];
+  refLinks: number[];
 }

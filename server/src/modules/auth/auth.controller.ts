@@ -110,7 +110,7 @@ export class AuthController {
     description: "Internal server error",
   })
   async register(
-    @Query("ref_links", new DefaultValuePipe([]), ParseArrayPipe) refLinksId: string[], 
+    @Query("ref_links", new DefaultValuePipe([]), ParseArrayPipe) refLinksId: number[], 
     @Body() body: RegisterUserDto
   ) {
     const newUser = await this.userService.createUser(body, refLinksId);

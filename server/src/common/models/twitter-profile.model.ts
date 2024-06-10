@@ -4,5 +4,5 @@ export interface TwitterProfile {
   twitterId: string;
   fullname: string;
   avatar: string;
-  refLinks: string[];
+  refLinks: number[];
 }
