@@ -31,6 +31,10 @@ export class UrlsService {
     return this.httpClient.get<Url>(`api/urls/${backHalf}/information`);
   }
 
+  getUrlById(id: string) {
+    return this.httpClient.get<Url>(`api/urls/${id}`);
+  }
+
   listUrls(options: GetUrlsOptions) {
     const {
       page = 1,

@@ -49,11 +49,12 @@
       <a class="hover:underline hover:text-black block text-sm text-gray-500 break-all" [href]="url.origin_url">{{ url.origin_url }}</a>
     </div>
     <div class="flex items-center gap-2">
-      <button
-        type="button"
-        class="flex items-center gap-1 px-2 py-0.5 rounded-md text-gray-700 bg-gray-300 border border-gray-300 hover:text-black hover:shadow">
+      <a
+        class="flex items-center gap-1 px-2 py-0.5 rounded-md text-gray-700 bg-gray-300 border border-gray-300 hover:text-black hover:shadow"
+        [routerLink]="['/u/analytics/view-statics', url.id]"
+      >
           <i class="icon-bar-chart"></i> View statics
-      </button>
+      </a>
       <p class="flex items-center gap-1">
         <i class="icon-calendar"></i>
         <span>{{ url.created_at | date:"MMM dd, yyyy" }}</span>

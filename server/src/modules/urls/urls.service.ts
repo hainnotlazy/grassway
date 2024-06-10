@@ -41,6 +41,16 @@ export class UrlsService {
     return url;
   }
 
+  async getUrlById(id: string) {
+    const url = await this.urlRepository.findOneBy({ id });
+
+    if (!url) {
+      throw new NotFoundException("Url not found");
+    }
+
+    return url;
+  }
+
   /** Describe: Get paginated urls by user */
   async getUrls(currentUser: User, options: GetUrlsOptions) {
     const { limit, page, isActive, linkTypeOptions, startDate, endDate, search, tagId } = options;

@@ -141,6 +141,12 @@ export class UrlsController {
     return url;
   }
 
+  @PublicRoute()
+  @Get(":id")
+  getUrlById(@Param("id") id: string) {
+    return this.urlsService.getUrlById(id);
+  }
+
   @Get("validate-custom-back-half")
   @ApiOperation({ summary: "Validate custom back half if it exists" })
   @ApiBearerAuth()
