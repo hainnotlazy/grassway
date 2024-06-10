@@ -27,25 +27,28 @@ const components = [
   LinkComponent,
   StatusFilterComponent,
   LoadingSectionComponent,
-  AdvancedFilterComponent
+  AdvancedFilterComponent,
+  DeleteDialogComponent,
+  QrcodeDialogComponent,
+  EditFormDialogComponent,
+  BulkSelectComponent,
+  SearchComponent,
+  OptionTagComponent,
+  TagBadgeComponent
 ]
 
 @NgModule({
   declarations: [
     ...pages,
     ...components,
-    DeleteDialogComponent,
-    QrcodeDialogComponent,
-    EditFormDialogComponent,
-    BulkSelectComponent,
-    SearchComponent,
-    OptionTagComponent,
-    TagBadgeComponent
   ],
   imports: [
     CommonModule,
     UrlRoutingModule,
     SharedModule
+  ],
+  exports: [
+    TagBadgeComponent
   ]
 })
 export class UrlModule { }

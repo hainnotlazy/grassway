@@ -62,7 +62,15 @@
     </tr>
     <tr>
       <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Tags</th>
-      <td class="border-slate-300 px-4 py-2 break-all border"></td>
+      <td class="border-slate-300 flex flex-wrap gap-2 px-4 py-2 break-all border">
+        <ng-container *ngIf="tags.length > 0">
+          <app-tag-badge
+            *ngFor="let tag of url.tags"
+            [tags]="tags"
+            [targetTagId]="tag.tag_id"
+          ></app-tag-badge>
+        </ng-container>
+      </td>
     </tr>
     <tr>
       <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Created at</th>
@@ -72,9 +80,9 @@
 
   <hr class="w-11/12 mx-auto border border-gray-300">
 
-  <div class="sm:flex-row flex flex-col items-center max-w-5xl gap-8 mx-auto">
-    <div class="w-1/2 space-y-2">
-      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border rounded-md shadow-md select-none">Clicks & redirect success</h6>
+  <div class="sm:flex-row sm:max-w-5xl md:gap-8 flex flex-col items-center gap-4 mx-auto">
+    <div class="sm:w-1/2 space-y-2">
+      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
       <canvas
         baseChart
         [type]="'doughnut'"
@@ -93,8 +101,8 @@
       </canvas>
     </div>
 
-    <div class="w-1/2 space-y-2">
-      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border rounded-md shadow-md select-none">Clicks by devices</h6>
+    <div class="sm:w-1/2 space-y-2">
+      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks by devices</h6>
       <canvas
         baseChart
         [type]="'polarArea'"
@@ -113,6 +121,4 @@
       </canvas>
     </div>
   </div>
-
-  <!-- [options]="pieChartOptions" -->
 </div>

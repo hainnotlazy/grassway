@@ -5,6 +5,7 @@ import { AnalyticRoutingModule } from './analytic-routing.module';
 import { IndexPage } from './pages/index/index.component';
 import { ViewStaticsPage } from './pages/view-statics/view-statics.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { UrlModule } from '../url/url.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     AnalyticRoutingModule,
-    SharedModule
+    UrlModule,
+    SharedModule,
   ]
 })
 export class AnalyticModule { }

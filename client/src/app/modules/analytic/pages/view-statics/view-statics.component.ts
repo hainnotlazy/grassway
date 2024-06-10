@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
+import { Tag } from 'src/app/core/models/tag.model';
+import { TagsService } from 'src/app/core/services/tags.service';
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component';
 import { environment } from 'src/environments/environment';
@@ -14,9 +16,11 @@ import { environment } from 'src/environments/environment';
 })
 export class ViewStaticsPage implements OnInit {
   url?: ExtendedUrl;
+  tags: Tag[] = [];
 
   constructor(
     private urlsService: UrlsService,
+    private tagsService: TagsService,
     private route: ActivatedRoute
   ) {}
 
@@ -31,6 +35,11 @@ export class ViewStaticsPage implements OnInit {
             client: environment.client
           };
         }),
+        untilDestroyed(this)
+      ).subscribe();
+
+      this.tagsService.getTags().pipe(
+        tap(tags => this.tags = tags),
         untilDestroyed(this)
       ).subscribe();
     }
