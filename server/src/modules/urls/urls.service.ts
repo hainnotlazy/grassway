@@ -282,7 +282,25 @@ export class UrlsService {
       throw new BadRequestException("You don't have permission to delete this url");
     }
 
-    return await this.urlRepository.remove(url);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.delete(TaggedUrl, { 
+        url_id: urlId
+      });
+      await queryRunner.manager.delete(Url, {
+        id: urlId
+      })
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed when deleting url");
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async exportCsv(currentUser: User, urlsId: string[]) {

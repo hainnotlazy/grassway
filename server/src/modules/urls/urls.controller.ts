@@ -336,8 +336,21 @@ export class UrlsController {
       }
     }
   })
-  @ApiInternalServerErrorResponse({
-    description: "Internal server error",
+  @ApiResponse({
+    status: 500,
+    description: "Not Found",
+    content: {
+      "application/json": { 
+        examples: {
+          "Internal server error": {
+            value: "Internal server error"
+          },
+          "Failed when deleting url": {
+            value: "Failed when deleting url"
+          }
+        }
+      }
+    }
   })
   async deleteUrl(@CurrentUser() currentUser: User, @Param("id", ParseIntPipe) id: number) {
     await this.urlsService.deleteUrl(currentUser, id);
