@@ -42,7 +42,12 @@ export class UrlsService {
   }
 
   async getUrlById(id: string) {
-    const url = await this.urlRepository.findOneBy({ id });
+    const url = await this.urlRepository.findOne({
+      where: {
+        id
+      },
+      relations: ["tags"],
+    })
 
     if (!url) {
       throw new NotFoundException("Url not found");

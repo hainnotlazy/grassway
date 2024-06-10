@@ -1,0 +1,49 @@
+<div class="sm:flex-row sm:max-w-5xl md:gap-8 flex flex-col gap-4 mx-auto">
+  <div class="sm:w-1/2 space-y-2">
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
+    <ng-container *ngIf="(url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile > 0) || (url.redirect_success > 0); else noData">
+      <canvas
+        baseChart
+        [type]="'doughnut'"
+        [datasets]="[{
+          label: 'Times',
+          data: [url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile, url.redirect_success]
+        }]"
+        [labels]="[
+          'Clicked', 'Redirected success'
+        ]"
+        [legend]="true"
+        [options]="{
+          responsive: true
+        }"
+      >
+      </canvas>
+    </ng-container>
+  </div>
+
+  <div class="sm:w-1/2 space-y-2">
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks by devices</h6>
+    <ng-container *ngIf="(url.visited_by_desktop > 0) || (url.visited_by_tablet > 0) || (url.visited_by_mobile > 0); else noData">
+      <canvas
+        baseChart
+        [type]="'polarArea'"
+        [datasets]="[{
+          label: 'Times',
+          data: [url.visited_by_desktop, url.visited_by_tablet, url.visited_by_mobile]
+        }]"
+        [labels]="[
+          'Desktop', 'Tablet', 'Mobile'
+        ]"
+        [legend]="true"
+        [options]="{
+          responsive: true
+        }"
+      >
+      </canvas>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #noData>
+  <p class="text-center text-gray-500">No data available!</p>
+</ng-template>

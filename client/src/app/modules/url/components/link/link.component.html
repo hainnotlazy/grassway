@@ -32,7 +32,7 @@
           matTooltipPosition="above"
         ></i>
         {{ url.title }}
-        <small *ngIf="!url.is_active" class="text-gray-500">(Inactive)</small>
+        <small *ngIf="!url.is_active" class="animate-pulse text-gray-500">🔴</small>
         <i
           *ngIf="url.use_password"
           class="icon-key text-yellow-600 rotate-45"
