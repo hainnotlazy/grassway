@@ -293,9 +293,4 @@ export class AuthController {
 
     return res.redirect(`${this.configService.get('CLIENT')}/auth/success-authentication`);
   }
-
-  @Get("whoami")
-  async whoami(@CurrentUser() currentUser) {
-    return currentUser;
-  }
 }

@@ -91,43 +91,8 @@ export class UrlsController {
     description: "Get url by back half successfully",
     type: Url
   })
-  @ApiBadRequestResponse({
-    description: "Invalid user id",
-  })
-  @ApiResponse({
-    status: 401,
-    description: "Unauthorized",
-    content: {
-      "application/json": { 
-        examples: {
-          "Unauthorized": {
-            value: "Unauthorized"
-          },
-          "Token is invalid": {
-            value: "Token is invalid"
-          }
-        }
-      }
-    }
-  })
-  @ApiForbiddenResponse({
-    description: "Account is inactive",
-  })
-  @ApiResponse({
-    status: 404,
-    description: "Not Found",
-    content: {
-      "application/json": { 
-        examples: {
-          "User not found": {
-            value: "User not found"
-          },
-          "Url not found": {
-            value: "Url not found"
-          }
-        }
-      }
-    }
+  @ApiNotFoundResponse({
+    description: "Url not found",
   })
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
@@ -143,6 +108,19 @@ export class UrlsController {
 
   @PublicRoute()
   @Get(":id")
+  @ApiOperation({
+    summary: "Get url by id",
+  })
+  @ApiOkResponse({
+    description: "Get url by id successfully",
+    type: Url
+  })
+  @ApiNotFoundResponse({
+    description: "Url not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   getUrlById(@Param("id") id: string) {
     return this.urlsService.getUrlById(id);
   }
@@ -192,31 +170,6 @@ export class UrlsController {
   @ApiCreatedResponse({
     description: "Shortened url successfully",
     type: Url
-  })
-  @ApiBadRequestResponse({
-    description: "Invalid user id",
-  })
-  @ApiResponse({
-    status: 401,
-    description: "Unauthorized",
-    content: {
-      "application/json": { 
-        examples: {
-          "Unauthorized": {
-            value: "Unauthorized"
-          },
-          "Token is invalid": {
-            value: "Token is invalid"
-          }
-        }
-      }
-    }
-  })
-  @ApiForbiddenResponse({
-    description: "Account is inactive",
-  })
-  @ApiNotFoundResponse({
-    description: "User not found",
   })
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
@@ -272,56 +225,11 @@ export class UrlsController {
     description: "Access protected url successfully",
     type: Url
   })
-  @ApiResponse({
-    status: 400,
-    description: "Bad Request",
-    content: {
-      "application/json": { 
-        examples: {
-          "Invalid user id": {
-            value: "Invalid user id"
-          },
-          "Password is incorrect": {
-            value: "Password is incorrect"
-          }
-        }
-      }
-    }
+  @ApiBadRequestResponse({
+    description: "Password is incorrect",
   })
-  @ApiResponse({
-    status: 401,
-    description: "Unauthorized",
-    content: {
-      "application/json": { 
-        examples: {
-          "Unauthorized": {
-            value: "Unauthorized"
-          },
-          "Token is invalid": {
-            value: "Token is invalid"
-          }
-        }
-      }
-    }
-  })
-  @ApiForbiddenResponse({
-    description: "Account is inactive",
-  })
-  @ApiResponse({
-    status: 404,
-    description: "Not Found",
-    content: {
-      "application/json": { 
-        examples: {
-          "User not found": {
-            value: "User not found"
-          },
-          "Url not found": {
-            value: "Url not found"
-          }
-        }
-      }
-    }
+  @ApiNotFoundResponse({
+    description: "Url not found",
   })
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
@@ -458,6 +366,13 @@ export class UrlsController {
   @PublicRoute()
   @Put(":id/visit")
   @HttpCode(204)
+  @ApiOperation({ summary: "Count times url is accessed" })
+  @ApiNoContentResponse({
+    description: "Count times url is accessed",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async visitUrl(@Param("id") id: string, @Body() body: VisitUrlDto) {
     await this.urlsService.visitUrl(id, body.deviceType);
     return "";
@@ -466,15 +381,69 @@ export class UrlsController {
   @PublicRoute()
   @Put(":id/redirect-success")
   @HttpCode(204)
+  
+  @ApiOperation({ summary: "Count times url is redirected successfully" })
+  @ApiNoContentResponse({
+    description: "Count times url is redirected successfully",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async redirectSuccessUrl(@Param("id") id: string) {
     await this.urlsService.redirectSuccessUrl(id);
     return "";
   }
 
-  /** Route for making batch of urls active/inactive */
+  /** Routes for bulk actions */
   // -------------------------------------------------
   @Put("/bulk/update-status")
   @HttpCode(204)
+  @ApiOperation({ summary: "Update status urls" })
+  @ApiBearerAuth()
+  @ApiNoContentResponse({
+    description: "Update status urls successfully",
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid user id",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiResponse({
+    status: 500,
+    description: "Not Found",
+    content: {
+      "application/json": { 
+        examples: {
+          "Internal server error": {
+            value: "User not found"
+          },
+          "Failed when bulk action": {
+            value: "Failed when bulk active/inactive urls"
+          }
+        }
+      }
+    }
+  })
   setStatusUrls(
     @CurrentUser() currentUser: User, 
     @Body() body: BulkChangeStatusUrlsDto
@@ -483,6 +452,39 @@ export class UrlsController {
   }
 
   @Get("/bulk/export-csv")
+  @ApiOperation({ summary: "Export urls as csv" })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: "Download file csv",
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid user id",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async exportCsv(
     @CurrentUser() currentUser: User,
     @Query("id", new DefaultValuePipe([]), ParseArrayPipe) query,
@@ -502,6 +504,66 @@ export class UrlsController {
   }
 
   @Put("/bulk/set-tag")
+  @ApiOperation({ summary: "Set tag for urls" })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: "Set tag for urls successfully",
+    type: [Url]
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid user id",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiResponse({
+    status: 404,
+    description: "Not Found",
+    content: {
+      "application/json": { 
+        examples: {
+          "User not found": {
+            value: "User not found"
+          },
+          "Tag not found": {
+            value: "Tag not found"
+          }
+        }
+      }
+    }
+  })
+  @ApiResponse({
+    status: 500,
+    description: "Internal server error",
+    content: {
+      "application/json": { 
+        examples: {
+          "Internal server error": {
+            value: "Internal server error"
+          },
+          "Failed when bulk action": {
+            value: "Failed when bulk set tag urls"
+          }
+        }
+      }
+    }
+  })
   async setTagUrls(
     @CurrentUser() currentUser: User,
     @Body() body: BulkSetTagUrlsDto
