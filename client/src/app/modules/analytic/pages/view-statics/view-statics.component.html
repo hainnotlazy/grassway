@@ -3,19 +3,21 @@
   <table class="border-spacing-1 sm:border-spacing-2 max-w-xl bg-white border border-separate border-gray-300 rounded-lg shadow-lg">
     <tr>
       <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Title</th>
-      <td class="border-slate-300 text-primary animate-pulse px-4 py-2 font-semibold break-all border">{{ url.title }}</td>
+      <td class="border-slate-300 text-primary px-4 py-2 font-semibold break-all border">{{ url.title }}</td>
     </tr>
     <tr>
       <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Origin Link</th>
       <td class="border-slate-300 px-4 py-2 break-all border">
-        <a class="hover:underline hover:text-blue-500" [href]="url.origin_url">{{ url.origin_url }}</a>
+        <a class="hover:underline hover:text-blue-500"
+          [href]="url.origin_url">
+          {{ url.origin_url }}
+        </a>
       </td>
     </tr>
     <tr>
       <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Shortened Link</th>
       <td class="border-slate-300 px-4 py-2 break-all border">
-        <a
-          class="hover:underline hover:text-blue-500"
+        <a class="hover:underline hover:text-blue-500"
           [routerLink]="['/l', url.custom_back_half || url.back_half]">
           {{ url.client }}/l/{{ url.custom_back_half || url.back_half }}
         </a>
@@ -24,8 +26,7 @@
     <tr *ngIf="url.custom_back_half">
       <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Alternative Link</th>
       <td class="border-slate-300 px-4 py-2 break-all border">
-        <a
-          class="hover:underline hover:text-blue-500"
+        <a class="hover:underline hover:text-blue-500"
           [routerLink]="['/l', url.back_half]">
           {{ url.client }}/l/{{ url.back_half }}
         </a>
@@ -38,7 +39,7 @@
 
     <tr>
       <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Active</th>
-      <td class="border-slate-300 px-4 py-2 break-all border">
+      <td class="border-slate-300 animate-pulse px-4 py-2 break-all border">
         {{ url.is_active ? '🟢' : '🔴' }}
       </td>
     </tr>
@@ -68,4 +69,50 @@
       <td class="border-slate-300 px-4 py-2 break-all border">{{ url.created_at | date }}</td>
     </tr>
   </table>
+
+  <hr class="w-11/12 mx-auto border border-gray-300">
+
+  <div class="sm:flex-row flex flex-col items-center max-w-5xl gap-8 mx-auto">
+    <div class="w-1/2 space-y-2">
+      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border rounded-md shadow-md select-none">Clicks & redirect success</h6>
+      <canvas
+        baseChart
+        [type]="'doughnut'"
+        [datasets]="[{
+          label: 'Times',
+          data: [url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile, url.redirect_success]
+        }]"
+        [labels]="[
+          'Clicked', 'Redirected success'
+        ]"
+        [legend]="true"
+        [options]="{
+          responsive: true
+        }"
+      >
+      </canvas>
+    </div>
+
+    <div class="w-1/2 space-y-2">
+      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border rounded-md shadow-md select-none">Clicks by devices</h6>
+      <canvas
+        baseChart
+        [type]="'polarArea'"
+        [datasets]="[{
+          label: 'Times',
+          data: [url.visited_by_desktop, url.visited_by_tablet, url.visited_by_mobile]
+        }]"
+        [labels]="[
+          'Desktop', 'Tablet', 'Mobile'
+        ]"
+        [legend]="true"
+        [options]="{
+          responsive: true
+        }"
+      >
+      </canvas>
+    </div>
+  </div>
+
+  <!-- [options]="pieChartOptions" -->
 </div>
