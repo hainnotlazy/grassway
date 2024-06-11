@@ -1,0 +1,108 @@
+<div
+  class="sm:grid-cols-2 grid items-center grid-cols-1 gap-6"
+  *ngIf="overviewAnalytics$ | async as overviewAnalytics"
+>
+  <div *ngIf="overviewAnalytics.totalVisited !== 0 && overviewAnalytics.totalRedirectedSuccess !== 0"
+    class="xl:w-1/2 h-full mx-auto space-y-2"
+  >
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Total clicks & redirect success</h6>
+    <canvas
+      baseChart
+      [type]="'bar'"
+      [datasets]="[{
+        label: 'Times',
+        data: [
+          overviewAnalytics.totalVisited,
+          overviewAnalytics.totalRedirectedSuccess
+        ]
+      }]"
+      [labels]="[
+        'Clicked', 'Redirected success'
+      ]"
+      [legend]="true"
+      [options]="{
+        responsive: true
+      }"
+    >
+    </canvas>
+  </div>
+
+  <div *ngIf="
+    overviewAnalytics.totalClicksByDesktop !== 0
+    || overviewAnalytics.totalClicksByTablet !== 0
+    || overviewAnalytics.totalClicksByMobile !== 0"
+    class="xl:w-1/2 mx-auto space-y-2"
+  >
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Total clicks by device</h6>
+    <canvas
+      baseChart
+      [type]="'polarArea'"
+      [datasets]="[{
+        label: 'Times',
+        data: [
+          overviewAnalytics.totalClicksByDesktop,
+          overviewAnalytics.totalClicksByTablet,
+          overviewAnalytics.totalClicksByMobile
+        ]
+      }]"
+      [labels]="[
+        'Desktop', 'Tablet', 'Mobile'
+      ]"
+      [legend]="true"
+      [options]="{
+        responsive: true
+      }"
+    >
+    </canvas>
+  </div>
+
+  <div *ngIf="overviewAnalytics.totalActiveLinks !== 0 && overviewAnalytics.totalInactiveLinks !== 0"
+    class="xl:w-1/2 mx-auto space-y-2"
+  >
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Active & inactive links</h6>
+    <canvas
+      baseChart
+      [type]="'doughnut'"
+      [datasets]="[{
+        label: 'Links',
+        data: [
+          overviewAnalytics.totalActiveLinks,
+          overviewAnalytics.totalInactiveLinks
+        ]
+      }]"
+      [labels]="[
+        'Active links', 'Inactive links'
+      ]"
+      [legend]="true"
+      [options]="{
+        responsive: true
+      }"
+    >
+    </canvas>
+  </div>
+
+  <div *ngIf="overviewAnalytics.totalCustomBackHalf !== 0 && overviewAnalytics.totalDefaultBackHalf !== 0"
+    class="xl:w-1/2 mx-auto space-y-2"
+  >
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Custom back-half & back-half</h6>
+    <canvas
+      baseChart
+      [type]="'doughnut'"
+      [datasets]="[{
+        label: 'Times',
+        data: [
+          overviewAnalytics.totalCustomBackHalf,
+          overviewAnalytics.totalDefaultBackHalf
+        ]
+      }]"
+      [labels]="[
+        'Custom back-half links', 'Default back-half links'
+      ]"
+      [legend]="true"
+      [options]="{
+        responsive: true
+      }"
+    >
+    </canvas>
+  </div>
+</div>

@@ -4,7 +4,7 @@
     <ng-container *ngIf="(url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile > 0) || (url.redirect_success > 0); else noData">
       <canvas
         baseChart
-        [type]="'doughnut'"
+        [type]="'bar'"
         [datasets]="[{
           label: 'Times',
           data: [url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile, url.redirect_success]

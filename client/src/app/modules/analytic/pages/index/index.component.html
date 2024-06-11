@@ -1,87 +1,7 @@
 <div class="mt-4 space-y-4">
   <h1 class="text-poetsen-one text-3xl">Overview</h1>
 
-  <div class="sm:grid-cols-2 grid items-center grid-cols-1 gap-6">
-    <div class="xl:w-1/2 mx-auto space-y-2">
-      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
-      <canvas
-        baseChart
-        [type]="'doughnut'"
-        [datasets]="[{
-          label: 'Times',
-          data: [123, 235]
-        }]"
-        [labels]="[
-          'Clicked', 'Redirected success'
-        ]"
-        [legend]="true"
-        [options]="{
-          responsive: true
-        }"
-      >
-      </canvas>
-    </div>
-
-    <div class="xl:w-1/2 mx-auto space-y-2">
-      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
-      <canvas
-        baseChart
-        [type]="'doughnut'"
-        [datasets]="[{
-          label: 'Times',
-          data: [123, 235]
-        }]"
-        [labels]="[
-          'Clicked', 'Redirected success'
-        ]"
-        [legend]="true"
-        [options]="{
-          responsive: true
-        }"
-      >
-      </canvas>
-    </div>
-
-    <div class="xl:w-1/2 mx-auto space-y-2">
-      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
-      <canvas
-        baseChart
-        [type]="'doughnut'"
-        [datasets]="[{
-          label: 'Times',
-          data: [123, 235]
-        }]"
-        [labels]="[
-          'Clicked', 'Redirected success'
-        ]"
-        [legend]="true"
-        [options]="{
-          responsive: true
-        }"
-      >
-      </canvas>
-    </div>
-
-    <div class="xl:w-1/2 mx-auto space-y-2">
-      <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
-      <canvas
-        baseChart
-        [type]="'doughnut'"
-        [datasets]="[{
-          label: 'Times',
-          data: [123, 235]
-        }]"
-        [labels]="[
-          'Clicked', 'Redirected success'
-        ]"
-        [legend]="true"
-        [options]="{
-          responsive: true
-        }"
-      >
-      </canvas>
-    </div>
-  </div>
+  <app-overview-charts></app-overview-charts>
 
   <hr class="w-11/12 mx-auto border border-gray-300">
 
@@ -98,8 +18,18 @@
     ></app-link>
 
     <app-loading-section
+      *ngIf="totalPage > 0; else noData"
       [currentPage]="currentPage"
       [totalPage]="totalPage"
     ></app-loading-section>
+
+    <ng-template #noData>
+      <p class="text-center text-gray-500">
+        You haven't created any links!
+        <a class="hover:underline hover:text-blue-700 block font-semibold text-blue-500" [routerLink]="'/u/links/shorten-url'">
+          Go create one now!
+        </a>
+      </p>
+    </ng-template>
   </div>
 </div>

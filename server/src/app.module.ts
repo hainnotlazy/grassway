@@ -12,6 +12,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { UrlsModule } from './modules/urls/urls.module';
 import { TagsModule } from './modules/tags/tags.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 const appModules = [
   UsersModule,
@@ -32,6 +33,7 @@ const appModules = [
     }),
     ...appModules,
     TagsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [

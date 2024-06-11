@@ -9,6 +9,7 @@ import { UrlModule } from '../url/url.module';
 import { OverviewTableComponent } from './components/overview-table/overview-table.component';
 import { StaticsChartComponent } from './components/statics-chart/statics-chart.component';
 import { LinkComponent } from './components/link/link.component';
+import { OverviewChartsComponent } from './components/overview-charts/overview-charts.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { LinkComponent } from './components/link/link.component';
     ViewStaticsPage,
     OverviewTableComponent,
     StaticsChartComponent,
-    LinkComponent
+    LinkComponent,
+    OverviewChartsComponent
   ],
   imports: [
     CommonModule,
