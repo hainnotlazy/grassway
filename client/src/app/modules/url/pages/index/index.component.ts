@@ -6,7 +6,7 @@ import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { environment } from 'src/environments/environment';
-import { GetUrlsOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 import { TagsService } from 'src/app/core/services/tags.service';
 import { Tag } from 'src/app/core/models/tag.model';
 
@@ -26,7 +26,7 @@ export class IndexPage implements OnInit {
 
   newFilterApplied = false;
   filterOptions: GetUrlsOptions = {
-    isActive: true,
+    linkActiveOptions: LinkActiveOptions.ACTIVE,
     linkTypeOptions: LinkTypeOptions.ALL
   };
 
@@ -77,23 +77,14 @@ export class IndexPage implements OnInit {
       )
       {
         this.lastUpdatedUrl = updatedUrl;
-        if (updatedUrl.is_active !== this.filterOptions.isActive) {
+        const isActiveOption = this.filterOptions.linkActiveOptions === LinkActiveOptions.ACTIVE;
+        if (updatedUrl.is_active !== isActiveOption) {
           return accumulatorResponse.filter(url => url.id !== updatedUrl.id);
         }
         const updatedIndex = accumulatorResponse.findIndex(url => url.id === updatedUrl.id);
         accumulatorResponse[updatedIndex] = updatedUrl;
         return accumulatorResponse;
       }
-
-      // if (updatedUrl && this.compareTwoUrls(this.lastUpdatedUrl, updatedUrl)) {
-      //   this.lastUpdatedUrl = updatedUrl;
-      //   if (updatedUrl.is_active !== this.filterOptions.isActive) {
-      //     return accumulatorResponse.filter(url => url.id !== updatedUrl.id);
-      //   }
-      //   const updatedIndex = accumulatorResponse.findIndex(url => url.id === updatedUrl.id);
-      //   accumulatorResponse[updatedIndex] = updatedUrl;
-      //   return accumulatorResponse;
-      // }
 
       /** Find & remove deleted url */
       if (deletedUrl && this.lastDeletedUrl?.id !== deletedUrl.id) {
@@ -160,8 +151,8 @@ export class IndexPage implements OnInit {
     this.newFilterApplied = true;
   }
 
-  onStatusFilterChanged(status: boolean) {
-    this.filterOptions.isActive = status;
+  onStatusFilterChanged(status: LinkActiveOptions) {
+    this.filterOptions.linkActiveOptions = status;
     this.newFilterApplied = true;
   }
 

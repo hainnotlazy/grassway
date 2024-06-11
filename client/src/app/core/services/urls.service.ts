@@ -4,7 +4,7 @@ import { Url } from '../models/url.model';
 import { UrlsResponse } from '../interfaces/urls-response.interface';
 import { ShortenUrl } from '../interfaces/shorten-url.interface';
 import { Observable } from 'rxjs';
-import { GetUrlsOptions, LinkTypeOptions } from '../interfaces/get-urls-options.interface';
+import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from '../interfaces/get-urls-options.interface';
 import { UpdateUrl } from '../interfaces/urls.interface';
 
 @Injectable({
@@ -38,7 +38,7 @@ export class UrlsService {
   listUrls(options: GetUrlsOptions) {
     const {
       page = 1,
-      isActive = true,
+      linkActiveOptions = LinkActiveOptions.ACTIVE,
       linkTypeOptions = LinkTypeOptions.ALL,
       startDate = "",
       endDate = "",
@@ -46,7 +46,7 @@ export class UrlsService {
       tagId = "",
     } = options;
 
-    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${isActive}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}&search=${search}&tag_id=${tagId}`);
+    return this.httpClient.get<UrlsResponse>(`api/urls?page=${page}&is_active=${linkActiveOptions}&link_type=${linkTypeOptions}&start_date=${startDate}&end_date=${endDate}&search=${search}&tag_id=${tagId}`);
   }
 
   accessProtectedUrl(id: number, password: string) {

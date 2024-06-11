@@ -24,7 +24,12 @@
     type="button"
   >
     <i *ngIf="isProcessingUpdateStatus" class='icon-spinner spinning'></i>
-    {{ isProcessingUpdateStatus ? "Updating..." : filterOptions.isActive ? "Inactive" : "Active" }}
+    {{ isProcessingUpdateStatus
+      ? "Updating..."
+      : filterOptions.linkActiveOptions === "active"
+        ? "Inactive"
+        : "Active"
+    }}
   </button>
 
   <button

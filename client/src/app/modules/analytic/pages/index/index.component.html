@@ -1,8 +1,8 @@
-<div class="my-4 space-y-4">
+<div class="mt-4 space-y-4">
   <h1 class="text-poetsen-one text-3xl">Overview</h1>
 
-  <div class="grid items-center grid-cols-2 gap-6">
-    <div class="sm:w-1/2 mx-auto space-y-2">
+  <div class="sm:grid-cols-2 grid items-center grid-cols-1 gap-6">
+    <div class="xl:w-1/2 mx-auto space-y-2">
       <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
       <canvas
         baseChart
@@ -22,7 +22,7 @@
       </canvas>
     </div>
 
-    <div class="sm:w-1/2 mx-auto space-y-2">
+    <div class="xl:w-1/2 mx-auto space-y-2">
       <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
       <canvas
         baseChart
@@ -42,7 +42,7 @@
       </canvas>
     </div>
 
-    <div class="sm:w-1/2 mx-auto space-y-2">
+    <div class="xl:w-1/2 mx-auto space-y-2">
       <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
       <canvas
         baseChart
@@ -62,7 +62,7 @@
       </canvas>
     </div>
 
-    <div class="sm:w-1/2 mx-auto space-y-2">
+    <div class="xl:w-1/2 mx-auto space-y-2">
       <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
       <canvas
         baseChart
@@ -85,40 +85,21 @@
 
   <hr class="w-11/12 mx-auto border border-gray-300">
 
-  <div class="bg-white px-4 py-2.5 rounded-md shadow-md flex gap-4 border border-slate-300">
-    <img
-      class="w-8 h-8 translate-y-full border border-gray-500 rounded-full"
-      [src]="'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drawsql.com&size=32'"
-      alt="Preview favicon of https://drawsql.com"
-      width="32"
-      height="32"
-      draggable="false"
-    >
-    <div class="flex flex-col flex-grow gap-1">
-      <h6 class="flex items-center gap-2 text-lg">
-        <small class="animate-pulse">🟢</small>
-        <span class="text-jost text-secondary font-semibold">DrawSQL</span>
-        <i class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"></i>
-        <i class="icon-key text-yellow-600 rotate-45"></i>
-      </h6>
-      <a
-        class="hover:underline hover:text-primary text-sm font-semibold text-gray-500 break-all"
-        [routerLink]="'/l/sfsdS3'"
-      >
-        http://localhost:4200/l/sfsdS3
-      </a>
-      <a class="hover:underline hover:text-black text-sm text-gray-500 break-all">https://drawsql.com</a>
-      <p class="flex items-center gap-1">
-        <i class="icon-calendar"></i>
-        <span>Jan 1, 2021</span>
-      </p>
-    </div>
+  <div
+    class="links space-y-4"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="150"
+    (scrolled)="onScrollDown()"
+  >
+    <app-link
+      *ngFor="let url of myUrls$ | async"
+      [url]="url"
+    ></app-link>
 
-    <div class="flex items-center -mr-4 -my-2.5">
-      <button class="px-6 py-2.5 bg-slate-300 hover:bg-slate-200 h-full rounded-tr-md rounded-br-md text-gray-700 hover:text-primary">
-        <span class="flex items-center gap-1.5 font-semibold text-lg">View details <i class="icon-chevron-right text-3xl font-normal"></i></span>
-      </button>
-    </div>
+    <app-loading-section
+      [currentPage]="currentPage"
+      [totalPage]="totalPage"
+    ></app-loading-section>
   </div>
-
 </div>

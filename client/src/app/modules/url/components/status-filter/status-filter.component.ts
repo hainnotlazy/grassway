@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, tap } from 'rxjs';
-import { GetUrlsOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { UrlsService } from 'src/app/core/services/urls.service';
 
@@ -17,7 +17,7 @@ export class StatusFilterComponent {
   @Input() initialLoadSubject!: BehaviorSubject<UrlsResponse | null>;
   @Input() infiniteLoadSubject!: BehaviorSubject<UrlsResponse | null>;
 
-  @Output() filterChanged =  new EventEmitter<boolean>();
+  @Output() filterChanged =  new EventEmitter<LinkActiveOptions>();
 
   constructor(
     private urlsService: UrlsService
@@ -25,8 +25,7 @@ export class StatusFilterComponent {
 
   onFilterChange(data: MatSelectChange) {
     const value = data.value;
-    const status = value === "active";
-    this.filterOptions.isActive = status;
+    this.filterOptions.linkActiveOptions = value === "active" ? LinkActiveOptions.ACTIVE : LinkActiveOptions.INACTIVE;
 
     /** Fetch data with new filter & push to observable stream */
     this.urlsService.listUrls({
@@ -35,7 +34,7 @@ export class StatusFilterComponent {
     }).pipe(
       tap(() => {
         // Emit selected status
-        this.filterChanged.emit(status);
+        this.filterChanged.emit(this.filterOptions.linkActiveOptions);
       }),
       tap((response) => {
         // Push new data to stream

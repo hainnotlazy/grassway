@@ -5,7 +5,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, filter, finalize, take, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { GetUrlsOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 import { Tag } from 'src/app/core/models/tag.model';
 import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
@@ -81,7 +81,10 @@ export class BulkSelectComponent implements OnInit {
   onChangeStatusUrls() {
     if (this.selectedUrls.length > 0 && !this.isProcessingUpdateStatus) {
       this.isProcessingUpdateStatus = changeStatus(this.isProcessingUpdateStatus);
-      this.urlsService.setStatusUrls(this.selectedUrls, !this.filterOptions.isActive).pipe(
+      this.urlsService.setStatusUrls(
+        this.selectedUrls,
+        this.filterOptions.linkActiveOptions !== LinkActiveOptions.ACTIVE
+      ).pipe(
         tap(() => {
           this.bulkChangeStatus.emit();
         }),
@@ -215,7 +218,7 @@ export class BulkSelectComponent implements OnInit {
 
   private handleUpdateStatusSuccess() {
     for (let url of this.selectedUrls) {
-      url.is_active = !this.filterOptions.isActive;
+      url.is_active = this.filterOptions.linkActiveOptions !== LinkActiveOptions.ACTIVE;
       this.updateUrlSubject.next(url);
     }
     this.selectedAll = false;

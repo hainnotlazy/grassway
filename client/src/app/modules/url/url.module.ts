@@ -48,7 +48,8 @@ const components = [
     SharedModule
   ],
   exports: [
-    TagBadgeComponent
+    TagBadgeComponent,
+    LoadingSectionComponent
   ]
 })
 export class UrlModule { }

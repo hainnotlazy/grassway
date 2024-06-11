@@ -8,13 +8,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { UrlModule } from '../url/url.module';
 import { OverviewTableComponent } from './components/overview-table/overview-table.component';
 import { StaticsChartComponent } from './components/statics-chart/statics-chart.component';
+import { LinkComponent } from './components/link/link.component';
 
 @NgModule({
   declarations: [
     IndexPage,
     ViewStaticsPage,
     OverviewTableComponent,
-    StaticsChartComponent
+    StaticsChartComponent,
+    LinkComponent
   ],
   imports: [
     CommonModule,

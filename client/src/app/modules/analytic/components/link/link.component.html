@@ -1,0 +1,55 @@
+<div class="bg-white px-4 py-2.5 rounded-md shadow-md flex gap-4 border border-slate-300">
+  <img
+    class="w-8 h-8 translate-y-full border border-gray-500 rounded-full"
+    [src]="'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=' + url.origin_url + '&size=32'"
+    [alt]="'Preview favicon of ' + url.origin_url"
+    width="32"
+    height="32"
+    draggable="false"
+  >
+  <div class="flex flex-col flex-grow gap-1">
+    <h6 class="flex items-center gap-2 text-lg">
+      <small class="animate-pulse">{{ url.is_active ? '🟢' : '🔴'}}</small>
+      <span class="text-jost text-secondary font-semibold">{{ url.title }}</span>
+      <i
+        *ngIf="url.description"
+        class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
+        [matTooltip]="url.description"
+        matTooltipPosition="above"
+      ></i>
+      <i *ngIf="url.use_password" class="icon-key text-yellow-600 rotate-45"></i>
+    </h6>
+    <a
+      class="hover:underline hover:text-primary text-sm font-semibold text-gray-500 break-all"
+      [routerLink]="['/l/' , (url.custom_back_half || url.back_half)]"
+    >
+      {{ url.client + (url.custom_back_half || url.back_half) }}
+    </a>
+    <a class="hover:underline hover:text-black text-sm text-gray-500 break-all"
+      [href]="url.origin_url"
+    >
+      {{ url.origin_url }}
+    </a>
+    <p class="flex items-center gap-1">
+      <i class="icon-calendar"></i>
+      <span>Jan 1, 2021</span>
+    </p>
+    <div class="sm:hidden">
+      <a class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-gray-700 bg-gray-300 border border-gray-300 hover:text-black hover:shadow"
+        [routerLink]="['view-statics', url.id]"
+      >
+        <i class="icon-bar-chart"></i> View details
+      </a>
+    </div>
+  </div>
+
+  <div class="sm:flex items-center -mr-4 -my-2.5 hidden">
+    <a class="flex items-center px-6 py-2.5 bg-slate-300 hover:bg-slate-200 h-full rounded-tr-md rounded-br-md text-gray-700 hover:text-primary"
+      [routerLink]="['view-statics', url.id]"
+    >
+      <span class="flex items-center gap-1.5 font-semibold text-lg">
+        View details <i class="icon-chevron-right text-3xl font-normal"></i>
+      </span>
+    </a>
+  </div>
+</div>
