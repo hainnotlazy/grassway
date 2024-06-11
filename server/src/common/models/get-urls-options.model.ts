@@ -4,10 +4,16 @@ export enum LinkTypeOptions {
   WITHOUT_CUSTOM_BACK_HALVES = "without-custom-back-halves"
 }
 
+export enum LinkActiveOptions {
+  ALL = "all",
+  ACTIVE = "active",
+  INACTIVE = "inactive"
+}
+
 export interface GetUrlsOptions {
   limit: number;
   page: number;
-  isActive?: boolean;
+  linkActiveOptions?: LinkActiveOptions;
   linkTypeOptions?: LinkTypeOptions;
   startDate?: Date | string;
   endDate?: Date | string;

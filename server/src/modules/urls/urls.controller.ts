@@ -7,7 +7,7 @@ import { CreateShortenUrlDto } from './dtos/create-shorten-url.dto';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Url } from 'src/entities/url.entity';
 import { LinkTypeValidationPipe } from 'src/shared/pipes/link-type-validation/link-type-validation.pipe';
-import { LinkTypeOptions } from 'src/common/models/get-urls-options.model';
+import { LinkActiveOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { AccessProtectedUrlDto } from './dtos/access-protected-url.dto';
 import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
 import { BulkChangeStatusUrlsDto } from './dtos/bulk-inactive-urls.dto';
@@ -15,6 +15,7 @@ import * as fs from "fs";
 import { CsvService } from 'src/shared/services/csv/csv.service';
 import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
 import { VisitUrlDto } from './dtos/visit-url.dto';
+import { LinkActiveValidationPipe } from 'src/shared/pipes/link-active-validation/link-active-validation.pipe';
 
 @ApiTags("Urls")
 @Controller('urls')
@@ -65,7 +66,7 @@ export class UrlsController {
   getUrls(
     @CurrentUser() currentUser: User, 
     @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query("is_active", new DefaultValuePipe(true), ParseBoolPipe) isActive: boolean,
+    @Query("is_active", new DefaultValuePipe(LinkActiveOptions.ACTIVE), LinkActiveValidationPipe) linkActive: LinkActiveOptions,
     @Query("link_type", new DefaultValuePipe(LinkTypeOptions.ALL), LinkTypeValidationPipe) linkType: LinkTypeOptions,
     @Query("start_date") startDate: string,
     @Query("end_date") endDate: string,
@@ -75,7 +76,7 @@ export class UrlsController {
     return this.urlsService.getUrls(currentUser, {
       limit: 10,
       page: page || 1,
-      isActive: isActive,
+      linkActiveOptions: linkActive,
       linkTypeOptions: linkType,
       startDate,
       endDate,

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-paginate';
-import { GetUrlsOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
+import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
 import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
 import { DataSource, In, Repository } from 'typeorm';
@@ -58,15 +58,21 @@ export class UrlsService {
 
   /** Describe: Get paginated urls by user */
   async getUrls(currentUser: User, options: GetUrlsOptions) {
-    const { limit, page, isActive, linkTypeOptions, startDate, endDate, search, tagId } = options;
+    const { limit, page, linkActiveOptions, linkTypeOptions, startDate, endDate, search, tagId } = options;
 
     // Create query builder
     const queryBuilder = this.urlRepository.createQueryBuilder("urls")
       .leftJoinAndSelect("urls.owner", "owner")
       .leftJoinAndSelect("urls.tags", "tags")
       .where("urls.owner = :ownerId", { ownerId: currentUser.id })
-      .andWhere("urls.is_active = :isActive", { isActive })
     
+    // Add filter link active
+    if (linkActiveOptions === LinkActiveOptions.ACTIVE) {
+      queryBuilder.andWhere("urls.is_active = :isActive", { isActive: true });
+    } else if (linkActiveOptions === LinkActiveOptions.INACTIVE) {
+      queryBuilder.andWhere("urls.is_active = :isActive", { isActive: false });
+    }
+
     // Add filter link type
     if (linkTypeOptions === LinkTypeOptions.WITH_CUSTOM_BACK_HALVES) {
       queryBuilder.andWhere("urls.custom_back_half != ''");
