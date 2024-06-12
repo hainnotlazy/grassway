@@ -1,0 +1,17 @@
+<div class="flex items-center flex-wrap gap-1 px-4 py-2.5 rounded-xl overflow-hidden border-2 border-gray-400 max-w-48 bg-white focus-within:border-secondary">
+	<input
+    #colorInput
+    class="text-input-color flex-grow order-1 p-0 bg-transparent border-none outline-none"
+    type="text"
+    value="#"
+    maxlength="7"
+    (keyup)="onChangeColor($event)"
+  >
+
+	<input
+    #colorPicker
+    class="flex-shrink-0 order-2 w-5 h-5 p-0 overflow-hidden border-none rounded-full cursor-pointer"
+    type="color"
+    [formControl]="control"
+  >
+</div>

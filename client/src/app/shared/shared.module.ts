@@ -62,7 +62,7 @@ const MatModules = [
     ...MatModules,
     InfiniteScrollModule,
     QRCodeModule,
-    NgChartsModule
+    NgChartsModule,
   ],
   exports: [
     ReactiveFormsModule,
@@ -72,7 +72,7 @@ const MatModules = [
     ...MatModules,
     InfiniteScrollModule,
     QRCodeModule,
-    NgChartsModule
+    NgChartsModule,
   ]
 })
 export class SharedModule { }

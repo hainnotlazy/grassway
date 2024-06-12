@@ -1,0 +1,12 @@
+input {
+	&::-webkit-color-swatch {
+		border: 0;
+	}
+	&::-webkit-color-swatch-wrapper {
+		padding: 0;
+	}
+}
+
+.text-input-color {
+  max-width: calc(100% - 24px);
+}

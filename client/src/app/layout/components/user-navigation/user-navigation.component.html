@@ -51,15 +51,20 @@
       <a
         routerLink="/u/my-account"
         routerLinkActive="bg-gray-100"
-        class="hover:bg-gray-200 px-4 py-2.5 text-left flex items-center gap-2 text-gray-700 hover:text-black">
+        class="hover:bg-gray-200 px-4 py-2.5 text-left flex items-center gap-2 text-gray-700 hover:text-black"
+      >
         <i class="icon-account text-lg"></i>
         <span>My account</span>
       </a>
 
-      <button class="hover:bg-gray-200 px-4 py-2.5 text-left flex items-center gap-2 text-gray-700 hover:text-black">
+      <a
+        routerLink="/u/settings"
+        routerLinkActive="bg-gray-100"
+        class="hover:bg-gray-200 px-4 py-2.5 text-left flex items-center gap-2 text-gray-700 hover:text-black"
+      >
         <i class="icon-settings text-lg"></i>
         <span>Settings</span>
-      </button>
+      </a>
 
       <button
         (click)="onSignOut()"

@@ -33,15 +33,15 @@ export class AnalyticsService {
     const totalDefaultBackHalf = await this.getTotalDefaultBackHalfLinks(currentUser.id);
 
     return {
-      totalVisited: totalVisited || 0,
-      totalRedirectedSuccess: totalRedirectedSuccess || 0,
-      totalClicksByDesktop: totalClicksByDesktop || 0,
-      totalClicksByTablet: totalClicksByTablet || 0,
-      totalClicksByMobile: totalClicksByMobile || 0,
-      totalActiveLinks: totalActiveLinks || 0,
-      totalInactiveLinks: totalInactiveLinks || 0,
-      totalCustomBackHalf: totalCustomBackHalf || 0,
-      totalDefaultBackHalf: totalDefaultBackHalf || 0
+      totalVisited: this.parseValueIntoNumber(totalVisited),
+      totalRedirectedSuccess: this.parseValueIntoNumber(totalRedirectedSuccess),
+      totalClicksByDesktop: this.parseValueIntoNumber(totalClicksByDesktop),
+      totalClicksByTablet: this.parseValueIntoNumber(totalClicksByTablet),
+      totalClicksByMobile: this.parseValueIntoNumber(totalClicksByMobile),
+      totalActiveLinks: this.parseValueIntoNumber(totalActiveLinks),
+      totalInactiveLinks: this.parseValueIntoNumber(totalInactiveLinks),
+      totalCustomBackHalf: this.parseValueIntoNumber(totalCustomBackHalf),
+      totalDefaultBackHalf: this.parseValueIntoNumber(totalDefaultBackHalf)
     }
   }
 
@@ -111,5 +111,13 @@ export class AnalyticsService {
       .where("url.owner_id = :ownerId", { ownerId: userId })
       .andWhere("url.custom_back_half is null")
       .getCount();
+  }
+
+  private parseValueIntoNumber(value: string | number | null): number {
+    if (typeof value === "number") {
+      return value;
+    }
+
+    return !value ? 0 : parseInt(value);
   }
 }
