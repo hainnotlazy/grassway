@@ -104,7 +104,7 @@ export class UsersService {
     // Save new avatar & remove old one
     if (avatar) {
       const savedAvatar = this.uploadFileService.saveAvatar(avatar);
-      currentUser.avatar && this.uploadFileService.removeOldAvatar(currentUser.avatar);
+      currentUser.avatar && this.uploadFileService.removeOldFile(currentUser.avatar);
       updateProfileDto.avatar = savedAvatar;
     }
 
