@@ -3,7 +3,7 @@
     #colorInput
     class="text-input-color flex-grow order-1 p-0 bg-transparent border-none outline-none"
     type="text"
-    value="#"
+    [value]="control.value"
     maxlength="7"
     (keyup)="onChangeColor($event)"
   >

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
@@ -9,7 +9,7 @@ import { tap } from 'rxjs';
   templateUrl: './input-color-picker.component.html',
   styleUrls: ['./input-color-picker.component.scss']
 })
-export class InputColorPickerComponent {
+export class InputColorPickerComponent implements OnInit {
   @Input() control!: FormControl;
 
   @ViewChild('colorInput') colorInput!: ElementRef;

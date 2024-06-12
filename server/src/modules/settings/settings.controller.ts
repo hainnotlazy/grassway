@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, UploadedFile, UseInterceptors, Put } from '@nestjs/common';
 import { UserSettingService } from './user-setting.service';
 import { CurrentUser } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
@@ -16,7 +16,7 @@ export class SettingsController {
     return this.userSettingService.getUserSetting(currentUser);
   }
 
-  @Post("user")
+  @Put("user")
   @UseInterceptors(FileInterceptor('logo'))
   updateUserSetting(
     @CurrentUser() currentUser: User,

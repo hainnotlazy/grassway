@@ -16,6 +16,12 @@ export class UserSettingDto {
 
   @IsBoolean()
   @IsOptional()
+  @Transform(({ value}: TransformFnParams) => {
+    if (typeof value === 'string') {
+      return value === 'true';
+    } 
+    return value;
+  })
   qr_code_show_logo: boolean;
 
   @IsOptional()

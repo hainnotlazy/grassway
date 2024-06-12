@@ -124,6 +124,7 @@ export class ManageAccountFormComponent implements OnInit {
   }
 
   private handleUpdateSuccess() {
+    this.formError = "";
     this.snackbar.open("Update account successfully", "x", {
       duration: 3000,
       horizontalPosition: "right",

@@ -1,6 +1,6 @@
 <div class="md:flex-row flex flex-col gap-4 my-4">
   <div class="flex flex-col gap-4 px-4">
-    <div class="md:my-0 relative inline-flex m-auto user-avatar-col">
+    <div class="md:my-0 user-avatar-col relative inline-flex m-auto">
       <img
         class="border-secondary aspect-square w-auto h-full border-2 rounded-full"
         [src]="avatarUrl"
@@ -120,7 +120,8 @@
       </mat-form-field>
     </div>
 
-    <div>
+    <div class="space-y-2">
+      <p *ngIf="formError" class="text-center text-red-500">{{ formError }}</p>
       <button
         type="submit"
         class="px-4 py-2.5 bg-secondary text-white rounded shadow ml-auto flex items-center gap-2 hover:bg-secondary/80 disabled:bg-gray-400"

@@ -74,6 +74,7 @@ export class ChangePasswordFormComponent {
         this.changePasswordForm.get("newPassword")?.value as string
       ).pipe(
         tap(() => {
+          this.formError = "";
           this.snackbar.open("Password changed successfully", "x", {
             duration: 3000,
             horizontalPosition: 'right',
