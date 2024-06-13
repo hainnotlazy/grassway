@@ -3,22 +3,25 @@
   <app-shorten-url></app-shorten-url>
 </div>
 
-<div class="summary sm:flex-row flex flex-col items-center justify-around gap-6 mb-4">
+<div
+  *ngIf="publicAnalytics$ | async as publicAnalytics"
+  class="summary sm:flex-row flex flex-col items-center justify-around gap-6 mb-4"
+>
   <div class="border-primary hover:scale-110 flex flex-col items-center justify-center gap-2 p-4 transition-all bg-white border border-dashed rounded-md shadow-lg cursor-default">
     <i class="icon-link text-primary text-3xl"></i>
-    <h6 class="text-secondary text-poetsen-one">1053</h6>
+    <h6 class="text-secondary text-poetsen-one">{{ publicAnalytics.totalLinks }}</h6>
     <p class="text-jost italic text-center text-gray-400">links were shortened</p>
   </div>
 
   <div class="border-primary hover:scale-110 flex flex-col items-center justify-center gap-2 p-4 transition-all bg-white border border-dashed rounded-md shadow-lg cursor-default">
     <i class="icon-click text-primary text-3xl"></i>
-    <h6 class="text-secondary text-poetsen-one">4576</h6>
+    <h6 class="text-secondary text-poetsen-one">{{ publicAnalytics.totalVisited }}</h6>
     <p class="text-jost italic text-center text-gray-400">clicks through our links</p>
   </div>
 
   <div class="border-primary hover:scale-110 flex flex-col items-center justify-center gap-2 p-4 transition-all bg-white border border-dashed rounded-md shadow-lg cursor-default">
     <i class="icon-rewrite text-primary text-3xl"></i>
-    <h6 class="text-secondary text-poetsen-one">1683</h6>
+    <h6 class="text-secondary text-poetsen-one">{{ publicAnalytics.totalCustomBackHalf }}</h6>
     <p class="text-jost italic text-center text-gray-400">links were customized back-half</p>
   </div>
 </div>

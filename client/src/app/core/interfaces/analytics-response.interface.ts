@@ -9,3 +9,9 @@ export interface PersonalLinksAnalyticsResponse {
   totalCustomBackHalf: number;
   totalDefaultBackHalf: number;
 }
+
+export interface PublicLinksAnalyticsResponse {
+  totalLinks: number,
+  totalCustomBackHalf: number,
+  totalVisited: number
+}

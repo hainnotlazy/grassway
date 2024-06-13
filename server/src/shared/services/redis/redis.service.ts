@@ -15,7 +15,8 @@ export interface GetKeyRedisOptions {
 }
 
 export enum RedisDatabase {
-  JWT_BLACKLIST = 1
+  JWT_BLACKLIST = 0,
+  PUBLIC_ANALYTICS = 1,
 }
 
 @Injectable()
