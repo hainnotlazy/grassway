@@ -49,6 +49,8 @@ export function configEnvironment(app: INestApplication) {
       .addTag("Auth", "Endpoints for authentication")
       .addTag("Urls", "Endpoints for urls interaction")
       .addTag("Tags", "Endpoints for tags interaction")
+      .addTag("Settings", "Endpoints for user settings interaction")
+      .addTag("Analytics", "Endpoints for analytics interaction")
       .addBearerAuth()
       .build();
 

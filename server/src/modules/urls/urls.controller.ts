@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseArrayPipe, ParseBoolPipe, ParseIntPipe, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseArrayPipe, ParseIntPipe, Post, Put, Query, Res } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { ShortenUrlDto } from './dtos/shorten-url.dto';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
