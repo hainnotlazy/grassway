@@ -1,28 +1,39 @@
-<div class="flex flex-col items-center justify-between h-full gap-2 p-4 text-center bg-white border border-gray-300 rounded-md shadow-md">
+<div
+  class="flex flex-col items-center justify-between h-full gap-2 p-4 text-center border border-gray-300 rounded-md shadow-md"
+  [class]="{
+    'bg-white': link.is_active,
+    'bg-gray-200': !link.is_active
+  }"
+>
   <div class="flex items-center justify-center">
     <qrcode
       #qrcode
       [qrdata]="link.client + (link.custom_back_half || link.back_half)"
       [alt]="'QR-Code of ' + link.title"
-      [colorDark]="'#000000ff'"
-      [colorLight]="'#ffffffff'"
+      [colorDark]="userSetting.qr_code_background_color"
+      [colorLight]="userSetting.qr_code_foreground_color"
       [elementType]="'canvas'"
       [errorCorrectionLevel]="'H'"
-      [imageSrc]="'./assets/images/grassway-logo.png'"
+      [imageSrc]="
+        userSetting.qr_code_show_logo && userSetting.qr_code_logo_url
+        ? userSetting.qr_code_logo_url
+        : !userSetting.qr_code_show_logo
+          ? ''
+          :'./assets/images/grassway-logo.png'"
       [imageHeight]="50"
       [imageWidth]="50"
       [width]="200"
     ></qrcode>
   </div>
   <h6 class="text-primary flex items-center gap-2 text-lg font-semibold break-all cursor-default">
+    <small class="animate-pulse">{{ link.is_active ? '🟢' : '🔴' }}</small>
+    {{ link.title }}
     <i
       *ngIf="link.description"
       class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
       [matTooltip]="link.description"
       matTooltipPosition="above"
     ></i>
-    {{ link.title }}
-    <small *ngIf="!link.is_active" class="text-gray-500">(Inactive)</small>
     <i
       *ngIf="link.use_password"
       class="icon-key text-yellow-600 rotate-45"

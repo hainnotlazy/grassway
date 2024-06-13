@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ExtendedUrl } from '../link/link.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserSettingService } from 'src/app/core/services/user-setting.service';
 
 @Component({
   selector: 'app-qrcode-dialog',
@@ -11,7 +12,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class QrcodeDialogComponent {
   screenWidth = window.screen.width;
 
+  userSetting$ = this.userSettingService.getUserSetting();
+
   constructor(
+    private userSettingService: UserSettingService,
     private snackbar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
     public data: ExtendedUrl

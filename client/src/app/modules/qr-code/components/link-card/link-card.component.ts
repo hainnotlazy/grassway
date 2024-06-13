@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserSetting } from 'src/app/core/models/user-setting.model';
 import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component';
 
 @Component({
@@ -9,6 +10,7 @@ import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component'
 })
 export class LinkCardComponent {
   @Input() link!: ExtendedUrl;
+  @Input() userSetting!: UserSetting;
 
   constructor(
     private snackbar: MatSnackBar

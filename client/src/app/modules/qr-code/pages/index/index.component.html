@@ -11,9 +11,12 @@
     [infiniteScrollThrottle]="150"
     (scrolled)="onScrollDown()"
   >
-    <app-link-card
-      *ngFor="let link of links$ | async"
-      [link]="link"
-    ></app-link-card>
+    <ng-container *ngIf="userSetting$ | async as userSetting">
+      <app-link-card
+        *ngFor="let link of links$ | async"
+        [link]="link"
+        [userSetting]="userSetting"
+      ></app-link-card>
+    </ng-container>
   </div>
 </div>

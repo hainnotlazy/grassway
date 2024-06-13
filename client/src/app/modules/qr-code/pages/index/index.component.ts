@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, combineLatest, filter, map, scan, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
+import { LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url } from 'src/app/core/models/url.model';
 import { UrlsService } from 'src/app/core/services/urls.service';
+import { UserSettingService } from 'src/app/core/services/user-setting.service';
 import { environment } from 'src/environments/environment';
 
 @UntilDestroy()
@@ -17,6 +19,8 @@ export class IndexPage implements OnInit {
   isLoading = false;
   currentPage = 1;
   totalPage = 1;
+
+  userSetting$ = this.userSettingService.getUserSetting();
 
   private initialLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
   private initialLoad$ = this.initialLoadSubject.asObservable();
@@ -53,12 +57,14 @@ export class IndexPage implements OnInit {
   );
 
   constructor(
-    private urlsService: UrlsService
+    private urlsService: UrlsService,
+    private userSettingService: UserSettingService
   ) {}
 
   ngOnInit() {
     this.urlsService.listUrls({
-      page: 1
+      page: 1,
+      linkActiveOptions: LinkActiveOptions.ALL
     }).pipe(
       tap((response) => {
         this.initialLoadSubject.next(response);
@@ -72,6 +78,7 @@ export class IndexPage implements OnInit {
       this.isLoading = true;
       this.urlsService.listUrls({
         page: this.currentPage + 1,
+        linkActiveOptions: LinkActiveOptions.ALL
       }).pipe(
         tap((response) => {
           this.infiniteLoadSubject.next(response);

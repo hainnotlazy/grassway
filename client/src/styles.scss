@@ -54,6 +54,23 @@ $my-theme: mat.define-light-theme(
 
 @import "libs/icomoon/style.css";
 
+/** Scrollbar customization */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 1rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ddd;
+}
+
 body {
   font-family: "Karla", sans-serif;
   font-optical-sizing: auto;
