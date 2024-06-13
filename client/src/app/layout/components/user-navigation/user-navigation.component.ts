@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { map } from 'rxjs';
+import { finalize, map } from 'rxjs';
 import { UsersService } from 'src/app/core/services/users.service';
 import { createAvatar } from '@dicebear/core';
 import { funEmoji } from '@dicebear/collection';
@@ -43,12 +43,11 @@ export class UserNavigationComponent {
 
   onSignOut() {
     return this.authService.logout().pipe(
-      untilDestroyed(this)
-    ).subscribe(
-      () => {
+      finalize(() => {
         removeAccessToken();
         this.router.navigate(['/']);
-      }
-    );
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 }
