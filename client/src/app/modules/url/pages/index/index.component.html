@@ -1,16 +1,13 @@
 <div class="mt-4 space-y-4">
   <div class="flex items-center justify-between">
     <h1 class="text-poetsen-one text-3xl">My Links</h1>
-    <!-- TODO: Show tooltip on button shorten new link whenever screen < 640 -->
     <a
-      matTooltip="Shorten new link"
-      matTooltipPosition="above"
-      matTooltipHideDelay="2000"
-      type="button"
       class="bg-white px-3 py-1.5 rounded-md shadow-md border border-gray-300 text-gray-600 hover:text-black flex items-center gap-1"
       routerLink="shorten-url"
     >
-      <i class="icon-add"></i> <span class="md:inline hidden">Shorten new link</span>
+      <i class="icon-add"></i>
+      <span class="md:block hidden">Shorten new link</span>
+      <span class="md:hidden">New link</span>
     </a>
   </div>
   <div class="sm:flex-row sm:items-center flex flex-col gap-4">

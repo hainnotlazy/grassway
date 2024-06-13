@@ -23,16 +23,16 @@
     >
   </div>
   <div class="flex flex-col flex-grow gap-6">
-    <div class="link-info flex-grow space-y-1">
+    <div class="link-info flex flex-col flex-grow gap-1">
       <h6 class="text-jost text-secondary flex items-center gap-2 text-lg font-semibold break-all cursor-default">
+        <small class="animate-pulse">{{ url.is_active ? '🟢' : '🔴' }}</small>
+        {{ url.title }}
         <i
           *ngIf="url.description"
           class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
           [matTooltip]="url.description"
           matTooltipPosition="above"
         ></i>
-        {{ url.title }}
-        <small *ngIf="!url.is_active" class="animate-pulse text-gray-500">🔴</small>
         <i
           *ngIf="url.use_password"
           class="icon-key text-yellow-600 rotate-45"
@@ -41,12 +41,12 @@
         ></i>
       </h6>
       <a
-        class="hover:underline hover:text-primary block text-sm font-semibold text-gray-500 break-all"
+        class="hover:underline hover:text-primary w-fit text-sm font-semibold text-gray-500 break-all"
         [routerLink]="'/l/' + (url.custom_back_half ? url.custom_back_half : url.back_half)"
       >
         {{ url.client + (url.custom_back_half || url.back_half) }}
       </a>
-      <a class="hover:underline hover:text-black block text-sm text-gray-500 break-all" [href]="url.origin_url">{{ url.origin_url }}</a>
+      <a class="hover:underline hover:text-black w-fit text-sm text-gray-500 break-all" [href]="url.origin_url">{{ url.origin_url }}</a>
     </div>
     <div class="flex items-center gap-2">
       <a

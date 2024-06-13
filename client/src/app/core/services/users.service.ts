@@ -3,17 +3,31 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { UserProfile } from '../interfaces/manage-account.interface';
 import { ResendVerificationCodeResponse } from '../interfaces/verify-email-response.interface';
+import { catchError, noop, tap } from 'rxjs';
+import { removeAccessToken } from '../helpers/local-storage.helper';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private router: Router
   ) { }
 
   getCurrentUser() {
-    return this.httpClient.get<User>("api/users");
+    return this.httpClient.get<User>("api/users").pipe(
+      tap(
+        noop,
+        (error) => {
+          if (error.error.statusCode === 401) {
+            removeAccessToken();
+            this.router.navigate(["/"]);
+          }
+        }
+      )
+    );
   }
 
   updateCurrentUser(userProfile: UserProfile) {

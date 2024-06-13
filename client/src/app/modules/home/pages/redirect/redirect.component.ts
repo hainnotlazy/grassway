@@ -1,13 +1,14 @@
 import { UrlsService } from 'src/app/core/services/urls.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, finalize, switchMap, take, tap, timer } from 'rxjs';
+import { filter, finalize, of, switchMap, take, tap, timer } from 'rxjs';
 import { Url } from 'src/app/core/models/url.model';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { isBrowserRefreshed } from 'src/app/app.component';
 
 @UntilDestroy()
 @Component({
@@ -105,7 +106,9 @@ export class RedirectPage implements OnInit {
   }
 
   private handleCountingAccess(urlId: number, type: "visit" | "redirected") {
-    if (type === "visit") {
+    if (isBrowserRefreshed) {
+      return of();
+    } else if (type === "visit") {
       const deviceDetected =
         this.deviceService.isDesktop() ? "desktop"
         : this.deviceService.isTablet() ? "tablet"
