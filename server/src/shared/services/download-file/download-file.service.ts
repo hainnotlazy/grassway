@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import * as fs from "fs";
-import * as path from "path";
 import * as sharp from 'sharp';
 
 @Injectable()
@@ -14,6 +13,9 @@ export class DownloadFileService {
     private httpService: HttpService
   ) {}
 
+  /**
+   * Describe: Download avatar from external url
+  */
   async downloadAvatar(imageUrl: string): Promise<string> {
     if (!fs.existsSync(this.AVATAR_PATH)) {
       fs.mkdirSync(this.AVATAR_PATH, { recursive: true });

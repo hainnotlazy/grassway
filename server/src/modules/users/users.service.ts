@@ -21,6 +21,7 @@ export class UsersService {
     private mailerServer: MailerService
   ) {}
 
+  /** Describe: Find user by id */
   async findUser(id: string) {
     // Try to parse id's type to number
     let userId = parseInt(id);
@@ -66,6 +67,7 @@ export class UsersService {
     return await this.userRepository.findOneBy({ [provider]: value });
   }
 
+  /** Describe: Create new user */
   async createUser(registerUser: Partial<User>, refLinksId: number[] = []) {
     // Check if username or email already exists
     const { username, email } = registerUser;
@@ -100,6 +102,7 @@ export class UsersService {
     return savedUser;
   }
 
+  /** Describe: Update user */
   async updateUserProfile(currentUser: User, updateProfileDto: UpdateProfileDto, avatar: Express.Multer.File) {
     // Save new avatar & remove old one
     if (avatar) {
@@ -114,6 +117,7 @@ export class UsersService {
     return await this.userRepository.save(currentUser);
   }
 
+  /** Describe: Change password */
   async changePassword(user: User, changePasswordDto: ChangePasswordDto) {
     const { password, newPassword } = changePasswordDto;
 
@@ -125,6 +129,7 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
+  /** Describe: Send verification email */
   async sendVerificationEmailMail(user: User) {
     if (!user.email) {
       throw new BadRequestException("User don't have email to verify");
@@ -155,6 +160,7 @@ export class UsersService {
     throw new InternalServerErrorException("Somethings went wrong when sending verification mail!");
   }
 
+  /** Describe: Verify email */
   async verifyEmail(user: User, verifyEmailDto: VerifyEmailDto) {
     const { code } = verifyEmailDto;
 
@@ -180,10 +186,12 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
+  /** Describe: Save user entity */
   async saveUser(user: User) {
     return await this.userRepository.save(user);
   }
 
+  /** Describe: Update user's linked account */
   async updateUserLinkedAccount(user: User, provider: "email" | "facebook" | "github" | "twitter", value: string) {
     user[provider] = value;
 

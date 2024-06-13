@@ -7,12 +7,19 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { InputColorPickerComponent } from './components/input-color-picker/input-color-picker.component';
 import { QrCodeFormComponent } from './components/qr-code-form/qr-code-form.component';
 
+const pages = [
+  IndexPage
+]
+
+const components = [
+  InputColorPickerComponent,
+  QrCodeFormComponent
+]
 
 @NgModule({
   declarations: [
-    IndexPage,
-    InputColorPickerComponent,
-    QrCodeFormComponent
+    ...pages,
+    ...components
   ],
   imports: [
     CommonModule,

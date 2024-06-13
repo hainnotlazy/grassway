@@ -50,6 +50,12 @@ const MatModules = [
   ClipboardModule
 ]
 
+const ExternalModules = [
+  InfiniteScrollModule,
+  QRCodeModule,
+  NgChartsModule,
+]
+
 @NgModule({
   declarations: [
     TruncatePipe,
@@ -60,9 +66,7 @@ const MatModules = [
     CommonModule,
     ReactiveFormsModule,
     ...MatModules,
-    InfiniteScrollModule,
-    QRCodeModule,
-    NgChartsModule,
+    ...ExternalModules
   ],
   exports: [
     ReactiveFormsModule,
@@ -70,9 +74,7 @@ const MatModules = [
     GetThirdPartyNamePipe,
     CountdownPipe,
     ...MatModules,
-    InfiniteScrollModule,
-    QRCodeModule,
-    NgChartsModule,
+    ...ExternalModules
   ]
 })
 export class SharedModule { }

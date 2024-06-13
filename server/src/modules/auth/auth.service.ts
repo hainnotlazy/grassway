@@ -22,6 +22,9 @@ export class AuthService {
     private downloadFileServer: DownloadFileService
   ) {}
 
+  /**
+   * Describe: Validate user login
+  */
   async validateLogin(username: string, password: string) {
     const user = await this.usersService.findUserByUsername(username);
 
@@ -32,6 +35,9 @@ export class AuthService {
     throw new BadRequestException("Username or password is incorrect");
   }
 
+  /**
+   * Describe: Github authentication
+  */
   async handleGithubAuthentication(githubProfile: GithubProfile) {
     const { id, fullname, github, avatar, refLinks } = githubProfile;
     let { username } = githubProfile;
@@ -89,6 +95,9 @@ export class AuthService {
     return newUser;
   }
 
+  /**
+   * Describe: Google authentication
+  */
   async handleGoogleAuthentication(googleProfile: GoogleProfile) {
     const { id, fullname, email, avatar, refLinks } = googleProfile;
 
@@ -137,6 +146,9 @@ export class AuthService {
     return newUser;
   }
 
+  /**
+   * Describe: Link account with Google
+  */
   private async linkAccountWithGoogle(id: string, email: string) {
     const userExisted = await this.usersService.findUser(id);
 
@@ -161,6 +173,9 @@ export class AuthService {
     return null;
   }
 
+  /**
+   * Describe: Facebook authentication
+  */
   async handleFacebookAuthentication(facebookProfile: FacebookProfile) {
     const { id, fullname, facebookId, avatar, refLinks } = facebookProfile;
 
@@ -217,6 +232,9 @@ export class AuthService {
     return newUser;
   }
 
+  /**
+   * Describe: Twitter authentication
+  */
   async handleTwitterAuthentication(twitterProfile: TwitterProfile) {
     const { id, fullname, twitterId, avatar, refLinks } = twitterProfile;
     let { username } = twitterProfile;
@@ -272,6 +290,9 @@ export class AuthService {
     return newUser;
   }
 
+  /**
+   * Describe: Generate access token
+  */
   async generateAccessToken(user: Partial<User>) {
     return this.jwtService.sign({
       userId: user.id,
@@ -280,6 +301,9 @@ export class AuthService {
     })
   }
 
+  /**
+   * Describe: Logout
+  */
   async logout(currentUser: User, accessToken: string, tokenExpirationTime: number) {
     return this.redisService.setKey({
       key: accessToken,
@@ -288,12 +312,18 @@ export class AuthService {
     })
   }
 
+  /**
+   * Describe: Check if access token is blacklisted
+  */
   async isTokenBlacklisted(accessToken: string) {
     return !!(await this.redisService.getKey({
       key: accessToken
     }));
   }
 
+  /**
+   * Describe: Get time left of access token
+  */
   private getTimeLeft(expirationTime: number) {
     const now = Math.floor(new Date().getTime() / 1000);
 

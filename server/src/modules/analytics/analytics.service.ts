@@ -45,6 +45,9 @@ export class AnalyticsService {
     }
   }
 
+  /**
+   * Describe: Get new public analytics then save it in redis
+  */
   private async handleGetPublicAnalytics(): Promise<PublicLinksAnalytics> {
     const totalLinks = await this.getTotalLinks();
     const totalCustomBackHalfLinks = await this.getTotalCustomBackHalfLinks();
@@ -80,6 +83,9 @@ export class AnalyticsService {
     }
   }
 
+  /**  
+   * Describe: Get personal analytics
+  */
   async getAnalytics(currentUser: User): Promise<PersonalLinksAnalytics> {
     // Get total visited & redirected success
     const totalVisited = await this.getTotalVisited(currentUser.id);
@@ -113,6 +119,9 @@ export class AnalyticsService {
     }
   }
 
+  /**
+   * Describe: Get total links
+  */
   private async getTotalLinks() {
     return (await this.urlRepository.findOne({
       where: {},
@@ -122,6 +131,9 @@ export class AnalyticsService {
     })).id;
   }
 
+  /** 
+   * Describe: Get total visited
+  */
   private async getTotalVisited();
   private async getTotalVisited(userId: number);
   private async getTotalVisited(userId?: number) {
@@ -139,6 +151,9 @@ export class AnalyticsService {
     }
   }
 
+  /** 
+   * Describe: Get total redirected success
+  */
   private async getTotalRedirectedSuccess(userId: number) {
     return (await this.urlRepository
       .createQueryBuilder("url")
@@ -147,6 +162,9 @@ export class AnalyticsService {
       .getRawMany())[0].total;
   }
 
+  /** 
+   * Describe: Get total clicks by devices
+  */
   private async getVisitedByDevices(userId: number) {
     return [
       (await this.urlRepository
@@ -167,6 +185,9 @@ export class AnalyticsService {
     ];
   }
 
+  /** 
+   * Describe: Get total active links
+  */
   private async getTotalActiveLinks(userId: number) {
     return await this.urlRepository
       .createQueryBuilder("url")
@@ -175,6 +196,9 @@ export class AnalyticsService {
       .getCount();
   }
 
+  /**   
+   * Describe: Get total inactive links
+  */
   private async getTotalInactiveLinks(userId: number) {
     return await this.urlRepository
       .createQueryBuilder("url")
@@ -183,6 +207,9 @@ export class AnalyticsService {
       .getCount();
   }
 
+  /**   
+   * Describe: Get total custom-back-half links
+  */
   private async getTotalCustomBackHalfLinks();
   private async getTotalCustomBackHalfLinks(userId: number);
   private async getTotalCustomBackHalfLinks(userId?: number) {
@@ -209,6 +236,9 @@ export class AnalyticsService {
     }
   }
 
+  /**   
+   * Describe: Get total not custom-back-half links
+  */
   private async getTotalDefaultBackHalfLinks(userId: number) {
     return await this.urlRepository
       .createQueryBuilder("url")
@@ -217,6 +247,9 @@ export class AnalyticsService {
       .getCount();
   }
 
+  /**   
+   * Describe: Parse value into number, if value is null return 0
+  */
   private parseValueIntoNumber(value: string | number | null): number {
     if (typeof value === "number") {
       return value;

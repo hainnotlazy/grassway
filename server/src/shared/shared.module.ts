@@ -5,21 +5,22 @@ import { DownloadFileService } from './services/download-file/download-file.serv
 import { UploadFileService } from './services/upload-file/upload-file.service';
 import { CsvService } from './services/csv/csv.service';
 
+const Services = [
+  RedisService,
+  DownloadFileService,
+  UploadFileService,
+  CsvService
+]
+
 @Module({
   imports: [
     HttpModule
   ],
   providers: [
-    RedisService,
-    DownloadFileService,
-    UploadFileService,
-    CsvService
+    ...Services
   ],
   exports: [
-    RedisService,
-    DownloadFileService,
-    UploadFileService,
-    CsvService
+    ...Services
   ]
 })
 export class SharedModule {}

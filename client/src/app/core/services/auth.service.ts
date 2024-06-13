@@ -13,6 +13,9 @@ export class AuthService {
     private refService: RefService
   ) { }
 
+  /**
+   * Describe: Login
+  */
   login(username: string, password: string) {
     return this.httpClient.post<AuthResponse>(`api/auth/login`, { username, password }).pipe(
       tap(
@@ -24,6 +27,9 @@ export class AuthService {
     );
   }
 
+  /**
+   * Describe: Register
+  */
   register(username: string, password: string, email?: string) {
     // Get ref links
     const refLinks = this.refService.getRefLinks();
@@ -46,6 +52,9 @@ export class AuthService {
     )
   }
 
+  /**
+   * Describe: Logout
+  */
   logout() {
     return this.httpClient.post("api/auth/logout", null);
   }

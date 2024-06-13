@@ -30,6 +30,9 @@ export class UrlsService {
     private tagsService: TagsService
   ) {}
 
+  /** 
+   * Describe: Get url by back half
+  */
   async getUrlByBackHalf(backHalf: string) {
     const url = await this.urlRepository.findOneBy({ back_half: backHalf })
       || await this.urlRepository.findOneBy({ custom_back_half: backHalf });
@@ -41,6 +44,9 @@ export class UrlsService {
     return url;
   }
 
+  /** 
+   * Describe: Get url by id
+  */
   async getUrlById(id: number) {
     const url = await this.urlRepository.findOne({
       where: {
@@ -56,7 +62,9 @@ export class UrlsService {
     return url;
   }
 
-  /** Describe: Get paginated urls by user */
+  /**
+   * Describe: Get paginated urls by user 
+  */
   async getUrls(currentUser: User, options: GetUrlsOptions) {
     const { limit, page, linkActiveOptions, linkTypeOptions, startDate, endDate, search, tagId } = options;
 
@@ -123,6 +131,9 @@ export class UrlsService {
     })
   }
 
+  /** 
+   * Describe: Shorten url for authenticated user
+  */
   async shortenUrl(currentUser: User, url: Partial<Url>) {
     const { origin_url, title, description, custom_back_half, password } = url;
 
@@ -162,6 +173,9 @@ export class UrlsService {
     return !(await this.urlRepository.findOneBy({ custom_back_half: backHalf }));
   }
 
+  /** 
+   * Describe: Access url having password
+  */
   async accessProtectedUrl(url: Partial<Url>) {
     const { id, password } = url;
 
@@ -177,6 +191,9 @@ export class UrlsService {
     throw new BadRequestException("Password is incorrect");
   }
 
+  /** 
+   * Describe: Increment visited count
+  */
   async visitUrl(urlId: string, deviceType: DeviceType) {
     const query = this.urlRepository.createQueryBuilder().update(Url);
 
@@ -192,6 +209,9 @@ export class UrlsService {
       .execute();
   }
 
+  /** 
+   * Describe: Increment redirect success count
+  */
   async redirectSuccessUrl(urlId: string) {
     return this.urlRepository.createQueryBuilder()
       .update(Url)
@@ -200,6 +220,9 @@ export class UrlsService {
       .execute();
   }
 
+  /** 
+   * Describe: Update existed url
+  */
   async updateUrl(currentUser: User, urlId: number, updateUrl: UpdateShortenUrlDto) {
     let url = await this.urlRepository.findOne({
       where: {
@@ -274,6 +297,9 @@ export class UrlsService {
     }
   }
 
+  /** 
+   * Describe: Delete existed url
+  */
   async deleteUrl(currentUser: User, urlId: number) {
     const url = await this.urlRepository.findOne({
       where: {
@@ -309,6 +335,9 @@ export class UrlsService {
     }
   }
 
+  /** 
+   * Describe: Export urls to csv
+  */
   async exportCsv(currentUser: User, urlsId: string[]) {
     const urls = await this.urlRepository
       .createQueryBuilder("urls")
@@ -331,6 +360,9 @@ export class UrlsService {
     return csvFilePath;
   }
 
+  /** 
+   * Describe: Save ref links when user register
+  */
   async saveRefLinks(user: User, refLinksId: number[]) {
     for (const refLinkId of refLinksId) {
       const refLink = await this.urlRepository.findOne({
@@ -346,7 +378,9 @@ export class UrlsService {
     }
   }
 
-  /** Bulk update active/inactive urls */
+  /** 
+   * Describe: Bulk update active/inactive urls 
+  */
   async setStatusUrls(currentUser: User, urlsId: number[], active: boolean) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -378,7 +412,9 @@ export class UrlsService {
     }
   }
 
-  /** Bulk set/remove tag for urls */
+  /** 
+   * Describe: Bulk set/remove tag for urls 
+  */
   async setTagUrls(currentUser: User, bulkSetTagUrlsDto: BulkSetTagUrlsDto) {
     const { 
       ids: urlsId, 
@@ -446,10 +482,16 @@ export class UrlsService {
     }
   }
 
+  /** 
+   * Describe: Check if backHalf is existed
+  */
   private checkBackHalf(backHalf: string) {
     return this.urlRepository.findOneBy({ back_half: backHalf });
   }
 
+  /** 
+   * Describe: Generate backHalf
+  */
   private async generateBackHalf() {
     let backHalf = uuidiv4().split("-")[0];
     while (true) {

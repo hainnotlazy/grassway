@@ -24,6 +24,9 @@ export class CsvService {
     private configService: ConfigService
   ) {}
 
+  /** 
+   * Describe: Generate csv file contains urls
+  */
   async writeUrlsCsv(fileName: string, data: Url[]) {
     const filePath = join(__dirname, "..", "..", "..", "..", "..", "resources", fileName);
 
@@ -43,6 +46,9 @@ export class CsvService {
     return filePath;
   }
 
+  /** 
+   * Describe: Remove unused file
+  */
   removeUnusedFile(filePath: string) {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);

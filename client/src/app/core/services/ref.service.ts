@@ -12,20 +12,32 @@ export class RefService {
   */
   constructor() {}
 
+  /**
+   * Describe: Save ref link into 'Local Storage'
+  */
   insertRefLink(linkId: number) {
     const refLinks = this.getRefLinks();
     refLinks.push(linkId);
     this.saveRefLinks(refLinks);
   }
 
+  /**
+   * Describe: Perform action to save ref link into 'Local Storage'
+  */
   saveRefLinks(links: number[]) {
     localStorage.setItem("ref_links", JSON.stringify(links));
   }
 
+  /**
+   * Describe: Get ref links from 'Local Storage'
+  */
   getRefLinks(): number[] {
     return JSON.parse(localStorage.getItem("ref_links") || "[]");
   }
 
+  /**
+   * Describe: Clear all ref links from 'Local Storage'
+  */
   removeRefLinks() {
     localStorage.removeItem("ref_links");
   }

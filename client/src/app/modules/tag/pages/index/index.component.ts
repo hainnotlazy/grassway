@@ -6,11 +6,11 @@ import { TagsService } from 'src/app/core/services/tags.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-index',
+  selector: 'index-page',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class IndexComponent implements OnInit {
+export class IndexPage implements OnInit {
   editingTag: Tag | null = null;
 
   tagsSubject = new BehaviorSubject<Tag[]>([]);

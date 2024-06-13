@@ -14,6 +14,9 @@ export class TagsService {
     private dataSource: DataSource
   ) {}
 
+  /**
+   * Describe: Find tag by id
+  */
   async findTag(currentUser: User, id: number) {
     return await this.tagRepository.findOne({ 
       where: { 
@@ -25,6 +28,9 @@ export class TagsService {
     });
   }
 
+  /**
+   * Describe: List all tags of current user
+  */
   async listTags(currentUser: User) {
     return await this.tagRepository.find({ 
       where: { 
@@ -35,6 +41,9 @@ export class TagsService {
     });
   }
 
+  /**
+   * Describe: Create new tag
+  */
   async createTag(currentUser: User, createTagDto: CreateTagDto) {
     const { name, description, icon } = createTagDto;
 
@@ -63,6 +72,9 @@ export class TagsService {
     return this.tagRepository.save(tag);
   }
 
+  /**
+   * Describe: Update existed tag
+  */
   async updateTag(currentUser: User, id: number, updateTagDto: CreateTagDto) {
     const existedTag = await this.tagRepository.findOne({ 
       where: {
@@ -82,6 +94,9 @@ export class TagsService {
     return this.tagRepository.save(existedTag);
   }
 
+  /**
+   * Describe: Delete existed tag
+  */
   async deleteTag(currentUser: User, id: number) {
     const tag = await this.tagRepository.findOne({ 
       where: {

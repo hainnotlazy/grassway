@@ -67,7 +67,6 @@ export class IndexPage implements OnInit {
       }
     }),
     scan((accumulatorResponse: Url[], [initialResponse, infiniteResponse, updatedUrl, deletedUrl]) => {
-      // ENHANCE: enhance this later
       /** Find & update updated url */
       if (
         updatedUrl

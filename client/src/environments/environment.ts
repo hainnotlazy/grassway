@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  client: "https://grassway.hainkone.com",
-  server: "https://grassway.hainkone.com",
+  client: "https://grassway.xyz",
+  server: "https://grassway.xyz",
 };

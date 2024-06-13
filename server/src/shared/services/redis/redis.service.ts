@@ -26,6 +26,9 @@ export class RedisService {
     private redisService: Redis
   ) {}
 
+  /** 
+   * Describe: Set key in redis
+  */
   async setKey(options: SetKeyRedisOptions): Promise<"OK"> {
     const { 
       key, 
@@ -43,6 +46,9 @@ export class RedisService {
     return "OK";
   }
 
+  /** 
+   * Describe: Get key in redis
+  */
   async getKey(options: GetKeyRedisOptions): Promise<string> {
     const { 
       key, 
@@ -53,6 +59,9 @@ export class RedisService {
     return this.redisService.get(key);
   }
 
+  /** 
+   * Describe: Select database in redis
+  */
   private async selectDatabase(database: RedisDatabase) {
     return await this.redisService.select(database);
   }

@@ -11,10 +11,16 @@ export class UserSettingService {
     private httpClient: HttpClient
   ) { }
 
+  /**
+   * Describe: Get user setting
+  */
   getUserSetting() {
     return this.httpClient.get<UserSetting>(`api/settings/user`);
   }
 
+  /**
+   * Describe: Update user setting
+  */
   updateUserSetting(updateUserSetting: UpdateUserSetting) {
     const formData = new FormData();
 

@@ -14,6 +14,9 @@ export class UserSettingService {
     private uploadFileService: UploadFileService
   ) {}
 
+  /**
+   * Describe: Get user setting
+  */
   async getUserSetting(currentUser: User) {
     const userSettingExisted = await this.userSettingRepository.findOne({
       where: {
@@ -33,6 +36,9 @@ export class UserSettingService {
     return userSettingExisted;
   }
 
+  /**
+   * Describe: Update user setting
+  */
   async updateUserSetting(
     currentUser: User, 
     userSettingDto: UserSettingDto,

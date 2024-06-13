@@ -11,14 +11,22 @@ import { StaticsChartComponent } from './components/statics-chart/statics-chart.
 import { LinkComponent } from './components/link/link.component';
 import { OverviewChartsComponent } from './components/overview-charts/overview-charts.component';
 
+const pages = [
+  IndexPage,
+  ViewStaticsPage
+]
+
+const components = [
+  OverviewTableComponent,
+  StaticsChartComponent,
+  LinkComponent,
+  OverviewChartsComponent
+]
+
 @NgModule({
   declarations: [
-    IndexPage,
-    ViewStaticsPage,
-    OverviewTableComponent,
-    StaticsChartComponent,
-    LinkComponent,
-    OverviewChartsComponent
+    ...pages,
+    ...components
   ],
   imports: [
     CommonModule,

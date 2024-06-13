@@ -6,11 +6,18 @@ import { IndexPage } from './pages/index/index.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { LinkCardComponent } from './components/link-card/link-card.component';
 
+const pages = [
+  IndexPage
+]
+
+const components = [
+  LinkCardComponent
+]
 
 @NgModule({
   declarations: [
-    IndexPage,
-    LinkCardComponent
+    ...pages,
+    ...components
   ],
   imports: [
     CommonModule,

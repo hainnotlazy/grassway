@@ -10,10 +10,16 @@ export class TagsService {
     private httpClient: HttpClient
   ) { }
 
+  /**
+   * Describe: Get all tags
+  */
   getTags() {
     return this.httpClient.get<Tag[]>("api/tags");
   }
 
+  /**
+   * Describe: Create new tag
+  */
   createTag(name: string, icon: string, description: string) {
     return this.httpClient.post<Tag>("api/tags", {
       name,
@@ -22,6 +28,9 @@ export class TagsService {
     });
   }
 
+  /**
+   * Describe: Update tag
+  */
   updateTag(id: number, name: string, icon: string, description: string) {
     return this.httpClient.put<Tag>(`api/tags/${id}`, {
       name,
@@ -30,6 +39,9 @@ export class TagsService {
     })
   }
 
+  /**
+   * Describe: Delete tag
+  */
   deleteTag(id: number) {
     return this.httpClient.delete(`api/tags/${id}`);
   }

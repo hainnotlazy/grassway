@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { UserProfile } from '../interfaces/manage-account.interface';
 import { ResendVerificationCodeResponse } from '../interfaces/verify-email-response.interface';
-import { catchError, noop, tap } from 'rxjs';
+import { noop, tap } from 'rxjs';
 import { removeAccessToken } from '../helpers/local-storage.helper';
 import { Router } from '@angular/router';
 
@@ -16,6 +16,9 @@ export class UsersService {
     private router: Router
   ) { }
 
+  /**
+   * Describe: Get current user information
+  */
   getCurrentUser() {
     return this.httpClient.get<User>("api/users").pipe(
       tap(
@@ -30,6 +33,9 @@ export class UsersService {
     );
   }
 
+  /**
+   * Describe: Update current user information
+  */
   updateCurrentUser(userProfile: UserProfile) {
     let { dob } = userProfile;
     const formData = new FormData();
@@ -52,16 +58,25 @@ export class UsersService {
     return this.httpClient.put<User>("api/users", formData);
   }
 
+  /**
+   * Describe: Resend email verification code
+  */
   resendVerificationCode() {
     return this.httpClient.post<ResendVerificationCodeResponse>("api/users/resend-verification-code", null);
   }
 
+  /**
+   * Describe: Verify email
+  */
   verifyEmail(code: string) {
     return this.httpClient.put<void>("api/users/verify-email", {
       code
     });
   }
 
+  /**
+   * Describe: Change password
+  */
   changePassword(password: string, newPassword: string) {
     return this.httpClient.put<void>("api/users/change-password", {
       password,

@@ -18,7 +18,10 @@ import { SettingsModule } from './modules/settings/settings.module';
 const appModules = [
   UsersModule,
   AuthModule,
-  UrlsModule
+  UrlsModule,
+  TagsModule,
+  AnalyticsModule,
+  SettingsModule,
 ]
 
 @Module({
@@ -33,9 +36,6 @@ const appModules = [
       useClass: config.MailerConfigOptions
     }),
     ...appModules,
-    TagsModule,
-    AnalyticsModule,
-    SettingsModule,
   ],
   controllers: [AppController],
   providers: [

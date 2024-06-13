@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { map, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { Tag } from 'src/app/core/models/tag.model';
 import { TagsService } from 'src/app/core/services/tags.service';
 import { UrlsService } from 'src/app/core/services/urls.service';
