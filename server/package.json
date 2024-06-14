@@ -1,10 +1,12 @@
 {
-  "name": "server",
-  "version": "0.0.1",
+  "name": "Grassway Server",
+  "version": "1.0.0",
   "description": "",
-  "author": "",
+  "author": {
+    "name": "Hain",
+    "email": "hain6621.dev@gmail.com"
+  },
   "private": true,
-  "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

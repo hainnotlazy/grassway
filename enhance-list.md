@@ -5,5 +5,3 @@
 - Forget password
 - Minimize sidebar
 - Update health-check server
-- Update README.md
-- Change domain to grassway.xyz

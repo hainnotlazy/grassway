@@ -1,6 +1,11 @@
 {
-  "name": "client",
-  "version": "0.0.0",
+  "name": "Grassway Client",
+  "version": "1.0.0",
+  "author": {
+    "name": "Hain",
+    "email": "hain6621.dev@gmail.com"
+  },
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check --configuration development --poll 200",
@@ -8,7 +13,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^16.2.0",
     "@angular/cdk": "^16.2.14",

@@ -1,6 +1,9 @@
 {
   "name": "Grassway",
-  "author": "hain6621.dev@gmail.com",
+  "author": {
+    "name": "Hain",
+    "email": "hain6621.dev@gmail.com"
+  },
   "version": "1.0.0",
   "description": "An Url Shortener web application",
   "scripts": {

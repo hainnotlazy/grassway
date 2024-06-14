@@ -100,7 +100,7 @@ export class UrlsController {
   })
   async getUrlByBackHalf(@Param("backHalf") backHalf: string) {
     const url = await this.urlsService.getUrlByBackHalf(backHalf);
-    if (url.password) {
+    if (url.password && !url.is_active) {
       url.origin_url = null;
     }
 
