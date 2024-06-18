@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,5 +9,16 @@ import { Component } from '@angular/core';
   }
 })
 export class SidebarComponent {
+  isInitialSidebarState = true;
+  isOpenSidebar = false;
+  currentScreenWidth = 0;
 
+  constructor() {
+    this.currentScreenWidth = window.innerWidth;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.currentScreenWidth = window.innerWidth;
+  }
 }

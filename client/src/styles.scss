@@ -57,6 +57,7 @@ $my-theme: mat.define-light-theme(
 /** Scrollbar customization */
 /* width */
 ::-webkit-scrollbar {
+  height: 5px;
   width: 10px;
 }
 

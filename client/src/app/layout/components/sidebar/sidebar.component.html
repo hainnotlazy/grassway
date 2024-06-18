@@ -1,8 +1,24 @@
 <div class="sidebar bg-primary top-20 sticky text-gray-300 rounded-md shadow-lg">
-  <ul>
+  <div class="lg:hidden p-2">
+    <button
+      class="flex items-center px-3 py-2 text-xl text-white border-2 border-white rounded-md"
+      type="button"
+      (click)="isOpenSidebar = !isOpenSidebar; isInitialSidebarState = false"
+    >
+      <i [class]="{'icon-menu': !isOpenSidebar, 'icon-menu-open': isOpenSidebar}"></i>
+    </button>
+  </div>
+
+  <ul
+    [ngClass]="{
+      'hidden': currentScreenWidth < 1024 && isInitialSidebarState,
+      'hide-sidebar': !isOpenSidebar && currentScreenWidth < 1024 && !isInitialSidebarState,
+      'show-sidebar': isOpenSidebar && currentScreenWidth < 1024 && !isInitialSidebarState
+    }"
+  >
     <li>
       <a
-        class="relative hover:text-white hover:bg-secondary rounded-tl-md rounded-tr-md px-4 py-2.5 block"
+        class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block"
         routerLink="links"
         routerLinkActive="active"
       >
