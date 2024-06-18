@@ -10,6 +10,7 @@ import { VerifyEmailDto } from './dtos/verify-email.dto';
 import * as bcrypt from 'bcrypt';
 import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
 import { UrlsService } from '../urls/urls.service';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -139,11 +140,11 @@ export class UsersService {
     // Check if user can resend reset pw code
     const remainingTimeToResendCode = Math.max(0, new Date(existedUser.next_forget_password_time).getTime() - new Date().getTime());
     if (remainingTimeToResendCode !== 0) {
-      throw new BadRequestException("Please wait a while before requesting a resend of the reset password code!");
+      return existedUser;
     }
 
-    const resetPwCode = Math.floor(Math.random() * 1000000);
-
+    // Send email contain reset pw code
+    const resetPwCode = Math.floor(100000 + Math.random() * 900000);
     const sentMail = await this.mailerServer.sendMail({
       to: existedUser.email,
       subject: "[Grassway] Reset your password",
@@ -163,8 +164,22 @@ export class UsersService {
   }
 
   /** Describe: Reset password */
-  async resetPassword() {
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { email, code, new_password: newPassword } = resetPasswordDto;
+    const existedUser = await this.userRepository.findOneBy({ email });
 
+    if (!existedUser) { 
+      throw new NotFoundException("User not found");
+    }
+
+    if (existedUser.reset_password_code.toString() !== code) {
+      throw new BadRequestException("Invalid reset code");
+    }
+
+    existedUser.password = bcrypt.hashSync(newPassword, SALT_ROUNDS);
+    existedUser.reset_password_code = null;
+    existedUser.next_forget_password_time = null;
+    return await this.userRepository.save(existedUser);
   }
 
   /** Describe: Send verification email */

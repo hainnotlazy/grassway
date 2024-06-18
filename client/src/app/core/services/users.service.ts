@@ -88,8 +88,19 @@ export class UsersService {
    * Describe: Forget password
   */
   forgetPassword(email: string) {
-    return this.httpClient.post<void>("api/users/forget-password", {
+    return this.httpClient.post<User>("api/users/forget-password", {
       email
+    });
+  }
+
+  /**
+   * Describe: Reset password
+  */
+  resetPassword(email: string, code: string, newPassword: string) {
+    return this.httpClient.put<void>("api/users/reset-password", {
+      email,
+      code,
+      new_password: newPassword
     });
   }
 }

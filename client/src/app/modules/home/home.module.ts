@@ -8,13 +8,11 @@ import { ShortenUrlComponent } from './components/shorten-url/shorten-url.compon
 import { RemindDialogComponent } from './components/remind-dialog/remind-dialog.component';
 import { RedirectPage } from './pages/redirect/redirect.component';
 import { ForgetPasswordPage } from './pages/forget-password/forget-password.component';
-import { ResetPasswordPage } from './pages/reset-password/reset-password.component';
 
 const pages = [
   HomePage,
   RedirectPage,
   ForgetPasswordPage,
-  ResetPasswordPage
 ];
 
 const components = [

@@ -8,6 +8,7 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbidde
 import { VerifyEmailDto } from './dtos/verify-email.dto';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { ForgetPasswordDto } from './dtos/forget-password.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @ApiTags("Users")
 @Controller('users')
@@ -355,7 +356,14 @@ export class UsersController {
   @PublicRoute()
   @Post("/forget-password")
   async forgetPassword(@Body() body: ForgetPasswordDto) {
-    await this.usersService.forgetPassword(body.email);
+    return this.usersService.forgetPassword(body.email);
+  }
+
+  @PublicRoute()
+  @Put("/reset-password")
+  @HttpCode(204)
+  async resetPassword(@Body() body: ResetPasswordDto) {
+    await this.usersService.resetPassword(body);
     return "";
   }
 }

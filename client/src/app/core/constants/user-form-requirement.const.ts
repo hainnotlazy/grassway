@@ -151,5 +151,35 @@ export const forgetPasswordRequirements = {
       required: "Email is required",
       email: "Email is invalid",
     }
+  },
+  code: {
+    requirements: {
+      required: true,
+      minlength: 6,
+      maxlength: 6
+    },
+    validationMsg: {
+      required: "Code is required",
+      minlength: `Code is invalid`,
+      maxlength: `Code is invalid`
+    }
+  },
+  newPassword: {
+    requirements: {
+      ...passwordRequirements
+    },
+    validationMsg: {
+      required: "New password is required",
+      minlength: `New password is invalid`,
+      maxlength: `New password is invalid`
+    }
+  },
+  passwordConfirmation: {
+    requirements: {
+      ...confirmPasswordRequirements
+    },
+    validationMsg: {
+      required: "Please confirm your password"
+    }
   }
 }

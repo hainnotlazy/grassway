@@ -16,6 +16,8 @@ export interface User {
   is_email_verified: boolean
   email_verification_code?: number
   next_email_verification_time: Date
+  reset_password_code?: number
+  next_forget_password_time: Date
   created_at?: Date
   updated_at?: Date
 }
