@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum } from "class-validator";
 
 export enum DeviceType {
@@ -7,6 +8,10 @@ export enum DeviceType {
 }
 
 export class VisitUrlDto {
+  @ApiProperty({
+    description: "Device type",
+    enum: Object.values(DeviceType),
+  })
   @IsEnum(DeviceType)
   deviceType: DeviceType;
 }

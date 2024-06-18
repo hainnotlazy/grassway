@@ -14,8 +14,10 @@ import { UrlsModule } from './modules/urls/urls.module';
 import { TagsModule } from './modules/tags/tags.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { SettingsModule } from './modules/settings/settings.module';
+import { HealthModule } from './modules/health/health.module';
 
 const appModules = [
+  HealthModule,
   UsersModule,
   AuthModule,
   UrlsModule,
