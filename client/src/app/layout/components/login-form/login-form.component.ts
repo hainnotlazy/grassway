@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap, finalize } from 'rxjs';
-import { loginRequirements } from 'src/app/core/constants/form-requirement.const';
+import { loginRequirements } from 'src/app/core/constants/user-form-requirement.const';
 import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
@@ -26,7 +27,8 @@ export class LoginFormComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   // Form requirements
@@ -70,6 +72,11 @@ export class LoginFormComponent {
         untilDestroyed(this)
       ).subscribe();
     }
+  }
+
+  onForgetPassword() {
+    this.dialog.closeAll();
+    this.router.navigate(['/forget-password']);
   }
 
   private handleLoginSuccess(data: AuthResponse) {

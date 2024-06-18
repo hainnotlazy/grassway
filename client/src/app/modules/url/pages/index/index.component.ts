@@ -188,6 +188,7 @@ export class IndexPage implements OnInit {
       || fromUrl.is_active !== toUrl.is_active
       || fromUrl.use_password !== toUrl.use_password
       || fromUrl.custom_back_half !== toUrl.custom_back_half
+      || fromUrl.tags.length !== toUrl.tags.length
     ) {
       return true;
     }

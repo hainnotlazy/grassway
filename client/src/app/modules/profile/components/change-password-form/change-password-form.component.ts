@@ -1,7 +1,6 @@
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { changePasswordRequirements } from 'src/app/core/constants/form-requirement.const';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -9,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { changePasswordRequirements } from 'src/app/core/constants/user-form-requirement.const';
 
 @UntilDestroy()
 @Component({

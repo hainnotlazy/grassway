@@ -129,6 +129,44 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
+  /** Describe: Forget password */
+  async forgetPassword(email: string) {
+    const existedUser = await this.userRepository.findOneBy({ email });
+    if (!existedUser) { 
+      throw new NotFoundException("User not found");
+    }
+
+    // Check if user can resend reset pw code
+    const remainingTimeToResendCode = Math.max(0, new Date(existedUser.next_forget_password_time).getTime() - new Date().getTime());
+    if (remainingTimeToResendCode !== 0) {
+      throw new BadRequestException("Please wait a while before requesting a resend of the reset password code!");
+    }
+
+    const resetPwCode = Math.floor(Math.random() * 1000000);
+
+    const sentMail = await this.mailerServer.sendMail({
+      to: existedUser.email,
+      subject: "[Grassway] Reset your password",
+      template: "forget-password",
+      context: {
+        username: existedUser.username,
+        resetCode: resetPwCode
+      }
+    });
+
+    if (sentMail?.accepted?.length > 0) {
+      existedUser.reset_password_code = resetPwCode;
+      existedUser.next_forget_password_time = new Date(new Date().getTime() + (15 * 60 * 1000));
+      return await this.userRepository.save(existedUser);
+    }
+    throw new InternalServerErrorException("Somethings went wrong when sending reset password mail!");
+  }
+
+  /** Describe: Reset password */
+  async resetPassword() {
+
+  }
+
   /** Describe: Send verification email */
   async sendVerificationEmailMail(user: User) {
     if (!user.email) {

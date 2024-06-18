@@ -94,6 +94,13 @@ export class User {
   @Column({ nullable: true })
   next_email_verification_time: Date;
 
+  @Column({ nullable: true })
+  @Exclude()
+  reset_password_code: number;
+
+  @Column({ nullable: true })
+  next_forget_password_time: Date;
+
   @CreateDateColumn()
   @Exclude()
   created_at: Date;

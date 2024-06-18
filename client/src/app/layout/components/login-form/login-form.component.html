@@ -52,6 +52,14 @@
     </mat-form-field>
   </div>
 
+  <button
+    class="hover:text-blue-600 hover:underline text-gray-800"
+    type="button"
+    (click)="onForgetPassword()"
+  >
+    Forget your password?
+  </button>
+
   <p *ngIf="formError" class="text-rose-500 text-center">{{ formError }}</p>
 
   <button

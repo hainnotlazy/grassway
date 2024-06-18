@@ -5,7 +5,7 @@ import { funEmoji } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, map, tap } from 'rxjs';
-import { profileRequirements } from 'src/app/core/constants/form-requirement.const';
+import { profileRequirements } from 'src/app/core/constants/user-form-requirement.const';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage } from 'src/app/core/interfaces/form.interface';

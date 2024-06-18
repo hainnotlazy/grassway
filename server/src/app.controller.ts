@@ -7,7 +7,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class AppController {
 
   @PublicRoute()
-  @Get("healthcheck")
+  @Get("health-check")
   @ApiOperation({
     summary: "Check server status"
   })

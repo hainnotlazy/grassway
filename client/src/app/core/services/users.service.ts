@@ -83,4 +83,13 @@ export class UsersService {
       newPassword
     });
   }
+
+  /**
+   * Describe: Forget password
+  */
+  forgetPassword(email: string) {
+    return this.httpClient.post<void>("api/users/forget-password", {
+      email
+    });
+  }
 }

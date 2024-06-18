@@ -13,7 +13,8 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   // Check if redirect page
   const isRedirectPage = currentUrl.split("/")[1] === "l";
-  if (isRedirectPage) {
+  const isForgetPasswordPage = currentUrl.split("/")[1] === "forget-password";
+  if (isRedirectPage || isForgetPasswordPage) {
     return true;
   }
 

@@ -61,17 +61,17 @@ export class AnalyticsService {
     await Promise.all([
       this.redisService.setKey({
         key: "public_analytics_total_links",
-        value: totalLinks.toString(),
+        value: totalLinks ? totalLinks.toString() : "0",
         ...setKeyOptions
       }),
       this.redisService.setKey({
         key: "public_analytics_total_custom_back_half",
-        value: totalCustomBackHalfLinks.toString(),
+        value: totalCustomBackHalfLinks ? totalCustomBackHalfLinks.toString() : "0",
         ...setKeyOptions
       }),
       this.redisService.setKey({
         key: "public_analytics_total_visited",
-        value: totalVisited.toString(),
+        value: totalVisited ? totalVisited.toString() : "0",
         ...setKeyOptions
       })
     ]);
@@ -123,12 +123,16 @@ export class AnalyticsService {
    * Describe: Get total links
   */
   private async getTotalLinks() {
-    return (await this.urlRepository.findOne({
+    const latestLink = await this.urlRepository.findOne({
       where: {},
       order: {
         id: 'DESC'
       }
-    })).id;
+    });
+
+    if (latestLink) return latestLink.id;
+    
+    return 0;
   }
 
   /** 

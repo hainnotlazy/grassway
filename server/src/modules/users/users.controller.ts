@@ -1,12 +1,13 @@
 import { Body, Controller, Get, HttpCode, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CurrentUser } from 'src/common/decorators';
+import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { VerifyEmailDto } from './dtos/verify-email.dto';
 import { ChangePasswordDto } from './dtos/change-password.dto';
+import { ForgetPasswordDto } from './dtos/forget-password.dto';
 
 @ApiTags("Users")
 @Controller('users')
@@ -348,6 +349,13 @@ export class UsersController {
   })
   async changePassword(@CurrentUser() currentUser: User, @Body() body: ChangePasswordDto) {
     await this.usersService.changePassword(currentUser, body);
+    return "";
+  }
+
+  @PublicRoute()
+  @Post("/forget-password")
+  async forgetPassword(@Body() body: ForgetPasswordDto) {
+    await this.usersService.forgetPassword(body.email);
     return "";
   }
 }

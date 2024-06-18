@@ -142,3 +142,14 @@ export const changePasswordRequirements = {
   }
 }
 
+export const forgetPasswordRequirements = {
+  email: {
+    requirements: {
+      ...emailRequirements
+    },
+    validationMsg: {
+      required: "Email is required",
+      email: "Email is invalid",
+    }
+  }
+}

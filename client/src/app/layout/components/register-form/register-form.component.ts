@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, tap } from 'rxjs';
-import { registerRequirements } from 'src/app/core/constants/form-requirement.const';
+import { registerRequirements } from 'src/app/core/constants/user-form-requirement.const';
 import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
