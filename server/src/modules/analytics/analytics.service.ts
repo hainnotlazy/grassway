@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PersonalLinksAnalytics, PublicLinksAnalytics } from 'src/common/models/analytics-response.model';
+import { UrlAnalytics } from 'src/entities/url-analytics.entity';
 import { Url } from 'src/entities/url.entity';
 import { User } from 'src/entities/user.entity';
 import { RedisDatabase, RedisService } from 'src/shared/services/redis/redis.service';
@@ -11,6 +12,8 @@ export class AnalyticsService {
   constructor(
     @InjectRepository(Url)
     private readonly urlRepository: Repository<Url>,
+    @InjectRepository(UrlAnalytics)
+    private readonly urlAnalyticsRepository: Repository<UrlAnalytics>,
     private redisService: RedisService
   ) {}
 
@@ -142,14 +145,15 @@ export class AnalyticsService {
   private async getTotalVisited(userId: number);
   private async getTotalVisited(userId?: number) {
     if (!userId) {  
-      return (await this.urlRepository
-        .createQueryBuilder("url")
-        .select("sum(url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile)", "total")
-        .getRawMany())[0].total;
+      return (await this.urlAnalyticsRepository.createQueryBuilder("url_analytics")
+        .select("sum(url_analytics.visited_by_desktop + url_analytics.visited_by_tablet + url_analytics.visited_by_mobile)", "total")
+        .getRawMany()
+      )[0].total;
     } else {
       return (await this.urlRepository
         .createQueryBuilder("url")
-        .select("sum(url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile)", "total")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .select("sum(url_analytics.visited_by_desktop + url_analytics.visited_by_tablet + url_analytics.visited_by_mobile)", "total")
         .where("url.owner_id = :ownerId", { ownerId: userId })
         .getRawMany())[0].total;
     }
@@ -161,7 +165,8 @@ export class AnalyticsService {
   private async getTotalRedirectedSuccess(userId: number) {
     return (await this.urlRepository
       .createQueryBuilder("url")
-      .select("sum(url.redirect_success)", "total")
+      .leftJoinAndSelect("url.analytics", "url_analytics")
+      .select("sum(url_analytics.redirect_success)", "total")
       .where("url.owner_id = :ownerId", { ownerId: userId })
       .getRawMany())[0].total;
   }
@@ -173,17 +178,20 @@ export class AnalyticsService {
     return [
       (await this.urlRepository
         .createQueryBuilder("url")
-        .select("sum(url.visited_by_desktop)", "total")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .select("sum(url_analytics.visited_by_desktop)", "total")
         .where("url.owner_id = :ownerId", { ownerId: userId })
         .getRawMany())[0].total,
       (await this.urlRepository
         .createQueryBuilder("url")
-        .select("sum(url.visited_by_tablet)", "total")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .select("sum(url_analytics.visited_by_tablet)", "total")
         .where("url.owner_id = :ownerId", { ownerId: userId })
         .getRawMany())[0].total,
       (await this.urlRepository
         .createQueryBuilder("url")
-        .select("sum(url.visited_by_mobile)", "total")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .select("sum(url_analytics.visited_by_mobile)", "total")
         .where("url.owner_id = :ownerId", { ownerId: userId })
         .getRawMany())[0].total
     ];
@@ -224,11 +232,6 @@ export class AnalyticsService {
         }
       });
     } else {
-      // return await this.urlRepository
-      //   .createQueryBuilder("url")
-      //   .where("url.owner_id = :ownerId", { ownerId: userId })
-      //   .andWhere("url.custom_back_half is not null")
-      //   .getCount();
       return await this.urlRepository.count({
           where: {
             owner: {

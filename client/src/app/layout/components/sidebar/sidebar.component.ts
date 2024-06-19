@@ -21,4 +21,11 @@ export class SidebarComponent {
   onResize(event: Event): void {
     this.currentScreenWidth = window.innerWidth;
   }
+
+  onClickNavigationItem() {
+    if (this.currentScreenWidth < 1024) {
+      this.isOpenSidebar = !this.isOpenSidebar;
+      this.isInitialSidebarState = false
+    }
+  }
 }

@@ -21,6 +21,7 @@
         class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block"
         routerLink="links"
         routerLinkActive="active"
+        (click)="onClickNavigationItem()"
       >
         <span class="flex items-center gap-1"><i class="icon-link rotate-45"></i> Links</span>
       </a>
@@ -31,6 +32,7 @@
         class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block"
         routerLink="qr-codes"
         routerLinkActive="active"
+        (click)="onClickNavigationItem()"
       >
         <span class="flex items-center gap-1"><i class="icon-qr-code"></i> QR Codes</span>
       </a>
@@ -41,6 +43,7 @@
         class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block"
         routerLink="tags"
         routerLinkActive="active"
+        (click)="onClickNavigationItem()"
       >
         <span class="flex items-center gap-1"><i class="icon-tags"></i> Tags</span>
       </a>
@@ -58,6 +61,7 @@
         class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block"
         routerLink="analytics"
         routerLinkActive="active"
+        (click)="onClickNavigationItem()"
       >
         <span class="flex items-center gap-1"><i class="icon-chart"></i> Analytics</span>
       </a>
@@ -68,6 +72,7 @@
         class="relative hover:text-white hover:bg-secondary px-4 py-2.5 block border-t-2 border-gray-400"
         routerLink="my-account"
         routerLinkActive="active"
+        (click)="onClickNavigationItem()"
       >
         <span class="flex items-center gap-1"><i class="icon-account"></i> My Account</span>
       </a>
@@ -78,6 +83,7 @@
         class="relative hover:text-white hover:bg-secondary rounded-bl-md rounded-br-md px-4 py-2.5 block "
         routerLink="settings"
         routerLinkActive="active"
+        (click)="onClickNavigationItem()"
       >
         <span class="flex items-center gap-1"><i class="icon-settings"></i> Settings</span>
       </a>

@@ -14,6 +14,7 @@ import { TaggedUrl } from 'src/entities/tagged-url.entity';
 import { TagsService } from '../tags/tags.service';
 import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
 import { DeviceType } from './dtos/visit-url.dto';
+import { UrlAnalytics } from 'src/entities/url-analytics.entity';
 
 @Injectable()
 export class UrlsService {
@@ -24,6 +25,8 @@ export class UrlsService {
     private urlRepository: Repository<Url>,
     @InjectRepository(TaggedUrl)
     private taggedUrlRepository: Repository<TaggedUrl>,
+    @InjectRepository(UrlAnalytics)
+    private urlAnalyticsRepository: Repository<UrlAnalytics>,
     private dataSource: DataSource,
     private csvService: CsvService,
     private configService: ConfigService,
@@ -47,12 +50,14 @@ export class UrlsService {
   /** 
    * Describe: Get url by id
   */
-  async getUrlById(id: number) {
+  async getUrlById(id: number, getAnalytics: boolean = false) {
+    const relations = getAnalytics ? ["tags", "analytics"] : ["tags"];
+
     const url = await this.urlRepository.findOne({
       where: {
         id
       },
-      relations: ["tags"],
+      relations,
     })
 
     if (!url) {
@@ -159,7 +164,12 @@ export class UrlsService {
       use_password: !!password,
     });
 
-    return this.urlRepository.save(shortenedUrl);
+    const savedShortenedUrl = await this.urlRepository.save(shortenedUrl);
+    await this.urlAnalyticsRepository.save(
+      this.urlAnalyticsRepository.create({ url: savedShortenedUrl })
+    );
+
+    return savedShortenedUrl;
   }
 
   /** 
@@ -195,7 +205,7 @@ export class UrlsService {
    * Describe: Increment visited count
   */
   async visitUrl(urlId: string, deviceType: DeviceType) {
-    const query = this.urlRepository.createQueryBuilder().update(Url);
+    const query = this.urlAnalyticsRepository.createQueryBuilder().update(UrlAnalytics);
 
     if (deviceType === DeviceType.Desktop) {
       query.set({ visited_by_desktop: () => "visited_by_desktop + 1" });
@@ -205,7 +215,7 @@ export class UrlsService {
       query.set({ visited_by_mobile: () => "visited_by_mobile + 1" });
     }
 
-    return query.where("id = :id", { id: urlId })
+    return query.where("url_id = :id", { id: urlId })
       .execute();
   }
 
@@ -213,10 +223,10 @@ export class UrlsService {
    * Describe: Increment redirect success count
   */
   async redirectSuccessUrl(urlId: string) {
-    return this.urlRepository.createQueryBuilder()
-      .update(Url)
+    return this.urlAnalyticsRepository.createQueryBuilder()
+      .update(UrlAnalytics)
       .set({ redirect_success: () => "redirect_success + 1" })
-      .where("id = :id", { id: urlId })
+      .where("url_id = :id", { id: urlId })
       .execute();
   }
 
@@ -322,6 +332,9 @@ export class UrlsService {
       await queryRunner.manager.delete(TaggedUrl, { 
         url_id: urlId
       });
+      await queryRunner.manager.delete(UrlAnalytics, {
+        url_id: urlId
+      })
       await queryRunner.manager.delete(Url, {
         id: urlId
       })

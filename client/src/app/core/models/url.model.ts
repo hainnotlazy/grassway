@@ -1,3 +1,5 @@
+import { UrlAnalytics } from "./url-analytics.model";
+
 export interface Url {
   id: number;
   origin_url: string;
@@ -8,14 +10,11 @@ export interface Url {
   password?: string;
   use_password: boolean;
   is_active: boolean;
-  redirect_success: number;
-  visited_by_desktop: number;
-  visited_by_tablet: number;
-  visited_by_mobile: number;
   tags: {
     tag_id: number;
     url_id: number;
   }[];
+  analytics: UrlAnalytics;
   created_at: Date;
   updated_at?: Date;
 }

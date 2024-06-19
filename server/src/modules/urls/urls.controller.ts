@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseArrayPipe, ParseIntPipe, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseArrayPipe, ParseBoolPipe, ParseIntPipe, Post, Put, Query, Res } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { ShortenUrlDto } from './dtos/shorten-url.dto';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
@@ -404,8 +404,11 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  getUrlById(@Param("id", ParseIntPipe) id: number) {
-    return this.urlsService.getUrlById(id);
+  getUrlById(
+    @Param("id", ParseIntPipe) id: number,
+    @Query("get_analytics", new DefaultValuePipe(false), ParseBoolPipe) getAnalytics: boolean
+  ) {
+    return this.urlsService.getUrlById(id, getAnalytics);
   }
 
   /** Routes for bulk actions */

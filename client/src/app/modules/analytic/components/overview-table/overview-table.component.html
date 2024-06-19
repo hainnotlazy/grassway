@@ -51,12 +51,12 @@
   <tr>
     <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Total visited</th>
     <td class="border-slate-300 px-4 py-2 font-semibold text-blue-500 break-all border">
-      {{ url.visited_by_desktop + url.visited_by_tablet + url.visited_by_mobile }}
+      {{ url.analytics.visited_by_desktop + url.analytics.visited_by_tablet + url.analytics.visited_by_mobile }}
     </td>
   </tr>
   <tr>
     <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Total redirected success</th>
-    <td class="border-slate-300 text-secondary px-4 py-2 font-semibold break-all border">{{ url.redirect_success }}</td>
+    <td class="border-slate-300 text-secondary px-4 py-2 font-semibold break-all border">{{ url.analytics.redirect_success }}</td>
   </tr>
   <tr>
     <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Tags</th>

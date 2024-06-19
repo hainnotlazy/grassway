@@ -4,10 +4,14 @@ import { AnalyticsController } from './analytics.controller';
 import { AnalyticsService } from './analytics.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SharedModule } from 'src/shared/shared.module';
+import { UrlAnalytics } from 'src/entities/url-analytics.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Url]),
+    TypeOrmModule.forFeature([
+      Url, 
+      UrlAnalytics
+    ]),
     SharedModule
   ],
   controllers: [AnalyticsController],

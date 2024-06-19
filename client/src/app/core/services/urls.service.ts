@@ -40,8 +40,10 @@ export class UrlsService {
   /**
    * Describe: Get url by id
   */
-  getUrlById(id: number) {
-    return this.httpClient.get<Url>(`api/urls/${id}`);
+  getUrlById(id: number, getAnalytics: boolean = false) {
+    const apiEndpoint = getAnalytics ? `api/urls/${id}?get_analytics=${getAnalytics}` : `api/urls/${id}`;
+
+    return this.httpClient.get<Url>(apiEndpoint);
   }
 
   /**

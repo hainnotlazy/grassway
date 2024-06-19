@@ -6,10 +6,15 @@ import { Url } from 'src/entities/url.entity';
 import { SharedModule } from 'src/shared/shared.module';
 import { TaggedUrl } from 'src/entities/tagged-url.entity';
 import { TagsModule } from '../tags/tags.module';
+import { UrlAnalytics } from 'src/entities/url-analytics.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Url, TaggedUrl]),
+    TypeOrmModule.forFeature([
+      Url, 
+      TaggedUrl,
+      UrlAnalytics
+    ]),
     TagsModule,
     SharedModule
   ],

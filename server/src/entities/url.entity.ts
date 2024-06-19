@@ -1,8 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
-import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./user.entity";
 import { TaggedUrl } from "./tagged-url.entity";
+import { UrlAnalytics } from "./url-analytics.entity";
 
 @Entity()
 export class Url {
@@ -17,6 +18,9 @@ export class Url {
 
   @OneToMany(() => TaggedUrl, taggedUrl => taggedUrl.url)
   tags: TaggedUrl[];
+
+  @OneToOne(() => UrlAnalytics, urlAnalytics => urlAnalytics.url)
+  analytics: UrlAnalytics;
 
   @ApiProperty()
   @Column()
@@ -50,22 +54,6 @@ export class Url {
   @ApiProperty()
   @Column({ default: true })
   is_active: boolean;
-
-  @ApiProperty()
-  @Column({ default: 0 })
-  visited_by_desktop: number;
-
-  @ApiProperty()
-  @Column({ default: 0 })
-  visited_by_tablet: number;
-
-  @ApiProperty()
-  @Column({ default: 0 })
-  visited_by_mobile: number;
-
-  @ApiProperty()
-  @Column({ default: 0 })
-  redirect_success: number;
 
   @ApiProperty()
   @CreateDateColumn()

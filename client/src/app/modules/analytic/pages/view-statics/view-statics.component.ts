@@ -34,7 +34,7 @@ export class ViewStaticsPage implements OnInit {
     }
 
     if (urlId) {
-      this.urlsService.getUrlById(parseInt(urlId)).pipe(
+      this.urlsService.getUrlById(parseInt(urlId), true).pipe(
         tap((data) => {
           this.url = {
             ...data,
