@@ -96,9 +96,17 @@ export class UrlsService {
   /**
    * Describe: Increase visited count
   */
-  visitUrl(urlId: number, deviceType: "desktop" | "mobile" | "tablet") {
+  visitUrl(
+    urlId: number,
+    deviceType: "desktop" | "mobile" | "tablet",
+    referrerType: string,
+  ) {
+    if (!["google", "facebook", "twitter", "instagram", "youtube", "reddit", "linkedin", "unknown"].includes(referrerType)) {
+      referrerType = "unknown";
+    }
     return this.httpClient.put(`api/urls/${urlId}/visit`, {
-      deviceType
+      deviceType,
+      referrerType
     });
   }
 

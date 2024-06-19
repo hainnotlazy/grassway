@@ -31,32 +31,36 @@ export class UrlAnalytics {
 
   @ApiProperty()
   @Column({ default: 0 })
-  referer_from_google: number;
+  referrer_from_google: number;
 
   @ApiProperty()
   @Column({ default: 0 })
-  referer_from_facebook: number;
+  referrer_from_facebook: number;
   
   @ApiProperty()
   @Column({ default: 0 })
-  referer_from_instagram: number;
+  referrer_from_instagram: number;
   
   @ApiProperty()
   @Column({ default: 0 })
-  referer_from_youtube: number;
+  referrer_from_youtube: number;
   
   @ApiProperty()
   @Column({ default: 0 })
-  referer_from_reddit: number;
+  referrer_from_reddit: number;
   
   @ApiProperty()
   @Column({ default: 0 })
-  referer_from_twitter: number;
+  referrer_from_twitter: number;
   
   @ApiProperty()
   @Column({ default: 0 })
-  referer_from_linkedin: number;
-  
+  referrer_from_linkedin: number;
+    
+  @ApiProperty()
+  @Column({ default: 0 })
+  referrer_from_unknown: number;
+
   @ApiProperty()
   @UpdateDateColumn()
   @Exclude()

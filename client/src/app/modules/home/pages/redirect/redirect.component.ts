@@ -9,6 +9,7 @@ import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CookieService } from 'ngx-cookie-service';
+import { ReferrerHeader } from 'src/app/core/constants/referrer-header.constant';
 
 @UntilDestroy()
 @Component({
@@ -125,7 +126,11 @@ export class RedirectPage implements OnInit {
         : this.deviceService.isTablet() ? "tablet"
         : "mobile";
 
-      return this.urlsService.visitUrl(urlId, deviceDetected).pipe(
+      return this.urlsService.visitUrl(
+        urlId,
+        deviceDetected,
+        this.handleGetReferrer()
+      ).pipe(
         take(1),
         untilDestroyed(this)
       );
@@ -153,6 +158,15 @@ export class RedirectPage implements OnInit {
       horizontalPosition: "right",
       verticalPosition: "top"
     })
+  }
+
+  private handleGetReferrer() {
+    const referrerLink = document.referrer;
+    const referrer = new URL(referrerLink);
+    const referrerDomain = referrer.hostname;
+
+    const referrerName = ReferrerHeader[referrerDomain] || "unknown";
+    return referrerName;
   }
 
   private getNonTrackDurationCookie(urlId: number, type: "visited" | "redirected") {

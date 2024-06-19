@@ -369,7 +369,7 @@ export class UrlsController {
     description: "Internal server error",
   })
   async visitUrl(@Param("id") id: string, @Body() body: VisitUrlDto) {
-    await this.urlsService.visitUrl(id, body.deviceType);
+    await this.urlsService.visitUrl(id, body.deviceType, body.referrerType);
     return "";
   }
 

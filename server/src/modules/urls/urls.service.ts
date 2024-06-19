@@ -13,7 +13,7 @@ import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
 import { TaggedUrl } from 'src/entities/tagged-url.entity';
 import { TagsService } from '../tags/tags.service';
 import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
-import { DeviceType } from './dtos/visit-url.dto';
+import { DeviceType, ReferrerType } from './dtos/visit-url.dto';
 import { UrlAnalytics } from 'src/entities/url-analytics.entity';
 
 @Injectable()
@@ -204,18 +204,43 @@ export class UrlsService {
   /** 
    * Describe: Increment visited count
   */
-  async visitUrl(urlId: string, deviceType: DeviceType) {
+  async visitUrl(
+    urlId: string, 
+    deviceType: DeviceType, 
+    referrerType?: ReferrerType
+  ) {
     const query = this.urlAnalyticsRepository.createQueryBuilder().update(UrlAnalytics);
+    const propsValue = {};
 
+    // Update visited by device
     if (deviceType === DeviceType.Desktop) {
-      query.set({ visited_by_desktop: () => "visited_by_desktop + 1" });
+      propsValue["visited_by_desktop"] = () => "visited_by_desktop + 1";
     } else if (deviceType === DeviceType.Tablet) {
-      query.set({ visited_by_tablet: () => "visited_by_tablet + 1" });
+      propsValue["visited_by_tablet"] = () => "visited_by_tablet + 1";
     } else if (deviceType === DeviceType.Mobile) {
-      query.set({ visited_by_mobile: () => "visited_by_mobile + 1" });
+      propsValue["visited_by_mobile"] = () => "visited_by_mobile + 1";
+    }
+    
+    // Update referrer
+    if (referrerType && referrerType === ReferrerType.GOOGLE) {
+      propsValue["referrer_from_google"] = () => "referrer_from_google + 1";
+    } else if (referrerType && referrerType === ReferrerType.FACEBOOK) {
+      propsValue["referrer_from_facebook"] = () => "referrer_from_facebook + 1";
+    } else if (referrerType && referrerType === ReferrerType.INSTAGRAM) {
+      propsValue["referrer_from_instagram"] = () => "referrer_from_instagram + 1";
+    } else if (referrerType && referrerType === ReferrerType.REDDIT) {
+      propsValue["referrer_from_reddit"] = () => "referrer_from_reddit + 1";
+    } else if (referrerType && referrerType === ReferrerType.LINKEDIN) {
+      propsValue["referrer_from_linkedin"] = () => "referrer_from_linkedin + 1";
+    } else if (referrerType && referrerType === ReferrerType.YOUTUBE) {
+      propsValue["referrer_from_youtube"] = () => "referrer_from_youtube + 1";
+    } else if (referrerType && referrerType === ReferrerType.TWITTER) {
+      propsValue["referrer_from_twitter"] = () => "referrer_from_twitter + 1";
+    } else {
+      propsValue["referrer_from_unknown"] = () => "referrer_from_unknown + 1";
     }
 
-    return query.where("url_id = :id", { id: urlId })
+    return query.set(propsValue).where("url_id = :id", { id: urlId })
       .execute();
   }
 
