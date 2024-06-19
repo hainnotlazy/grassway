@@ -24,7 +24,7 @@ export class UsersService {
       tap(
         noop,
         (error) => {
-          if (error.error.statusCode === 401) {
+          if ([400, 401, 403, 404].includes(error.error.statusCode)) {
             removeAccessToken();
             this.router.navigate(["/"]);
           }

@@ -8,7 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { isBrowserRefreshed } from 'src/app/app.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @UntilDestroy()
 @Component({
@@ -17,8 +17,11 @@ import { isBrowserRefreshed } from 'src/app/app.component';
   styleUrls: ['./redirect.component.scss']
 })
 export class RedirectPage implements OnInit {
+  private readonly NON_TRACK_INTERVAL = 10 * 60 * 1000;
+
   hidePassword = true;
   isLoading = true;
+  isRedirecting = false;
   countdownTime = 5;
   url?: Url;
 
@@ -33,6 +36,7 @@ export class RedirectPage implements OnInit {
     private route: ActivatedRoute,
     private deviceService: DeviceDetectorService,
     private urlsService: UrlsService,
+    private cookieService: CookieService,
     private snackbar: MatSnackBar
   ) {}
 
@@ -45,18 +49,19 @@ export class RedirectPage implements OnInit {
       this.urlsService.getUrlByBackHalf(backHalf).pipe(
         tap((data) => {
           this.url = data;
-          this.handleCountingAccess(this.url.id, "visit").subscribe();
+          this.handleCountingAccess(this.url.id, "visited").subscribe();
         }),
         finalize(() => this.isLoading = false),
         filter(data => data.is_active),
         filter((data) => !!data && !data.use_password),
         switchMap(() => timer(0, 1000)),
         tap(() => {
-          if (this.countdownTime <= 0) {
+          if (this.countdownTime <= 0 && !this.isRedirecting) {
+            this.isRedirecting = true;
             this.handleCountingAccess(this.url?.id as number, "redirected").pipe(
               tap(() => window.location.href = this.url?.origin_url as string)
             ).subscribe();
-          } else {
+          } else if (!this.isRedirecting) {
             this.countdownTime -= 1;
           }
         }),
@@ -105,10 +110,16 @@ export class RedirectPage implements OnInit {
     ).subscribe();
   }
 
-  private handleCountingAccess(urlId: number, type: "visit" | "redirected") {
-    if (isBrowserRefreshed) {
-      return of();
-    } else if (type === "visit") {
+  private handleCountingAccess(urlId: number, type: "visited" | "redirected") {
+    // if (isBrowserRefreshed) {
+    //   return of();
+    // }
+    if (this.getNonTrackDurationCookie(urlId, type)) {
+      return of({});
+    }
+
+    this.setNonTrackDurationCookie(urlId, type);
+    if (type === "visited") {
       const deviceDetected =
         this.deviceService.isDesktop() ? "desktop"
         : this.deviceService.isTablet() ? "tablet"
@@ -142,5 +153,18 @@ export class RedirectPage implements OnInit {
       horizontalPosition: "right",
       verticalPosition: "top"
     })
+  }
+
+  private getNonTrackDurationCookie(urlId: number, type: "visited" | "redirected") {
+    const totalCookies = this.cookieService.getAll();
+    return totalCookies[`${type}_${urlId.toString()}`];
+  }
+
+  private setNonTrackDurationCookie(urlId: number, type: "visited" | "redirected") {
+    this.cookieService.set(
+      `${type}_${urlId.toString()}`,
+      new Date().toISOString(),
+      new Date(Date.now() + this.NON_TRACK_INTERVAL)
+    )
   }
 }

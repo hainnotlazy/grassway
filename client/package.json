@@ -31,6 +31,7 @@
     "angularx-qrcode": "^16.0.2",
     "chart.js": "^4.4.3",
     "ng2-charts": "^5.0.4",
+    "ngx-cookie-service": "^16.1.0",
     "ngx-device-detector": "^6.0.2",
     "ngx-infinite-scroll": "^16.0.0",
     "qrcode": "^1.5.3",
