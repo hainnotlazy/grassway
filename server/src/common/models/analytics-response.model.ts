@@ -6,8 +6,16 @@ export interface PersonalLinksAnalytics {
   totalClicksByMobile: number;
   totalActiveLinks: number;
   totalInactiveLinks: number;
-  totalCustomBackHalf: number;
-  totalDefaultBackHalf: number;
+  totalReferrers: {
+    google: number;
+    facebook: number;
+    instagram: number;
+    youtube: number;
+    reddit: number;
+    twitter: number;
+    linkedin: number;
+    unknown: number;
+  }
 }
 
 export interface PublicLinksAnalytics {

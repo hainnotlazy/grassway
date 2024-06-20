@@ -105,9 +105,8 @@ export class AnalyticsService {
     const totalActiveLinks = await this.getTotalActiveLinks(currentUser.id);
     const totalInactiveLinks = await this.getTotalInactiveLinks(currentUser.id);
 
-    // Get total custom-back-half & default-back-half links
-    const totalCustomBackHalf = await this.getTotalCustomBackHalfLinks(currentUser.id);
-    const totalDefaultBackHalf = await this.getTotalDefaultBackHalfLinks(currentUser.id);
+    // Get total referrers
+    const totalReferrers = await this.getReferrersStatics(currentUser.id);
 
     return {
       totalVisited: this.parseValueIntoNumber(totalVisited),
@@ -117,8 +116,7 @@ export class AnalyticsService {
       totalClicksByMobile: this.parseValueIntoNumber(totalClicksByMobile),
       totalActiveLinks: this.parseValueIntoNumber(totalActiveLinks),
       totalInactiveLinks: this.parseValueIntoNumber(totalInactiveLinks),
-      totalCustomBackHalf: this.parseValueIntoNumber(totalCustomBackHalf),
-      totalDefaultBackHalf: this.parseValueIntoNumber(totalDefaultBackHalf)
+      totalReferrers
     }
   }
 
@@ -175,25 +173,21 @@ export class AnalyticsService {
    * Describe: Get total clicks by devices
   */
   private async getVisitedByDevices(userId: number) {
+    const statics = await this.urlRepository
+      .createQueryBuilder("url")
+      .leftJoinAndSelect("url.analytics", "url_analytics")
+      .select([
+        "sum(url_analytics.visited_by_desktop) as total_desktop",
+        "sum(url_analytics.visited_by_tablet) as total_tablet",
+        "sum(url_analytics.visited_by_mobile) as total_mobile"
+      ])
+      .where("url.owner_id = :ownerId", { ownerId: userId })
+      .getRawMany();
+
     return [
-      (await this.urlRepository
-        .createQueryBuilder("url")
-        .leftJoinAndSelect("url.analytics", "url_analytics")
-        .select("sum(url_analytics.visited_by_desktop)", "total")
-        .where("url.owner_id = :ownerId", { ownerId: userId })
-        .getRawMany())[0].total,
-      (await this.urlRepository
-        .createQueryBuilder("url")
-        .leftJoinAndSelect("url.analytics", "url_analytics")
-        .select("sum(url_analytics.visited_by_tablet)", "total")
-        .where("url.owner_id = :ownerId", { ownerId: userId })
-        .getRawMany())[0].total,
-      (await this.urlRepository
-        .createQueryBuilder("url")
-        .leftJoinAndSelect("url.analytics", "url_analytics")
-        .select("sum(url_analytics.visited_by_mobile)", "total")
-        .where("url.owner_id = :ownerId", { ownerId: userId })
-        .getRawMany())[0].total
+      this.parseValueIntoNumber(statics[0].total_desktop),
+      this.parseValueIntoNumber(statics[0].total_tablet),
+      this.parseValueIntoNumber(statics[0].total_mobile)
     ];
   }
 
@@ -252,6 +246,37 @@ export class AnalyticsService {
       .where("url.owner_id = :ownerId", { ownerId: userId })
       .andWhere("url.custom_back_half is null")
       .getCount();
+  }
+
+  /**
+   * Describe: Get referrers statics
+  */
+  private async getReferrersStatics(userId: number) {
+    const statics = await this.urlAnalyticsRepository.createQueryBuilder("url_analytics")
+      .select([
+        "sum(url_analytics.referrer_from_google) as total_referrer_from_google",
+        "sum(url_analytics.referrer_from_facebook) as total_referrer_from_facebook",
+        "sum(url_analytics.referrer_from_instagram) as total_referrer_from_instagram",
+        "sum(url_analytics.referrer_from_youtube) as total_referrer_from_youtube",
+        "sum(url_analytics.referrer_from_reddit) as total_referrer_from_reddit",
+        "sum(url_analytics.referrer_from_twitter) as total_referrer_from_twitter",
+        "sum(url_analytics.referrer_from_linkedin) as total_referrer_from_linkedin",
+        "sum(url_analytics.referrer_from_unknown) as total_referrer_from_unknown"
+      ])
+      .getRawMany();
+
+    const totalReferrers = {
+      google: this.parseValueIntoNumber(statics[0].total_referrer_from_google),
+      facebook: this.parseValueIntoNumber(statics[0].total_referrer_from_facebook),
+      instagram: this.parseValueIntoNumber(statics[0].total_referrer_from_instagram),
+      youtube: this.parseValueIntoNumber(statics[0].total_referrer_from_youtube),
+      reddit: this.parseValueIntoNumber(statics[0].total_referrer_from_reddit),
+      twitter: this.parseValueIntoNumber(statics[0].total_referrer_from_twitter),
+      linkedin: this.parseValueIntoNumber(statics[0].total_referrer_from_linkedin),
+      unknown: this.parseValueIntoNumber(statics[0].total_referrer_from_unknown)
+    };
+
+    return totalReferrers;
   }
 
   /**   

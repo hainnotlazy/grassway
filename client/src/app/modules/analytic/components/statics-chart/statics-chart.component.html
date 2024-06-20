@@ -1,34 +1,5 @@
 <div class="sm:flex-row sm:max-w-5xl md:gap-8 flex flex-col gap-4 mx-auto">
   <div class="sm:w-1/2 space-y-2">
-    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks & redirect success</h6>
-    <ng-container
-      *ngIf="(url.analytics.visited_by_desktop + url.analytics.visited_by_tablet + url.analytics.visited_by_mobile > 0)
-      || (url.analytics.redirect_success > 0);
-      else noData"
-    >
-      <canvas
-        baseChart
-        [type]="'bar'"
-        [datasets]="[{
-          label: 'Times',
-          data: [
-            url.analytics.visited_by_desktop + url.analytics.visited_by_tablet + url.analytics.visited_by_mobile,
-            url.analytics.redirect_success
-          ]
-        }]"
-        [labels]="[
-          'Clicked', 'Redirected success'
-        ]"
-        [legend]="true"
-        [options]="{
-          responsive: true
-        }"
-      >
-      </canvas>
-    </ng-container>
-  </div>
-
-  <div class="sm:w-1/2 space-y-2">
     <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks by devices</h6>
     <ng-container
       *ngIf="(url.analytics.visited_by_desktop > 0)
@@ -49,6 +20,50 @@
         }]"
         [labels]="[
           'Desktop', 'Tablet', 'Mobile'
+        ]"
+        [legend]="true"
+        [options]="{
+          responsive: true
+        }"
+      >
+      </canvas>
+    </ng-container>
+  </div>
+
+  <div class="sm:w-1/2 space-y-2">
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Clicks by referrers</h6>
+
+    <ng-container
+      *ngIf="(url.analytics.referrer_from_google > 0)
+      || (url.analytics.referrer_from_facebook > 0)
+      || (url.analytics.referrer_from_instagram > 0)
+      || (url.analytics.referrer_from_youtube > 0)
+      || (url.analytics.referrer_from_linkedin > 0)
+      || (url.analytics.referrer_from_reddit > 0)
+      || (url.analytics.referrer_from_twitter > 0)
+      || (url.analytics.referrer_from_unknown > 0);
+      else noData"
+    >
+      <canvas
+        baseChart
+        [type]="'doughnut'"
+        [datasets]="[{
+          label: 'Times',
+          data: [
+            url.analytics.referrer_from_google,
+            url.analytics.referrer_from_facebook,
+            url.analytics.referrer_from_instagram,
+            url.analytics.referrer_from_youtube,
+            url.analytics.referrer_from_linkedin,
+            url.analytics.referrer_from_reddit,
+            url.analytics.referrer_from_twitter,
+            url.analytics.referrer_from_unknown,
+          ]
+        }]"
+        [labels]="[
+          'Google', 'Facebook', 'Instagram',
+          'Youtube', 'Linkedin', 'Reddit',
+          'Twitter', 'Unknown'
         ]"
         [legend]="true"
         [options]="{

@@ -28,6 +28,49 @@
   </div>
 
   <div *ngIf="
+    overviewAnalytics.totalReferrers.google !== 0
+    || overviewAnalytics.totalReferrers.facebook !== 0
+    || overviewAnalytics.totalReferrers.instagram !== 0
+    || overviewAnalytics.totalReferrers.youtube !== 0
+    || overviewAnalytics.totalReferrers.reddit !== 0
+    || overviewAnalytics.totalReferrers.twitter !== 0
+    || overviewAnalytics.totalReferrers.linkedin !== 0
+    || overviewAnalytics.totalReferrers.unknown !== 0"
+    class="xl:w-1/2 mx-auto space-y-2"
+  >
+    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">
+      Clicks by referrers
+    </h6>
+    <canvas
+      baseChart
+      [type]="'doughnut'"
+      [datasets]="[{
+        label: 'Times',
+        data: [
+          overviewAnalytics.totalReferrers.google,
+          overviewAnalytics.totalReferrers.facebook,
+          overviewAnalytics.totalReferrers.instagram,
+          overviewAnalytics.totalReferrers.youtube,
+          overviewAnalytics.totalReferrers.reddit,
+          overviewAnalytics.totalReferrers.twitter,
+          overviewAnalytics.totalReferrers.linkedin,
+          overviewAnalytics.totalReferrers.unknown
+        ]
+      }]"
+      [labels]="[
+        'Google', 'Facebook', 'Instagram',
+        'Youtube', 'Reddit', 'Twitter',
+        'Linkedin', 'Unknown'
+      ]"
+      [legend]="true"
+      [options]="{
+        responsive: true
+      }"
+    >
+    </canvas>
+  </div>
+
+  <div *ngIf="
     overviewAnalytics.totalClicksByDesktop !== 0
     || overviewAnalytics.totalClicksByTablet !== 0
     || overviewAnalytics.totalClicksByMobile !== 0"
@@ -72,31 +115,6 @@
       }]"
       [labels]="[
         'Active links', 'Inactive links'
-      ]"
-      [legend]="true"
-      [options]="{
-        responsive: true
-      }"
-    >
-    </canvas>
-  </div>
-
-  <div *ngIf="overviewAnalytics.totalCustomBackHalf !== 0 || overviewAnalytics.totalDefaultBackHalf !== 0"
-    class="xl:w-1/2 mx-auto space-y-2"
-  >
-    <h6 class="text-rubik bg-slate-100 px-4 py-2 font-semibold text-center text-gray-600 border border-white rounded-md shadow-md select-none">Custom back-half & back-half</h6>
-    <canvas
-      baseChart
-      [type]="'doughnut'"
-      [datasets]="[{
-        label: 'Times',
-        data: [
-          overviewAnalytics.totalCustomBackHalf,
-          overviewAnalytics.totalDefaultBackHalf
-        ]
-      }]"
-      [labels]="[
-        'Custom back-half links', 'Default back-half links'
       ]"
       [legend]="true"
       [options]="{
