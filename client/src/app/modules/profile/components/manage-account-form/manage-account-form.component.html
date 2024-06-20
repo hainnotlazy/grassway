@@ -1,8 +1,8 @@
 <div class="md:flex-row flex flex-col gap-4 my-4">
   <div class="flex flex-col gap-4 px-4">
-    <div class="md:my-0 user-avatar-col relative inline-flex m-auto">
+    <div class="md:my-0 user-avatar-col group relative inline-flex m-auto">
       <img
-        class="border-secondary aspect-square w-auto h-full border-2 rounded-full"
+        class="border-secondary aspect-square group-hover:brightness-50 group-hover:p-1 w-auto h-full border-2 rounded-full"
         [src]="avatarUrl"
         alt="User's avatar"
         width="250"
@@ -10,6 +10,7 @@
         loading="eager"
         draggable="false"
       >
+      <i class="icon-camera left-1/2 top-1/2 group-hover:opacity-100 group-hover:scale-100 absolute text-5xl text-white transition-all duration-300 scale-75 -translate-x-1/2 -translate-y-1/2 opacity-0"></i>
       <input
         #avatarInput
         class="absolute top-0 bottom-0 left-0 right-0 opacity-0 cursor-pointer"

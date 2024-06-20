@@ -50,9 +50,9 @@
 
       <div class="flex flex-col gap-2">
         <span class="text-gray-500">Logo:</span>
-        <div class=" w-28 max-w-28 min-w-28 relative inline-flex mb-4 cursor-pointer">
+        <div class="group w-28 max-w-28 min-w-28 relative inline-flex mb-4 cursor-pointer">
           <img
-            class="aspect-square w-auto h-full border-2 border-gray-300 rounded-md"
+            class="aspect-square group-hover:opacity-75 w-auto h-full border-2 border-gray-300 rounded-md"
             [src]="logoUrl"
             alt="Personal logo"
             width="100"
@@ -60,6 +60,7 @@
             loading="eager"
             draggable="false"
           >
+          <i class="icon-camera left-1/2 top-1/2 group-hover:opacity-100 group-hover:scale-100 absolute text-5xl text-black transition-all duration-300 scale-75 -translate-x-1/2 -translate-y-1/2 opacity-0"></i>
           <input
             #logoInput
             class="absolute top-0 bottom-0 left-0 right-0 opacity-0 cursor-pointer"
