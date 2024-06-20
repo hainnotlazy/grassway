@@ -14,9 +14,15 @@ export interface GetKeyRedisOptions {
   database?: RedisDatabase;
 }
 
+export interface RemoveKeyRedisOptions {
+  key: string;
+  database?: RedisDatabase;
+}
+
 export enum RedisDatabase {
   JWT_BLACKLIST = 0,
   PUBLIC_ANALYTICS = 1,
+  NOTIFICATION_SOCKET = 2
 }
 
 @Injectable()
@@ -57,6 +63,27 @@ export class RedisService {
 
     await this.selectDatabase(database);
     return this.redisService.get(key);
+  }
+
+  /** 
+   * Describe: Remove key in redis
+   */
+  async removeKey(options: RemoveKeyRedisOptions) {
+    const {
+      key,
+      database = RedisDatabase.JWT_BLACKLIST
+    } = options;
+
+    await this.selectDatabase(database);
+    return await this.redisService.del(key);
+  }
+
+  /**  
+   * Describe: Flush specific database in redis
+  */
+  async flushDatabase(database: RedisDatabase) {
+    await this.selectDatabase(database);
+    return await this.redisService.flushdb();
   }
 
   /** 

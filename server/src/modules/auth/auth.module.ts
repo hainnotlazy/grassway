@@ -39,6 +39,7 @@ import { UrlsModule } from '../urls/urls.module';
     }
   ],
   exports: [
+    AuthService
   ]
 })
 export class AuthModule {}

@@ -7,9 +7,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
 import { JwtModule } from '@auth0/angular-jwt';
-import { JwtConfigOptions } from "./core/config/jwt.config";
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { CookieService } from 'ngx-cookie-service';
+import { SocketIoModule } from 'ngx-socket-io';
+import { JwtConfigOptions } from './core/config';
+import { NotificationSocket } from './core/sockets/notification.socket';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { CookieService } from 'ngx-cookie-service';
     BrowserAnimationsModule,
     LayoutModule,
     HttpClientModule,
-    JwtModule.forRoot(JwtConfigOptions)
+    JwtModule.forRoot(JwtConfigOptions),
+    SocketIoModule
   ],
   providers: [
     {
@@ -29,6 +32,7 @@ import { CookieService } from 'ngx-cookie-service';
       useClass: AuthInterceptor,
       multi: true
     },
+    NotificationSocket,
     CookieService
   ],
   bootstrap: [AppComponent]

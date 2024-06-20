@@ -15,6 +15,7 @@ import { TagsModule } from './modules/tags/tags.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { HealthModule } from './modules/health/health.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 const appModules = [
   HealthModule,
@@ -38,6 +39,7 @@ const appModules = [
       useClass: config.MailerConfigOptions
     }),
     ...appModules,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [

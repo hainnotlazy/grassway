@@ -312,6 +312,13 @@ export class AuthService {
     })
   }
 
+  /**  
+   * Describe: Extract payload from access token
+  */
+  async extractTokenPayload(token: string) {
+    return this.jwtService.verify(token);
+  }
+
   /**
    * Describe: Check if access token is blacklisted
   */
