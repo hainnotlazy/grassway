@@ -6,6 +6,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Url } from "./url.entity";
 import { Tag } from "./tag.entity";
 import { UserSetting } from "./user-setting.entity";
+import { UserNotification } from "./user-notification.entity";
 
 enum GenderTypes {
   MALE = "male",
@@ -20,6 +21,9 @@ export class User {
 
   @OneToOne(() => UserSetting, setting => setting.user)
   setting: UserSetting;
+
+  @OneToMany(() => UserNotification, notification => notification.user)
+  notifications: UserNotification;
 
   @OneToMany(() => Url, url => url.owner)
   urls: Url[];

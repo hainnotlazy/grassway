@@ -1,0 +1,38 @@
+<button
+  class="hover:text-secondary focus:outline-none flex items-center text-2xl text-gray-500"
+  type="button"
+  [matMenuTriggerFor]="notificationMenu"
+  #menuTrigger="matMenuTrigger"
+>
+  <i class="icon-notification"></i>
+</button>
+
+<mat-menu
+  #notificationMenu="matMenu"
+  xPosition="before"
+  class="text-roboto-condensed !max-w-72 sm:!max-w-96 mt-4 ml-6 sm:ml-0"
+>
+  <div class="w-72 sm:w-96 flex flex-col">
+
+    <div class="flex justify-between gap-4 border-b border-gray-300 px-4 py-2.5">
+      <span class="text-lg font-semibold cursor-default select-none">Notifications</span>
+      <button class="text-primary hover:text-secondary">
+        Mark all as read
+      </button>
+    </div>
+
+    <div class="">
+      <div class="px-4 py-2.5 hover:bg-slate-100 hover:shadow cursor-pointer flex items-center gap-4">
+        <div class="min-h-1 min-w-1 w-1 h-1 -mr-2 bg-blue-600 rounded-full"></div>
+        <i class="icon-celebration text-3xl text-yellow-500"></i>
+        <div class="flex-grow">
+          <span class="text-primary font-semibold">Welcome to Grassway</span>
+          <p class="text-gray-500">Ex quis minim do amet magna est ea adipisicing elit elit pariatur.</p>
+        </div>
+        <button>
+          <i class="icon-more-vert text-xl text-gray-700"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-menu>

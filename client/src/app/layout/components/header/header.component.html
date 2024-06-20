@@ -33,7 +33,10 @@
     </div>
 
     <ng-template #loggedIn>
-      <app-user-navigation></app-user-navigation>
+      <div class="flex items-center gap-4">
+        <app-notification></app-notification>
+        <app-user-navigation></app-user-navigation>
+      </div>
     </ng-template>
   </div>
 </header>

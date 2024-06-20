@@ -11,12 +11,15 @@ import * as bcrypt from 'bcrypt';
 import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
 import { UrlsService } from '../urls/urls.service';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { NotificationType, UserNotification } from 'src/entities/user-notification.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(UserNotification)
+    private userNotificationRepository: Repository<UserNotification>,
     private urlService: UrlsService,
     private uploadFileService: UploadFileService,
     private mailerServer: MailerService
@@ -81,6 +84,15 @@ export class UsersService {
     // Handled hash password in entity layer
     const newUser = this.userRepository.create(registerUser);
     const savedUser = await this.userRepository.save(newUser);
+
+    // Save notification
+    const newNotification = this.userNotificationRepository.create({
+      user: savedUser,
+      title: "Welcome to Grassway! 🎉",
+      description: "Let's get started with your first link.",
+      type: NotificationType.CONGRATULATION
+    })
+    await this.userNotificationRepository.save(newNotification);
 
     // Handle to save referral links
     if (refLinksId.length > 0) {
