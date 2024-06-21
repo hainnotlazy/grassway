@@ -1,7 +1,8 @@
-import { Controller, DefaultValuePipe, Get, ParseIntPipe, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Put, Query } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { CurrentUser } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
+import { ChangeNotificationStatusDto } from './dtos/change-notification-status.dto';
 
 @Controller('notification')
 export class NotificationController {
@@ -19,5 +20,34 @@ export class NotificationController {
       page,
       limit
     });
+  }
+
+  @Put("/bulk/change-status")
+  @HttpCode(204)
+  async bulkChangeNotificationStatus(
+    @CurrentUser() currentUser: User,
+    @Body() body: ChangeNotificationStatusDto
+  ) {
+    await this.notificationService.bulkChangeNotificationStatus(currentUser, body);
+    return "";
+  }
+
+  @Put("/:id/change-status")
+  async changeNotificationStatus(
+    @CurrentUser() currentUser: User,
+    @Param("id", ParseIntPipe) id: number,
+    @Body() body: ChangeNotificationStatusDto
+  ) {
+    return await this.notificationService.changeNotificationStatus(currentUser, id, body);
+  }
+
+  @Delete("/:id")
+  @HttpCode(204)
+  async deleteNotification(
+    @CurrentUser() currentUser: User,
+    @Param("id", ParseIntPipe) id: number
+  ) {
+    await this.notificationService.deleteNotification(currentUser, id);
+    return "";
   }
 }

@@ -27,4 +27,20 @@ export class NotificationService {
   getNewNotification() {
     return this.socket.fromEvent<UserNotification>(this.NEW_NOTIFICATION_EVENT_NAME);
   }
+
+  changeNotificationStatus(id: number, isRead: boolean) {
+    return this.httpClient.put<UserNotification>(`api/notification/${id}/change-status`, {
+      is_read: isRead
+    });
+  }
+
+  changeAllNotificationStatus(isRead: boolean) {
+    return this.httpClient.put(`api/notification/bulk/change-status`, {
+      is_read: isRead
+    });
+  }
+
+  deleteNotification(id: number) {
+    return this.httpClient.delete(`api/notification/${id}`);
+  }
 }

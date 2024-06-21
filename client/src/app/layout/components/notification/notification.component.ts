@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, scan, startWith, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, finalize, scan, shareReplay, startWith, switchMap, take, tap } from 'rxjs';
 import { GetNotificationOptions } from 'src/app/core/interfaces/get-notifications-options.interface';
 import { NotificationResponse } from 'src/app/core/interfaces/notification-response.interface';
 import { UserNotification } from 'src/app/core/models/user-notification.model';
@@ -13,6 +13,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
   styleUrls: ['./notification.component.scss']
 })
 export class NotificationComponent {
+  isProcessing = false;
   currentPage = 1;
   totalPages = 1;
   isInitialLoad = false;
@@ -25,11 +26,20 @@ export class NotificationComponent {
   };
 
   private listNotificationsSubject = new BehaviorSubject<NotificationResponse | null>(null);
-  listNotifications$ = this.listNotificationsSubject.asObservable();
+  private listNotifications$ = this.listNotificationsSubject.asObservable();
+
+  updateNotificationSubject = new BehaviorSubject<UserNotification | null>(null);
+  private updateNotification$ = this.updateNotificationSubject.asObservable();
+
+  removeNotificationSubject = new BehaviorSubject<UserNotification | null>(null);
+  private removeNotification$ = this.removeNotificationSubject.asObservable();
+  private removedNotificationId: number[] = [];
 
   notifications$ = combineLatest([
     this.listNotifications$,
-    this.notificationService.getNewNotification().pipe(startWith(null))
+    this.notificationService.getNewNotification().pipe(startWith(null)),
+    this.updateNotification$,
+    this.removeNotification$
   ]).pipe(
     filter(([notification]) => !!notification),
     tap(([notification]) => {
@@ -37,12 +47,29 @@ export class NotificationComponent {
       this.currentPage = responseMeta.currentPage;
       this.totalPages = responseMeta.totalPages;
     }),
-    scan((accumulator: UserNotification[], [notifications, newNotification]) => {
+    scan((accumulator: UserNotification[], [notifications, newNotification, updatedNotification, removedNotification]) => {
       accumulator = [...accumulator, ...(notifications as NotificationResponse).data];
 
+      // Add new notification
       if (newNotification) {
         accumulator = [newNotification, ...accumulator];
       }
+
+      // Update notification
+      if (updatedNotification) {
+        accumulator = accumulator.map(notification => {
+          if (notification.id === updatedNotification.id) {
+            return updatedNotification;
+          }
+          return notification;
+        });
+      }
+
+      // Remove notification
+      if (removedNotification) {
+        this.removedNotificationId.push(removedNotification.id);
+      }
+      accumulator = accumulator.filter(notification => !this.removedNotificationId.includes(notification.id));
 
       // Remove duplicate notification
       accumulator = this.removeDuplicateNotification(accumulator);
@@ -54,7 +81,8 @@ export class NotificationComponent {
         this.isLoading = false;
       }
       this.isInitialLoad = true;
-    })
+    }),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   constructor(
@@ -89,6 +117,24 @@ export class NotificationComponent {
         untilDestroyed(this),
       ).subscribe();
     }
+  }
+
+  onBulkChangeStatus() {
+    if (this.isProcessing) return;
+
+    this.isProcessing = true;
+    this.notificationService.changeAllNotificationStatus(true).pipe(
+      switchMap(() => this.notifications$),
+      take(1),
+      tap((notifications: UserNotification[]) => {
+        for (const notification of notifications) {
+          notification.is_read = true;
+          this.updateNotificationSubject.next(notification);
+        }
+      }),
+      finalize(() => this.isProcessing = false),
+      untilDestroyed(this)
+    ).subscribe()
   }
 
   private removeDuplicateNotification(notifications: UserNotification[]) {

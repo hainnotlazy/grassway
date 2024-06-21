@@ -28,6 +28,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from "@angular/material/chips";
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
 
 const MatModules = [
   MatFormFieldModule,
@@ -60,7 +61,8 @@ const ExternalModules = [
   declarations: [
     TruncatePipe,
     GetThirdPartyNamePipe,
-    CountdownPipe
+    CountdownPipe,
+    TimeAgoPipe
   ],
   imports: [
     CommonModule,
@@ -73,6 +75,7 @@ const ExternalModules = [
     TruncatePipe,
     GetThirdPartyNamePipe,
     CountdownPipe,
+    TimeAgoPipe,
     ...MatModules,
     ...ExternalModules
   ]

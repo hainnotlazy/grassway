@@ -14,6 +14,8 @@ import { FullLayout } from './full-layout/full-layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserNavigationComponent } from './components/user-navigation/user-navigation.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { NotificationItemComponent } from './components/notification-item/notification-item.component';
+import { NotificationIconComponent } from './components/notification-icon/notification-icon.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { NotificationComponent } from './components/notification/notification.co
     SidebarComponent,
     UserNavigationComponent,
     NotificationComponent,
+    NotificationItemComponent,
+    NotificationIconComponent,
   ],
   imports: [
     CommonModule,

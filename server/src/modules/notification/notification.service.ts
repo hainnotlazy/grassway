@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { NotificationGateway } from './notification.gateway';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserNotification } from 'src/entities/user-notification.entity';
@@ -7,6 +7,7 @@ import { User } from 'src/entities/user.entity';
 import { CreateNotificationDto } from './dtos/create-notification.dto';
 import { GetNotificationsOptions } from 'src/common/models/get-notifications-options.model';
 import { paginate } from 'nestjs-paginate';
+import { ChangeNotificationStatusDto } from './dtos/change-notification-status.dto';
 
 @Injectable()
 export class NotificationService {
@@ -73,5 +74,61 @@ export class NotificationService {
     }
 
     return savedNotification;
+  }
+
+  /**
+   * Describe: Change notification status
+   */
+  async changeNotificationStatus(
+    user: User,
+    notificationId: number,
+    changeNotificationStatusDto: ChangeNotificationStatusDto
+  ) {
+    const { is_read: isRead } = changeNotificationStatusDto;
+    const existedNotification = await this.userNotificationRepository.findOne({
+      where: {
+        id: notificationId,
+        user: {
+          id: user.id
+        }
+      }
+    });
+
+    if (!existedNotification) {  
+      throw new NotFoundException("Notification not found");
+    } 
+
+    existedNotification.is_read = isRead;
+    return await this.userNotificationRepository.save(existedNotification);
+  }
+
+
+  /** 
+   * Describe: Delete notification
+  */
+  async deleteNotification(user: User, notificationId: number) {
+    return await this.userNotificationRepository.delete({
+      id: notificationId,
+      user: {
+        id: user.id
+      }
+    });
+  }
+
+  /**
+   * Describe: Change all notifications status
+  */
+  async bulkChangeNotificationStatus(
+    user: User, 
+    changeNotificationStatusDto: ChangeNotificationStatusDto
+  ) {
+    const { is_read: isRead } = changeNotificationStatusDto;
+
+    const queryBuilder = this.userNotificationRepository.createQueryBuilder()
+      .update(UserNotification)
+      .set({ is_read: isRead })
+      .where("user_id = :userId", { userId: user.id })
+
+    return await queryBuilder.execute();
   }
 }

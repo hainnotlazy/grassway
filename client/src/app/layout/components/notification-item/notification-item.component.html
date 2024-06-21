@@ -1,0 +1,48 @@
+<div
+  class="px-4 py-2.5 hover:bg-slate-100 hover:shadow cursor-pointer flex items-center gap-4"
+  (click)="$event.stopPropagation()"
+>
+  <div
+    class="min-h-1 min-w-1 w-1 h-1 -mr-2 bg-blue-600 rounded-full"
+    [class]="notification.is_read ? 'bg-transparent' : 'bg-blue-600'"
+  ></div>
+  <app-notification-icon [type]="notification.type"></app-notification-icon>
+  <div class="flex-grow">
+    <span class="text-primary font-semibold">{{ notification.title }} - {{ notification.id }}</span>
+    <p class="text-gray-500">{{ notification.description }}</p>
+    <small>{{ notification.created_at | timeAgo | async }}</small>
+  </div>
+  <button
+    type="button"
+    [matMenuTriggerFor]="itemMenu"
+  >
+    <i class="icon-more-vert hover:text-black text-xl text-gray-700"></i>
+  </button>
+
+  <mat-menu
+    #itemMenu="matMenu"
+    xPosition="after"
+    class="text-roboto-condensed !p-0"
+  >
+    <div (click)="$event.stopPropagation()" class="flex flex-col">
+      <button
+        class="text-start hover:bg-gray-200 disabled:bg-white disabled:text-sky-400 disabled:cursor-not-allowed flex items-center gap-1 px-3 py-2"
+        type="button"
+        (click)="onChangeStatus(!notification.is_read)"
+        [disabled]="isProcessing"
+      >
+        <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
+        Mark as {{ notification.is_read ? 'unread' : 'read' }}
+      </button>
+      <button
+        class="text-start hover:bg-gray-200 disabled:text-sky-400 disabled:cursor-not-allowed disabled:bg-white flex items-center gap-1 px-3 py-2"
+        type="button"
+        (click)="onDelete()"
+        [disabled]="isProcessing"
+      >
+        <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
+        Remove this notification
+      </button>
+    </div>
+  </mat-menu>
+</div>

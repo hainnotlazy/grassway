@@ -13,14 +13,20 @@
 >
   <div class="w-72 sm:w-96 flex flex-col">
 
-    <div class="flex justify-between gap-4 border-b border-gray-300 px-4 py-2.5">
+    <div
+      class="flex justify-between gap-4 border-b border-gray-300 px-4 py-2.5"
+      (click)="$event.stopPropagation()"
+    >
       <span class="text-lg font-semibold cursor-default select-none">Notifications</span>
       <button
         *ngIf="!hasLoadingError"
-        class="text-primary hover:text-secondary"
+        class="text-primary hover:text-secondary disabled:text-sky-400 disabled:cursor-not-allowed flex items-center gap-2"
         type="button"
+        [disabled]="isProcessing"
+        (click)="onBulkChangeStatus()"
       >
-        Mark all as read
+        <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
+        {{ isProcessing ? 'Processing' : 'Mark all as read' }}
       </button>
     </div>
 
@@ -33,22 +39,12 @@
       [scrollWindow]="false"
       (scrolled)="onScrollDown()"
     >
-
-      <div
+      <app-notification-item
         *ngFor="let notification of notifications$ | async"
-        class="px-4 py-2.5 hover:bg-slate-100 hover:shadow cursor-pointer flex items-center gap-4"
-      >
-        <div class="min-h-1 min-w-1 w-1 h-1 -mr-2 bg-blue-600 rounded-full"></div>
-        <i class="icon-celebration text-3xl text-yellow-500"></i>
-        <div class="flex-grow">
-          <span class="text-primary font-semibold">{{ notification.title }} - {{ notification.id }}</span>
-          <p class="text-gray-500">{{ notification.description }}</p>
-        </div>
-        <button>
-          <i class="icon-more-vert text-xl text-gray-700"></i>
-        </button>
-      </div>
-
+        [notification]="notification"
+        [updateNotificationSubject]="updateNotificationSubject"
+        [removeNotificationSubject]="removeNotificationSubject"
+      ></app-notification-item>
     </div>
 
     <ng-template #loadingError>

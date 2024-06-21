@@ -30,7 +30,10 @@
     xPosition="before"
     class="text-roboto-condensed mt-1"
   >
-    <div class="border-b-gray-300 flex gap-3 px-4 border-b py-2.5">
+    <div
+      class="border-b-gray-300 flex gap-3 px-4 border-b py-2.5"
+      (click)="$event.stopPropagation()"
+    >
       <div>
         <img
           class="navigation-avatar border-primary border-2 rounded-md"
