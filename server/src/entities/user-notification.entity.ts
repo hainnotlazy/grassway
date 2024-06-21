@@ -5,6 +5,7 @@ import { Exclude } from "class-transformer";
 export enum NotificationType {
   INFORMATION = "information",
   CONGRATULATION = "congratulation",
+  UPDATE_PROFILE = "update_profile",
   UPDATE_SETTINGS = "update_settings",
 }
 

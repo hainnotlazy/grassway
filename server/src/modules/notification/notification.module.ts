@@ -3,11 +3,18 @@ import { NotificationController } from './notification.controller';
 import { NotificationService } from './notification.service';
 import { NotificationGateway } from './notification.gateway';
 import { SharedModule } from 'src/shared/shared.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserNotification } from 'src/entities/user-notification.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtConfigOptions } from 'src/config';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
-    AuthModule,
+    TypeOrmModule.forFeature([UserNotification]),
+    JwtModule.registerAsync({
+      useClass: JwtConfigOptions
+    }),
     SharedModule
   ],
   controllers: [
@@ -16,6 +23,9 @@ import { AuthModule } from '../auth/auth.module';
   providers: [
     NotificationService, 
     NotificationGateway
+  ],
+  exports: [
+    NotificationService
   ]
 })
 export class NotificationModule {}

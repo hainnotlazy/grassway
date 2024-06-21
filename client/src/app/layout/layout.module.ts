@@ -28,7 +28,7 @@ import { NotificationComponent } from './components/notification/notification.co
     FullLayout,
     SidebarComponent,
     UserNavigationComponent,
-    NotificationComponent
+    NotificationComponent,
   ],
   imports: [
     CommonModule,

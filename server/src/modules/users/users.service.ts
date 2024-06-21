@@ -12,6 +12,7 @@ import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
 import { UrlsService } from '../urls/urls.service';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { NotificationType, UserNotification } from 'src/entities/user-notification.entity';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +22,7 @@ export class UsersService {
     @InjectRepository(UserNotification)
     private userNotificationRepository: Repository<UserNotification>,
     private urlService: UrlsService,
+    private notificationService: NotificationService,
     private uploadFileService: UploadFileService,
     private mailerServer: MailerService
   ) {}
@@ -126,8 +128,19 @@ export class UsersService {
 
     // Update user
     Object.assign(currentUser, updateProfileDto);
+    const updatedUser = await this.userRepository.save(currentUser);
 
-    return await this.userRepository.save(currentUser);
+    // Push notification
+    await this.notificationService.createNewNotification(
+      updatedUser, 
+      {
+        title: "Updated profile successfully",
+        description: "You have successfully updated your profile.",
+        type: NotificationType.UPDATE_PROFILE
+      }
+    )
+
+    return updatedUser;
   }
 
   /** Describe: Change password */
