@@ -119,7 +119,6 @@ export class RedirectPage implements OnInit {
       return of({});
     }
 
-    this.setNonTrackDurationCookie(urlId, type);
     if (type === "visited") {
       const deviceDetected =
         this.deviceService.isDesktop() ? "desktop"
@@ -132,11 +131,13 @@ export class RedirectPage implements OnInit {
         this.handleGetReferrer()
       ).pipe(
         take(1),
+        tap(() => this.setNonTrackDurationCookie(urlId, type)),
         untilDestroyed(this)
       );
     } else {
       return this.urlsService.redirectSuccess(urlId).pipe(
         take(1),
+        tap(() => this.setNonTrackDurationCookie(urlId, type)),
         untilDestroyed(this)
       );
     }

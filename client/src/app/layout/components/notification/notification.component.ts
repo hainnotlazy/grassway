@@ -53,9 +53,7 @@ export class NotificationComponent implements OnInit {
       this.currentPage = responseMeta.currentPage;
       this.totalPages = responseMeta.totalPages;
 
-      console.log(this.totalItems, newNotification);
       if (this.totalItems === 0 && newNotification) {
-        console.log("was here");
         this.totalItems = 1;
       }
     }),

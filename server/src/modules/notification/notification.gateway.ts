@@ -23,7 +23,7 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
     try {
       const accessToken = socket.handshake.headers.authorization.replace("Bearer ", "");
       const user = await this.extractTokenPayload(accessToken);
-  
+
       if (!user) {
         this.disconnectSocket(socket);
       } else if (await this.isTokenBlacklisted(accessToken) || !user.isActive) {
