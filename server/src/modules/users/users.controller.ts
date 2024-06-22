@@ -355,6 +355,20 @@ export class UsersController {
 
   @PublicRoute()
   @Post("/forget-password")
+  @HttpCode(200)
+  @ApiOperation({
+    summary: "Forget password"
+  })
+  @ApiOkResponse({
+    description: "Send reset password code successfully",
+    type: User
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async forgetPassword(@Body() body: ForgetPasswordDto) {
     return this.usersService.forgetPassword(body.email);
   }
@@ -362,6 +376,21 @@ export class UsersController {
   @PublicRoute()
   @Put("/reset-password")
   @HttpCode(204)
+  @ApiOperation({
+    summary: "Reset password"
+  })
+  @ApiNoContentResponse({
+    description: "Reset password successfully",
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid reset code"
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   async resetPassword(@Body() body: ResetPasswordDto) {
     await this.usersService.resetPassword(body);
     return "";
