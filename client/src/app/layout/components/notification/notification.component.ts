@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, combineLatest, filter, finalize, scan, shareReplay, startWith, switchMap, take, tap } from 'rxjs';
 import { GetNotificationOptions } from 'src/app/core/interfaces/get-notifications-options.interface';
@@ -10,10 +10,15 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  styleUrls: ['./notification.component.scss'],
+  host: {
+    class: 'relative',
+  }
 })
-export class NotificationComponent {
+export class NotificationComponent implements OnInit {
   isProcessing = false;
+  isNotificationMenuOpen = false;
+  totalItems: number | null = null;
   currentPage = 1;
   totalPages = 1;
   isInitialLoad = false;
@@ -28,11 +33,11 @@ export class NotificationComponent {
   private listNotificationsSubject = new BehaviorSubject<NotificationResponse | null>(null);
   private listNotifications$ = this.listNotificationsSubject.asObservable();
 
-  updateNotificationSubject = new BehaviorSubject<UserNotification | null>(null);
-  private updateNotification$ = this.updateNotificationSubject.asObservable();
+  updateNotificationSubject = new BehaviorSubject<UserNotification | null | "all">(null);
+  updateNotification$ = this.updateNotificationSubject.asObservable();
 
   removeNotificationSubject = new BehaviorSubject<UserNotification | null>(null);
-  private removeNotification$ = this.removeNotificationSubject.asObservable();
+  removeNotification$ = this.removeNotificationSubject.asObservable();
   private removedNotificationId: number[] = [];
 
   notifications$ = combineLatest([
@@ -44,6 +49,7 @@ export class NotificationComponent {
     filter(([notification]) => !!notification),
     tap(([notification]) => {
       const responseMeta = (notification as NotificationResponse).meta;
+      this.totalItems = responseMeta.totalItems;
       this.currentPage = responseMeta.currentPage;
       this.totalPages = responseMeta.totalPages;
     }),
@@ -56,7 +62,7 @@ export class NotificationComponent {
       }
 
       // Update notification
-      if (updatedNotification) {
+      if (updatedNotification && updatedNotification !== "all") {
         accumulator = accumulator.map(notification => {
           if (notification.id === updatedNotification.id) {
             return updatedNotification;
@@ -131,6 +137,7 @@ export class NotificationComponent {
           notification.is_read = true;
           this.updateNotificationSubject.next(notification);
         }
+        this.updateNotificationSubject.next("all");
       }),
       finalize(() => this.isProcessing = false),
       untilDestroyed(this)

@@ -18,7 +18,7 @@ export class NotificationItemComponent {
 
   @Input() notification!: UserNotification;
 
-  @Input() updateNotificationSubject!: BehaviorSubject<UserNotification | null>;
+  @Input() updateNotificationSubject!: BehaviorSubject<UserNotification | null | "all">;
   @Input() removeNotificationSubject!: BehaviorSubject<UserNotification | null>;
 
   constructor(

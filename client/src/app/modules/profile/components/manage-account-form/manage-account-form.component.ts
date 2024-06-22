@@ -130,6 +130,7 @@ export class ManageAccountFormComponent implements OnInit {
       horizontalPosition: "right",
       verticalPosition: "top"
     })
+    this.manageAccountForm.markAsPristine();
   }
 
   private handleUpdateFail(error: any) {

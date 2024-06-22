@@ -1,9 +1,16 @@
 <button
-  class="hover:text-secondary focus:outline-none flex items-center text-2xl text-gray-500"
+  class="hover:text-secondary focus:outline-none group relative flex items-center text-3xl"
+  [class]="{'text-primary': isNotificationMenuOpen, 'text-gray-500': !isNotificationMenuOpen}"
   type="button"
   [matMenuTriggerFor]="notificationMenu"
+  (menuOpened)="isNotificationMenuOpen = true"
+  (menuClosed)="isNotificationMenuOpen = false"
 >
   <i class="icon-notification"></i>
+  <app-notification-unread-count
+    [updateNotification$]="updateNotification$"
+    [removeNotification$]="removeNotification$"
+  ></app-notification-unread-count>
 </button>
 
 <mat-menu
@@ -30,22 +37,31 @@
       </button>
     </div>
 
-    <div
-      *ngIf="!hasLoadingError; else loadingError"
-      class="h-96 max-h-96 min-h-96 overflow-y-auto"
-      infiniteScroll
-      [infiniteScrollDistance]="1"
-      [infiniteScrollThrottle]="150"
-      [scrollWindow]="false"
-      (scrolled)="onScrollDown()"
-    >
-      <app-notification-item
-        *ngFor="let notification of notifications$ | async"
-        [notification]="notification"
-        [updateNotificationSubject]="updateNotificationSubject"
-        [removeNotificationSubject]="removeNotificationSubject"
-      ></app-notification-item>
-    </div>
+    <ng-container *ngIf="!hasLoadingError; else loadingError">
+      <div
+        *ngIf="totalItems === null || totalItems > 0; else noNotifications"
+        class="h-96 max-h-96 min-h-96 overflow-y-auto"
+        infiniteScroll
+        [infiniteScrollDistance]="1"
+        [infiniteScrollThrottle]="150"
+        [scrollWindow]="false"
+        (scrolled)="onScrollDown()"
+      >
+        <app-notification-item
+          *ngFor="let notification of notifications$ | async"
+          [notification]="notification"
+          [updateNotificationSubject]="updateNotificationSubject"
+          [removeNotificationSubject]="removeNotificationSubject"
+        ></app-notification-item>
+      </div>
+
+      <ng-template #noNotifications>
+        <div class="h-96 max-h-96 min-h-96 text-primary flex flex-col items-center justify-center gap-4">
+          <i class="icon-excited text-7xl"></i>
+          <span class="text-lg">You have no notifications now!</span>
+        </div>
+      </ng-template>
+    </ng-container>
 
     <ng-template #loadingError>
       <div class="h-96 max-h-96 min-h-96 flex flex-col items-center justify-center gap-4 text-gray-600">

@@ -16,6 +16,7 @@ import { UserNavigationComponent } from './components/user-navigation/user-navig
 import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationItemComponent } from './components/notification-item/notification-item.component';
 import { NotificationIconComponent } from './components/notification-icon/notification-icon.component';
+import { NotificationUnreadCountComponent } from './components/notification-unread-count/notification-unread-count.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NotificationIconComponent } from './components/notification-icon/notifi
     NotificationComponent,
     NotificationItemComponent,
     NotificationIconComponent,
+    NotificationUnreadCountComponent,
   ],
   imports: [
     CommonModule,

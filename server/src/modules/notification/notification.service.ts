@@ -48,6 +48,20 @@ export class NotificationService {
     })
   }
 
+  /** 
+   * Describe: Get unread notifications count
+  */
+  async getUnreadCount(currentUser: User) {
+    return await this.userNotificationRepository.count({
+      where: {
+        user: {
+          id: currentUser.id
+        },
+        is_read: false
+      }
+    });
+  }
+
   /**
    * Describe: Create new notification
    */
@@ -101,7 +115,6 @@ export class NotificationService {
     existedNotification.is_read = isRead;
     return await this.userNotificationRepository.save(existedNotification);
   }
-
 
   /** 
    * Describe: Delete notification

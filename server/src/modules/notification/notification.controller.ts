@@ -22,6 +22,11 @@ export class NotificationController {
     });
   }
 
+  @Get("/unread-count")
+  async getUnreadCount(@CurrentUser() currentUser: User) {
+    return this.notificationService.getUnreadCount(currentUser);
+  }
+
   @Put("/bulk/change-status")
   @HttpCode(204)
   async bulkChangeNotificationStatus(

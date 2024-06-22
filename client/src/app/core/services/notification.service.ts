@@ -24,6 +24,10 @@ export class NotificationService {
     return this.httpClient.get<NotificationResponse>(`api/notification?page=${page}&limit=${limit}`);
   }
 
+  getUnreadCount() {
+    return this.httpClient.get<number>("api/notification/unread-count");
+  }
+
   getNewNotification() {
     return this.socket.fromEvent<UserNotification>(this.NEW_NOTIFICATION_EVENT_NAME);
   }
