@@ -162,12 +162,16 @@ export class RedirectPage implements OnInit {
   }
 
   private handleGetReferrer() {
-    const referrerLink = document.referrer;
-    const referrer = new URL(referrerLink);
-    const referrerDomain = referrer.hostname;
+    try {
+      const referrerLink = document.referrer;
+      const referrer = new URL(referrerLink);
+      const referrerDomain = referrer.hostname;
 
-    const referrerName = ReferrerHeader[referrerDomain] || "unknown";
-    return referrerName;
+      const referrerName = ReferrerHeader[referrerDomain] || "unknown";
+      return referrerName;
+    } catch {
+      return "unknown";
+    }
   }
 
   private getNonTrackDurationCookie(urlId: number, type: "visited" | "redirected") {
