@@ -18,7 +18,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 export class NotificationComponent implements OnInit {
   isProcessing = false;
   isNotificationMenuOpen = false;
-  totalItems: number | null = null;
+  totalItems = 0;
   currentPage = 1;
   totalPages = 1;
   isInitialLoad = false;
@@ -47,11 +47,17 @@ export class NotificationComponent implements OnInit {
     this.removeNotification$
   ]).pipe(
     filter(([notification]) => !!notification),
-    tap(([notification]) => {
+    tap(([notification, newNotification]) => {
       const responseMeta = (notification as NotificationResponse).meta;
       this.totalItems = responseMeta.totalItems;
       this.currentPage = responseMeta.currentPage;
       this.totalPages = responseMeta.totalPages;
+
+      console.log(this.totalItems, newNotification);
+      if (this.totalItems === 0 && newNotification) {
+        console.log("was here");
+        this.totalItems = 1;
+      }
     }),
     scan((accumulator: UserNotification[], [notifications, newNotification, updatedNotification, removedNotification]) => {
       accumulator = [...accumulator, ...(notifications as NotificationResponse).data];

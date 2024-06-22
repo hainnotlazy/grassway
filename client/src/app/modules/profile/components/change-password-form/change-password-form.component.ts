@@ -80,6 +80,7 @@ export class ChangePasswordFormComponent {
             horizontalPosition: 'right',
             verticalPosition: 'top'
           });
+          this.changePasswordForm.markAsPristine();
         }, (error) => {
           this.handleChangePasswordFail(error);
         }),

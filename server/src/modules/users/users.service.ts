@@ -134,7 +134,7 @@ export class UsersService {
     await this.notificationService.createNewNotification(
       updatedUser, 
       {
-        title: "Updated profile successfully",
+        title: "Updated profile",
         description: "You have successfully updated your profile.",
         type: NotificationType.UPDATE_PROFILE
       }
@@ -152,7 +152,19 @@ export class UsersService {
     }
 
     user.password = bcrypt.hashSync(newPassword, SALT_ROUNDS);
-    return await this.userRepository.save(user);
+    const updatedUser = await this.userRepository.save(user);
+
+    // Push notification
+    await this.notificationService.createNewNotification(
+      updatedUser,
+      {
+        title: "Changed password",
+        description: "You have successfully changed your password.",
+        type: NotificationType.UPDATE_PROFILE
+      }
+    )
+
+    return updatedUser;
   }
 
   /** Describe: Forget password */

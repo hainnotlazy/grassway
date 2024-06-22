@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserSetting } from 'src/entities/user-setting.entity';
 import { User } from 'src/entities/user.entity';
 import { UserSettingService } from './user-setting.service';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, UserSetting]),
+    NotificationModule,
     SharedModule
   ],
   controllers: [SettingsController],

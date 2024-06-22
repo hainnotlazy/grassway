@@ -39,8 +39,8 @@
 
     <ng-container *ngIf="!hasLoadingError; else loadingError">
       <div
-        *ngIf="totalItems === null || totalItems > 0; else noNotifications"
         class="h-96 max-h-96 min-h-96 overflow-y-auto"
+        [class.hidden]="totalItems === 0"
         infiniteScroll
         [infiniteScrollDistance]="1"
         [infiniteScrollThrottle]="150"
@@ -55,12 +55,12 @@
         ></app-notification-item>
       </div>
 
-      <ng-template #noNotifications>
+      <ng-container *ngIf="totalItems === 0">
         <div class="h-96 max-h-96 min-h-96 text-primary flex flex-col items-center justify-center gap-4">
           <i class="icon-excited text-7xl"></i>
           <span class="text-lg">You have no notifications now!</span>
         </div>
-      </ng-template>
+      </ng-container>
     </ng-container>
 
     <ng-template #loadingError>
