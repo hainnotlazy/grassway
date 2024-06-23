@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, finalize, tap } from 'rxjs';
 import { UserNotification } from 'src/app/core/models/user-notification.model';
@@ -16,6 +16,8 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 export class NotificationItemComponent {
   isProcessing = false;
 
+  @ViewChild("actionButton") actionButton!: ElementRef;
+
   @Input() notification!: UserNotification;
 
   @Input() updateNotificationSubject!: BehaviorSubject<UserNotification | null | "all">;
@@ -24,6 +26,16 @@ export class NotificationItemComponent {
   constructor(
     private notificationService: NotificationService,
   ) {}
+
+  onClickNotification($event: Event) {
+    $event.stopPropagation();
+
+    if (this.actionButton.nativeElement.contains($event.target)) {
+      return;
+    }
+
+    this.onChangeStatus(true);
+  }
 
   onChangeStatus(status: boolean) {
     if (this.isProcessing) return;

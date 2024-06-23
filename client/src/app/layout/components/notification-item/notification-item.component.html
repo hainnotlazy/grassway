@@ -1,6 +1,6 @@
 <div
   class="px-4 py-2.5 hover:bg-slate-100 hover:shadow cursor-pointer flex items-center gap-4"
-  (click)="$event.stopPropagation()"
+  (click)="onClickNotification($event)"
 >
   <div
     class="min-h-1 min-w-1 w-1 h-1 -mr-2 bg-blue-600 rounded-full"
@@ -13,6 +13,7 @@
     <small>{{ notification.created_at | timeAgo | async }}</small>
   </div>
   <button
+    #actionButton
     type="button"
     [matMenuTriggerFor]="itemMenu"
   >
