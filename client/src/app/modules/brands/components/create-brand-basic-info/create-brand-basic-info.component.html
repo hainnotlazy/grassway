@@ -1,0 +1,45 @@
+<form
+  class="space-y-2"
+  [formGroup]="basicInfoForm"
+>
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-600" for="title">Title:<small class="text-red-500">*</small></label>
+    <mat-form-field
+      class="max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="title"
+        formControlName="title"
+        type="text"
+        placeholder="Brand name"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-600" for="description">Description:</label>
+    <mat-form-field
+      class="max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <textarea
+        matInput
+        id="description"
+        formControlName="description"
+        placeholder="Brand description"
+        rows="5"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <button
+    matStepperNext
+    class="bg-secondary text-white px-4 py-2.5 rounded shadow hover:bg-secondary/80 inline-flex items-center gap-2 flex-row-reverse"
+  >
+    <i class="icon-chevron-right"></i> Next step
+  </button>
+</form>

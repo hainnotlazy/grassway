@@ -8,6 +8,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { GetThirdPartyNamePipe } from './pipes/get-third-party-name.pipe';
 import { CountdownPipe } from './pipes/countdown.pipe';
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
 
 /* Angular Material Modules */
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,7 +29,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from "@angular/material/chips";
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { MatStepperModule } from '@angular/material/stepper';
 
 const MatModules = [
   MatFormFieldModule,
@@ -48,7 +49,8 @@ const MatModules = [
   MatSlideToggleModule,
   MatAutocompleteModule,
   MatChipsModule,
-  ClipboardModule
+  ClipboardModule,
+  MatStepperModule
 ]
 
 const ExternalModules = [

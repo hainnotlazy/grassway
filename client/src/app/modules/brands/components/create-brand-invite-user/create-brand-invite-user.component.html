@@ -1,0 +1,47 @@
+<div class="space-y-2">
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-600" for="">Invite other users:</label>
+    <mat-form-field appearance="outline" color="accent">
+      <mat-chip-grid #tagChipGrid>
+        <mat-chip-row
+          *ngFor="let user of selectedUsers"
+          (removed)="removeSelectedUser(user)"
+          class="!bg-white border border-gray-300"
+        >
+          <app-create-brand-option-user [user]="user"></app-create-brand-option-user>
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-grid>
+      <input
+        #tagInput
+        placeholder="Enter user's username or email"
+        formControlName="tags"
+        [matChipInputFor]="tagChipGrid"
+        [matAutocomplete]="tagAuto"
+      />
+      <mat-autocomplete #tagAuto="matAutocomplete" (optionSelected)="selectUser($event)">
+        <mat-option *ngFor="let user of filteredUsers" [value]="user">
+          <app-create-brand-option-user [user]="user"></app-create-brand-option-user>
+        </mat-option>
+      </mat-autocomplete>
+      <mat-hint>Invitation will be sent to these users</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <button
+      matStepperPrevious
+      class="bg-secondary text-white px-4 py-2.5 rounded shadow hover:bg-secondary/80 inline-flex items-center gap-2"
+    >
+      <i class="icon-chevron-left"></i> Previous step
+    </button>
+    <button
+      matStepperNext
+      class="bg-secondary text-white px-4 py-2.5 rounded shadow hover:bg-secondary/80 inline-flex items-center gap-2 flex-row-reverse"
+    >
+      <i class="icon-chevron-right"></i> Next step
+    </button>
+  </div>
+</div>

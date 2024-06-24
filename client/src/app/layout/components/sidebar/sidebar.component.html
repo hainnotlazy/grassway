@@ -50,10 +50,15 @@
     </li>
 
     <li>
-      <button type="button" class="hover:text-white hover:bg-secondary px-4 py-2.5 flex items-center justify-between w-full">
+      <a
+        class="hover:text-white hover:bg-secondary relative px-4 py-2.5 flex items-center justify-between w-full"
+        routerLink="brands"
+        routerLinkActive="active"
+        (click)="onClickNavigationItem()"
+      >
         <span class="flex items-center gap-1"><i class="icon-star"></i> Brands</span>
         <i class="icon-chevron-down text-end"></i>
-      </button>
+      </a>
     </li>
 
     <li>

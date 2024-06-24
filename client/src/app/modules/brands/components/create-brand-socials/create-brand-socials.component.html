@@ -1,0 +1,307 @@
+<form
+  [formGroup]="socialsForm"
+  class="space-y-2"
+>
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 text-blue-800 bg-white px-4 py-2.5 rounded shadow"
+        for="facebook"
+      >
+        <img
+          src="assets/images/icon-facebook-colored.svg"
+          alt="Facebook's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Facebook
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="facebook"
+        type="text"
+        formControlName="facebook"
+        placeholder="https://facebook.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 text-pink-600 bg-white px-4 py-2.5 rounded shadow"
+        for="instagram"
+      >
+        <img
+          src="assets/images/icon-instagram-colored.svg"
+          alt="Instagram's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Instagram
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="instagram"
+        type="text"
+        formControlName="instagram"
+        placeholder="https://instagram.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 bg-white px-4 py-2.5 rounded shadow"
+        for="twitter"
+      >
+        <img
+          src="assets/images/icon-x-colored.svg"
+          alt="Twitter's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        X (Formerly Twitter)
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="twitter"
+        type="text"
+        formControlName="twitter"
+        placeholder="https://x.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 bg-white px-4 py-2.5 rounded shadow"
+        for="tiktok"
+      >
+        <img
+          src="assets/images/icon-tiktok-colored.svg"
+          alt="Tiktok's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Tiktok
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="tiktok"
+        type="text"
+        formControlName="tiktok"
+        placeholder="https://tiktok.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 text-rose-700 bg-white px-4 py-2.5 rounded shadow"
+        for="youtube"
+      >
+        <img
+          src="assets/images/icon-youtube-colored.svg"
+          alt="Youtube's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Youtube
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="youtube"
+        type="text"
+        formControlName="youtube"
+        placeholder="https://youtube.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 text-violet-800 bg-white px-4 py-2.5 rounded shadow"
+        for="discord"
+      >
+        <img
+          src="assets/images/icon-discord-colored.svg"
+          alt="Discord's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Discord
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="discord"
+        type="text"
+        formControlName="discord"
+        placeholder="https://discord.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 text-sky-700 bg-white px-4 py-2.5 rounded shadow"
+        for="linkedin"
+      >
+        <img
+          src="assets/images/icon-linkedin-colored.svg"
+          alt="Linkedin's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Linkedin
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="linkedin"
+        type="text"
+        formControlName="linkedin"
+        placeholder="https://linkedin.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 text-gray-700 bg-white px-4 py-2.5 rounded shadow"
+        for="github"
+      >
+        <img
+          src="assets/images/icon-github-colored.svg"
+          alt="Github's icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Github
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="github"
+        type="text"
+        formControlName="github"
+        placeholder="https://github.com/your-brand"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="sm:flex-row flex flex-col gap-2">
+    <div>
+      <label
+        class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 bg-white px-4 py-2.5 rounded shadow"
+        for="website"
+      >
+        <img
+          src="assets/images/icon-public-colored.svg"
+          alt="Website icon"
+          width="24"
+          height="24"
+          loading="eager"
+          draggable="false"
+        >
+        Website
+      </label>
+    </div>
+    <mat-form-field
+      class="flex-grow max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="website"
+        type="text"
+        formControlName="website"
+        placeholder="Your brand's website"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <button
+      matStepperPrevious
+      class="bg-secondary text-white px-4 py-2.5 rounded shadow hover:bg-secondary/80 inline-flex items-center gap-2"
+    >
+      <i class="icon-chevron-left"></i> Previous step
+    </button>
+    <button
+      matStepperNext
+      class="bg-secondary text-white px-4 py-2.5 rounded shadow hover:bg-secondary/80 inline-flex items-center gap-2 flex-row-reverse"
+    >
+      <i class="icon-chevron-right"></i> Next step
+    </button>
+  </div>
+</form>

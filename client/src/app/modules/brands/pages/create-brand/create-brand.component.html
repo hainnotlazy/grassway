@@ -1,0 +1,66 @@
+<div class="my-4 space-y-4">
+  <div class="space-y-1">
+    <h1 class="text-poetsen-one text-3xl">Create new Brand</h1>
+    <p class="italic text-gray-500">Create and customize your own brand</p>
+  </div>
+
+  <mat-stepper
+    #stepper
+    class="!bg-slate-100 border border-slate-200 rounded-md shadow-md"
+    [linear]="true"
+    [orientation]="(stepperOrientation | async)!"
+    color="accent"
+  >
+    <mat-step
+      label="Basic info"
+      state="basic-info"
+      [stepControl]="basicInfoForm"
+    >
+      <app-create-brand-basic-info [basicInfoForm]="basicInfoForm"></app-create-brand-basic-info>
+    </mat-step>
+
+    <mat-step
+      label="Socials"
+      state="socials"
+      [stepControl]="socialsForm"
+    >
+      <app-create-brand-socials [socialsForm]="socialsForm"></app-create-brand-socials>
+    </mat-step>
+
+    <mat-step
+      label="Logo"
+      state="logo"
+      [stepControl]="logoControl"
+    >
+      <app-create-brand-logo [logoControl]="logoControl"></app-create-brand-logo>
+    </mat-step>
+
+    <mat-step
+      label="Invite users"
+      state="invite-users"
+    >
+      <app-create-brand-invite-user></app-create-brand-invite-user>
+    </mat-step>
+
+    <mat-step label="Finish" state="finish">
+      <app-create-brand-finish></app-create-brand-finish>
+    </mat-step>
+
+    <!-- Icon overrides. -->
+    <ng-template matStepperIcon="basic-info">
+      <mat-icon>title</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="logo">
+      <mat-icon>photo_camera</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="socials">
+      <mat-icon>public</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="invite-users">
+      <mat-icon>group_add</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="finish">
+      <mat-icon>rocket_launch</mat-icon>
+    </ng-template>
+  </mat-stepper>
+</div>
