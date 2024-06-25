@@ -1,0 +1,89 @@
+version: "3"
+
+name: grassway-app-production
+
+services:
+  client:
+    container_name: client-prod
+    image: hainnotlazy/grassway-client
+    ports:
+      - 80:80
+      - 443:443 
+    networks:
+      - mainnet
+    depends_on:
+      - server
+
+  server:
+    container_name: server-prod
+    image: hainnotlazy/grassway-server
+    volumes:
+      - server-data:/app/resources 
+    ports:
+      - 3000:3000
+    networks:
+      - mainnet
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  database: 
+    container_name: database-prod
+    image: postgres:alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    env_file:
+      - .database-env.production
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 20s
+      retries: 5
+      start_period: 30s  
+    networks:
+      - mainnet
+
+  database-admin:
+    container_name: database-admin-prod
+    image: dpage/pgadmin4:8.6
+    volumes:
+      - db-admin-data:/var/lib/pgadmin
+    ports:
+      - 15432:80
+      - 15433:443
+    env_file:
+      - .database-env.production
+    networks:
+      - mainnet
+    depends_on:
+      database:
+        condition: service_healthy
+
+  redis:
+    container_name: redis-prod
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6389:6379
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 10s
+      timeout: 20s
+      retries: 5
+      start_period: 30s  
+    networks:
+      - mainnet
+
+networks:
+  mainnet:
+
+volumes:
+  server-data:
+  db-data:
+  db-admin-data:
+  redis-data:
