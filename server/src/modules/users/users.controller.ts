@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, HttpCode, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
@@ -56,6 +56,13 @@ export class UsersController {
   })
   async getCurrentUser(@CurrentUser() currentUser: User) {
     return currentUser;
+  }
+  
+  @Get("/filter")
+  async filterUsers(
+    @Query("query", new DefaultValuePipe("")) query: string,
+  ) {
+    return await this.usersService.filterUsers(query);
   }
 
   @Get("/:id")

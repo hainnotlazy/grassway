@@ -8,18 +8,20 @@
           (removed)="removeSelectedUser(user)"
           class="!bg-white border border-gray-300"
         >
-          <app-create-brand-option-user [user]="user"></app-create-brand-option-user>
+          <app-create-brand-option-user [user]="user" [imageSize]="26"></app-create-brand-option-user>
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-chip-row>
       </mat-chip-grid>
       <input
-        #tagInput
+        #userInput
         placeholder="Enter user's username or email"
-        formControlName="tags"
+        [formControl]="userControl"
         [matChipInputFor]="tagChipGrid"
         [matAutocomplete]="tagAuto"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="addUser($event)"
       />
       <mat-autocomplete #tagAuto="matAutocomplete" (optionSelected)="selectUser($event)">
         <mat-option *ngFor="let user of filteredUsers" [value]="user">

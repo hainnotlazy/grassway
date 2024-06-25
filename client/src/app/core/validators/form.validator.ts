@@ -3,6 +3,17 @@ import { UrlsService } from "../services/urls.service";
 import { Observable, debounceTime, distinctUntilChanged, filter, first, map, of, switchMap, tap } from "rxjs";
 
 export class FormValidator {
+  private static readonly SOCIAL_PATTERN = {
+    facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/.+$/,
+    instagram: /^(https?:\/\/)?(www\.)?instagram\.com\/.+$/,
+    twitter: /^(https?:\/\/)?(www\.)?x\.com\/.+$/,
+    linkedin: /^(https?:\/\/)?(www\.)?linkedin\.com\/.+$/,
+    github: /^(https?:\/\/)?(www\.)?github\.com\/.+$/,
+    tiktok: /^(https?:\/\/)?(www\.)?tiktok\.com\/.+$/,
+    youtube: /^(https?:\/\/)?(www\.)?youtube\.com\/.+$/,
+    discord: /^(https?:\/\/)?(www\.)?discord\.gg\/.+$/,
+  }
+
   static validUrl(control: AbstractControl) {
     const value = control.value;
     if (value === "") return null;
@@ -18,7 +29,21 @@ export class FormValidator {
     return regexPattern.test(value) ? null : { validUrl: true };
   }
 
-  // Check if custom back half is existed
+  static validSocialLink(
+    platform: "facebook" | "instagram" | "twitter" | "linkedin" | "github" | "tiktok" | "youtube" | "discord"
+  ) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const url = control.value;
+      if (!url) return null;
+
+      const pattern = this.SOCIAL_PATTERN[platform];
+      if (pattern && !pattern.test(url)) {
+        return { invalidSocialLink: true };
+      }
+      return null;
+    };
+  }
+
   static customBackHalfExisted(urlsService: UrlsService, currentCustomBackHalf?: string): AsyncValidatorFn {
     return control => {
       if (!control.value || control.value === currentCustomBackHalf) return of(null);

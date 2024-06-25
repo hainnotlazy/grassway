@@ -31,6 +31,12 @@
         formControlName="facebook"
         placeholder="https://facebook.com/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.facebook.errors)"
+      >
+        {{ facebookValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -63,6 +69,12 @@
         formControlName="instagram"
         placeholder="https://instagram.com/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.instagram.errors)"
+      >
+        {{ instagramValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -95,6 +107,12 @@
         formControlName="twitter"
         placeholder="https://x.com/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.twitter.errors)"
+      >
+        {{ twitterValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -127,6 +145,12 @@
         formControlName="tiktok"
         placeholder="https://tiktok.com/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.tiktok.errors)"
+      >
+        {{ tiktokValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -159,6 +183,12 @@
         formControlName="youtube"
         placeholder="https://youtube.com/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.youtube.errors)"
+      >
+        {{ youtubeValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -189,8 +219,14 @@
         id="discord"
         type="text"
         formControlName="discord"
-        placeholder="https://discord.com/your-brand"
+        placeholder="https://discord.gg/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.discord.errors)"
+      >
+        {{ discordValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -223,6 +259,12 @@
         formControlName="linkedin"
         placeholder="https://linkedin.com/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.linkedin.errors)"
+      >
+        {{ linkedinValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -255,6 +297,12 @@
         formControlName="github"
         placeholder="https://github.com/your-brand"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.github.errors)"
+      >
+        {{ githubValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -287,6 +335,12 @@
         formControlName="website"
         placeholder="Your brand's website"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.website.errors)"
+      >
+        {{ websiteValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 

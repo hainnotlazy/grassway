@@ -16,6 +16,12 @@
         type="text"
         placeholder="Brand name"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(basicInfoForm.get('title')?.errors)"
+      >
+        {{ titleValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -33,6 +39,12 @@
         placeholder="Brand description"
         rows="5"
       ></textarea>
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(basicInfoForm.get('description')?.errors)"
+      >
+        {{ descriptionValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 

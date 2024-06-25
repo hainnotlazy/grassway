@@ -2,7 +2,7 @@ import { ChangePasswordDto } from './dtos/change-password.dto';
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -63,6 +63,24 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  /** 
+   * Describe: Filter users by username or email
+  */
+  async filterUsers(query: string) {
+    const users = await this.userRepository.find({
+      where: [
+        { username: Like(`%${query}%`), is_active: true },
+        { email: Like(`%${query}%`), is_active: true }
+      ],
+      take: 5,
+      order: {
+        id: "DESC"
+      }
+    })
+
+    return users;
   }
 
   /** Describe: Find user by email, github, facebook or twitter */

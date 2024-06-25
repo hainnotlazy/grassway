@@ -34,6 +34,13 @@ export class UsersService {
   }
 
   /**
+   * Describe: Filter users by username or email
+  */
+  filterUsers(query: string) {
+    return this.httpClient.get<User[]>(`api/users/filter?query=${query}`);
+  }
+
+  /**
    * Describe: Update current user information
   */
   updateCurrentUser(userProfile: UserProfile) {

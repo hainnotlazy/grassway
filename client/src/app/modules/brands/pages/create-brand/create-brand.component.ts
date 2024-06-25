@@ -3,6 +3,7 @@ import { STEPPER_GLOBAL_OPTIONS, StepperOrientation } from '@angular/cdk/stepper
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, map } from 'rxjs';
+import { FormValidator } from 'src/app/core/validators/form.validator';
 
 @Component({
   selector: 'create-brand-page',
@@ -31,31 +32,40 @@ export class CreateBrandPage {
 
   socialsForm = new FormGroup({
     facebook: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("facebook")
     ]),
     instagram: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("instagram")
     ]),
     twitter: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("twitter")
     ]),
     linkedin: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("linkedin")
     ]),
     github: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("github")
     ]),
     tiktok: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("tiktok")
     ]),
     youtube: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("youtube")
     ]),
     discord: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("discord")
     ]),
     website: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(255),
+      FormValidator.validUrl
     ])
   });
 
