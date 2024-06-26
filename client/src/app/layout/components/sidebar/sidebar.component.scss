@@ -14,19 +14,37 @@
     }
   }
 
+  .sub-item-active {
+    background: #6371a9;
+    font-weight: 600;
+    color: white;
+  }
+
   @media (min-width: 1024px) {
+    min-width: 200px;
+
     .active {
       width: 200px;
+    }
+  }
+
+  .brand-sub-items {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+
+    &.show {
+      max-height: fit-content;
     }
   }
 }
 
 .hide-sidebar {
-  animation: hide-sidebar 0.4s forwards;
+  animation: hide-sidebar 0.5s forwards;
 }
 
 .show-sidebar {
-  animation: show-sidebar 0.4s forwards;
+  animation: show-sidebar 0.5s forwards;
 }
 
 @keyframes hide-sidebar {

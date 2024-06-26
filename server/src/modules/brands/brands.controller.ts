@@ -11,6 +11,11 @@ export class BrandsController {
     private brandsService: BrandsService
   ) {}
 
+  @Get()
+  getBrands(@CurrentUser() currentUser: User) {
+    return this.brandsService.getBrands(currentUser);
+  }
+
   @Get("/validate-prefix")
   async validateBrandPrefix(@Query("prefix", new DefaultValuePipe("")) prefix: string) {
     return !(await this.brandsService.validateBrandPrefix(prefix));

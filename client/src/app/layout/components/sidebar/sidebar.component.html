@@ -3,17 +3,17 @@
     <button
       class="flex items-center px-3 py-2 text-xl text-white border-2 border-white rounded-md"
       type="button"
-      (click)="isOpenSidebar = !isOpenSidebar; isInitialSidebarState = false"
+      (click)="isSidebarOpen = !isSidebarOpen; isInitialSidebarState = false"
     >
-      <i [class]="{'icon-menu': !isOpenSidebar, 'icon-menu-open': isOpenSidebar}"></i>
+      <i [class]="{'icon-menu': !isSidebarOpen, 'icon-menu-open': isSidebarOpen}"></i>
     </button>
   </div>
 
   <ul
     [ngClass]="{
-      'hidden': currentScreenWidth < 1024 && isInitialSidebarState,
-      'hide-sidebar': !isOpenSidebar && currentScreenWidth < 1024 && !isInitialSidebarState,
-      'show-sidebar': isOpenSidebar && currentScreenWidth < 1024 && !isInitialSidebarState
+      'hidden': !isLgScreen && isInitialSidebarState,
+      'hide-sidebar': !isSidebarOpen && !isLgScreen && !isInitialSidebarState,
+      'show-sidebar': isSidebarOpen && !isLgScreen && !isInitialSidebarState
     }"
   >
     <li>
@@ -51,14 +51,42 @@
 
     <li>
       <a
-        class="hover:text-white hover:bg-secondary relative px-4 py-2.5 flex items-center justify-between w-full"
-        routerLink="brands"
-        routerLinkActive="active"
-        (click)="onClickNavigationItem()"
+        class="hover:text-white hover:bg-secondary relative px-4 py-2.5 flex items-center justify-between w-full cursor-pointer"
+        [ngClass]="{
+          'active shadow': isInBrandRoute
+        }"
+        (click)="onClickBrandItem()"
       >
         <span class="flex items-center gap-1"><i class="icon-star"></i> Brands</span>
-        <i class="icon-chevron-down text-end"></i>
+        <i
+          class="icon-chevron-down text-end transition-all duration-500"
+          [class]="{'rotate-180': isBrandItemOpen}"
+        ></i>
       </a>
+
+      <ul class="bg-slate-800 brand-sub-items" [class.show]="isBrandItemOpen">
+        <li *ngFor="let brand of brands">
+          <a
+            class="relative pr-4 pl-8 hover:text-white hover:bg-slate-700 py-2.5 block"
+            [routerLink]="['brands', 'manage', brand.prefix]"
+            routerLinkActive="sub-item-active"
+            (click)="onClickNavigationItem()"
+          >
+            {{ brand.title }} ({{ brand.prefix }})
+          </a>
+        </li>
+        <li>
+          <a
+            class="relative pr-4 pl-8 text-white hover:bg-slate-700 py-2.5 flex items-center gap-1"
+            routerLink="brands"
+            routerLinkActive="sub-item-active"
+            [routerLinkActiveOptions]="{exact: true}"
+            (click)="onClickNavigationItem()"
+          >
+            <i class="icon-add-box text-sm"></i> <span class="flex-grow">New Brand</span>
+          </a>
+        </li>
+      </ul>
     </li>
 
     <li>

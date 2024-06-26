@@ -3,8 +3,8 @@ import { BrandSocialPlatforms } from "./brand-social-platforms.model";
 
 export interface Brand {
   id: string;
-  social_platforms: BrandSocialPlatforms;
-  members: BrandMember[];
+  social_platforms?: BrandSocialPlatforms;
+  members?: BrandMember[];
   title: string;
   description: string;
   prefix: string;

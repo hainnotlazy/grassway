@@ -16,6 +16,10 @@ export class BrandsService {
     private httpClient: HttpClient
   ) { }
 
+  getBrands() {
+    return this.httpClient.get<Brand[]>("api/brands");
+  }
+
   createBrand(createBrandDto: CreateBrandDto) {
     const formData = new FormData();
 

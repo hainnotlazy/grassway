@@ -10,6 +10,7 @@ import { CreateBrandLogoComponent } from './components/create-brand-logo/create-
 import { CreateBrandInviteUserComponent } from './components/create-brand-invite-user/create-brand-invite-user.component';
 import { CreateBrandFinishComponent } from './components/create-brand-finish/create-brand-finish.component';
 import { CreateBrandOptionUserComponent } from './components/create-brand-option-user/create-brand-option-user.component';
+import { ManageBrandPage } from './pages/manage-brand/manage-brand.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { CreateBrandOptionUserComponent } from './components/create-brand-option
     CreateBrandLogoComponent,
     CreateBrandInviteUserComponent,
     CreateBrandFinishComponent,
-    CreateBrandOptionUserComponent
+    CreateBrandOptionUserComponent,
+    ManageBrandPage
   ],
   imports: [
     CommonModule,

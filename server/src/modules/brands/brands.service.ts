@@ -23,6 +23,18 @@ export class BrandsService {
     private readonly uploadFileService: UploadFileService
   ) {}
 
+  async getBrands(currentUser: User) {
+    return this.brandRepository.find({  
+      where: {
+        members: {
+          user: {
+            id: currentUser.id
+          }
+        }
+      },
+    });
+  }
+
   async createBrand(
     currentUser: User,
     createBrandDto: CreateBrandDto,
