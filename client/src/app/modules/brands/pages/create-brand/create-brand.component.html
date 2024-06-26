@@ -39,11 +39,14 @@
       label="Invite users"
       state="invite-users"
     >
-      <app-create-brand-invite-user></app-create-brand-invite-user>
+      <app-create-brand-invite-user
+        (addedUser)="onAddInvitedUser($event)"
+        (removedUser)="onRemoveInvitedUser($event)"
+      ></app-create-brand-invite-user>
     </mat-step>
 
     <mat-step label="Finish" state="finish">
-      <app-create-brand-finish></app-create-brand-finish>
+      <app-create-brand-finish (finished)="onCreateBrand()"></app-create-brand-finish>
     </mat-step>
 
     <!-- Icon overrides. -->

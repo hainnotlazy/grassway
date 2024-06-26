@@ -4,6 +4,13 @@ const titleRequirements = {
   maxlength: 255
 }
 
+const prefixRequirements = {
+  required: true,
+  minlength: 3,
+  maxlength: 255,
+  existed: true
+}
+
 const descriptionRequirements = {
   maxlength: 255
 }
@@ -49,6 +56,17 @@ export const createBrandRequirements = {
       required: "Title is required",
       minlength: `Title must be at least ${titleRequirements.minlength} characters`,
       maxlength: `Title must be at most ${titleRequirements.maxlength} characters`
+    }
+  },
+  prefix: {
+    requirements: {
+      ...prefixRequirements
+    },
+    validationMsg: {
+      required: "Prefix is required",
+      minlength: `Prefix must be at least ${prefixRequirements.minlength} characters`,
+      maxlength: `Prefix must be at most ${prefixRequirements.maxlength} characters`,
+      existed: "Prefix has already been taken"
     }
   },
   description: {

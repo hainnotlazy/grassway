@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-create-brand-finish',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./create-brand-finish.component.scss']
 })
 export class CreateBrandFinishComponent {
+  @Output() finished = new EventEmitter();
 
+  onFinished() {
+    this.finished.emit();
+  }
 }

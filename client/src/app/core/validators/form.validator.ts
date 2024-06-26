@@ -1,6 +1,7 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from "@angular/forms";
 import { UrlsService } from "../services/urls.service";
 import { Observable, debounceTime, distinctUntilChanged, filter, first, map, of, switchMap, tap } from "rxjs";
+import { BrandsService } from "../services/brands.service";
 
 export class FormValidator {
   private static readonly SOCIAL_PATTERN = {
@@ -42,6 +43,20 @@ export class FormValidator {
       }
       return null;
     };
+  }
+
+  static brandPrefixExisted(brandsService: BrandsService, currentBrandPrefix?: string): AsyncValidatorFn {
+    return control => {
+      if (!control.value || control.value === currentBrandPrefix) return of(null);
+
+      return control.valueChanges.pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        switchMap(value => brandsService.validateBrandPrefix(value)),
+        map(response => response ? null : { existed: true }),
+        first()
+      );
+    }
   }
 
   static customBackHalfExisted(urlsService: UrlsService, currentCustomBackHalf?: string): AsyncValidatorFn {

@@ -1,5 +1,5 @@
 import { getObjectKeys } from 'src/app/core/helpers/utils';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ENTER } from '@angular/cdk/keycodes';
 import { FormControl } from '@angular/forms';
 import { User } from 'src/app/core/models/user.model';
@@ -16,6 +16,9 @@ import { MatChipInputEvent } from '@angular/material/chips';
   styleUrls: ['./create-brand-invite-user.component.scss']
 })
 export class CreateBrandInviteUserComponent implements OnInit {
+  @Output() addedUser = new EventEmitter<number>();
+  @Output() removedUser = new EventEmitter<number>();
+
   separatorKeysCodes = [ENTER];
   userControl = new FormControl("");
 
@@ -55,21 +58,25 @@ export class CreateBrandInviteUserComponent implements OnInit {
     const foundUser = this.filteredUsers.find(user => user.username === value || user.email === value);
     if (foundUser && !this.selectedUsers.find(selectedUser => selectedUser.id === foundUser.id)) {
       this.selectedUsers.push(foundUser);
+      this.addedUser.emit(foundUser.id);
       this.clearUserInput();
       this.filteredUsers = [];
     }
   }
 
   selectUser(event: MatAutocompleteSelectedEvent) {
-    if (!this.selectedUsers.find(selectedUser => selectedUser.id === event.option.value.id)) {
+    const user = event.option.value;
+    if (!this.selectedUsers.find(selectedUser => selectedUser.id === user.id)) {
       this.clearUserInput();
       this.filteredUsers = [];
-      this.selectedUsers.push(event.option.value);
+      this.selectedUsers.push(user);
+      this.addedUser.emit(user.id);
     }
   }
 
   removeSelectedUser(user: User) {
     this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
+    this.removedUser.emit(user.id);
   }
 
   private clearUserInput() {

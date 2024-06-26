@@ -12,11 +12,13 @@ import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 export class CreateBrandBasicInfoComponent {
   @Input() basicInfoForm!: FormGroup<{
     title: FormControl<string | null>;
+    prefix: FormControl<string | null>;
     description: FormControl<string | null>;
   }>;
 
   // Form validation messages
   titleValidationMessages: ValidationMessage = createBrandRequirements.title.validationMsg;
+  prefixValidationMessages: ValidationMessage = createBrandRequirements.prefix.validationMsg;
   descriptionValidationMessages: ValidationMessage = createBrandRequirements.description.validationMsg;
 
   getObjectKeys = getObjectKeys;

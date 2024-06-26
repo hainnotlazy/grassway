@@ -60,9 +60,10 @@ export class UsersController {
   
   @Get("/filter")
   async filterUsers(
+    @CurrentUser() currentUser: User,
     @Query("query", new DefaultValuePipe("")) query: string,
   ) {
-    return await this.usersService.filterUsers(query);
+    return await this.usersService.filterUsers(currentUser, query);
   }
 
   @Get("/:id")

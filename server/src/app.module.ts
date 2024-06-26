@@ -16,6 +16,7 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { HealthModule } from './modules/health/health.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { BrandsModule } from './modules/brands/brands.module';
 
 const appModules = [
   HealthModule,
@@ -40,6 +41,7 @@ const appModules = [
     }),
     ...appModules,
     NotificationModule,
+    BrandsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -7,6 +7,7 @@ export class UploadFileService {
   private readonly RESOURCES_PATH = "./resources";
   private readonly AVATAR_PATH = "./resources/avatars";
   private readonly LOGO_PATH = "./resources/logos";
+  private readonly BRAND_PATH = "./resources/brands";
   private readonly SERVE_PATH = "public";
 
   /** 
@@ -36,6 +37,21 @@ export class UploadFileService {
 
     fs.writeFileSync(filePath, logo.buffer);
     return filePath.replace(this.LOGO_PATH, `${this.SERVE_PATH}/logos`);
+  }
+
+  /**
+   * Describe: Save brand from form data
+   */
+  saveBrandLogo(brand: Express.Multer.File) {
+    if (!fs.existsSync(this.BRAND_PATH)) {
+      fs.mkdirSync(this.BRAND_PATH, { recursive: true });
+    }
+
+    const randomName = `${Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')}${path.extname(brand.originalname)}`;
+    const filePath = `${this.BRAND_PATH}/${randomName}`;
+
+    fs.writeFileSync(filePath, brand.buffer);
+    return filePath.replace(this.BRAND_PATH, `${this.SERVE_PATH}/brands`);
   }
 
   /** 

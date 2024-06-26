@@ -7,6 +7,7 @@ import { Url } from "./url.entity";
 import { Tag } from "./tag.entity";
 import { UserSetting } from "./user-setting.entity";
 import { UserNotification } from "./user-notification.entity";
+import { BrandMember } from "./brand-member.entity";
 
 enum GenderTypes {
   MALE = "male",
@@ -30,6 +31,9 @@ export class User {
 
   @OneToMany(() => Tag, tag => tag.owner)
   tags: Tag[];
+
+  @OneToMany(() => BrandMember, member => member.user)
+  brands: BrandMember[];
 
   @ApiProperty()
   @Column({ unique: true })

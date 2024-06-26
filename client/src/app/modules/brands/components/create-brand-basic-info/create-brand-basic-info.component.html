@@ -26,6 +26,29 @@
   </div>
 
   <div class="flex flex-col gap-2">
+    <label class="text-gray-600" for="prefix">Prefix:<small class="text-red-500">*</small></label>
+    <mat-form-field
+      class="max-w-xl"
+      appearance="outline"
+      color="accent"
+    >
+      <input
+        matInput
+        id="prefix"
+        formControlName="prefix"
+        type="text"
+        placeholder="Brand prefix"
+      >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(basicInfoForm.get('prefix')?.errors)"
+      >
+        {{ prefixValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
     <label class="text-gray-600" for="description">Description:</label>
     <mat-form-field
       class="max-w-xl"
