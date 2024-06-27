@@ -24,7 +24,7 @@ export class BrandsService {
     const formData = new FormData();
 
     for (const field of this.CREATE_BRAND_FIELDS) {
-      if (field === "invited_users" && createBrandDto.invited_users.length > 0) {
+      if (field === "invited_users") {
         for (let user of createBrandDto.invited_users) {
           formData.append("invited_users[]", user.toString());
         }

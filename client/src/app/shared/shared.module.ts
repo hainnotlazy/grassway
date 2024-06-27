@@ -30,6 +30,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from "@angular/material/chips";
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
+import { InputColorPickerComponent } from './components/input-color-picker/input-color-picker.component';
+import { InputImageComponent } from './components/input-image/input-image.component';
 
 const MatModules = [
   MatFormFieldModule,
@@ -49,8 +54,10 @@ const MatModules = [
   MatSlideToggleModule,
   MatAutocompleteModule,
   MatChipsModule,
+  MatStepperModule,
+  MatExpansionModule,
   ClipboardModule,
-  MatStepperModule
+  DragDropModule
 ]
 
 const ExternalModules = [
@@ -59,12 +66,22 @@ const ExternalModules = [
   NgChartsModule,
 ]
 
+const Components = [
+  InputColorPickerComponent,
+  InputImageComponent,
+]
+
+const Pipes = [
+  TruncatePipe,
+  GetThirdPartyNamePipe,
+  CountdownPipe,
+  TimeAgoPipe,
+]
+
 @NgModule({
   declarations: [
-    TruncatePipe,
-    GetThirdPartyNamePipe,
-    CountdownPipe,
-    TimeAgoPipe
+    ...Pipes,
+    ...Components
   ],
   imports: [
     CommonModule,
@@ -74,10 +91,8 @@ const ExternalModules = [
   ],
   exports: [
     ReactiveFormsModule,
-    TruncatePipe,
-    GetThirdPartyNamePipe,
-    CountdownPipe,
-    TimeAgoPipe,
+    ...Pipes,
+    ...Components,
     ...MatModules,
     ...ExternalModules
   ]

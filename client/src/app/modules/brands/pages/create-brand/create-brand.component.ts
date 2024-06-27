@@ -3,8 +3,11 @@ import { STEPPER_GLOBAL_OPTIONS, StepperOrientation } from '@angular/cdk/stepper
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, map, tap } from 'rxjs';
+import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { Brand } from 'src/app/core/models/brand.model';
 import { BrandsService } from 'src/app/core/services/brands.service';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 
@@ -85,7 +88,8 @@ export class CreateBrandPage {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private brandsService: BrandsService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private router: Router
   ) {
     this.stepperOrientation = this.breakpointObserver
       .observe(['(min-width: 1024px)'])
@@ -109,10 +113,10 @@ export class CreateBrandPage {
       website: this.socialsForm.value.website as string,
       invited_users: this.invitedUsers
     }).pipe(
-      tap(() => {
-        this.handleCreateSuccess();
+      tap((brand) => {
+        this.handleCreateSuccess(brand);
       }, error => {
-
+        this.handleCreateFailed(error);
       }),
       untilDestroyed(this)
     ).subscribe();
@@ -126,11 +130,29 @@ export class CreateBrandPage {
     this.invitedUsers = this.invitedUsers.filter(id => id !== userId);
   }
 
-  private handleCreateSuccess() {
+  private handleCreateSuccess(brand: Brand) {
     this.snackbar.open("Brand created successfully", "x", {
       duration: 3000,
       verticalPosition: "top",
       horizontalPosition: "right"
     });
+    this.router.navigate(["/u/brands/manage", brand.id]);
+  }
+
+  private handleCreateFailed(error: any) {
+    const errorResponse: ErrorResponse = error.error;
+    let errorMessage = errorResponse.message ?? "Unexpected error happened";
+
+    // Handle if server return more than 1 error
+    if (typeof errorMessage === "object") {
+      errorMessage = errorMessage[0];
+    }
+
+    // Show error message
+    this.snackbar.open(errorMessage, "x", {
+      duration: 4000,
+      horizontalPosition: "right",
+      verticalPosition: "top"
+    })
   }
 }

@@ -16,7 +16,9 @@
       state="basic-info"
       [stepControl]="basicInfoForm"
     >
-      <app-create-brand-basic-info [basicInfoForm]="basicInfoForm"></app-create-brand-basic-info>
+      <ng-template matStepContent>
+        <app-create-brand-basic-info [basicInfoForm]="basicInfoForm"></app-create-brand-basic-info>
+      </ng-template>
     </mat-step>
 
     <mat-step
@@ -24,7 +26,9 @@
       state="socials"
       [stepControl]="socialsForm"
     >
-      <app-create-brand-socials [socialsForm]="socialsForm"></app-create-brand-socials>
+      <ng-template matStepContent>
+        <app-create-brand-socials [socialsForm]="socialsForm"></app-create-brand-socials>
+      </ng-template>
     </mat-step>
 
     <mat-step
@@ -32,21 +36,27 @@
       state="logo"
       [stepControl]="logoControl"
     >
-      <app-create-brand-logo [logoControl]="logoControl"></app-create-brand-logo>
+      <ng-template matStepContent>
+        <app-create-brand-logo [logoControl]="logoControl"></app-create-brand-logo>
+      </ng-template>
     </mat-step>
 
     <mat-step
       label="Invite users"
       state="invite-users"
     >
-      <app-create-brand-invite-user
-        (addedUser)="onAddInvitedUser($event)"
-        (removedUser)="onRemoveInvitedUser($event)"
-      ></app-create-brand-invite-user>
+      <ng-template matStepContent>
+        <app-create-brand-invite-user
+          (addedUser)="onAddInvitedUser($event)"
+          (removedUser)="onRemoveInvitedUser($event)"
+        ></app-create-brand-invite-user>
+      </ng-template>
     </mat-step>
 
     <mat-step label="Finish" state="finish">
-      <app-create-brand-finish (finished)="onCreateBrand()"></app-create-brand-finish>
+      <ng-template matStepContent>
+        <app-create-brand-finish (finished)="onCreateBrand()"></app-create-brand-finish>
+      </ng-template>
     </mat-step>
 
     <!-- Icon overrides. -->

@@ -1,1 +1,31 @@
-<p>manage-brand works!</p>
+<div class="my-4 space-y-4">
+  <div class="space-y-1">
+    <h1 class="text-poetsen-one text-3xl">
+      Brand: <span class="text-primary">hainkOne</span>
+    </h1>
+    <p class="italic text-gray-500">Manage all about your brand!</p>
+  </div>
+  <mat-tab-group
+    mat-stretch-tabs="false"
+    mat-align-tabs="start"
+    animationDuration="0ms"
+    color="accent"
+  >
+    <mat-tab label="Design">
+      <app-brand-design-tab></app-brand-design-tab>
+    </mat-tab>
+
+    <mat-tab label="Build">
+
+    </mat-tab>
+    <mat-tab label="Analytics">
+      Not implement yet
+    </mat-tab>
+    <mat-tab label="Settings">
+      Not implement yet
+    </mat-tab>
+    <mat-tab label="Links">
+      Not implement yet
+    </mat-tab>
+  </mat-tab-group>
+</div>

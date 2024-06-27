@@ -1,0 +1,38 @@
+<form
+  class=""
+  [formGroup]="designForm"
+>
+  <h6 class="text-karla text-xl font-bold">Brand</h6>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-500">Logo:</label>
+    <app-input-image></app-input-image>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-500" for="title">Title:</label>
+    <mat-form-field class="max-w-xl" appearance="outline" color="accent">
+      <input
+        formControlName="title"
+        matInput
+        id="title"
+        type="text"
+        placeholder="Brand name"
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-500" for="description">Description:</label>
+    <mat-form-field class="max-w-xl" appearance="outline" color="accent">
+      <textarea
+        formControlName="description"
+        matInput
+        id="description"
+        type="text"
+        placeholder="Brand description"
+        rows="2"
+      ></textarea>
+    </mat-form-field>
+  </div>
+</form>

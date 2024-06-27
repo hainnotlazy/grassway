@@ -11,6 +11,13 @@ import { CreateBrandInviteUserComponent } from './components/create-brand-invite
 import { CreateBrandFinishComponent } from './components/create-brand-finish/create-brand-finish.component';
 import { CreateBrandOptionUserComponent } from './components/create-brand-option-user/create-brand-option-user.component';
 import { ManageBrandPage } from './pages/manage-brand/manage-brand.component';
+import { BrandDesignTabComponent } from './components/brand-design-tab/brand-design-tab.component';
+import { BrandDesignLayoutComponent } from './components/brand-design-layout/brand-design-layout.component';
+import { PageFormComponent } from './components/page-form/page-form.component';
+import { ProfileFormComponent } from './components/profile-form/profile-form.component';
+import { FontFormComponent } from './components/font-form/font-form.component';
+import { BlocksFormComponent } from './components/blocks-form/blocks-form.component';
+import { SocialsFormComponent } from './components/socials-form/socials-form.component';
 
 
 @NgModule({
@@ -22,7 +29,14 @@ import { ManageBrandPage } from './pages/manage-brand/manage-brand.component';
     CreateBrandInviteUserComponent,
     CreateBrandFinishComponent,
     CreateBrandOptionUserComponent,
-    ManageBrandPage
+    ManageBrandPage,
+    BrandDesignTabComponent,
+    BrandDesignLayoutComponent,
+    PageFormComponent,
+    ProfileFormComponent,
+    FontFormComponent,
+    BlocksFormComponent,
+    SocialsFormComponent
   ],
   imports: [
     CommonModule,
