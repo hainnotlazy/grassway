@@ -1,22 +1,19 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { BrandSocialPlatforms } from "./brand-social-platforms.entity";
-import { BrandMember } from "./brand-member.entity";
-import { BrandDraft } from "./brand-draft.entity";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Brand } from "./brand.entity";
+import { BrandSocialPlatformsDraft } from "./brand-social-platforms-draft.entity";
 import { BlockShadow, BlockShape, BrandFont, BrandLayout } from "./brand.enum";
 
 @Entity()
-export class Brand {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+export class BrandDraft {
+  @PrimaryColumn("uuid")
+  brand_id: string;
 
-  @OneToOne(() => BrandSocialPlatforms, social_platforms => social_platforms.brand)
-  social_platforms: BrandSocialPlatforms;
+  @OneToOne(() => Brand, brand => brand.draft)
+  @JoinColumn({ name: "brand_id" })
+  brand: Brand;
 
-  @OneToMany(() => BrandMember, member => member.brand)
-  members: BrandMember[];
-
-  @OneToOne(() => BrandDraft, draft => draft.brand)
-  draft: BrandDraft;
+  @OneToOne(() => BrandSocialPlatformsDraft, social_platforms => social_platforms.brand)
+  social_platforms: BrandSocialPlatformsDraft;
 
   @Column()
   title: string;
@@ -105,9 +102,6 @@ export class Brand {
     default: BrandFont.KARLA
   })
   font: BrandFont;
-
-  @CreateDateColumn()
-  created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;

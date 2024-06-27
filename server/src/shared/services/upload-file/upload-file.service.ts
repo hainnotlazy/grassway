@@ -40,17 +40,17 @@ export class UploadFileService {
   }
 
   /**
-   * Describe: Save brand from form data
+   * Describe: Save brand logo from form data
    */
-  saveBrandLogo(brand: Express.Multer.File) {
+  saveBrandLogo(brandLogo: Express.Multer.File) {
     if (!fs.existsSync(this.BRAND_PATH)) {
       fs.mkdirSync(this.BRAND_PATH, { recursive: true });
     }
 
-    const randomName = `${Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')}${path.extname(brand.originalname)}`;
+    const randomName = `${Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')}${path.extname(brandLogo.originalname)}`;
     const filePath = `${this.BRAND_PATH}/${randomName}`;
 
-    fs.writeFileSync(filePath, brand.buffer);
+    fs.writeFileSync(filePath, brandLogo.buffer);
     return filePath.replace(this.BRAND_PATH, `${this.SERVE_PATH}/brands`);
   }
 

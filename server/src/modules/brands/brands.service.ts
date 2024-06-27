@@ -7,6 +7,8 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateBrandDto } from './dtos/create-brand.dto';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { BrandMember, BrandMemberRole } from 'src/entities/brand-member.entity';
+import { BrandDraft } from 'src/entities/brand-draft.entity';
+import { BrandSocialPlatformsDraft } from 'src/entities/brand-social-platforms-draft.entity';
 
 @Injectable()
 export class BrandsService {
@@ -17,6 +19,10 @@ export class BrandsService {
     private readonly brandSocialPlatformsRepository: Repository<BrandSocialPlatforms>,
     @InjectRepository(BrandMember)
     private readonly brandMemberRepository: Repository<BrandMember>,
+    @InjectRepository(BrandDraft)
+    private readonly brandDraftRepository: Repository<BrandDraft>,
+    @InjectRepository(BrandSocialPlatformsDraft)
+    private readonly brandSocialPlatformsDraftRepository: Repository<BrandSocialPlatformsDraft>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
@@ -97,11 +103,23 @@ export class BrandsService {
       });
       await queryRunner.manager.save(brandSocialPlatforms);
 
+      // Save brand draft
+      const brandDraft = this.brandDraftRepository.create({
+        ...savedBrand,
+        brand: savedBrand
+      });
+      await queryRunner.manager.save(brandDraft);
+
+      const brandSocialPlatformsDraft = this.brandSocialPlatformsDraftRepository.create({
+        brand_id: savedBrand.id,
+        ...createBrandDto
+      });
+      await queryRunner.manager.save(brandSocialPlatformsDraft);
+
       // Commit transaction
       await queryRunner.commitTransaction();
       return savedBrand;
     } catch (err) {
-      console.log(err);
       // Rollback transaction
       await queryRunner.rollbackTransaction();
       logo && this.uploadFileService.removeOldFile(savedLogoPath);

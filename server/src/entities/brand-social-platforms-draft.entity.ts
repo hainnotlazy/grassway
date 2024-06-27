@@ -1,15 +1,15 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { Brand } from "./brand.entity";
+import { BrandDraft } from "./brand-draft.entity";
 import { SocialIconPosition, SocialIconStyle } from "./brand.enum";
 
 @Entity()
-export class BrandSocialPlatforms {
-  @PrimaryColumn()
+export class BrandSocialPlatformsDraft {
+  @PrimaryColumn("uuid")
   brand_id: string;
 
-  @OneToOne(() => Brand, brand => brand.social_platforms)
+  @OneToOne(() => BrandDraft, brandDraft => brandDraft.social_platforms)
   @JoinColumn({ name: "brand_id" })
-  brand: Brand;
+  brand: BrandDraft;
 
   @Column({
     type: "enum",
