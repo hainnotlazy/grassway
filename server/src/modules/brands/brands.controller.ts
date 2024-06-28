@@ -24,6 +24,16 @@ export class BrandsController {
     return !(await this.brandsService.validateBrandPrefix(prefix));
   }
 
+  @Get("/:id")
+  async getBrand(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    return this.brandsService.getBrandById(currentUser, id);
+  }
+
+  @Get("/:id/design/draft")
+  async getBrandDesignDraft(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    return this.brandDraftService.getBrandDesignDraft(currentUser, id);
+  }
+
   @Post()
   @UseInterceptors(FileInterceptor("logo"))
   createBrand(

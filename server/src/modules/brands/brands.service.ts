@@ -41,6 +41,19 @@ export class BrandsService {
     });
   }
 
+  async getBrandById(currentUser: User, id: string) {
+    return this.brandRepository.findOne({  
+      where: {
+        id,
+        members: {
+          user: {
+            id: currentUser.id
+          }
+        }
+      },
+    });
+  }
+
   async createBrand(
     currentUser: User,
     createBrandDto: CreateBrandDto,

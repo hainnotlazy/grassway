@@ -6,11 +6,14 @@
 
   <div class="flex flex-col gap-2">
     <label class="text-gray-500">Logo:</label>
-    <app-input-image></app-input-image>
+    <app-input-image
+      [imageUrl]="designForm.controls.logo.value"
+      [control]="designForm.controls.logo"
+    ></app-input-image>
   </div>
 
   <div class="flex flex-col gap-2">
-    <label class="text-gray-500" for="title">Title:</label>
+    <label class="text-gray-500" for="title">Title:<small class="text-red-500">*</small></label>
     <mat-form-field class="max-w-xl" appearance="outline" color="accent">
       <input
         formControlName="title"
@@ -19,6 +22,31 @@
         type="text"
         placeholder="Brand name"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(designForm.controls.title.errors)"
+      >
+        {{ titleValidationMessages[error] }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-500" for="prefix">Prefix:<small class="text-red-500">*</small></label>
+    <mat-form-field class="max-w-xl" appearance="outline" color="accent">
+      <input
+        formControlName="prefix"
+        matInput
+        id="prefix"
+        type="text"
+        placeholder="Brand prefix"
+      >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(designForm.controls.prefix.errors)"
+      >
+        {{ prefixValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -33,6 +61,12 @@
         placeholder="Brand description"
         rows="2"
       ></textarea>
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(designForm.controls.description.errors)"
+      >
+        {{ descriptionValidationMessages[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 </form>

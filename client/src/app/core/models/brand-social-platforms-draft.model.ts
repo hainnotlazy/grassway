@@ -1,9 +1,7 @@
 import { SocialIconPosition, SocialIconStyle } from "./brand.enum";
-import { Brand } from "./brand.model";
 
-export interface BrandSocialPlatforms {
+export interface BrandSocialPlatformsDraft {
   brand_id: string;
-  brand?: Brand;
   icon_style: SocialIconStyle;
   icon_position: SocialIconPosition;
   facebook: string;

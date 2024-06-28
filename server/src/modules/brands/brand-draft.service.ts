@@ -18,6 +18,21 @@ export class BrandDraftService {
     private uploadFileService: UploadFileService
   ) {}
 
+  async getBrandDesignDraft(currentUser: User, brandId: string) {
+    const isMember = await this.brandMemberRepository.findOneBy({
+      brand_id: brandId,
+      user_id: currentUser.id,
+    })
+
+    if (!isMember) {
+      throw new BadRequestException("You don't have permission to view this brand");
+    }
+
+    return this.brandDraftRepository.findOneBy({
+      brand_id: brandId
+    });
+  }
+
   async updateDesign(
     currentUser: User,
     brandId: string,

@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './brand-design-layout.component.html',
   styleUrls: ['./brand-design-layout.component.scss'],
   host: {
-    class: "flex gap-3"
+    class: "flex gap-3 flex-wrap"
   }
 })
 export class BrandDesignLayoutComponent {

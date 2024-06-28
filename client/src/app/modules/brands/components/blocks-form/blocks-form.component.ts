@@ -11,6 +11,7 @@ export class BlocksFormComponent {
     title: FormControl<string | null>;
     description: FormControl<string | null>;
     prefix: FormControl<string | null>;
+    logo: FormControl<string | null>;
     layout: FormControl<string | null>;
     headerColor: FormControl<string | null>;
     backgroundColor: FormControl<string | null>;

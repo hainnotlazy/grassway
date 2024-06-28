@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateBrandDto } from '../interfaces/create-brand.interface';
 import { Brand } from '../models/brand.model';
+import { UpdateBrandDesignDto } from '../interfaces/update-brand.interface';
+import { BrandDraft } from '../models/brand-draft.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +20,14 @@ export class BrandsService {
 
   getBrands() {
     return this.httpClient.get<Brand[]>("api/brands");
+  }
+
+  getBrandById(brandId: string) {
+    return this.httpClient.get<Brand>(`api/brands/${brandId}`);
+  }
+
+  getBrandDraft(brandId: string) {
+    return this.httpClient.get<BrandDraft>(`api/brands/${brandId}/design/draft`);
   }
 
   createBrand(createBrandDto: CreateBrandDto) {
@@ -41,5 +51,9 @@ export class BrandsService {
 
   validateBrandPrefix(prefix: string) {
     return this.httpClient.get<boolean>(`api/brands/validate-prefix?prefix=${prefix}`);
+  }
+
+  updateDesignDraft(brandId: string, updateBrandDesignDto: UpdateBrandDesignDto) {
+    return this.httpClient.put<BrandDraft>(`api/brands/${brandId}/design/draft`, updateBrandDesignDto);
   }
 }

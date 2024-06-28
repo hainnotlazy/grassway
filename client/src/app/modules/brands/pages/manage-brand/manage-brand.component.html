@@ -1,7 +1,7 @@
 <div class="my-4 space-y-4">
   <div class="space-y-1">
     <h1 class="text-poetsen-one text-3xl">
-      Brand: <span class="text-primary">hainkOne</span>
+      Brand: <span class="text-primary">{{ (brand$ | async)?.title }}</span>
     </h1>
     <p class="italic text-gray-500">Manage all about your brand!</p>
   </div>
