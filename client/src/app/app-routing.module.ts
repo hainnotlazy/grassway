@@ -58,10 +58,20 @@ const routes: Routes = [
       }
     ]
   },
-    {
-      path: "**",
-      redirectTo: ""
-    }
+  {
+    path: "m",
+    title: "Brand | Grassway",
+    children: [
+      {
+        path: "",
+        loadChildren: () => import('./modules/brand-page/brand-page.module').then(m => m.BrandPageModule)
+      }
+    ]
+  },
+  {
+    path: "**",
+    redirectTo: ""
+  }
 ];
 
 @NgModule({

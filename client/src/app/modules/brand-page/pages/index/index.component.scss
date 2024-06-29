@@ -1,0 +1,21 @@
+.brand-card {
+  @media screen and (min-width: 680px) {
+    padding-top: 3rem;
+  }
+}
+
+.brand {
+  header {
+    .header-background {
+      height: 12.5rem;
+    }
+
+    .header-content {
+      margin-top: -9rem;
+    }
+  }
+
+  @media screen and (min-width: 680px) {
+    width: 680px;
+  }
+}

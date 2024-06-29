@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --disable-host-check --configuration development --poll 200",
+    "start": "ng serve --host 0.0.0.0 --disable-host-check --configuration development --poll 300",
     "build": "ng build --configuration production --aot",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
