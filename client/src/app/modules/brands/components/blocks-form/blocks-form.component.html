@@ -3,17 +3,26 @@
 
   <div class="space-y-2">
     <h6 class="text-karla list-item ml-4 text-lg font-semibold text-blue-700">Shape</h6>
-
     <div class="space-y-2">
-      <div class="flex gap-4">
-        <div class="hover:outline hover:outline-blue-300 bg-slate-400 w-48 h-8 rounded-full"></div>
-        <div class="hover:outline hover:outline-blue-300 bg-slate-400 w-48 h-8 rounded-lg"></div>
-        <div class="hover:outline hover:outline-blue-300 bg-slate-400 w-48 h-8"></div>
-      </div>
-      <div class="flex gap-4">
-        <div class="hover:outline hover:outline-blue-300 bg-slate-300 w-48 h-8 border-2 border-black rounded-full"></div>
-        <div class="hover:outline hover:outline-blue-300 bg-slate-300 w-48 h-8 border-2 border-black rounded-lg"></div>
-        <div class="hover:outline hover:outline-blue-300 bg-slate-300 w-48 h-8 border-2 border-black"></div>
+      <div class="flex flex-wrap items-center gap-4">
+        <ng-container *ngFor="let shape of getObjectValues(BlockShape); let i = index">
+          <div *ngIf="i === 3" class="w-full opacity-0"></div>
+          <button
+            class="bg-slate-400 w-48 h-10"
+            [ngClass]="{
+              'hover:outline hover:outline-blue-500': blockShapeControl.value !== shape,
+              'outline outline-blue-500': blockShapeControl.value === shape,
+              'rounded-full': shape === BlockShape.PILL_NO_BORDER || shape === BlockShape.PILL_BORDER,
+              'rounded-lg': shape === BlockShape.ROUNDED_NO_BORDER || shape === BlockShape.ROUNDED_BORDER,
+              'border-2 border-black':
+                shape === BlockShape.PILL_BORDER
+                || shape === BlockShape.ROUNDED_BORDER
+                || shape === BlockShape.NO_ROUNDED_BORDER,
+            }"
+            type="button"
+            (click)="blockShapeControl.patchValue(shape)"
+          ></button>
+        </ng-container>
       </div>
     </div>
   </div>
@@ -21,9 +30,18 @@
   <div class="space-y-2">
     <h6 class="text-karla list-item ml-4 text-lg font-semibold text-blue-700">Shadow</h6>
     <div class="flex gap-4">
-      <div class="bg-slate-400 hover:outline hover:outline-blue-300 w-48 h-12 rounded-lg shadow"></div>
-      <div class="bg-slate-400 hover:outline hover:outline-blue-300 w-48 h-12 rounded-lg shadow-lg"></div>
-      <div class="bg-slate-400 hover:outline hover:outline-blue-300 w-48 h-12 rounded-lg shadow-2xl"></div>
+      <button
+        *ngFor="let shadow of getObjectValues(BlockShadow)"
+        class="bg-slate-400 w-48 h-12 rounded-lg"
+        [ngClass]="{
+          'hover:outline hover:outline-blue-500': blockShadowControl.value !== shadow,
+          'outline outline-blue-500': blockShadowControl.value === shadow,
+          'shadow': shadow === BlockShadow.SHADOW,
+          'shadow-2xl': shadow === BlockShadow.HEAVY_SHADOW
+        }"
+        type="button"
+        (click)="blockShadowControl.patchValue(shadow)"
+      ></button>
     </div>
   </div>
 
@@ -32,14 +50,13 @@
     <div class="flex flex-wrap gap-4">
       <div>
         <span class="text-gray-500">Block color:</span>
-        <app-input-color-picker [control]="designForm.controls.blockBackgroundColor"></app-input-color-picker>
+        <app-input-color-picker [control]="blockColorControl"></app-input-color-picker>
       </div>
 
       <div>
         <span class="text-gray-500">Text color:</span>
-        <app-input-color-picker [control]="designForm.controls.blockTextColor"></app-input-color-picker>
+        <app-input-color-picker [control]="blockTextColorControl"></app-input-color-picker>
       </div>
     </div>
   </div>
-
 </div>

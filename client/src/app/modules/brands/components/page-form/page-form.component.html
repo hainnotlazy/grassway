@@ -1,23 +1,20 @@
-<form
-  class="space-y-3"
-  [formGroup]="designForm"
->
+<div class="space-y-3">
   <h5 class="text-karla text-xl font-bold">Page</h5>
   <div class="space-y-2">
     <h6 class="text-karla list-item ml-4 text-lg font-semibold text-blue-700">Layout</h6>
-    <app-brand-design-layout></app-brand-design-layout>
+    <app-brand-design-layout [control]="layoutControl"></app-brand-design-layout>
   </div>
 
   <div>
     <h6 class="text-karla list-item ml-4 text-lg font-semibold text-blue-700">Header</h6>
     <span class="text-gray-500">Color:</span>
-    <app-input-color-picker [control]="designForm.controls.headerColor"></app-input-color-picker>
+    <app-input-color-picker [control]="headerColorControl"></app-input-color-picker>
   </div>
 
   <div>
     <h6 class="text-karla list-item ml-4 text-lg font-semibold text-blue-700">Background</h6>
     <span class="text-gray-500">Color:</span>
-    <app-input-color-picker [control]="designForm.controls.backgroundColor"></app-input-color-picker>
+    <app-input-color-picker [control]="backgroundColorControl"></app-input-color-picker>
   </div>
 
   <div>
@@ -25,13 +22,13 @@
     <div class="flex flex-wrap gap-4">
       <div>
         <span class="text-gray-500">Title color:</span>
-        <app-input-color-picker [control]="designForm.controls.titleColor"></app-input-color-picker>
+        <app-input-color-picker [control]="titleColorControl"></app-input-color-picker>
       </div>
 
       <div>
         <span class="text-gray-500">Description color:</span>
-        <app-input-color-picker [control]="designForm.controls.descriptionColor"></app-input-color-picker>
+        <app-input-color-picker [control]="descriptionColorControl"></app-input-color-picker>
       </div>
     </div>
   </div>
-</form>
+</div>

@@ -2,7 +2,7 @@ export enum BrandLayout {
   NO_HEADER = "no-header",
   CURLY_HEADER = "curly-header",
   LEFT_HEADER = "left-header",
-  CENTER_HEADER = "right-header",
+  CENTER_HEADER = "center-header",
 }
 
 export enum BlockShape {

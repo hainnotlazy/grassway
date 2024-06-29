@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { BrandFont } from './../../../../core/models/brand.enum';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-font-form',
@@ -9,5 +11,7 @@ import { Component } from '@angular/core';
   }
 })
 export class FontFormComponent {
+  readonly BrandFont = BrandFont;
 
+  @Input() fontControl!: FormControl;
 }

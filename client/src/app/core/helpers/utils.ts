@@ -6,6 +6,18 @@ export function getObjectKeys(arg: any): string[] {
   }
 }
 
+export function getObjectValues(arg: any): any[] {
+  try {
+    return Object.values(arg);
+  } catch (err) {
+    return [];
+  }
+}
+
 export function changeStatus(status: boolean) {
   return !status;
+}
+
+export function camelCaseToSnackCase(text: string) {
+  return text.replace(/([A-Z])/g, '_$1').toLowerCase();
 }

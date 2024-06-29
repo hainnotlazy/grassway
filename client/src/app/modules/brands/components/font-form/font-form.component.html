@@ -1,51 +1,147 @@
 <h6 class="text-karla text-xl font-bold">Font</h6>
 
 <div class="sm:grid-cols-4 grid grid-cols-2 gap-4">
-  <div class="text-karla hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.KARLA,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.KARLA,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.KARLA)"
+  >
     Karla
-  </div>
+  </button>
 
-  <div class="text-roboto-condensed hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.ROBOTO_CONDENSED,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.ROBOTO_CONDENSED,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.ROBOTO_CONDENSED)"
+  >
     Roboto Condensed
-  </div>
+  </button>
 
-  <div class="text-arvo hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.ARVO,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.ARVO,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.ARVO)"
+  >
     Arvo
-  </div>
+  </button>
 
-  <div class="text-dosis hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.DOSIS,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.DOSIS,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.DOSIS)"
+  >
     Dosis
-  </div>
+  </button>
 
-  <div class="text-lato hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.LATO,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.LATO,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.LATO)"
+  >
     Lato
-  </div>
+  </button>
 
-  <div class="text-league-spartan hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.LEAGUE_SPARTAN,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.LEAGUE_SPARTAN,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.LEAGUE_SPARTAN)"
+  >
     League Spartan
-  </div>
+  </button>
 
-  <div class="text-nunito hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.NUNITO,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.NUNITO,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.NUNITO)"
+  >
     Nunito
-  </div>
+  </button>
 
-  <div class="text-oswald hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.OSWALD,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.OSWALD,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.OSWALD)"
+  >
     Oswald
-  </div>
+  </button>
 
-  <div class="text-ubuntu-condensed hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.UBUNTU_CONDENSED,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.UBUNTU_CONDENSED,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.UBUNTU_CONDENSED)"
+  >
     Ubuntu Condensed
-  </div>
+  </button>
 
-  <div class="text-jost hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.JOST,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.JOST,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.JOST)"
+  >
     Jost
-  </div>
+  </button>
 
-  <div class="text-itim hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.ITIM,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.ITIM,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.ITIM)"
+  >
     Itim
-  </div>
+  </button>
 
-  <div class="text-lobster hover:border-blue-500 text-slate-700 hover:text-blue-700 flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer">
+  <button
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    [ngClass]="{
+      'border-blue-500 text-blue-700': fontControl.value === BrandFont.LOBSTER,
+      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.LOBSTER,
+    }"
+    type="button"
+    (click)="fontControl.patchValue(BrandFont.LOBSTER)"
+  >
     Lobster
-  </div>
+  </button>
 </div>

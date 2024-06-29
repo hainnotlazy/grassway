@@ -1,3 +1,4 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -13,12 +14,18 @@ import { BrandsService } from 'src/app/core/services/brands.service';
 })
 export class ManageBrandPage {
   brand$: Observable<Brand>;
+  showLivePreview$: Observable<boolean>;
 
   constructor(
+    private breakpointObserver: BreakpointObserver,
     private brandsService: BrandsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
+    this.showLivePreview$ = this.breakpointObserver
+      .observe(['(min-width: 1280px)'])
+      .pipe(map(({ matches }) => !!matches));
+
     this.brand$ = this.router.events.pipe(
       filter(event => (event instanceof Scroll || event instanceof NavigationEnd)),
       map(() => this.route.snapshot.paramMap.get("brandId") as string),
@@ -26,4 +33,5 @@ export class ManageBrandPage {
       switchMap((brandId: string) => this.brandsService.getBrandById(brandId))
     )
   }
+
 }

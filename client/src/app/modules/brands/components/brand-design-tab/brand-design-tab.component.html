@@ -1,19 +1,35 @@
-<div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
-  <app-profile-form [designForm]="designForm"></app-profile-form>
-</div>
+<ng-container *ngIf="brandId">
+  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+    <app-profile-form
+      [titleControl]="designForm.controls.title"
+      [descriptionControl]="designForm.controls.description"
+    ></app-profile-form>
+  </div>
 
-<div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
-  <app-page-form [designForm]="designForm"></app-page-form>
-</div>
+  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+    <app-page-form
+      [layoutControl]="designForm.controls.layout"
+      [headerColorControl]="designForm.controls.headerColor"
+      [backgroundColorControl]="designForm.controls.backgroundColor"
+      [titleColorControl]="designForm.controls.titleColor"
+      [descriptionColorControl]="designForm.controls.descriptionColor"
+    ></app-page-form>
+  </div>
 
-<div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
-  <app-socials-form></app-socials-form>
-</div>
+  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+    <app-socials-form></app-socials-form>
+  </div>
 
-<div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
-  <app-blocks-form [designForm]="designForm"></app-blocks-form>
-</div>
+  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+    <app-blocks-form
+      [blockShapeControl]="designForm.controls.blockShape"
+      [blockShadowControl]="designForm.controls.blockShadow"
+      [blockColorControl]="designForm.controls.blockColor"
+      [blockTextColorControl]="designForm.controls.blockTextColor"
+    ></app-blocks-form>
+  </div>
 
-<div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
-  <app-font-form></app-font-form>
-</div>
+  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+    <app-font-form [fontControl]="designForm.controls.font"></app-font-form>
+  </div>
+</ng-container>
