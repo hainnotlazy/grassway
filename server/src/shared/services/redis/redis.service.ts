@@ -22,7 +22,8 @@ export interface RemoveKeyRedisOptions {
 export enum RedisDatabase {
   JWT_BLACKLIST = 0,
   PUBLIC_ANALYTICS = 1,
-  NOTIFICATION_SOCKET = 2
+  NOTIFICATION_SOCKET = 2,
+  BRAND = 3
 }
 
 @Injectable()

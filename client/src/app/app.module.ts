@@ -12,6 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { SocketIoModule } from 'ngx-socket-io';
 import { JwtConfigOptions } from './core/config';
 import { NotificationSocket } from './core/sockets/notification.socket';
+import { BrandsSocket } from './core/sockets/brands.socket';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NotificationSocket } from './core/sockets/notification.socket';
       multi: true
     },
     NotificationSocket,
+    BrandsSocket,
     CookieService
   ],
   bootstrap: [AppComponent]

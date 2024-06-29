@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { UpdateBrandDesignDto } from './dtos/update-brand-design.dto';
@@ -6,6 +6,7 @@ import { BrandDraft } from 'src/entities/brand-draft.entity';
 import { DataSource, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { BrandMember } from 'src/entities/brand-member.entity';
+import { BrandsGateway } from './brands.gateway';
 
 @Injectable()
 export class BrandDraftService {
@@ -15,6 +16,7 @@ export class BrandDraftService {
     @InjectRepository(BrandMember)
     private readonly brandMemberRepository: Repository<BrandMember>,
     private dataSource: DataSource,
+    private brandsGateway: BrandsGateway,
     private uploadFileService: UploadFileService
   ) {}
 
@@ -31,6 +33,20 @@ export class BrandDraftService {
     return this.brandDraftRepository.findOneBy({
       brand_id: brandId
     });
+  }
+
+  async getBrandByPrefix(prefix: string) {
+    const brand = await this.brandDraftRepository.findOneBy({
+      brand: {
+        prefix
+      }
+    });
+
+    if (!brand) {
+      throw new NotFoundException("Brand not found");
+    }
+
+    return brand;
   }
 
   async updateDesign(
@@ -73,6 +89,10 @@ export class BrandDraftService {
 
       // Commit transaction
       await queryRunner.commitTransaction();
+
+      // Push new design to live preview
+      await this.brandsGateway.emitNewDesign(currentUser.id, updatedBrandDraft);
+
       return updatedBrandDraft;
     } catch (error) {
       // Rollback transaction

@@ -4,18 +4,21 @@ import { CreateBrandDto } from '../interfaces/create-brand.interface';
 import { Brand } from '../models/brand.model';
 import { UpdateBrandDesignDto } from '../interfaces/update-brand.interface';
 import { BrandDraft } from '../models/brand-draft.model';
+import { BrandsSocket } from '../sockets/brands.socket';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BrandsService {
+  private readonly NEW_DESIGN_EVENT_NAME = "NewDesign";
   private readonly CREATE_BRAND_FIELDS = [
     "title", "description", "prefix", "logo", "facebook", "instagram", "twitter",
     "youtube", "tiktok", "linkedin", "discord", "github", "website", "invited_users"
   ];
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private socket: BrandsSocket
   ) { }
 
   getBrands() {
@@ -26,8 +29,17 @@ export class BrandsService {
     return this.httpClient.get<Brand>(`api/brands/${brandId}`);
   }
 
+  getBrandByPrefix(prefix: string) {
+    return this.httpClient.get<BrandDraft>(`api/brands/prefix/${prefix}`);
+  }
+
   getBrandDraft(brandId: string) {
+    // Add query as get draft data
     return this.httpClient.get<BrandDraft>(`api/brands/${brandId}/design/draft`);
+  }
+
+  getNewDesign() {
+    return this.socket.fromEvent<BrandDraft>(this.NEW_DESIGN_EVENT_NAME);
   }
 
   createBrand(createBrandDto: CreateBrandDto) {

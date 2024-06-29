@@ -19,12 +19,11 @@ export class ManageBrandPage {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.brand$ = this.router.events
-      .pipe(
-        filter(event => (event instanceof Scroll || event instanceof NavigationEnd)),
-        map(() => this.route.snapshot.paramMap.get("brandId") as string),
-        distinctUntilChanged(),
-        switchMap((brandId: string) => this.brandsService.getBrandById(brandId))
-      )
+    this.brand$ = this.router.events.pipe(
+      filter(event => (event instanceof Scroll || event instanceof NavigationEnd)),
+      map(() => this.route.snapshot.paramMap.get("brandId") as string),
+      distinctUntilChanged(),
+      switchMap((brandId: string) => this.brandsService.getBrandById(brandId))
+    )
   }
 }

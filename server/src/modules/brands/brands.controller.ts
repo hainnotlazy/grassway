@@ -1,6 +1,6 @@
 import { Body, Controller, DefaultValuePipe, Get, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { BrandsService } from './brands.service';
-import { CurrentUser } from 'src/common/decorators';
+import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateBrandDto } from './dtos/create-brand.dto';
@@ -27,6 +27,12 @@ export class BrandsController {
   @Get("/:id")
   async getBrand(@CurrentUser() currentUser: User, @Param("id") id: string) {
     return this.brandsService.getBrandById(currentUser, id);
+  }
+
+  @PublicRoute()
+  @Get("/prefix/:prefix")
+  async getBrandByPrefix(@Param("prefix") prefix: string) {
+    return this.brandDraftService.getBrandByPrefix(prefix);
   }
 
   @Get("/:id/design/draft")

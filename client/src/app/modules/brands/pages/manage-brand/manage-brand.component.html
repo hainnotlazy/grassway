@@ -5,27 +5,36 @@
     </h1>
     <p class="italic text-gray-500">Manage all about your brand!</p>
   </div>
-  <mat-tab-group
-    mat-stretch-tabs="false"
-    mat-align-tabs="start"
-    animationDuration="0ms"
-    color="accent"
-  >
-    <mat-tab label="Design">
-      <app-brand-design-tab></app-brand-design-tab>
-    </mat-tab>
+  <div class="flex gap-2">
+    <mat-tab-group
+      class="flex-grow"
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      animationDuration="0ms"
+      color="accent"
+    >
+      <mat-tab label="Design">
+        <app-brand-design-tab></app-brand-design-tab>
+      </mat-tab>
 
-    <mat-tab label="Build">
+      <mat-tab label="Build">
 
-    </mat-tab>
-    <mat-tab label="Analytics">
-      Not implement yet
-    </mat-tab>
-    <mat-tab label="Settings">
-      Not implement yet
-    </mat-tab>
-    <mat-tab label="Links">
-      Not implement yet
-    </mat-tab>
-  </mat-tab-group>
+      </mat-tab>
+      <mat-tab label="Analytics">
+        Not implement yet
+      </mat-tab>
+      <mat-tab label="Settings">
+        Not implement yet
+      </mat-tab>
+      <mat-tab label="Links">
+        Not implement yet
+      </mat-tab>
+    </mat-tab-group>
+
+    <iframe
+      class="rounded-xl top-20 sticky items-start max-w-xs shadow-lg"
+      src="http://localhost:4200/m/jost"
+      frameborder="0"
+    ></iframe>
+  </div>
 </div>

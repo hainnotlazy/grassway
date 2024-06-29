@@ -10,6 +10,9 @@ import { User } from 'src/entities/user.entity';
 import { BrandDraft } from 'src/entities/brand-draft.entity';
 import { BrandSocialPlatformsDraft } from 'src/entities/brand-social-platforms-draft.entity';
 import { BrandDraftService } from './brand-draft.service';
+import { BrandsGateway } from './brands.gateway';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtConfigOptions } from 'src/config';
 
 @Module({
   imports: [
@@ -21,12 +24,16 @@ import { BrandDraftService } from './brand-draft.service';
       BrandSocialPlatformsDraft,
       User
     ]),
+    JwtModule.registerAsync({
+      useClass: JwtConfigOptions
+    }),
     SharedModule
   ],
   controllers: [BrandsController],
   providers: [
     BrandsService,
-    BrandDraftService
+    BrandDraftService,
+    BrandsGateway
   ]
 })
 export class BrandsModule {}
