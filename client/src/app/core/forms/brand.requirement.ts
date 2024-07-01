@@ -1,7 +1,7 @@
 const titleRequirements = {
   required: true,
   minlength: 3,
-  maxlength: 255
+  maxlength: 80
 }
 
 const prefixRequirements = {
@@ -12,7 +12,7 @@ const prefixRequirements = {
 }
 
 const descriptionRequirements = {
-  maxlength: 255
+  maxlength: 100
 }
 
 const facebookRequirements = {

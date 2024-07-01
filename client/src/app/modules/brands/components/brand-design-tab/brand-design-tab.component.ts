@@ -23,10 +23,10 @@ export class BrandDesignTabComponent {
     title: new FormControl("", [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(255)
+      Validators.maxLength(80)
     ]),
     description: new FormControl("", [
-      Validators.maxLength(255)
+      Validators.maxLength(100)
     ]),
     logo: new FormControl(""),
     layout: new FormControl(""),

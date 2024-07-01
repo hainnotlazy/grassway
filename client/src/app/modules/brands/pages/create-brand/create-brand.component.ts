@@ -30,12 +30,12 @@ export class CreateBrandPage {
     title: new FormControl("", [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(255)
+      Validators.maxLength(80)
     ]),
     prefix: new FormControl("", [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(255)
+      Validators.maxLength(100)
     ], FormValidator.brandPrefixExisted(this.brandsService)),
     description: new FormControl("", [
       Validators.maxLength(255)

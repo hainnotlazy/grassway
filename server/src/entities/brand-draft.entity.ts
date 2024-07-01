@@ -15,10 +15,10 @@ export class BrandDraft {
   @OneToOne(() => BrandSocialPlatformsDraft, social_platforms => social_platforms.brand_draft)
   social_platforms: BrandSocialPlatformsDraft;
 
-  @Column()
+  @Column({ length: 80 })
   title: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 100 })
   description: string;
 
   @Column({ unique: true })

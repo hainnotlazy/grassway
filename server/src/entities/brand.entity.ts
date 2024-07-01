@@ -18,10 +18,10 @@ export class Brand {
   @OneToOne(() => BrandDraft, draft => draft.brand)
   draft: BrandDraft;
 
-  @Column()
+  @Column({ length: 80 })
   title: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 100 })
   description: string;
 
   @Column({ unique: true })

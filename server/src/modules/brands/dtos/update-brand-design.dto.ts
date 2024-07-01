@@ -1,15 +1,17 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsEnum, IsHexColor, IsOptional, IsString, Length } from "class-validator";
+import { IsEnum, IsHexColor, IsOptional, IsString, Length, MaxLength } from "class-validator";
 import { BlockShadow, BlockShape, BrandFont, BrandLayout } from "src/entities/brand.enum";
 
 export class UpdateBrandDesignDto {
   @IsString()
   @IsOptional()
+  @MaxLength(80)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   title?: string;
 
   @IsString()
   @IsOptional()
+  @MaxLength(100)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   description?: string;
   

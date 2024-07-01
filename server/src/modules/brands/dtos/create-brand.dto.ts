@@ -1,13 +1,15 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsArray, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
+import { IsArray, IsNotEmpty, IsOptional, IsString, Matches, MaxLength } from "class-validator";
 
 export class CreateBrandDto {
   @IsString()
   @IsNotEmpty()
+  @MaxLength(80)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   title: string;
 
   @IsString()
+  @MaxLength(100)
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => value?.trim())
   description?: string;

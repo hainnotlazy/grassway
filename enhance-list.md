@@ -2,11 +2,9 @@
 - Tooltip in info & copy button in home page.
 - upload file service
 - sharp logo uploaded
-- limit length of brand title and desc
 - query
 
 ## TODO:
-- Fix cors of socket
 - push noti when brand created
 
 - Prevent other website embedded 
