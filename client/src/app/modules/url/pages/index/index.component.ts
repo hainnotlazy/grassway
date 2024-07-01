@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, combineLatest, filter, map, scan, shareReplay, take, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers';
-import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
 import { Url, Tag } from 'src/app/core/models';
 import { UrlsService, TagsService } from 'src/app/core/services';
 import { environment } from 'src/environments/environment';
-import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { UrlsResponse, GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from 'src/app/core/interfaces';
 
 @UntilDestroy()
 @Component({

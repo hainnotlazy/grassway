@@ -1,7 +1,7 @@
-import { Url } from "../models/url.model";
+import { UserNotification } from "../../models";
 
-export interface UrlsResponse {
-  data: Url[];
+export interface NotificationResponse {
+  data: UserNotification[];
   meta: {
     itemsPerPage: number,
     totalItems: number,

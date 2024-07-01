@@ -1,4 +1,4 @@
-export interface UserProfile {
+export interface UserProfileDto {
   [key: string]: any;
   fullname: string;
   dob?: Date | null;

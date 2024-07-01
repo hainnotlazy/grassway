@@ -4,10 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { Tag } from 'src/app/core/models';
 import { TagsService } from 'src/app/core/services';
 import { DeleteTagDialogComponent } from '../delete-tag-dialog/delete-tag-dialog.component';
+import { ErrorResponse } from 'src/app/core/interfaces';
 
 @UntilDestroy()
 @Component({

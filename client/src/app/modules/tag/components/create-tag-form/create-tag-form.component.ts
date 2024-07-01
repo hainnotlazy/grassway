@@ -5,8 +5,8 @@ import { TagsService } from 'src/app/core/services';
 import { finalize, tap } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage, tagFormRequirements } from 'src/app/core/forms';
+import { ErrorResponse } from 'src/app/core/interfaces';
 
 @UntilDestroy()
 @Component({

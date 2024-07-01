@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
-import { UserProfile } from '../interfaces/manage-account.interface';
-import { ResendVerificationCodeResponse } from '../interfaces/verify-email-response.interface';
+import { User } from '../models';
 import { noop, tap } from 'rxjs';
-import { removeAccessToken } from '../helpers/local-storage.helper';
+import { removeAccessToken } from '../helpers';
 import { Router } from '@angular/router';
+import { ResendVerificationCodeResponse } from '../interfaces';
+import { UserProfileDto } from '../dtos';
 
 @Injectable({
   providedIn: 'root'
@@ -43,13 +43,13 @@ export class UsersService {
   /**
    * Describe: Update current user information
   */
-  updateCurrentUser(userProfile: UserProfile) {
-    let { dob } = userProfile;
+  updateCurrentUser(userProfileDto: UserProfileDto) {
+    let { dob } = userProfileDto;
     const formData = new FormData();
 
     for (const field of ["fullname", "bio", "gender", "avatar", "phone"]) {
-      if (userProfile[field]) {
-        formData.append(field, userProfile[field]);
+      if (userProfileDto[field]) {
+        formData.append(field, userProfileDto[field]);
       }
     }
 

@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
-import { GetUrlsOptions } from 'src/app/core/interfaces/get-urls-options.interface';
-import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
+import { UrlsResponse, GetUrlsOptions } from 'src/app/core/interfaces';
 import { UrlsService } from 'src/app/core/services';
 
 @UntilDestroy()

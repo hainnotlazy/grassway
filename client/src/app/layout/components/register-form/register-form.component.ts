@@ -6,8 +6,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, tap } from 'rxjs';
 import { ValidationMessage, registerRequirements } from 'src/app/core/forms';
 import { setAccessToken, changeStatus, getObjectKeys } from 'src/app/core/helpers';
-import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { AuthResponse, ErrorResponse } from 'src/app/core/interfaces';
 import { AuthService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 

@@ -5,7 +5,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, tap } from 'rxjs';
 import { ValidationMessage, tagFormRequirements } from 'src/app/core/forms';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { ErrorResponse } from 'src/app/core/interfaces';
 import { Tag } from 'src/app/core/models';
 import { TagsService } from 'src/app/core/services';
 

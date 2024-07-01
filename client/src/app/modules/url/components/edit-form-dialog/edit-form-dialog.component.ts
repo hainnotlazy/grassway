@@ -7,7 +7,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { filter, finalize, tap } from 'rxjs';
 import { ValidationMessage, shortenUrlRequirements } from 'src/app/core/forms';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { ErrorResponse } from 'src/app/core/interfaces';
 import { Url, Tag } from 'src/app/core/models';
 import { UrlsService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';

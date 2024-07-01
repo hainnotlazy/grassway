@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PersonalLinksAnalyticsResponse, PublicLinksAnalyticsResponse } from '../interfaces/analytics-response.interface';
+import { PersonalLinksAnalyticsResponse, PublicLinksAnalyticsResponse } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'

@@ -4,8 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, filter, finalize, take, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { ErrorResponse, GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces';
 import { Url, Tag } from 'src/app/core/models';
 import { UrlsService } from 'src/app/core/services';
 

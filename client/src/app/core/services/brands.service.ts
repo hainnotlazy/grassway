@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CreateBrandDto } from '../interfaces/create-brand.interface';
-import { Brand } from '../models/brand.model';
-import { UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto } from '../interfaces/update-brand.interface';
-import { BrandDraft } from '../models/brand-draft.model';
-import { BrandsSocket } from '../sockets/brands.socket';
+import { Brand, BrandDraft } from '../models';
+import { BrandsSocket } from '../sockets';
+import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto } from '../dtos';
 
 @Injectable({
   providedIn: 'root'

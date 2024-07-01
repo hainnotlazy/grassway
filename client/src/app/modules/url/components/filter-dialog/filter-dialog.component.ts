@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { GetUrlsOptions, LinkTypeOptions } from 'src/app/core/interfaces/get-urls-options.interface';
+import { GetUrlsOptions, LinkTypeOptions } from 'src/app/core/interfaces/options/get-urls-options.interface';
 import { Tag } from 'src/app/core/models';
 
 @Component({

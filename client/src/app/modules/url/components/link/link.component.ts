@@ -7,9 +7,9 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { UrlsService } from 'src/app/core/services';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 import { EditFormDialogComponent } from '../edit-form-dialog/edit-form-dialog.component';
+import { ErrorResponse } from 'src/app/core/interfaces';
 
 @UntilDestroy()
 @Component({

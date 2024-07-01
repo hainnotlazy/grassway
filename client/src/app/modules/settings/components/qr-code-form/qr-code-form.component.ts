@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
+import { ErrorResponse } from 'src/app/core/interfaces';
 import { UserSettingService } from 'src/app/core/services';
 
 @UntilDestroy()

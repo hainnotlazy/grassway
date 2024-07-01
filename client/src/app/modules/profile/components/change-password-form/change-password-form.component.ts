@@ -5,9 +5,9 @@ import { FormValidator } from 'src/app/core/validators/form.validator';
 import { UsersService } from 'src/app/core/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize, tap } from 'rxjs';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ValidationMessage, changePasswordRequirements } from 'src/app/core/forms';
+import { ErrorResponse } from 'src/app/core/interfaces';
 
 @UntilDestroy()
 @Component({

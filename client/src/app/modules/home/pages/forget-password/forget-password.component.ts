@@ -5,11 +5,11 @@ import { BehaviorSubject, combineLatest, finalize, map, tap, timer } from 'rxjs'
 import { UsersService } from 'src/app/core/services';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { User } from 'src/app/core/models';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 import { ValidationMessage, forgetPasswordRequirements } from 'src/app/core/forms';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
+import { ErrorResponse } from 'src/app/core/interfaces';
 
 @UntilDestroy()
 @Component({

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserSetting } from '../models/user-setting.model';
-import { UpdateUserSetting } from '../interfaces/user-setting.interface';
+import { UserSetting } from '../models';
+import { UpdateUserSettingsDto } from '../dtos';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +21,19 @@ export class UserSettingService {
   /**
    * Describe: Update user setting
   */
-  updateUserSetting(updateUserSetting: UpdateUserSetting) {
+  updateUserSetting(updateUserSettingsDto: UpdateUserSettingsDto) {
     const formData = new FormData();
 
-    if (updateUserSetting.qrCodeBackgroundColor) {
-      formData.append("qr_code_background_color", updateUserSetting.qrCodeBackgroundColor);
+    if (updateUserSettingsDto.qrCodeBackgroundColor) {
+      formData.append("qr_code_background_color", updateUserSettingsDto.qrCodeBackgroundColor);
     }
-    if (updateUserSetting.qrCodeForegroundColor) {
-      formData.append("qr_code_foreground_color", updateUserSetting.qrCodeForegroundColor);
+    if (updateUserSettingsDto.qrCodeForegroundColor) {
+      formData.append("qr_code_foreground_color", updateUserSettingsDto.qrCodeForegroundColor);
     }
-    if (updateUserSetting.logo) {
-      formData.append("logo", updateUserSetting.logo);
+    if (updateUserSettingsDto.logo) {
+      formData.append("logo", updateUserSettingsDto.logo);
       }
-    formData.append("qr_code_show_logo", updateUserSetting.qrCodeShowLogo.toString());
+    formData.append("qr_code_show_logo", updateUserSettingsDto.qrCodeShowLogo.toString());
 
     return this.httpClient.put<UserSetting>(`api/settings/user`, formData);
   }

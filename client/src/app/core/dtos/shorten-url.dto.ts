@@ -1,4 +1,4 @@
-export interface ShortenUrl {
+export interface ShortenUrlDto {
   origin_url: string
   title?: string;
   description?: string;

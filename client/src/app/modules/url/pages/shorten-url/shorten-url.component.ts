@@ -7,8 +7,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { finalize, tap } from 'rxjs';
-import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { ValidationMessage, shortenUrlRequirements } from 'src/app/core/forms';
+import { ErrorResponse } from 'src/app/core/interfaces';
 
 @UntilDestroy()
 @Component({

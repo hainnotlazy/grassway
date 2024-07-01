@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, tap } from 'rxjs';
-import { GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
-import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
+import { UrlsResponse, GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces';
 import { UrlsService } from 'src/app/core/services';
 
 @UntilDestroy()

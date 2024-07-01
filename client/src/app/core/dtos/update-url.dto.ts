@@ -1,4 +1,4 @@
-export interface UpdateUrl {
+export interface UpdateUrlDto {
   id: number;
   title: string;
   description?: string;

@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Url } from '../models/url.model';
-import { UrlsResponse } from '../interfaces/urls-response.interface';
-import { ShortenUrl } from '../interfaces/shorten-url.interface';
+import { Url } from '../models';
 import { Observable } from 'rxjs';
-import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from '../interfaces/get-urls-options.interface';
-import { UpdateUrl } from '../interfaces/urls.interface';
+import { UrlsResponse, GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from '../interfaces';
+import { ShortenUrlDto, UpdateUrlDto } from '../dtos';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +16,9 @@ export class UrlsService {
   /**
    * Describe: Shorten url
   */
-  shortenUrl(url: ShortenUrl): Observable<Url>;
+  shortenUrl(url: ShortenUrlDto): Observable<Url>;
   shortenUrl(url: string): Observable<Url>;
-  shortenUrl(url: ShortenUrl | string) {
+  shortenUrl(url: ShortenUrlDto | string) {
     if (typeof url === "string") {
       return this.httpClient.post<Url>("api/urls", {
         origin_url: url
@@ -82,7 +80,7 @@ export class UrlsService {
   /**
    * Describe: Update existed url
   */
-  updateUrl(updateUrlDto: UpdateUrl) {
+  updateUrl(updateUrlDto: UpdateUrlDto) {
     return this.httpClient.put<Url>(`api/urls/${updateUrlDto.id}`, updateUrlDto);
   }
 

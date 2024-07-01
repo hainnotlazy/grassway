@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { NotificationSocket } from '../sockets/notification.socket';
-import { UserNotification } from '../models/user-notification.model';
+import { UserNotification } from '../models';
 import { HttpClient } from '@angular/common/http';
-import { NotificationResponse } from '../interfaces/notification-response.interface';
-import { GetNotificationOptions } from '../interfaces/get-notifications-options.interface';
+import { NotificationResponse, GetNotificationOptions } from '../interfaces';
+import { NotificationSocket } from '../sockets';
 
 @Injectable({
   providedIn: 'root'
