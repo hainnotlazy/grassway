@@ -1,11 +1,9 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { CurrentUser } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
-import { CreateTagDto } from './dtos/create-tag.dto';
-import { UpdateTagDto } from './dtos/update-tag.dto';
+import { User, Tag } from 'src/entities';
+import { CreateTagDto, UpdateTagDto } from './dtos';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Tag } from 'src/entities/tag.entity';
 
 @ApiTags("Tags")
 @Controller('tags')
@@ -241,8 +239,11 @@ export class TagsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async deleteTag(@CurrentUser() currentUser: User, @Param('id', ParseIntPipe) id: number) {
+  async deleteTag(
+    @CurrentUser() currentUser: User, 
+    @Param('id', new DefaultValuePipe(0), ParseIntPipe) id: number
+  ) {
     await this.tagsService.deleteTag(currentUser, id);
-    return "";
+    return;
   }
 }

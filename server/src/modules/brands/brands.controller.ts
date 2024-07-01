@@ -1,10 +1,9 @@
 import { Body, Controller, DefaultValuePipe, Get, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from './dtos';
 import { BrandsService } from './brands.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/entities';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateBrandDto } from './dtos/create-brand.dto';
-import { UpdateBrandDesignDto } from './dtos/update-brand-design.dto';
 import { BrandDraftService } from './brand-draft.service';
 
 @Controller('brands')
@@ -25,19 +24,19 @@ export class BrandsController {
   }
 
   @Get("/:id")
-  async getBrand(@CurrentUser() currentUser: User, @Param("id") id: string) {
+  getBrand(@CurrentUser() currentUser: User, @Param("id") id: string) {
     return this.brandsService.getBrandById(currentUser, id);
   }
 
   @PublicRoute()
   @Get("/prefix/:prefix")
-  async getBrandByPrefix(@Param("prefix") prefix: string) {
+  getBrandByPrefix(@Param("prefix") prefix: string) {
     return this.brandDraftService.getBrandByPrefix(prefix);
   }
 
-  @Get("/:id/design/draft")
-  async getBrandDesignDraft(@CurrentUser() currentUser: User, @Param("id") id: string) {
-    return this.brandDraftService.getBrandDesignDraft(currentUser, id);
+  @Get("/draft/:id/design")
+  getBrandDesignDraft(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    return this.brandDraftService.getBrandDesign(currentUser, id);
   }
 
   @Post()
@@ -50,14 +49,45 @@ export class BrandsController {
     return this.brandsService.createBrand(currentUser, createBrandDto, logo);
   }
 
-  @Put("/:id/design/draft")
+  @Put("/draft/:id/design")
   @UseInterceptors(FileInterceptor("logo"))
-  updateDesign(
+  updateBrandDesignDraft(
     @CurrentUser() currentUser: User,
     @Param("id") id: string,
     @Body() updateBrandDesignDto: UpdateBrandDesignDto,
     @UploadedFile() logo: Express.Multer.File
   ) {
-    return this.brandDraftService.updateDesign(currentUser, id, updateBrandDesignDto, logo);
+    return this.brandDraftService.updateBrandDesign(
+      currentUser, 
+      id, 
+      updateBrandDesignDto, 
+      logo
+    );
+  }
+
+  @Put("/draft/:id/social-platforms/order") 
+  updateBrandSocialPlatformsDraftOrder(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto
+  ) {
+    return this.brandDraftService.updateBrandSocialPlatformsOrder(
+      currentUser, 
+      id, 
+      updateSocialPlatformsOrderDto
+    );
+  }
+
+  @Put("/draft/:id/social-platforms") 
+  updateBrandSocialPlatformsDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateSocialPlatformsDto: UpdateSocialPlatformsDto
+  ) {
+    return this.brandDraftService.updateBrandSocialPlatform(
+      currentUser, 
+      id, 
+      updateSocialPlatformsDto
+    );
   }
 }

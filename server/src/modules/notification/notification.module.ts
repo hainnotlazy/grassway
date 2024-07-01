@@ -4,10 +4,9 @@ import { NotificationService } from './notification.service';
 import { NotificationGateway } from './notification.gateway';
 import { SharedModule } from 'src/shared/shared.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserNotification } from 'src/entities/user-notification.entity';
+import { UserNotification } from 'src/entities';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigOptions } from 'src/config';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [

@@ -1,14 +1,10 @@
 import { Body, Controller, DefaultValuePipe, Get, HttpCode, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
-import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { User } from 'src/entities';
+import { UpdateProfileDto, VerifyEmailDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto } from './dtos';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { VerifyEmailDto } from './dtos/verify-email.dto';
-import { ChangePasswordDto } from './dtos/change-password.dto';
-import { ForgetPasswordDto } from './dtos/forget-password.dto';
-import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @ApiTags("Users")
 @Controller('users')
@@ -54,16 +50,16 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async getCurrentUser(@CurrentUser() currentUser: User) {
+  getCurrentUser(@CurrentUser() currentUser: User) {
     return currentUser;
   }
   
   @Get("/filter")
-  async filterUsers(
+  filterUsers(
     @CurrentUser() currentUser: User,
     @Query("query", new DefaultValuePipe("")) query: string,
   ) {
-    return await this.usersService.filterUsers(currentUser, query);
+    return this.usersService.filterUsers(currentUser, query);
   }
 
   @Get("/:id")
@@ -103,8 +99,8 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async getUserById(@Param("id") id: string) {
-    return await this.usersService.findUser(id);
+  getUserById(@Param("id") id: string) {
+    return this.usersService.findUser(id);
   }
 
   @Put("")
@@ -150,7 +146,7 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async updateProfile(
+  updateProfile(
     @CurrentUser() currentUser: User, 
     @Body() body: UpdateProfileDto, 
     @UploadedFile() avatar: Express.Multer.File
@@ -303,7 +299,7 @@ export class UsersController {
   })
   async verifyEmail(@CurrentUser() currentUser: User, @Body() body: VerifyEmailDto) {
     await this.usersService.verifyEmail(currentUser, body);
-    return "";
+    return;
   }
 
   @Put("/change-password")
@@ -358,7 +354,7 @@ export class UsersController {
   })
   async changePassword(@CurrentUser() currentUser: User, @Body() body: ChangePasswordDto) {
     await this.usersService.changePassword(currentUser, body);
-    return "";
+    return;
   }
 
   @PublicRoute()
@@ -377,7 +373,7 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async forgetPassword(@Body() body: ForgetPasswordDto) {
+  forgetPassword(@Body() body: ForgetPasswordDto) {
     return this.usersService.forgetPassword(body.email);
   }
 
@@ -401,6 +397,6 @@ export class UsersController {
   })
   async resetPassword(@Body() body: ResetPasswordDto) {
     await this.usersService.resetPassword(body);
-    return "";
+    return;
   }
 }

@@ -1,11 +1,10 @@
 import { Body, Controller, Get, UploadedFile, UseInterceptors, Put } from '@nestjs/common';
 import { UserSettingService } from './user-setting.service';
 import { CurrentUser } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
-import { UserSettingDto } from './dtos/user-setting.dto';
+import { User, UserSetting } from 'src/entities';
+import { UserSettingDto } from './dtos';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserSetting } from 'src/entities/user-setting.entity';
 
 @ApiTags('Settings')
 @Controller('settings')
@@ -91,9 +90,13 @@ export class SettingsController {
   })
   updateUserSetting(
     @CurrentUser() currentUser: User,
-    @Body() body: UserSettingDto,
+    @Body() userSettingDto: UserSettingDto,
     @UploadedFile() logo: Express.Multer.File
   ) {
-    return this.userSettingService.updateUserSetting(currentUser, body, logo);
+    return this.userSettingService.updateUserSetting(
+      currentUser, 
+      userSettingDto, 
+      logo
+    );
   }
 }

@@ -1,20 +1,13 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseArrayPipe, ParseBoolPipe, ParseIntPipe, Post, Put, Query, Res } from '@nestjs/common';
 import { UrlsService } from './urls.service';
-import { ShortenUrlDto } from './dtos/shorten-url.dto';
+import { ShortenUrlDto, CreateShortenUrlDto, AccessProtectedUrlDto, UpdateShortenUrlDto, BulkChangeStatusUrlsDto, BulkSetTagUrlsDto, VisitUrlDto } from './dtos';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
-import { CreateShortenUrlDto } from './dtos/create-shorten-url.dto';
+import { User, Url } from 'src/entities';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Url } from 'src/entities/url.entity';
 import { LinkTypeValidationPipe } from 'src/shared/pipes/link-type-validation/link-type-validation.pipe';
 import { LinkActiveOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
-import { AccessProtectedUrlDto } from './dtos/access-protected-url.dto';
-import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
-import { BulkChangeStatusUrlsDto } from './dtos/bulk-inactive-urls.dto';
 import * as fs from "fs";
 import { CsvService } from 'src/shared/services/csv/csv.service';
-import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
-import { VisitUrlDto } from './dtos/visit-url.dto';
 import { LinkActiveValidationPipe } from 'src/shared/pipes/link-active-validation/link-active-validation.pipe';
 
 @ApiTags("Urls")
@@ -156,8 +149,8 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  shortenUrl(@Body() body: ShortenUrlDto) {
-    return this.urlsService.shortenUrl(null, body);
+  shortenUrl(@Body() shortenUrlDto: ShortenUrlDto) {
+    return this.urlsService.shortenUrl(null, shortenUrlDto);
   }
 
   @Post("shorten-url")
@@ -195,8 +188,8 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  shortenUrlByUser(@CurrentUser() currentUser: User, @Body() body: CreateShortenUrlDto) {
-    return this.urlsService.shortenUrl(currentUser, body);
+  shortenUrlByUser(@CurrentUser() currentUser: User, @Body() createShortenUrlDto: CreateShortenUrlDto) {
+    return this.urlsService.shortenUrl(currentUser, createShortenUrlDto);
   }
 
   @PublicRoute()
@@ -216,10 +209,10 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  accessProtectedUrl(@Param("id", ParseIntPipe) id: number, @Body() body: AccessProtectedUrlDto) {
+  accessProtectedUrl(@Param("id", ParseIntPipe) id: number, @Body() accessProtectedUrlDto: AccessProtectedUrlDto) {
     return this.urlsService.accessProtectedUrl({
       id,
-      password: body.password
+      password: accessProtectedUrlDto.password
     });
   }
 
@@ -274,9 +267,9 @@ export class UrlsController {
   updateUrl(
     @CurrentUser() currentUser: User, 
     @Param("id", ParseIntPipe) urlId: number,
-    @Body() body: UpdateShortenUrlDto
+    @Body() updateShortenUrlDto: UpdateShortenUrlDto
   ) {
-    return this.urlsService.updateUrl(currentUser, urlId, body);
+    return this.urlsService.updateUrl(currentUser, urlId, updateShortenUrlDto);
   }
 
   @Delete("/:id")
@@ -368,8 +361,8 @@ export class UrlsController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async visitUrl(@Param("id") id: string, @Body() body: VisitUrlDto) {
-    await this.urlsService.visitUrl(id, body.deviceType, body.referrerType);
+  async visitUrl(@Param("id") id: string, @Body() visitUrlDto: VisitUrlDto) {
+    await this.urlsService.visitUrl(id, visitUrlDto.deviceType, visitUrlDto.referrerType);
     return "";
   }
 
@@ -463,9 +456,9 @@ export class UrlsController {
   })
   setStatusUrls(
     @CurrentUser() currentUser: User, 
-    @Body() body: BulkChangeStatusUrlsDto
+    @Body() bulkChangeStatusUrlsDto: BulkChangeStatusUrlsDto
   ) {
-    return this.urlsService.setStatusUrls(currentUser, body.ids, body.active);
+    return this.urlsService.setStatusUrls(currentUser, bulkChangeStatusUrlsDto.ids, bulkChangeStatusUrlsDto.active);
   }
 
   @Get("/bulk/export-csv")
@@ -583,8 +576,8 @@ export class UrlsController {
   })
   async setTagUrls(
     @CurrentUser() currentUser: User,
-    @Body() body: BulkSetTagUrlsDto
+    @Body() bulkSetTagUrlsDto: BulkSetTagUrlsDto
   ) {
-    return this.urlsService.setTagUrls(currentUser, body);
+    return this.urlsService.setTagUrls(currentUser, bulkSetTagUrlsDto);
   }
 }

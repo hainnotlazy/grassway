@@ -12,7 +12,7 @@ export class BrandDraft {
   @JoinColumn({ name: "brand_id" })
   brand: Brand;
 
-  @OneToOne(() => BrandSocialPlatformsDraft, social_platforms => social_platforms.brand)
+  @OneToOne(() => BrandSocialPlatformsDraft, social_platforms => social_platforms.brand_draft)
   social_platforms: BrandSocialPlatformsDraft;
 
   @Column()

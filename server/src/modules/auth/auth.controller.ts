@@ -1,21 +1,13 @@
-import { Body, Controller, DefaultValuePipe, Get, HttpCode, Param, ParseArrayPipe, Post, Query, Req, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, HttpCode, ParseArrayPipe, Post, Query, Req, Request, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
-import { RegisterUserDto } from './dtos/register-user.dto';
-import { GithubAuthGuard } from './guards/github-auth.guard';
-import { GithubProfile } from 'src/common/models/github-profile.model';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LoginUserDto, RegisterUserDto } from './dtos';
+import { LocalAuthGuard, GithubAuthGuard, GoogleAuthGuard, FacebookAuthGuard, TwitterAuthGuard } from './guards';
+import { GoogleProfile, GithubProfile, FacebookProfile, TwitterProfile } from 'src/common/models';
 import { CurrentUser, PublicRoute, TokenExpirationTime } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/entities';
 import { AuthService } from './auth.service';
-import { GoogleAuthGuard } from './guards/google-auth.guard';
-import { GoogleProfile } from 'src/common/models/google-profile.model';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiExtraModels, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { LoginUserDto } from './dtos/login-user.dto';
-import { FacebookAuthGuard } from './guards/facebook-auth.guard';
-import { FacebookProfile } from 'src/common/models/facebook-profile.model';
-import { TwitterAuthGuard } from './guards/twitter-auth.guard';
-import { TwitterProfile } from 'src/common/models/twitter-profile.model';
 
 @ApiTags("Auth")
 @Controller('auth')
@@ -111,9 +103,9 @@ export class AuthController {
   })
   async register(
     @Query("ref_links", new DefaultValuePipe([]), ParseArrayPipe) refLinksId: number[], 
-    @Body() body: RegisterUserDto
+    @Body() registerUserDto: RegisterUserDto
   ) {
-    const newUser = await this.userService.createUser(body, refLinksId);
+    const newUser = await this.userService.createUser(registerUserDto, refLinksId);
 
     return {
       access_token: await this.authService.generateAccessToken(newUser),
@@ -157,7 +149,7 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async logout(
+  logout(
     @Request() request,
     @CurrentUser() currentUser: User,
     @TokenExpirationTime() tokenExpirationTime: number
@@ -172,7 +164,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Github authentication route"
   })
-  async githubAuthenticate() {}
+  githubAuthenticate() {}
 
   @PublicRoute()
   @UseGuards(GithubAuthGuard)
@@ -204,7 +196,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Google authentication route"
   })
-  async googleAuthenticate() {}
+  googleAuthenticate() {}
 
   @PublicRoute()
   @UseGuards(GoogleAuthGuard)
@@ -236,7 +228,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Facebook authentication route"
   })
-  async facebookAuthenticate() {}
+  facebookAuthenticate() {}
 
   @PublicRoute()
   @Get("facebook/callback")
@@ -268,7 +260,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Twitter authentication route"
   })
-  async twitterAuthenticate() {}
+  twitterAuthenticate() {}
 
   @PublicRoute()
   @Get("twitter/callback")

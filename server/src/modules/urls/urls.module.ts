@@ -2,11 +2,9 @@ import { Module } from '@nestjs/common';
 import { UrlsController } from './urls.controller';
 import { UrlsService } from './urls.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Url } from 'src/entities/url.entity';
+import { Url, TaggedUrl, UrlAnalytics } from 'src/entities';
 import { SharedModule } from 'src/shared/shared.module';
-import { TaggedUrl } from 'src/entities/tagged-url.entity';
 import { TagsModule } from '../tags/tags.module';
-import { UrlAnalytics } from 'src/entities/url-analytics.entity';
 
 @Module({
   imports: [

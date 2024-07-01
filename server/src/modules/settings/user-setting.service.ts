@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserSetting } from 'src/entities/user-setting.entity';
-import { User } from 'src/entities/user.entity';
+import { User, UserSetting, NotificationType } from 'src/entities';
 import { Repository } from 'typeorm';
-import { UserSettingDto } from './dtos/user-setting.dto';
+import { UserSettingDto } from './dtos';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { NotificationService } from '../notification/notification.service';
-import { NotificationType } from 'src/entities/user-notification.entity';
 
 @Injectable()
 export class UserSettingService {
@@ -60,11 +58,10 @@ export class UserSettingService {
     // Save logo
     if (logo) {
       const savedLogoPath = this.uploadFileService.saveLogo(logo);
-
       userSettingExisted.qr_code_logo_url && this.uploadFileService.removeOldFile(userSettingExisted.qr_code_logo_url);
       userSettingExisted.qr_code_logo_url = savedLogoPath;
     }
-
+    
     const savedUserSetting = await this.userSettingRepository.save(userSettingExisted);
 
     // Push notification
@@ -76,6 +73,7 @@ export class UserSettingService {
         type: NotificationType.UPDATE_SETTINGS
       }
     )
+
     return savedUserSetting;
   }
 }

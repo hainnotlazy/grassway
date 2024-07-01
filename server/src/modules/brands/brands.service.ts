@@ -1,14 +1,10 @@
 import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BrandSocialPlatforms } from 'src/entities/brand-social-platforms.entity';
-import { Brand } from 'src/entities/brand.entity';
-import { User } from 'src/entities/user.entity';
+import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
-import { CreateBrandDto } from './dtos/create-brand.dto';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
-import { BrandMember, BrandMemberRole } from 'src/entities/brand-member.entity';
-import { BrandDraft } from 'src/entities/brand-draft.entity';
-import { BrandSocialPlatformsDraft } from 'src/entities/brand-social-platforms-draft.entity';
+import { CreateBrandDto } from './dtos';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class BrandsService {
@@ -29,6 +25,9 @@ export class BrandsService {
     private readonly uploadFileService: UploadFileService
   ) {}
 
+  /**
+   * Describe: List all brands by user
+  */
   async getBrands(currentUser: User) {
     return this.brandRepository.find({  
       where: {
@@ -41,7 +40,12 @@ export class BrandsService {
     });
   }
 
+  /**
+   * Describe: Get brand by id
+  */
   async getBrandById(currentUser: User, id: string) {
+    this.validateBrandId(id);
+
     return this.brandRepository.findOne({  
       where: {
         id,
@@ -148,5 +152,14 @@ export class BrandsService {
     });
 
     return existedBrand;
+  }
+
+  /**
+   * Describe: Validate brand id
+  */
+  validateBrandId(brandId: string): void {
+    if (!isUUID(brandId)) {
+      throw new BadRequestException("Invalid brand id");
+    }
   }
 }

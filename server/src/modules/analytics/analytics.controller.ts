@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/entities';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Analytics')

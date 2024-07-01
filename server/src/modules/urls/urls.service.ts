@@ -2,19 +2,14 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-paginate';
 import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
-import { Url } from 'src/entities/url.entity';
-import { User } from 'src/entities/user.entity';
+import { User, Url, TaggedUrl, UrlAnalytics } from 'src/entities';
 import { DataSource, In, Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
 import * as CryptoJS from 'crypto-js';
 import { CsvService } from 'src/shared/services/csv/csv.service';
 import { ConfigService } from '@nestjs/config';
-import { UpdateShortenUrlDto } from './dtos/update-shorten-url.dto';
-import { TaggedUrl } from 'src/entities/tagged-url.entity';
+import { UpdateShortenUrlDto, BulkSetTagUrlsDto, DeviceType, ReferrerType } from './dtos';
 import { TagsService } from '../tags/tags.service';
-import { BulkSetTagUrlsDto } from './dtos/bulk-set-tag-urls.dto';
-import { DeviceType, ReferrerType } from './dtos/visit-url.dto';
-import { UrlAnalytics } from 'src/entities/url-analytics.entity';
 
 @Injectable()
 export class UrlsService {
@@ -163,7 +158,6 @@ export class UrlsService {
       password: password ? encryptedPassword : "",
       use_password: !!password,
     });
-
     const savedShortenedUrl = await this.urlRepository.save(shortenedUrl);
     await this.urlAnalyticsRepository.save(
       this.urlAnalyticsRepository.create({ url: savedShortenedUrl })
@@ -180,6 +174,7 @@ export class UrlsService {
     if (!backHalf) {
       return true;
     }
+
     return !(await this.urlRepository.findOneBy({ custom_back_half: backHalf }));
   }
 
@@ -198,6 +193,7 @@ export class UrlsService {
     if (password === decryptedPassword) {
       return urlExisted;
     }
+    
     throw new BadRequestException("Password is incorrect");
   }
 

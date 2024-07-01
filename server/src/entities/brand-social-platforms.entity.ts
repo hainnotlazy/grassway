@@ -4,7 +4,7 @@ import { SocialIconPosition, SocialIconStyle } from "./brand.enum";
 
 @Entity()
 export class BrandSocialPlatforms {
-  @PrimaryColumn()
+  @PrimaryColumn("uuid")
   brand_id: string;
 
   @OneToOne(() => Brand, brand => brand.social_platforms)
@@ -32,7 +32,7 @@ export class BrandSocialPlatforms {
   instagram: string;
 
   @Column({ nullable: true })
-  twitter: string;
+  x: string;
 
   @Column({ nullable: true })
   youtube: string;
@@ -59,7 +59,7 @@ export class BrandSocialPlatforms {
   instagram_order: number;
 
   @Column({ default: -1 })
-  twitter_order: number;
+  x_order: number;
 
   @Column({ default: -1 })
   youtube_order: number;

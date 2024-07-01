@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     // Find user from token
     const { userId, exp: expirationTime } = payload;
-    const user =  await this.usersService.findUser(userId);
+    const user = await this.usersService.findUser(userId);
 
     // Validate user
     if (!user.is_active) {

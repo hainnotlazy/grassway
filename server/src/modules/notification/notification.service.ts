@@ -1,13 +1,11 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { NotificationGateway } from './notification.gateway';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserNotification } from 'src/entities/user-notification.entity';
+import { User, UserNotification } from 'src/entities';
 import { Repository } from 'typeorm';
-import { User } from 'src/entities/user.entity';
-import { CreateNotificationDto } from './dtos/create-notification.dto';
+import { CreateNotificationDto, ChangeNotificationStatusDto } from './dtos';
 import { GetNotificationsOptions } from 'src/common/models/get-notifications-options.model';
 import { paginate } from 'nestjs-paginate';
-import { ChangeNotificationStatusDto } from './dtos/change-notification-status.dto';
 
 @Injectable()
 export class NotificationService {
@@ -99,6 +97,7 @@ export class NotificationService {
     changeNotificationStatusDto: ChangeNotificationStatusDto
   ) {
     const { is_read: isRead } = changeNotificationStatusDto;
+
     const existedNotification = await this.userNotificationRepository.findOne({
       where: {
         id: notificationId,
@@ -107,12 +106,11 @@ export class NotificationService {
         }
       }
     });
-
     if (!existedNotification) {  
       throw new NotFoundException("Notification not found");
     } 
-
     existedNotification.is_read = isRead;
+
     return await this.userNotificationRepository.save(existedNotification);
   }
 

@@ -1,10 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Tag } from 'src/entities/tag.entity';
-import { User } from 'src/entities/user.entity';
+import { User, Tag, TaggedUrl } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
-import { CreateTagDto } from './dtos/create-tag.dto';
-import { TaggedUrl } from 'src/entities/tagged-url.entity';
+import { CreateTagDto } from './dtos';
 
 @Injectable()
 export class TagsService {
@@ -84,11 +82,9 @@ export class TagsService {
         }
       }
     });
-
     if (!existedTag) {
       throw new NotFoundException("Tag not found!");
     }
-
     Object.assign(existedTag, updateTagDto);
 
     return this.tagRepository.save(existedTag);
@@ -106,7 +102,6 @@ export class TagsService {
         }
       }
     });
-
     if (!tag) {
       throw new NotFoundException("Tag not found!");
     }
@@ -114,7 +109,7 @@ export class TagsService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
+    
     try {
       await queryRunner.manager.delete(TaggedUrl, { tag: { id: tag.id } });
       await queryRunner.manager.delete(Tag, { id: tag.id });

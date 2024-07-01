@@ -2,7 +2,7 @@ import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway, WebSocketSe
 import { Server, Socket } from 'socket.io';
 import { UnauthorizedException } from '@nestjs/common';
 import { RedisDatabase, RedisService } from 'src/shared/services/redis/redis.service';
-import { UserNotification } from 'src/entities/user-notification.entity';
+import { UserNotification } from 'src/entities';
 import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({

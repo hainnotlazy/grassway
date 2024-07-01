@@ -1,18 +1,15 @@
-import { ChangePasswordDto } from './dtos/change-password.dto';
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
+import { User, NotificationType, UserNotification } from 'src/entities';
 import { Like, Not, Repository } from 'typeorm';
-import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UpdateProfileDto, ChangePasswordDto, VerifyEmailDto, ResetPasswordDto } from './dtos';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { MailerService } from '@nestjs-modules/mailer';
-import { VerifyEmailDto } from './dtos/verify-email.dto';
 import * as bcrypt from 'bcrypt';
 import { SALT_ROUNDS } from 'src/common/constants/bcrypt.const';
 import { UrlsService } from '../urls/urls.service';
-import { ResetPasswordDto } from './dtos/reset-password.dto';
-import { NotificationType, UserNotification } from 'src/entities/user-notification.entity';
 import { NotificationService } from '../notification/notification.service';
+import { isNumberString } from 'class-validator';
 
 @Injectable()
 export class UsersService {
@@ -29,11 +26,10 @@ export class UsersService {
 
   /** Describe: Find user by id */
   async findUser(id: string) {
-    // Try to parse id's type to number
-    let userId = parseInt(id);
-    if (isNaN(userId)) {
+    if (typeof id === 'string' && !isNumberString(id)) {
       throw new BadRequestException('Invalid user id');
     }
+    let userId = parseInt(id);
 
     // Find user
     const user = await this.userRepository.findOneBy({ id: userId });
@@ -48,7 +44,11 @@ export class UsersService {
    * @param findByEmail - If true, find the user by both username and email; otherwise, find by username only.
    * @param throwError - If true, throw an error if the user is not found.
   */
-  async findUserByUsername(username: string, findByEmail: boolean = true, throwError: boolean = true) {
+  async findUserByUsername(
+    username: string, 
+    findByEmail: boolean = true, 
+    throwError: boolean = true
+  ) {
     let user: User = null;
 
     if (findByEmail) {
@@ -136,7 +136,11 @@ export class UsersService {
   }
 
   /** Describe: Update user */
-  async updateUserProfile(currentUser: User, updateProfileDto: UpdateProfileDto, avatar: Express.Multer.File) {
+  async updateUserProfile(
+    currentUser: User, 
+    updateProfileDto: UpdateProfileDto, 
+    avatar: Express.Multer.File
+  ) {
     // Save new avatar & remove old one
     if (avatar) {
       const savedAvatar = this.uploadFileService.saveAvatar(avatar);
@@ -209,12 +213,12 @@ export class UsersService {
         resetCode: resetPwCode
       }
     });
-
     if (sentMail?.accepted?.length > 0) {
       existedUser.reset_password_code = resetPwCode;
       existedUser.next_forget_password_time = new Date(new Date().getTime() + (15 * 60 * 1000));
       return await this.userRepository.save(existedUser);
     }
+
     throw new InternalServerErrorException("Somethings went wrong when sending reset password mail!");
   }
 
@@ -226,7 +230,6 @@ export class UsersService {
     if (!existedUser) { 
       throw new NotFoundException("User not found");
     }
-
     if (existedUser.reset_password_code.toString() !== code) {
       throw new BadRequestException("Invalid reset code");
     }
@@ -260,11 +263,11 @@ export class UsersService {
         verificationCode: user.email_verification_code
       }
     });
-
     if (sentMail?.accepted?.length > 0) {
       user.next_email_verification_time = new Date(new Date().getTime() + (15 * 60 * 1000));
       return await this.userRepository.save(user);
     } 
+
     throw new InternalServerErrorException("Somethings went wrong when sending verification mail!");
   }
 
@@ -273,10 +276,10 @@ export class UsersService {
     const { code } = verifyEmailDto;
 
     // Validate verification code
-    const codeNumber = parseInt(code);
-    if (isNaN(codeNumber)) {
+    if (typeof code === "string" && !isNumberString(code)) {
       throw new BadRequestException("Invalid verification code");
     }
+    const codeNumber = parseInt(code);
 
     if (!user.email) {
       throw new BadRequestException("User don't have email to verify");
@@ -300,7 +303,11 @@ export class UsersService {
   }
 
   /** Describe: Update user's linked account */
-  async updateUserLinkedAccount(user: User, provider: "email" | "facebook" | "github" | "twitter", value: string) {
+  async updateUserLinkedAccount(
+    user: User, 
+    provider: "email" | "facebook" | "github" | "twitter", 
+    value: string
+  ) {
     user[provider] = value;
 
     if (provider === "email") {

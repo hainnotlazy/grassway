@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PersonalLinksAnalytics, PublicLinksAnalytics } from 'src/common/models/analytics-response.model';
-import { UrlAnalytics } from 'src/entities/url-analytics.entity';
-import { Url } from 'src/entities/url.entity';
-import { User } from 'src/entities/user.entity';
+import { User, Url, UrlAnalytics } from 'src/entities';
 import { RedisDatabase, RedisService } from 'src/shared/services/redis/redis.service';
 import { Not, Repository } from 'typeorm';
 
@@ -153,7 +151,8 @@ export class AnalyticsService {
         .leftJoinAndSelect("url.analytics", "url_analytics")
         .select("sum(url_analytics.visited_by_desktop + url_analytics.visited_by_tablet + url_analytics.visited_by_mobile)", "total")
         .where("url.owner_id = :ownerId", { ownerId: userId })
-        .getRawMany())[0].total;
+        .getRawMany()
+      )[0].total;
     }
   }
 
@@ -166,7 +165,8 @@ export class AnalyticsService {
       .leftJoinAndSelect("url.analytics", "url_analytics")
       .select("sum(url_analytics.redirect_success)", "total")
       .where("url.owner_id = :ownerId", { ownerId: userId })
-      .getRawMany())[0].total;
+      .getRawMany()
+    )[0].total;
   }
 
   /** 
@@ -227,13 +227,13 @@ export class AnalyticsService {
       });
     } else {
       return await this.urlRepository.count({
-          where: {
-            owner: {
-              id: userId
-            },
-            custom_back_half: Not("")
-          }
-        });
+        where: {
+          owner: {
+            id: userId
+          },
+          custom_back_half: Not("")
+        }
+      });
     }
   }
 

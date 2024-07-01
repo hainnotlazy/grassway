@@ -12,7 +12,7 @@ export class BrandMember {
   @PrimaryColumn()
   user_id: number;
 
-  @PrimaryColumn()
+  @PrimaryColumn("uuid")
   brand_id: string;
 
   @ManyToOne(() => User, user => user.brands)

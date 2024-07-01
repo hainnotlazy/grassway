@@ -1,10 +1,9 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Put, Query } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { CurrentUser } from 'src/common/decorators';
-import { User } from 'src/entities/user.entity';
-import { ChangeNotificationStatusDto } from './dtos/change-notification-status.dto';
+import { User, UserNotification } from 'src/entities';
+import { ChangeNotificationStatusDto } from './dtos';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserNotification } from 'src/entities/user-notification.entity';
 
 @ApiTags('Notifications')
 @Controller('notification')
@@ -48,12 +47,12 @@ export class NotificationController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async listNotifications(
+  listNotifications(
     @CurrentUser() currentUser: User,
     @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query("limit", new DefaultValuePipe(20), ParseIntPipe) limit: number
   ) {
-    return await this.notificationService.listNotifications(currentUser, {
+    return this.notificationService.listNotifications(currentUser, {
       page,
       limit
     });
@@ -94,7 +93,7 @@ export class NotificationController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async getUnreadCount(@CurrentUser() currentUser: User) {
+  getUnreadCount(@CurrentUser() currentUser: User) {
     return this.notificationService.getUnreadCount(currentUser);
   }
 
@@ -135,10 +134,10 @@ export class NotificationController {
   })
   async bulkChangeNotificationStatus(
     @CurrentUser() currentUser: User,
-    @Body() body: ChangeNotificationStatusDto
+    @Body() changeNotificationStatusDto: ChangeNotificationStatusDto
   ) {
-    await this.notificationService.bulkChangeNotificationStatus(currentUser, body);
-    return "";
+    await this.notificationService.bulkChangeNotificationStatus(currentUser, changeNotificationStatusDto);
+    return;
   }
 
   @Put("/:id/change-status")
@@ -185,12 +184,16 @@ export class NotificationController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async changeNotificationStatus(
+  changeNotificationStatus(
     @CurrentUser() currentUser: User,
     @Param("id", ParseIntPipe) id: number,
-    @Body() body: ChangeNotificationStatusDto
+    @Body() changeNotificationStatusDto: ChangeNotificationStatusDto
   ) {
-    return await this.notificationService.changeNotificationStatus(currentUser, id, body);
+    return this.notificationService.changeNotificationStatus(
+      currentUser, 
+      id, 
+      changeNotificationStatusDto
+    );
   }
 
   @Delete("/:id")
@@ -233,6 +236,6 @@ export class NotificationController {
     @Param("id", ParseIntPipe) id: number
   ) {
     await this.notificationService.deleteNotification(currentUser, id);
-    return "";
+    return;
   }
 }

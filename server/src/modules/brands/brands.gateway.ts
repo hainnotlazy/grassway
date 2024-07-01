@@ -3,7 +3,7 @@ import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway, WebSocketSe
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
-import { BrandDraft } from 'src/entities/brand-draft.entity';
+import { BrandDraft } from 'src/entities';
 
 @WebSocketGateway({
   cors: { origin: "*" },

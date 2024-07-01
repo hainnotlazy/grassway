@@ -9,7 +9,7 @@ export class BrandSocialPlatformsDraft {
 
   @OneToOne(() => BrandDraft, brandDraft => brandDraft.social_platforms)
   @JoinColumn({ name: "brand_id" })
-  brand: BrandDraft;
+  brand_draft: BrandDraft;
 
   @Column({
     type: "enum",
@@ -32,7 +32,7 @@ export class BrandSocialPlatformsDraft {
   instagram: string;
 
   @Column({ nullable: true })
-  twitter: string;
+  x: string;
 
   @Column({ nullable: true })
   youtube: string;
@@ -59,7 +59,7 @@ export class BrandSocialPlatformsDraft {
   instagram_order: number;
 
   @Column({ default: -1 })
-  twitter_order: number;
+  x_order: number;
 
   @Column({ default: -1 })
   youtube_order: number;

@@ -3,13 +3,10 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from "uuid";
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/entities';
 import { RedisService } from 'src/shared/services/redis/redis.service';
-import { GithubProfile } from 'src/common/models/github-profile.model';
+import { GoogleProfile, GithubProfile, FacebookProfile, TwitterProfile } from 'src/common/models';
 import { DownloadFileService } from 'src/shared/services/download-file/download-file.service';
-import { GoogleProfile } from 'src/common/models/google-profile.model';
-import { FacebookProfile } from 'src/common/models/facebook-profile.model';
-import { TwitterProfile } from 'src/common/models/twitter-profile.model';
 import { UrlsService } from '../urls/urls.service';
 
 @Injectable()
