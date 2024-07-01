@@ -23,7 +23,7 @@ export class RegisterUserDto {
   @IsEmail()
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  email: string;
+  email?: string;
 
   @ApiPropertyOptional({
     description: "Password of user",

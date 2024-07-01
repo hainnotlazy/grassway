@@ -5,7 +5,7 @@ import { ManageBrandPage } from './pages/manage-brand/manage-brand.component';
 
 const routes: Routes = [
   {
-    path: "manage/:brandId",
+    path: ":brandId/manage",
     title: "Manage Brand | Grassway",
     component: ManageBrandPage
   },

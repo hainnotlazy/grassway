@@ -68,7 +68,7 @@
         <li *ngFor="let brand of brands">
           <a
             class="relative pr-4 pl-8 hover:text-white hover:bg-slate-700 py-2.5 block space-x-1 break-all"
-            [routerLink]="['brands', 'manage', brand.id]"
+            [routerLink]="['brands', brand.id, 'manage']"
             routerLinkActive="sub-item-active"
             (click)="onClickNavigationItem()"
           >

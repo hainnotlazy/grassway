@@ -11,7 +11,7 @@ export class UserSettingDto {
   @Length(7, 7)
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  qr_code_background_color: string;
+  qr_code_background_color?: string;
 
   @ApiProperty({
     description: "QR Code Foreground color",
@@ -21,7 +21,7 @@ export class UserSettingDto {
   @Length(7, 7)
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  qr_code_foreground_color: string;
+  qr_code_foreground_color?: string;
 
   @ApiProperty({
     description: "Show/Hide QR Code Logo",
@@ -35,11 +35,11 @@ export class UserSettingDto {
     } 
     return value;
   })
-  qr_code_show_logo: boolean;
+  qr_code_show_logo?: boolean;
 
   @ApiPropertyOptional({
     description: "QR Code Logo",
   })
   @IsOptional()
-  logo: any;
+  logo?: any;
 }

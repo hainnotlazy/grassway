@@ -23,5 +23,5 @@ export class ChangePasswordDto {
   @MinLength(5, { message: "Password must be at least 5 characters" })
   @MaxLength(255, { message: "Password must be at most 255 characters" })
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  newPassword: string;
+  new_password: string;
 }

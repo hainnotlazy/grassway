@@ -167,7 +167,7 @@ export class UsersService {
 
   /** Describe: Change password */
   async changePassword(user: User, changePasswordDto: ChangePasswordDto) {
-    const { password, newPassword } = changePasswordDto;
+    const { password, new_password: newPassword } = changePasswordDto;
 
     if (!bcrypt.compareSync(password, user.password)) {
       throw new BadRequestException("Password is incorrect");

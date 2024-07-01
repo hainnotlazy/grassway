@@ -10,7 +10,7 @@ import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto } f
 export class BrandsService {
   private readonly NEW_DESIGN_EVENT_NAME = "NewDesign";
   private readonly CREATE_BRAND_FIELDS = [
-    "title", "description", "prefix", "logo", "facebook", "instagram", "twitter",
+    "title", "description", "prefix", "logo", "facebook", "instagram", "x",
     "youtube", "tiktok", "linkedin", "discord", "github", "website", "invited_users"
   ];
 

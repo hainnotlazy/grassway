@@ -10,7 +10,7 @@ export class CreateBrandDto {
   @IsString()
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  description: string;
+  description?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -18,7 +18,7 @@ export class CreateBrandDto {
   prefix: string;
 
   @IsOptional()
-  logo: any;
+  logo?: any;
 
   @IsString()
   @IsOptional()
@@ -36,7 +36,7 @@ export class CreateBrandDto {
     { message: "Invalid instagram url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  instagram: string;
+  instagram?: string;
 
   @IsString()
   @IsOptional()
@@ -45,7 +45,7 @@ export class CreateBrandDto {
     { message: "Invalid X (Formerly Twitter) url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  x: string;
+  x?: string;
 
   @IsString()
   @IsOptional()
@@ -54,7 +54,7 @@ export class CreateBrandDto {
     { message: "Invalid youtube url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  youtube: string;
+  youtube?: string;
 
   @IsString()
   @IsOptional()
@@ -63,7 +63,7 @@ export class CreateBrandDto {
     { message: "Invalid tiktok url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  tiktok: string;
+  tiktok?: string;
 
   @IsString()
   @IsOptional()
@@ -72,7 +72,7 @@ export class CreateBrandDto {
     { message: "Invalid linkedin url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  linkedin: string;
+  linkedin?: string;
 
   @IsString()
   @IsOptional()
@@ -81,7 +81,7 @@ export class CreateBrandDto {
     { message: "Invalid discord url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  discord: string;
+  discord?: string;
 
   @IsString()
   @IsOptional()
@@ -90,14 +90,14 @@ export class CreateBrandDto {
     { message: "Invalid github url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  github: string;
+  github?: string;
 
   @IsString()
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  website: string;
+  website?: string;
 
   @IsArray()
   @IsOptional()
-  invited_users: number[];
+  invited_users?: number[];
 }

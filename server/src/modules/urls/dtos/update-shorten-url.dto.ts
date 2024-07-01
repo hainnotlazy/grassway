@@ -21,7 +21,7 @@ export class UpdateShortenUrlDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  description: string;
+  description?: string;
 
   @ApiPropertyOptional({
     description: "Custom back-half", 
@@ -31,7 +31,7 @@ export class UpdateShortenUrlDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  custom_back_half: string;
+  custom_back_half?: string;
 
   @ApiProperty({
     description: "Change password",
@@ -49,7 +49,7 @@ export class UpdateShortenUrlDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  password: string;
+  password?: string;
 
   @ApiPropertyOptional({
     description: "Status", 
@@ -57,7 +57,7 @@ export class UpdateShortenUrlDto {
   })
   @IsBoolean()
   @IsOptional()
-  is_active: boolean;
+  is_active?: boolean;
 
   @ApiPropertyOptional({
     description: "Tags", 
@@ -65,5 +65,5 @@ export class UpdateShortenUrlDto {
   })
   @IsArray()
   @IsOptional()
-  tags: number[]
+  tags?: number[]
 }

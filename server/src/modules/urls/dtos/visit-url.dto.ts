@@ -31,5 +31,5 @@ export class VisitUrlDto {
     enum: Object.values(ReferrerType),
   })
   @IsEnum(ReferrerType)
-  referrerType?: ReferrerType;
+  referrer_type?: ReferrerType;
 }

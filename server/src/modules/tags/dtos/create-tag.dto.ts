@@ -22,7 +22,7 @@ export class CreateTagDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }) => value ? value.trim() : "")
-  description: string;
+  description?: string;
 
   @ApiProperty({
     description: "Tag icon",
@@ -31,5 +31,5 @@ export class CreateTagDto {
   @IsString()
   @IsOptional()
   @Transform(({ value }) => value.trim())
-  icon: string;
+  icon?: string;
 }

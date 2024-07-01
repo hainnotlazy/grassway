@@ -19,7 +19,7 @@ export class UpdateProfileDto {
   @MinLength(3, { message: "Fullname must have more than 3 characters" })
   @MaxLength(255, { message: "Fullname must have less than 255 characters" })
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  fullname: string;
+  fullname?: string;
 
   @ApiPropertyOptional({
     description: "Bio of user",
@@ -30,7 +30,7 @@ export class UpdateProfileDto {
   @IsString()
   @MaxLength(255, { message: "Bio must have less than 255 characters" })
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  bio: string;
+  bio?: string;
 
   @ApiPropertyOptional({
     description: "Phone number of user",
@@ -40,7 +40,7 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsString()
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  phone: string;
+  phone?: string;
 
   @ApiPropertyOptional({
     description: "Date of birth of user (YYYY-MM-DD)",
@@ -48,7 +48,7 @@ export class UpdateProfileDto {
     type: Date
   })
   @IsOptional()
-  dob: Date;
+  dob?: Date;
 
   @ApiPropertyOptional({
     description: "Gender of user",
@@ -58,7 +58,7 @@ export class UpdateProfileDto {
   })
   @IsOptional()
   @IsEnum(Gender, { message: "Gender must be male, female or other" })
-  gender: Gender;
+  gender?: Gender;
   
   @ApiPropertyOptional({
     description: "Avatar of user",
@@ -66,5 +66,5 @@ export class UpdateProfileDto {
     format: "binary"
   })
   @IsOptional()
-  avatar: any;
+  avatar?: any;
 }

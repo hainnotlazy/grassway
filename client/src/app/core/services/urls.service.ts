@@ -104,7 +104,7 @@ export class UrlsService {
     }
     return this.httpClient.put(`api/urls/${urlId}/visit`, {
       deviceType,
-      referrerType
+      referrer_type: referrerType
     });
   }
 

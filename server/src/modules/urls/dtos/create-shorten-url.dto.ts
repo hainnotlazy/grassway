@@ -30,7 +30,7 @@ export class CreateShortenUrlDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  title: string;
+  title?: string;
 
   @ApiPropertyOptional({
     description: "Description of shortened url",
@@ -40,7 +40,7 @@ export class CreateShortenUrlDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  description: string;
+  description?: string;
 
   @ApiPropertyOptional({
     description: "Custom back half of shortened url",
@@ -50,7 +50,7 @@ export class CreateShortenUrlDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value ? value?.trim() : null)
-  custom_back_half: string;
+  custom_back_half?: string;
 
   @ApiPropertyOptional({
     description: "Password of shortened url",
@@ -60,5 +60,5 @@ export class CreateShortenUrlDto {
   @IsOptional()
   @MaxLength(255)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  password: string;
+  password?: string;
 }
