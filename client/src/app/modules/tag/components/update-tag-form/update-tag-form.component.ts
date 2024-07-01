@@ -3,12 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, tap } from 'rxjs';
-import { tagFormRequirements } from 'src/app/core/constants/tag-form-requirement.constant';
-import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
+import { ValidationMessage, tagFormRequirements } from 'src/app/core/forms';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
-import { Tag } from 'src/app/core/models/tag.model';
-import { TagsService } from 'src/app/core/services/tags.service';
+import { Tag } from 'src/app/core/models';
+import { TagsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

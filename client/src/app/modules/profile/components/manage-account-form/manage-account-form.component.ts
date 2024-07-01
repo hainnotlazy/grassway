@@ -5,12 +5,11 @@ import { funEmoji } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, map, tap } from 'rxjs';
-import { profileRequirements } from 'src/app/core/constants/user-form-requirement.const';
-import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
+import { ValidationMessage, profileRequirements } from 'src/app/core/forms';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 import { UserProfile } from 'src/app/core/interfaces/manage-account.interface';
-import { UsersService } from 'src/app/core/services/users.service';
+import { UsersService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { filter, map, take, tap } from 'rxjs';
-import { Brand } from 'src/app/core/models/brand.model';
-import { BrandsService } from 'src/app/core/services/brands.service';
+import { Brand } from 'src/app/core/models';
+import { BrandsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

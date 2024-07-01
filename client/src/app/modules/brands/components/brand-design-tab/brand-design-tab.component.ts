@@ -3,8 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, distinctUntilChanged, filter, map, of, switchMap, tap } from 'rxjs';
-import { camelCaseToSnackCase } from 'src/app/core/helpers/utils';
-import { BrandsService } from 'src/app/core/services/brands.service';
+import { camelCaseToSnackCase } from 'src/app/core/helpers';
+import { BrandSocialPlatformsDraft } from 'src/app/core/models';
+import { BrandsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({
@@ -17,6 +18,7 @@ import { BrandsService } from 'src/app/core/services/brands.service';
 })
 export class BrandDesignTabComponent {
   brandId?: string;
+  brandSocialPlatforms?: BrandSocialPlatformsDraft;
   designForm = new FormGroup({
     title: new FormControl("", [
       Validators.required,
@@ -50,6 +52,9 @@ export class BrandDesignTabComponent {
       distinctUntilChanged(),
       tap((brandId) => this.brandId = brandId),
       switchMap((brandId: string) => this.brandsService.getBrandDraft(brandId)),
+      tap((brandDraft) => {
+        this.brandSocialPlatforms = brandDraft.social_platforms;
+      }),
       tap((brandDraft) => {
         this.designForm.patchValue({
           title: brandDraft.title,

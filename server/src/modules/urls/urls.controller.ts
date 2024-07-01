@@ -348,7 +348,7 @@ export class UrlsController {
   })
   async deleteUrl(@CurrentUser() currentUser: User, @Param("id", ParseIntPipe) id: number) {
     await this.urlsService.deleteUrl(currentUser, id);
-    return "";
+    return;
   }
 
   @PublicRoute()
@@ -363,7 +363,7 @@ export class UrlsController {
   })
   async visitUrl(@Param("id") id: string, @Body() visitUrlDto: VisitUrlDto) {
     await this.urlsService.visitUrl(id, visitUrlDto.deviceType, visitUrlDto.referrerType);
-    return "";
+    return;
   }
 
   @PublicRoute()
@@ -379,7 +379,7 @@ export class UrlsController {
   })
   async redirectSuccessUrl(@Param("id") id: string) {
     await this.urlsService.redirectSuccessUrl(id);
-    return "";
+    return;
   }
 
   @PublicRoute()

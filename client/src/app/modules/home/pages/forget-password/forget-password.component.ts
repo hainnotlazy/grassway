@@ -1,16 +1,15 @@
-import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { forgetPasswordRequirements } from 'src/app/core/constants/user-form-requirement.const';
-import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, combineLatest, finalize, map, tap, timer } from 'rxjs';
-import { UsersService } from 'src/app/core/services/users.service';
+import { UsersService } from 'src/app/core/services';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { User } from 'src/app/core/models/user.model';
+import { User } from 'src/app/core/models';
 import { FormValidator } from 'src/app/core/validators/form.validator';
+import { ValidationMessage, forgetPasswordRequirements } from 'src/app/core/forms';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
 
 @UntilDestroy()
 @Component({

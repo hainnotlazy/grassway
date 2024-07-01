@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, take, tap } from 'rxjs';
-import { Tag } from 'src/app/core/models/tag.model';
-import { TagsService } from 'src/app/core/services/tags.service';
+import { Tag } from 'src/app/core/models';
+import { TagsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

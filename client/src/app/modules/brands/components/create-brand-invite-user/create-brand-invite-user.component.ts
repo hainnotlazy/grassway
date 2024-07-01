@@ -1,13 +1,13 @@
-import { getObjectKeys } from 'src/app/core/helpers/utils';
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ENTER } from '@angular/cdk/keycodes';
 import { FormControl } from '@angular/forms';
-import { User } from 'src/app/core/models/user.model';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { getObjectKeys } from 'src/app/core/helpers';
+import { User } from 'src/app/core/models';
 
 @UntilDestroy()
 @Component({

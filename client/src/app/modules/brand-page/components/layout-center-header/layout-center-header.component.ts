@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { BrandBase } from 'src/app/core/models/brand-base.model';
+import { BrandBase } from 'src/app/core/models';
 
 @Component({
   selector: 'app-layout-center-header',

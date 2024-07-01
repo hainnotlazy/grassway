@@ -4,7 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, tap } from 'rxjs';
 import { GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
-import { UrlsService } from 'src/app/core/services/urls.service';
+import { UrlsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

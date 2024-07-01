@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { funEmoji } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
-import { User } from 'src/app/core/models/user.model';
+import { User } from 'src/app/core/models';
 
 @Component({
   selector: 'app-create-brand-option-user',

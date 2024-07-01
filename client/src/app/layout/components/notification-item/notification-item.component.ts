@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, finalize, tap } from 'rxjs';
-import { UserNotification } from 'src/app/core/models/user-notification.model';
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { UserNotification } from 'src/app/core/models';
+import { NotificationService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

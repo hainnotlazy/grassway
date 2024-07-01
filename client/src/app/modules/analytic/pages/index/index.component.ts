@@ -4,8 +4,8 @@ import { BehaviorSubject, combineLatest, map, scan, take, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers/utils';
 import { LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
-import { Url } from 'src/app/core/models/url.model';
-import { UrlsService } from 'src/app/core/services/urls.service';
+import { Url } from 'src/app/core/models';
+import { UrlsService } from 'src/app/core/services';
 import { environment } from 'src/environments/environment';
 
 @UntilDestroy()

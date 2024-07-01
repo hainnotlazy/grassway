@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Tag } from 'src/app/core/models/tag.model';
+import { Tag } from 'src/app/core/models';
 
 @Component({
   selector: 'app-option-tag',

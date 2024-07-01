@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { UrlsService } from 'src/app/core/services/urls.service';
+import { UrlsService } from 'src/app/core/services';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 import { GetUrlsOptions, filtersApplied } from 'src/app/core/interfaces/get-urls-options.interface';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { UrlsResponse } from 'src/app/core/interfaces/urls-response.interface';
-import { Tag } from 'src/app/core/models/tag.model';
+import { Tag } from 'src/app/core/models';
 
 @UntilDestroy()
 @Component({

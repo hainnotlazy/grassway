@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AnalyticsService } from 'src/app/core/services/analytics.service';
+import { AnalyticsService } from 'src/app/core/services';
 
 @Component({
   selector: 'home-page',

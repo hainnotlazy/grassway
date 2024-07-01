@@ -19,7 +19,6 @@ import { FontFormComponent } from './components/font-form/font-form.component';
 import { BlocksFormComponent } from './components/blocks-form/blocks-form.component';
 import { SocialsFormComponent } from './components/socials-form/socials-form.component';
 
-
 @NgModule({
   declarations: [
     CreateBrandPage,

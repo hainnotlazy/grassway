@@ -1,4 +1,4 @@
-export const ReferrerHeader: {
+export const REFERRER_HEADER: {
   [key: string]: string;
 } = {
   "google.com": "google",

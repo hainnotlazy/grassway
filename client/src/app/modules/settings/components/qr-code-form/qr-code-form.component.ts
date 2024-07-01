@@ -3,9 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
-import { changeStatus } from 'src/app/core/helpers/utils';
+import { changeStatus } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { UserSettingService } from 'src/app/core/services/user-setting.service';
+import { UserSettingService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

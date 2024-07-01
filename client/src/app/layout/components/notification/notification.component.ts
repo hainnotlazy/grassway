@@ -3,8 +3,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, combineLatest, filter, finalize, scan, shareReplay, startWith, switchMap, take, tap } from 'rxjs';
 import { GetNotificationOptions } from 'src/app/core/interfaces/get-notifications-options.interface';
 import { NotificationResponse } from 'src/app/core/interfaces/notification-response.interface';
-import { UserNotification } from 'src/app/core/models/user-notification.model';
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { UserNotification } from 'src/app/core/models';
+import { NotificationService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

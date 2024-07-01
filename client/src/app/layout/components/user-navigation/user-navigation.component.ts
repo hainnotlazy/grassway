@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { finalize, map } from 'rxjs';
-import { UsersService } from 'src/app/core/services/users.service';
+import { UsersService, AuthService } from 'src/app/core/services';
 import { createAvatar } from '@dicebear/core';
 import { funEmoji } from '@dicebear/collection';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { Router } from '@angular/router';
 import { removeAccessToken } from 'src/app/core/helpers/local-storage.helper';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';

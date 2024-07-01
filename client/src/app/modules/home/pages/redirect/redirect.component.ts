@@ -1,15 +1,15 @@
-import { UrlsService } from 'src/app/core/services/urls.service';
+import { UrlsService } from 'src/app/core/services';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, finalize, of, switchMap, take, tap, timer } from 'rxjs';
-import { Url } from 'src/app/core/models/url.model';
+import { Url } from 'src/app/core/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CookieService } from 'ngx-cookie-service';
-import { ReferrerHeader } from 'src/app/core/constants/referrer-header.constant';
+import { REFERRER_HEADER } from 'src/app/core/constants/referrer-header.constant';
 
 @UntilDestroy()
 @Component({
@@ -167,7 +167,7 @@ export class RedirectPage implements OnInit {
       const referrer = new URL(referrerLink);
       const referrerDomain = referrer.hostname;
 
-      const referrerName = ReferrerHeader[referrerDomain] || "unknown";
+      const referrerName = REFERRER_HEADER[referrerDomain] || "unknown";
       return referrerName;
     } catch {
       return "unknown";

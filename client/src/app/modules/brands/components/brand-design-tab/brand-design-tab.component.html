@@ -16,9 +16,12 @@
     ></app-page-form>
   </div>
 
-  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
-    <app-socials-form></app-socials-form>
-  </div>
+  <!-- <div
+    *ngIf="brandSocialPlatforms"
+    class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow"
+  >
+    <app-socials-form [socialPlatforms]="brandSocialPlatforms"></app-socials-form>
+  </div> -->
 
   <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
     <app-blocks-form

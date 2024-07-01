@@ -2,19 +2,14 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
-import { Url } from 'src/app/core/models/url.model';
+import { ExtendedUrl, Url, Tag } from 'src/app/core/models';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { UrlsService } from 'src/app/core/services/urls.service';
+import { UrlsService } from 'src/app/core/services';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 import { EditFormDialogComponent } from '../edit-form-dialog/edit-form-dialog.component';
-import { Tag } from 'src/app/core/models/tag.model';
-
-export interface ExtendedUrl extends Url {
-  client: string;
-}
 
 @UntilDestroy()
 @Component({

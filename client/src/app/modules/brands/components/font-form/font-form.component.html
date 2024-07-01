@@ -2,146 +2,15 @@
 
 <div class="sm:grid-cols-4 grid grid-cols-2 gap-4">
   <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
+    *ngFor="let font of getObjectValues(BrandFont)"
+    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 rounded-md cursor-pointer"
     [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.KARLA,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.KARLA,
+      'border-blue-500 text-blue-700': fontControl.value === font,
+      'hover:border-blue-500 text-slate-700 border-gray-400 hover:text-blue-700': fontControl.value !== font,
     }"
     type="button"
-    (click)="fontControl.patchValue(BrandFont.KARLA)"
+    (click)="fontControl.patchValue(font)"
   >
-    Karla
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.ROBOTO_CONDENSED,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.ROBOTO_CONDENSED,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.ROBOTO_CONDENSED)"
-  >
-    Roboto Condensed
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.ARVO,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.ARVO,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.ARVO)"
-  >
-    Arvo
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.DOSIS,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.DOSIS,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.DOSIS)"
-  >
-    Dosis
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.LATO,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.LATO,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.LATO)"
-  >
-    Lato
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.LEAGUE_SPARTAN,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.LEAGUE_SPARTAN,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.LEAGUE_SPARTAN)"
-  >
-    League Spartan
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.NUNITO,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.NUNITO,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.NUNITO)"
-  >
-    Nunito
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.OSWALD,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.OSWALD,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.OSWALD)"
-  >
-    Oswald
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.UBUNTU_CONDENSED,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.UBUNTU_CONDENSED,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.UBUNTU_CONDENSED)"
-  >
-    Ubuntu Condensed
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.JOST,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.JOST,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.JOST)"
-  >
-    Jost
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.ITIM,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.ITIM,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.ITIM)"
-  >
-    Itim
-  </button>
-
-  <button
-    class="text-itim flex items-center justify-center px-4 py-3 text-lg text-center border-2 border-gray-400 rounded-md cursor-pointer"
-    [ngClass]="{
-      'border-blue-500 text-blue-700': fontControl.value === BrandFont.LOBSTER,
-      'hover:border-blue-500 text-slate-700 hover:text-blue-700': fontControl.value !== BrandFont.LOBSTER,
-    }"
-    type="button"
-    (click)="fontControl.patchValue(BrandFont.LOBSTER)"
-  >
-    Lobster
+    {{ font | titlecase }}
   </button>
 </div>

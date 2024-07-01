@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RefService } from 'src/app/core/services/ref.service';
+import { RefService } from 'src/app/core/services';
 import { environment } from 'src/environments/environment';
 
 @Component({

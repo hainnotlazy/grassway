@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
-import { Tag } from 'src/app/core/models/tag.model';
-import { TagsService } from 'src/app/core/services/tags.service';
-import { UrlsService } from 'src/app/core/services/urls.service';
-import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component';
+import { ExtendedUrl, Tag } from 'src/app/core/models';
+import { UrlsService, TagsService } from 'src/app/core/services';
 import { environment } from 'src/environments/environment';
 
 @UntilDestroy()

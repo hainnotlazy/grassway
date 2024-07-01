@@ -1,12 +1,10 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
-import { Brand } from 'src/app/core/models/brand.model';
-import { BrandsService } from 'src/app/core/services/brands.service';
+import { Observable, distinctUntilChanged, filter, map, switchMap } from 'rxjs';
+import { Brand } from 'src/app/core/models';
+import { BrandsService } from 'src/app/core/services';
 
-@UntilDestroy()
 @Component({
   selector: 'manage-brand-page',
   templateUrl: './manage-brand.component.html',
@@ -33,5 +31,4 @@ export class ManageBrandPage {
       switchMap((brandId: string) => this.brandsService.getBrandById(brandId))
     )
   }
-
 }

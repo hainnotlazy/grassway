@@ -25,7 +25,7 @@ export interface BrandSocialPlatformsBase {
   icon_position: SocialIconPosition;
   facebook: string;
   instagram: string;
-  twitter: string;
+  x: string;
   youtube: string;
   tiktok: string;
   linkedin: string;
@@ -34,7 +34,7 @@ export interface BrandSocialPlatformsBase {
   website: string;
   facebook_order: number;
   instagram_order: number;
-  twitter_order: number;
+  x_order: number;
   youtube_order: number;
   tiktok_order: number;
   linkedin_order: number;

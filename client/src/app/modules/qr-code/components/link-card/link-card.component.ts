@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserSetting } from 'src/app/core/models/user-setting.model';
-import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component';
+import { ExtendedUrl, UserSetting } from 'src/app/core/models';
 
 @Component({
   selector: 'app-link-card',

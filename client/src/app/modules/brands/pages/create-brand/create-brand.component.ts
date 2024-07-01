@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, map, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { Brand } from 'src/app/core/models/brand.model';
-import { BrandsService } from 'src/app/core/services/brands.service';
+import { Brand } from 'src/app/core/models';
+import { BrandsService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 
 @UntilDestroy()

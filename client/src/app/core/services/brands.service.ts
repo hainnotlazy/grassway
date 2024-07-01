@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateBrandDto } from '../interfaces/create-brand.interface';
 import { Brand } from '../models/brand.model';
-import { UpdateBrandDesignDto } from '../interfaces/update-brand.interface';
+import { UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto } from '../interfaces/update-brand.interface';
 import { BrandDraft } from '../models/brand-draft.model';
 import { BrandsSocket } from '../sockets/brands.socket';
 
@@ -67,5 +67,18 @@ export class BrandsService {
 
   updateDesignDraft(brandId: string, updateBrandDesignDto: UpdateBrandDesignDto) {
     return this.httpClient.put<BrandDraft>(`api/brands/${brandId}/design/draft`, updateBrandDesignDto);
+  }
+
+  updateSocialPlatformsDraftOrder(
+    brandId: string,
+    updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto
+  ) {
+    return this.httpClient.put<BrandDraft>(
+      `api/brands/${brandId}/social-platforms/draft/order`,
+      updateSocialPlatformsOrderDto
+    );
+  }
+
+  updateSocialPlatformsDraft(brandId: string, updateBrandSocialPlatformsDto: any) {
   }
 }

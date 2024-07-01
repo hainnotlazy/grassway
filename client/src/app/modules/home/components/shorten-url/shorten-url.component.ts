@@ -1,4 +1,3 @@
-import { RefService } from './../../../../core/services/ref.service';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,16 +6,14 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { finalize, tap } from 'rxjs';
-import { shortenUrlRequirements } from 'src/app/core/constants/url-form-requirement.const';
-import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
+import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
-import { Url } from 'src/app/core/models/url.model';
-import { UrlsService } from 'src/app/core/services/urls.service';
+import { Url, ExtendedUrl } from 'src/app/core/models';
+import { UrlsService, RefService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 import { environment } from 'src/environments/environment';
 import { RemindDialogComponent } from '../remind-dialog/remind-dialog.component';
-import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component';
+import { ValidationMessage, shortenUrlRequirements } from 'src/app/core/forms';
 
 @UntilDestroy()
 @Component({

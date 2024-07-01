@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ExtendedUrl } from '../link/link.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserSettingService } from 'src/app/core/services/user-setting.service';
+import { ExtendedUrl } from 'src/app/core/models';
+import { UserSettingService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-qrcode-dialog',

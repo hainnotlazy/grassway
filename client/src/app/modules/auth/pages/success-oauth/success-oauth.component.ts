@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
-import { RefService } from 'src/app/core/services/ref.service';
+import { setAccessToken } from 'src/app/core/helpers';
+import { RefService } from 'src/app/core/services';
 
 @Component({
   selector: 'success-oauth-page',

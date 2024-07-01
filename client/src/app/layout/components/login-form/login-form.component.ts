@@ -5,13 +5,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap, finalize } from 'rxjs';
-import { loginRequirements } from 'src/app/core/constants/user-form-requirement.const';
-import { setAccessToken } from 'src/app/core/helpers/local-storage.helper';
-import { changeStatus, getObjectKeys } from 'src/app/core/helpers/utils';
+import { ValidationMessage, loginRequirements } from 'src/app/core/forms';
+import { setAccessToken, changeStatus, getObjectKeys } from 'src/app/core/helpers';
 import { AuthResponse } from 'src/app/core/interfaces/auth-response.interface';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
-import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

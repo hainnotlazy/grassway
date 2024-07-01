@@ -18,3 +18,7 @@ export interface Url {
   created_at: Date;
   updated_at?: Date;
 }
+
+export interface ExtendedUrl extends Url {
+  client: string;
+}

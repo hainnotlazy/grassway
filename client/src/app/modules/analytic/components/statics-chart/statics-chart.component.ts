@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ExtendedUrl } from 'src/app/modules/url/components/link/link.component';
+import { ExtendedUrl } from 'src/app/core/models';
 
 @Component({
   selector: 'app-statics-chart',

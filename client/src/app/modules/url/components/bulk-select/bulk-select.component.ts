@@ -3,12 +3,11 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, filter, finalize, take, tap } from 'rxjs';
-import { changeStatus } from 'src/app/core/helpers/utils';
+import { changeStatus } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces/error-response.interface';
 import { GetUrlsOptions, LinkActiveOptions } from 'src/app/core/interfaces/get-urls-options.interface';
-import { Tag } from 'src/app/core/models/tag.model';
-import { Url } from 'src/app/core/models/url.model';
-import { UrlsService } from 'src/app/core/services/urls.service';
+import { Url, Tag } from 'src/app/core/models';
+import { UrlsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({

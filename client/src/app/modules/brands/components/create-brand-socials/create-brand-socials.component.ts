@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { createBrandRequirements } from 'src/app/core/constants/brand-form-requirement.const';
+import { ValidationMessage, createBrandRequirements } from 'src/app/core/forms';
 import { getObjectKeys } from 'src/app/core/helpers/utils';
-import { ValidationMessage } from 'src/app/core/interfaces/form.interface';
 
 @Component({
   selector: 'app-create-brand-socials',

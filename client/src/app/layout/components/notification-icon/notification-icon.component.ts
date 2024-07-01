@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NotificationType } from 'src/app/core/models/user-notification.model';
+import { NotificationType } from 'src/app/core/models';
 
 @Component({
   selector: 'app-notification-icon',

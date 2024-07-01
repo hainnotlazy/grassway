@@ -1,7 +1,7 @@
-import { getObjectValues } from 'src/app/core/helpers/utils';
-import { BlockShape, BlockShadow } from "../../../../core/models/brand.enum";
+import { getObjectValues } from 'src/app/core/helpers';
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { BlockShadow, BlockShape } from 'src/app/core/models';
 
 @Component({
   selector: 'app-blocks-form',

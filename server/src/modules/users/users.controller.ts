@@ -148,10 +148,10 @@ export class UsersController {
   })
   updateProfile(
     @CurrentUser() currentUser: User, 
-    @Body() body: UpdateProfileDto, 
+    @Body() updateProfileDto: UpdateProfileDto, 
     @UploadedFile() avatar: Express.Multer.File
   ) {
-    return this.usersService.updateUserProfile(currentUser, body, avatar);
+    return this.usersService.updateUserProfile(currentUser, updateProfileDto, avatar);
   }
 
   @Post("/resend-verification-code")
@@ -297,8 +297,8 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async verifyEmail(@CurrentUser() currentUser: User, @Body() body: VerifyEmailDto) {
-    await this.usersService.verifyEmail(currentUser, body);
+  async verifyEmail(@CurrentUser() currentUser: User, @Body() verifyEmailDto: VerifyEmailDto) {
+    await this.usersService.verifyEmail(currentUser, verifyEmailDto);
     return;
   }
 
@@ -352,8 +352,8 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async changePassword(@CurrentUser() currentUser: User, @Body() body: ChangePasswordDto) {
-    await this.usersService.changePassword(currentUser, body);
+  async changePassword(@CurrentUser() currentUser: User, @Body() changePasswordDto: ChangePasswordDto) {
+    await this.usersService.changePassword(currentUser, changePasswordDto);
     return;
   }
 
@@ -373,8 +373,8 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  forgetPassword(@Body() body: ForgetPasswordDto) {
-    return this.usersService.forgetPassword(body.email);
+  forgetPassword(@Body() forgetPasswordDto: ForgetPasswordDto) {
+    return this.usersService.forgetPassword(forgetPasswordDto.email);
   }
 
   @PublicRoute()
@@ -395,8 +395,8 @@ export class UsersController {
   @ApiInternalServerErrorResponse({
     description: "Internal server error",
   })
-  async resetPassword(@Body() body: ResetPasswordDto) {
-    await this.usersService.resetPassword(body);
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    await this.usersService.resetPassword(resetPasswordDto);
     return;
   }
 }

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
-import { BrandDraft } from 'src/app/core/models/brand-draft.model';
-import { BrandsService } from 'src/app/core/services/brands.service';
+import { BrandDraft } from 'src/app/core/models';
+import { BrandsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({
