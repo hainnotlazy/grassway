@@ -33,7 +33,7 @@ export class BrandsService {
 
   getBrandDraft(brandId: string) {
     // Add query as get draft data
-    return this.httpClient.get<BrandDraft>(`api/brands/${brandId}/design/draft`);
+    return this.httpClient.get<BrandDraft>(`api/brands/draft/${brandId}/design`);
   }
 
   getNewDesign() {
@@ -64,7 +64,7 @@ export class BrandsService {
   }
 
   updateDesignDraft(brandId: string, updateBrandDesignDto: UpdateBrandDesignDto) {
-    return this.httpClient.put<BrandDraft>(`api/brands/${brandId}/design/draft`, updateBrandDesignDto);
+    return this.httpClient.put<BrandDraft>(`api/brands/draft/${brandId}/design`, updateBrandDesignDto);
   }
 
   updateSocialPlatformsDraftOrder(
@@ -72,7 +72,7 @@ export class BrandsService {
     updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto
   ) {
     return this.httpClient.put<BrandDraft>(
-      `api/brands/${brandId}/social-platforms/draft/order`,
+      `api/brands/draft/${brandId}/social-platforms/order`,
       updateSocialPlatformsOrderDto
     );
   }

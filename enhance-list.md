@@ -16,5 +16,3 @@
 
 - Change name of twitter to X (include auth routes)
 - Change format of dto to snack_case => change all variables in service to camelCase
-
-- consistent model in fe with entity in be

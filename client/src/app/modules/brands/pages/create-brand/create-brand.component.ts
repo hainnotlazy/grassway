@@ -51,9 +51,9 @@ export class CreateBrandPage {
       Validators.maxLength(255),
       FormValidator.validSocialLink("instagram")
     ]),
-    twitter: new FormControl("", [
+    x: new FormControl("", [
       Validators.maxLength(255),
-      FormValidator.validSocialLink("twitter")
+      FormValidator.validSocialLink("x")
     ]),
     linkedin: new FormControl("", [
       Validators.maxLength(255),
@@ -104,7 +104,7 @@ export class CreateBrandPage {
       logo: this.logoControl.value,
       facebook: this.socialsForm.value.facebook as string,
       instagram: this.socialsForm.value.instagram as string,
-      twitter: this.socialsForm.value.twitter as string,
+      x: this.socialsForm.value.x as string,
       linkedin: this.socialsForm.value.linkedin as string,
       github: this.socialsForm.value.github as string,
       tiktok: this.socialsForm.value.tiktok as string,

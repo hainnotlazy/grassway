@@ -15,7 +15,7 @@ export class UpdateSocialPlatformsDto {
   @IsOptional()
   @Matches(
     /^(https?:\/\/)?(www\.)?x\.com\/.+$/, 
-    { message: "Invalid twitter url" }
+    { message: "Invalid X (Formerly Twitter) url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
   x: string;

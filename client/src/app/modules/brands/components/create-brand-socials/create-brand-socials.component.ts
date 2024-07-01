@@ -12,7 +12,7 @@ export class CreateBrandSocialsComponent {
   @Input() socialsForm!: FormGroup<{
     facebook: FormControl<string | null>;
     instagram: FormControl<string | null>;
-    twitter: FormControl<string | null>;
+    x: FormControl<string | null>;
     linkedin: FormControl<string | null>;
     github: FormControl<string | null>;
     tiktok: FormControl<string | null>;
@@ -24,7 +24,7 @@ export class CreateBrandSocialsComponent {
   // Form validation messages
   facebookValidationMessages: ValidationMessage = createBrandRequirements.facebook.validationMsg;
   instagramValidationMessages: ValidationMessage = createBrandRequirements.instagram.validationMsg;
-  twitterValidationMessages: ValidationMessage = createBrandRequirements.twitter.validationMsg;
+  xValidationMessages: ValidationMessage = createBrandRequirements.x.validationMsg;
   linkedinValidationMessages: ValidationMessage = createBrandRequirements.linkedin.validationMsg;
   githubValidationMessages: ValidationMessage = createBrandRequirements.github.validationMsg;
   tiktokValidationMessages: ValidationMessage = createBrandRequirements.tiktok.validationMsg;

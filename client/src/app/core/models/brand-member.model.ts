@@ -9,8 +9,8 @@ export enum BrandMemberRole {
 export interface BrandMember {
   user_id: number;
   brand_id: string;
-  user: User;
-  brand: Brand;
+  user?: User;
+  brand?: Brand;
   role: BrandMemberRole;
   created_at: Date;
   updated_at: Date;

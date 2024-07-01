@@ -7,7 +7,7 @@ export class FormValidator {
   private static readonly SOCIAL_PATTERN = {
     facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/.+$/,
     instagram: /^(https?:\/\/)?(www\.)?instagram\.com\/.+$/,
-    twitter: /^(https?:\/\/)?(www\.)?x\.com\/.+$/,
+    x: /^(https?:\/\/)?(www\.)?x\.com\/.+$/,
     linkedin: /^(https?:\/\/)?(www\.)?linkedin\.com\/.+$/,
     github: /^(https?:\/\/)?(www\.)?github\.com\/.+$/,
     tiktok: /^(https?:\/\/)?(www\.)?tiktok\.com\/.+$/,
@@ -31,7 +31,7 @@ export class FormValidator {
   }
 
   static validSocialLink(
-    platform: "facebook" | "instagram" | "twitter" | "linkedin" | "github" | "tiktok" | "youtube" | "discord"
+    platform: "facebook" | "instagram" | "x" | "linkedin" | "github" | "tiktok" | "youtube" | "discord"
   ) {
     return (control: AbstractControl): ValidationErrors | null => {
       const url = control.value;

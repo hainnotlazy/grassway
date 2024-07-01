@@ -42,10 +42,10 @@ export class CreateBrandDto {
   @IsOptional()
   @Matches(
     /^(https?:\/\/)?(www\.)?x\.com\/.+$/, 
-    { message: "Invalid twitter url" }
+    { message: "Invalid X (Formerly Twitter) url" }
   )
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  twitter: string;
+  x: string;
 
   @IsString()
   @IsOptional()

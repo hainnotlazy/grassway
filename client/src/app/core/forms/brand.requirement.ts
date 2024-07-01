@@ -23,7 +23,7 @@ const instagramRequirements = {
   maxlength: 255
 }
 
-const twitterRequirements = {
+const xRequirements = {
   maxlength: 255
 }
 
@@ -95,13 +95,13 @@ export const createBrandRequirements = {
       maxlength: `Instagram URL must be at most ${instagramRequirements.maxlength} characters`
     }
   },
-  twitter: {
+  x: {
     requirements: {
-      ...twitterRequirements
+      ...xRequirements
     },
     validationMsg: {
       invalidSocialLink: "X (Formerly Twitter) URL is invalid",
-      maxlength: `X (Formerly Twitter) URL must be at most ${twitterRequirements.maxlength} characters`
+      maxlength: `X (Formerly Twitter) URL must be at most ${xRequirements.maxlength} characters`
     }
   },
   linkedin: {

@@ -82,11 +82,11 @@
     <div>
       <label
         class="sm:max-h-12 inline-flex items-center justify-start sm:w-52 sm:max-w-52 gap-2 bg-white px-4 py-2.5 rounded shadow"
-        for="twitter"
+        for="x"
       >
         <img
           src="assets/images/icon-x-colored.svg"
-          alt="Twitter's icon"
+          alt="X's icon"
           width="24"
           height="24"
           loading="eager"
@@ -102,16 +102,16 @@
     >
       <input
         matInput
-        id="twitter"
+        id="x"
         type="text"
-        formControlName="twitter"
+        formControlName="x"
         placeholder="https://x.com/your-brand"
       >
       <mat-error
         class="text-jost text-sm"
-        *ngFor="let error of getObjectKeys(socialsForm.controls.twitter.errors)"
+        *ngFor="let error of getObjectKeys(socialsForm.controls.x.errors)"
       >
-        {{ twitterValidationMessages[error] }}
+        {{ xValidationMessages[error] }}
       </mat-error>
     </mat-form-field>
   </div>

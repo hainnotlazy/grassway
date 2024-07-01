@@ -6,7 +6,7 @@ export interface CreateBrandDto {
   logo?: any;
   facebook?: string;
   instagram?: string;
-  twitter?: string;
+  x?: string;
   youtube?: string;
   tiktok?: string;
   linkedin?: string;
