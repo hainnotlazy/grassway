@@ -4,9 +4,10 @@ import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
 import { BrandDraft } from 'src/entities';
+import { SOCKET_ORIGIN } from 'src/config/socket.config';
 
 @WebSocketGateway({
-  cors: { origin: "*" },
+  cors: { origin: SOCKET_ORIGIN },
   namespace: "brands",
   maxHttpBufferSize: 1e7 //1MB
 })

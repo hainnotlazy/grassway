@@ -4,9 +4,10 @@ import { UnauthorizedException } from '@nestjs/common';
 import { RedisDatabase, RedisService } from 'src/shared/services/redis/redis.service';
 import { UserNotification } from 'src/entities';
 import { JwtService } from '@nestjs/jwt';
+import { SOCKET_ORIGIN } from 'src/config/socket.config';
 
 @WebSocketGateway({
-  cors: { origin: "*" },
+  cors: { origin: SOCKET_ORIGIN },
   namespace: "notification",
   maxHttpBufferSize: 1e7 //1MB
 })

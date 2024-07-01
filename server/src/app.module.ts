@@ -26,6 +26,8 @@ const appModules = [
   TagsModule,
   AnalyticsModule,
   SettingsModule,
+  NotificationModule,
+  BrandsModule,
 ]
 
 @Module({
@@ -40,8 +42,6 @@ const appModules = [
       useClass: config.MailerConfigOptions
     }),
     ...appModules,
-    NotificationModule,
-    BrandsModule,
   ],
   controllers: [AppController],
   providers: [
