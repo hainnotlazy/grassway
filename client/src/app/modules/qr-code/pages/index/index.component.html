@@ -13,7 +13,7 @@
   >
     <ng-container *ngIf="userSetting$ | async as userSetting">
       <app-link-card
-        *ngFor="let link of links$ | async"
+        *ngFor="let link of infiniteLoad$ | async"
         [link]="link"
         [userSetting]="userSetting"
       ></app-link-card>

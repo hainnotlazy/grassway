@@ -136,7 +136,7 @@ export class CreateBrandPage {
       verticalPosition: "top",
       horizontalPosition: "right"
     });
-    this.router.navigate(["/u/brands/manage", brand.id]);
+    this.router.navigate(["/u/brands", brand.id, "manage"]);
   }
 
   private handleCreateFailed(error: any) {
