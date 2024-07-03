@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { debounceTime, distinctUntilChanged, filter, map, of, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, of, switchMap, takeUntil, tap } from 'rxjs';
 import { camelCaseToSnackCase } from 'src/app/core/helpers';
 import { BrandSocialPlatformsDraft } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
@@ -17,6 +17,7 @@ import { BrandsService } from 'src/app/core/services';
   }
 })
 export class BrandDesignTabComponent {
+  fetchedBrand = false;
   brandId?: string;
   brandSocialPlatforms?: BrandSocialPlatformsDraft;
   designForm = new FormGroup({
@@ -47,10 +48,13 @@ export class BrandDesignTabComponent {
     private router: Router
   ) {
     this.router.events.pipe(
-      filter(event => (event instanceof Scroll || event instanceof NavigationEnd)),
+      filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
       map(() => this.route.snapshot.paramMap.get("brandId") as string),
       distinctUntilChanged(),
-      tap((brandId) => this.brandId = brandId),
+      tap((brandId) => {
+        this.fetchedBrand = false;
+        this.brandId = brandId;
+      }),
       switchMap((brandId: string) => this.brandsService.getBrandDraft(brandId)),
       tap((brandDraft) => {
         this.brandSocialPlatforms = brandDraft.social_platforms;
@@ -76,7 +80,8 @@ export class BrandDesignTabComponent {
         const controlNames = Object.keys(this.designForm.controls);
         controlNames.forEach((controlName) => {
           this.designChangeHandler(controlName);
-        })
+        });
+        this.fetchedBrand = true;
       }),
       untilDestroyed(this)
     ).subscribe();
@@ -89,7 +94,7 @@ export class BrandDesignTabComponent {
     const controlNameSnackCase = camelCaseToSnackCase(controlName);
 
     control.valueChanges.pipe(
-      debounceTime(150),
+      debounceTime(300),
       distinctUntilChanged(),
       switchMap(value => {
         if (control.invalid) {
@@ -101,7 +106,11 @@ export class BrandDesignTabComponent {
           { [controlNameSnackCase]: value }
         );
       }),
-      untilDestroyed(this)
+      takeUntil(
+        this.router.events.pipe(
+          filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd)
+        )
+      ),
     ).subscribe();
   }
 }

@@ -1,6 +1,7 @@
-<ng-container *ngIf="brandId">
+<ng-container *ngIf="fetchedBrand && brandId">
   <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
     <app-profile-form
+      [logoControl]="designForm.controls.logo"
       [titleControl]="designForm.controls.title"
       [descriptionControl]="designForm.controls.description"
     ></app-profile-form>

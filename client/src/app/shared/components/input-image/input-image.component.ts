@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -6,13 +6,18 @@ import { FormControl } from '@angular/forms';
   templateUrl: './input-image.component.html',
   styleUrls: ['./input-image.component.scss']
 })
-export class InputImageComponent {
-  readonly defaultImageUrl = "./assets/images/grassway-logo.png";
+export class InputImageComponent implements OnChanges {
+  imageUrl = "./assets/images/grassway-logo.png";
 
-  @Input() imageUrl!: string | null;
   @Input() control!: FormControl<string | null>;
 
   @ViewChild("imageInput") imageInput?: ElementRef;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["control"] && this.control.value) {
+      this.imageUrl = this.control.value;
+    }
+  }
 
   onImageChange(event: Event) {
     const fileList = (event.target as HTMLInputElement).files;
@@ -21,7 +26,7 @@ export class InputImageComponent {
       const file = fileList[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.imageInput = e.target.result;
+        this.imageUrl = e.target.result;
       };
       reader.readAsDataURL(file);
 

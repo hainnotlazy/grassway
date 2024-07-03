@@ -1,28 +1,44 @@
 <div class="space-y-3">
   <h5 class="text-karla text-xl font-bold">Blocks</h5>
 
-  <div class="space-y-2">
+  <div class="space-y-3">
     <h6 class="text-karla list-item ml-4 text-lg font-semibold text-blue-700">Shape</h6>
-    <div class="space-y-2">
-      <div class="w-fit grid items-center grid-cols-3 gap-4">
-        <ng-container *ngFor="let shape of getObjectValues(BlockShape); let i = index">
-          <button
-            class="bg-slate-400 w-48 h-10"
-            [ngClass]="{
-              'hover:outline hover:outline-blue-500': blockShapeControl.value !== shape,
-              'outline outline-blue-500': blockShapeControl.value === shape,
-              'rounded-full': shape === BlockShape.PILL_NO_BORDER || shape === BlockShape.PILL_BORDER,
-              'rounded-lg': shape === BlockShape.ROUNDED_NO_BORDER || shape === BlockShape.ROUNDED_BORDER,
-              'border-2 border-black':
-                shape === BlockShape.PILL_BORDER
-                || shape === BlockShape.ROUNDED_BORDER
-                || shape === BlockShape.NO_ROUNDED_BORDER,
-            }"
-            type="button"
-            (click)="blockShapeControl.patchValue(shape)"
-          ></button>
-        </ng-container>
-      </div>
+    <div class="!mt-2 flex items-center gap-4">
+      <button
+        *ngFor="let shape of getObjectValues(BlockShape) | slice:0:3"
+        class="bg-slate-400 w-48 h-10"
+        [ngClass]="{
+          'hover:outline hover:outline-blue-500': blockShapeControl.value !== shape,
+          'outline outline-blue-500': blockShapeControl.value === shape,
+          'rounded-full': shape === BlockShape.PILL_NO_BORDER || shape === BlockShape.PILL_BORDER,
+          'rounded-lg': shape === BlockShape.ROUNDED_NO_BORDER || shape === BlockShape.ROUNDED_BORDER,
+          'border-2 border-black':
+            shape === BlockShape.PILL_BORDER
+            || shape === BlockShape.ROUNDED_BORDER
+            || shape === BlockShape.NO_ROUNDED_BORDER,
+        }"
+        type="button"
+        (click)="blockShapeControl.patchValue(shape)"
+      ></button>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <button
+        *ngFor="let shape of getObjectValues(BlockShape) | slice:3"
+        class="bg-slate-400 w-48 h-10"
+        [ngClass]="{
+          'hover:outline hover:outline-blue-500': blockShapeControl.value !== shape,
+          'outline outline-blue-500': blockShapeControl.value === shape,
+          'rounded-full': shape === BlockShape.PILL_NO_BORDER || shape === BlockShape.PILL_BORDER,
+          'rounded-lg': shape === BlockShape.ROUNDED_NO_BORDER || shape === BlockShape.ROUNDED_BORDER,
+          'border-2 border-black':
+            shape === BlockShape.PILL_BORDER
+            || shape === BlockShape.ROUNDED_BORDER
+            || shape === BlockShape.NO_ROUNDED_BORDER,
+        }"
+        type="button"
+        (click)="blockShapeControl.patchValue(shape)"
+      ></button>
     </div>
   </div>
 

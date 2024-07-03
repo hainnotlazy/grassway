@@ -9,6 +9,7 @@ import { getObjectKeys } from 'src/app/core/helpers';
   styleUrls: ['./profile-form.component.scss']
 })
 export class ProfileFormComponent {
+  @Input() logoControl!: FormControl;
   @Input() titleControl!: FormControl;
   @Input() descriptionControl!: FormControl;
 

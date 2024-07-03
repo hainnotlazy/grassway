@@ -64,7 +64,18 @@ export class BrandsService {
   }
 
   updateDesignDraft(brandId: string, updateBrandDesignDto: UpdateBrandDesignDto) {
-    return this.httpClient.put<BrandDraft>(`api/brands/draft/${brandId}/design`, updateBrandDesignDto);
+    const fields = Object.keys(updateBrandDesignDto);
+
+    const formData = new FormData();
+    for (const field of fields) {
+      // @ts-ignore
+      const fieldValue = updateBrandDesignDto[field];
+      if (fieldValue) {
+        formData.append(field, fieldValue);
+      }
+    }
+
+    return this.httpClient.put<BrandDraft>(`api/brands/draft/${brandId}/design`, formData);
   }
 
   updateSocialPlatformsDraftOrder(
