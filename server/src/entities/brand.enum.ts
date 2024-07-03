@@ -45,3 +45,16 @@ export enum SocialIconPosition {
   TOP = "top",
   BOTTOM = "bottom"
 }
+
+export enum BlockType {
+  BUTTON = "button",
+  IMAGE = "image",
+  YOUTUBE = "youtube",
+}
+
+export enum BlockImageRatio {
+  RATIO_ORIGIN = "origin",
+  RATIO_1_1 = "1:1",
+  RATIO_3_2 = "3:2",
+  RATIO_16_9 = "16:9",
+}

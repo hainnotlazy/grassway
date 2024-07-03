@@ -1,10 +1,11 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 import { Brand } from "./brand.entity";
 import { BrandSocialPlatformsDraft } from "./brand-social-platforms-draft.entity";
-import { BlockShadow, BlockShape, BrandFont, BrandLayout } from "./brand.enum";
+import { BrandBase } from "./brand-base";
+import { BrandBlockDraft } from "./brand-block-draft.entity";
 
 @Entity()
-export class BrandDraft {
+export class BrandDraft extends BrandBase {
   @PrimaryColumn("uuid")
   brand_id: string;
 
@@ -12,107 +13,9 @@ export class BrandDraft {
   @JoinColumn({ name: "brand_id" })
   brand: Brand;
 
+  @OneToMany(() => BrandBlockDraft, block => block.brand_draft)
+  blocks: BrandBlockDraft[];
+
   @OneToOne(() => BrandSocialPlatformsDraft, social_platforms => social_platforms.brand_draft)
   social_platforms: BrandSocialPlatformsDraft;
-
-  @Column({ length: 80 })
-  title: string;
-
-  @Column({ nullable: true, length: 100 })
-  description: string;
-
-  @Column({ unique: true })
-  prefix: string;
-
-  @Column({ nullable: true })
-  logo: string;
-
-  @Column({
-    default: "#000000",
-    length: 7
-  })
-  qr_code_background_color: string;
-
-  @Column({
-    default: "#ffffff",
-    length: 7
-  })
-  qr_code_foreground_color: string;
-
-  @Column({
-    type: "enum",
-    enum: BrandLayout,
-    default: BrandLayout.NO_HEADER
-  })
-  layout: BrandLayout;
-
-  @Column({
-    default: "#000000",
-    length: 7
-  })
-  header_color: string;
-
-  @Column({
-    default: "#ffffff",
-    length: 7
-  })
-  background_color: string;
-
-  @Column({
-    default: "#000000",
-    length: 7
-  })
-  title_color: string;
-
-  @Column({
-    default: "#000000",
-    length: 7
-  })
-  description_color: string;
-
-  @Column({
-    type: "enum",
-    enum: BlockShape,
-    default: BlockShape.ROUNDED_NO_BORDER
-  })
-  block_shape: BlockShape;
-
-  @Column({
-    type: "enum",
-    enum: BlockShadow,
-    default: BlockShadow.NO_SHADOW
-  })
-  block_shadow: BlockShadow;
-
-  @Column({
-    default: "#ffffff",
-    length: 7
-  })
-  block_color: string;
-
-  @Column({
-    default: "#000000",
-    length: 7
-  })
-  block_text_color: string;
-
-  @Column({
-    type: "enum",
-    enum: BrandFont,
-    default: BrandFont.KARLA
-  })
-  font: BrandFont;
-
-  @UpdateDateColumn()
-  updated_at: Date;
-
-  @BeforeInsert()
-  handleBeforeInsert() {
-    this.prefix = this.prefix.toLowerCase();
-  }
-
-  @BeforeUpdate()
-  handleBeforeUpdate() {
-    this.prefix = this.prefix.toLowerCase();
-  }
 }
