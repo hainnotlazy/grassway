@@ -1,101 +1,118 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input } from '@angular/core';
-import { BrandSocialPlatformsBase } from 'src/app/core/models/brand-base.model';
-import { BrandSocialPlatformsDraft } from 'src/app/core/models/brand-social-platforms-draft.model';
-import { SocialIconPosition, SocialIconStyle } from 'src/app/core/models/brand.enum';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { debounceTime, distinctUntilChanged, filter, switchMap, take } from 'rxjs';
+import { SOCIAL_PLATFORMS_COLORED } from 'src/app/core/constants/social-platforms.constant';
+import { UpdateSocialPlatformsDto } from 'src/app/core/dtos';
+import { BrandSocialPlatformsDraft } from 'src/app/core/models';
+import { BrandsService } from 'src/app/core/services';
+import { FormValidator } from 'src/app/core/validators/form.validator';
 
-// interface SocialPlatform {
-//   name: string;
-//   order: number;
-//   icon: string;
-// }
-
+@UntilDestroy()
 @Component({
   selector: 'app-socials-form',
   templateUrl: './socials-form.component.html',
   styleUrls: ['./socials-form.component.scss'],
 })
-export class SocialsFormComponent {
-  // readonly SOCIAL_PLATFORMS: string[] = [
-  //   'facebook',
-  //   'instagram',
-  //   'x',
-  //   'youtube',
-  //   'tiktok',
-  //   'linkedin',
-  //   'discord',
-  //   'github',
-  //   'website'
-  // ];
-  // @Input() socialPlatforms!: BrandSocialPlatformsBase;
+export class SocialsFormComponent implements OnChanges {
+  readonly DND_SOCIAL_PLATFORMS = SOCIAL_PLATFORMS_COLORED;
 
-  // dndSocialPlatforms?: SocialPlatform[];
+  @Input() socialPlatforms!: BrandSocialPlatformsDraft;
+  @Input() brandId!: string;
 
-  // private readonly sampleResponse: BrandSocialPlatformsDraft = {
-  //   brand_id: "c6d2f0ec-363e-444e-b708-89693e785ed0",
-  //   icon_style: SocialIconStyle.COLOR,
-  //   icon_position: SocialIconPosition.TOP,
-  //   facebook: "",
-  //   instagram: "",
-  //   twitter: "",
-  //   youtube: "",
-  //   tiktok: "",
-  //   linkedin: "",
-  //   discord: "",
-  //   github: "",
-  //   website: "",
-  //   facebook_order: -1,
-  //   instagram_order: -1,
-  //   twitter_order: -1,
-  //   youtube_order: -1,
-  //   tiktok_order: -1,
-  //   linkedin_order: -1,
-  //   discord_order: 0,
-  //   github_order: -1,
-  //   website_order: 1,
-  //   updated_at: new Date()
-  // }
+  form = new FormGroup({
+    facebook: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("facebook")
+    ]),
+    instagram: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("instagram")
+    ]),
+    x: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("x")
+    ]),
+    linkedin: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("linkedin")
+    ]),
+    github: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("github")
+    ]),
+    tiktok: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("tiktok")
+    ]),
+    youtube: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("youtube")
+    ]),
+    discord: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validSocialLink("discord")
+    ]),
+    website: new FormControl("", [
+      Validators.maxLength(255),
+      FormValidator.validUrl
+    ]),
+  })
 
-  // ngOnInit() {
-  //   this.socialPlatforms = this.sortSocialPlatformsByOrder();
-  //   console.log(this.socialPlatforms);
-  // }
+  constructor(
+    private brandsService: BrandsService,
+  ) {}
 
-  // drop(event: CdkDragDrop<string[]>) {
-  //   moveItemInArray(this.socialPlatforms, event.previousIndex, event.currentIndex);
-  //   console.log(this.socialPlatforms);
-  // }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["socialPlatforms"]) {
+      this.form.patchValue(this.socialPlatforms);
+      this.sortPlatforms();
+      this.form.valueChanges.pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        filter(() => this.form.valid),
+        switchMap(data => this.brandsService.updateSocialPlatformsDraft(this.brandId, data as UpdateSocialPlatformsDto)),
+        untilDestroyed(this)
+      ).subscribe();
+    }
+  }
 
-  // private initSocialPlatformsHandling() {
-  //   const orderMap = {
-  //     facebook: this.socialPlatforms.facebook_order,
-  //     instagram: this.socialPlatforms.instagram_order,
-  //     twitter: this.socialPlatforms.twitter_order,
-  //     youtube: this.socialPlatforms.youtube_order,
-  //     tiktok: this.socialPlatforms.tiktok_order,
-  //     linkedin: this.socialPlatforms.linkedin_order,
-  //     discord: this.socialPlatforms.discord_order,
-  //     github: this.socialPlatforms.github_order,
-  //     website: this.socialPlatforms.website_order
-  //   };
-  // }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.DND_SOCIAL_PLATFORMS, event.previousIndex, event.currentIndex);
+    this.updatePlatformsOrder()
+  }
 
-  // private sortSocialPlatformsByOrder() {
-  //   const orderMap = {
-  //     facebook: this.sampleResponse.facebook_order,
-  //     instagram: this.sampleResponse.instagram_order,
-  //     twitter: this.sampleResponse.twitter_order,
-  //     youtube: this.sampleResponse.youtube_order,
-  //     tiktok: this.sampleResponse.tiktok_order,
-  //     linkedin: this.sampleResponse.linkedin_order,
-  //     discord: this.sampleResponse.discord_order,
-  //     github: this.sampleResponse.github_order,
-  //     website: this.sampleResponse.website_order
-  //   };
+  private sortPlatforms() {
+    return this.DND_SOCIAL_PLATFORMS.sort((a, b) => {
+      const platformA = a.name;
+      const platformB = b.name;
 
-  //   return this.socialPlatforms.sort((a, b) => {
-  //     // @ts-ignore
-  //     return orderMap[b] - orderMap[a];
-  //   });
-  // }
+      // @ts-ignore
+      return this.socialPlatforms[`${platformB}_order`] - this.socialPlatforms[`${platformA}_order`];
+    })
+  }
+
+  private getPlatformOrder(platformName: string) {
+    return this.DND_SOCIAL_PLATFORMS.length - this.DND_SOCIAL_PLATFORMS.findIndex(platform => platform.name === platformName);
+  }
+
+  private updatePlatformsOrder() {
+    this.brandsService.updateSocialPlatformsDraftOrder(
+      this.brandId,
+      {
+        facebook_order: this.getPlatformOrder("facebook"),
+        instagram_order: this.getPlatformOrder("instagram"),
+        x_order: this.getPlatformOrder("x"),
+        linkedin_order: this.getPlatformOrder("linkedin"),
+        github_order: this.getPlatformOrder("github"),
+        tiktok_order: this.getPlatformOrder("tiktok"),
+        youtube_order: this.getPlatformOrder("youtube"),
+        discord_order: this.getPlatformOrder("discord"),
+        website_order: this.getPlatformOrder("website"),
+      }
+    ).pipe(
+      take(1)
+    ).subscribe();
+  }
 }

@@ -4,9 +4,8 @@
   <div class="space-y-2">
     <h6 class="text-karla list-item ml-4 text-lg font-semibold text-blue-700">Shape</h6>
     <div class="space-y-2">
-      <div class="flex flex-wrap items-center gap-4">
+      <div class="w-fit grid items-center grid-cols-3 gap-4">
         <ng-container *ngFor="let shape of getObjectValues(BlockShape); let i = index">
-          <div *ngIf="i === 3" class="w-full opacity-0"></div>
           <button
             class="bg-slate-400 w-48 h-10"
             [ngClass]="{

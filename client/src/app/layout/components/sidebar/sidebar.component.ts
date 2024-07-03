@@ -64,13 +64,12 @@ export class SidebarComponent {
     }
 
     this.brandsService.getBrands().pipe(
-      take(1),
       tap((brands) => {
         this.brands = brands;
         this.isBrandItemOpen = true;
         this.fetchedBrands = true;
       }),
-      untilDestroyed(this)
+      take(1),
     ).subscribe();
   }
 }

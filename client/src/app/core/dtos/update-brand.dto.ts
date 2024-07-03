@@ -17,6 +17,18 @@ export interface UpdateBrandDesignDto {
   font?: BrandFont;
 }
 
+export interface UpdateSocialPlatformsDto {
+  facebook?: string;
+  instagram?: string;
+  x?: string;
+  youtube?: string;
+  tiktok?: string;
+  linkedin?: string;
+  discord?: string;
+  github?: string;
+  website?: string;
+}
+
 export interface UpdateSocialPlatformsOrderDto {
   facebook_order: number;
   instagram_order: number;
