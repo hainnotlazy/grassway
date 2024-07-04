@@ -1,8 +1,7 @@
-import { UpdateSocialPlatformsDto } from './dtos/update-social-platforms.dto';
 import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto } from './dtos';
-import { User, BrandDraft, BrandMember, BrandSocialPlatformsDraft } from 'src/entities';
+import { UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto, UpdateSocialPlatformsDto, BrandBlockDto, UpdateBlockOrderDto } from './dtos';
+import { User, BrandDraft, BrandMember, BrandSocialPlatformsDraft, BrandBlockDraft, BlockType } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { BrandsGateway } from './brands.gateway';
@@ -17,6 +16,8 @@ export class BrandDraftService {
     private readonly brandMemberRepository: Repository<BrandMember>,
     @InjectRepository(BrandSocialPlatformsDraft)
     private readonly brandSocialPlatformsDraftRepository: Repository<BrandSocialPlatformsDraft>,
+    @InjectRepository(BrandBlockDraft)
+    private readonly brandBlockDraftRepository: Repository<BrandBlockDraft>,
     private brandsService: BrandsService,
     private dataSource: DataSource,
     private brandsGateway: BrandsGateway,
@@ -62,6 +63,102 @@ export class BrandDraftService {
     }
 
     return brand;
+  }
+
+  /**
+   * Describe: Create brand block 
+  */ 
+  async createBrandBlock(
+    currentUser: User,
+    brandId: string,
+    createBrandBlockDto: BrandBlockDto,
+    image: Express.Multer.File
+  ) {
+    this.brandsService.validateBrandId(brandId);
+
+    const brand = await this.brandDraftRepository.findOne({
+      where: {
+        brand_id: brandId,
+        brand: {
+          members: {
+            user_id: currentUser.id
+          }
+        }
+      }
+    })
+    if (!brand) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    // Save block image
+    let savedImagePath = null;
+    if (createBrandBlockDto.type === BlockType.IMAGE && image) {
+      savedImagePath = this.uploadFileService.saveBrandLogo(image);
+    }
+
+    const block = this.brandBlockDraftRepository.create({
+      ...createBrandBlockDto,
+      brand_draft: brand,
+      image: savedImagePath
+    });
+
+    return this.brandBlockDraftRepository.save(block);
+  }
+
+  /**
+   * Describe: Update brand block
+  */
+  async updateBrandBlock(
+    currentUser: User,
+    brandId: string,
+    blockId: number,
+    updateBrandBlockDto: BrandBlockDto,
+    image: Express.Multer.File
+  ) {
+    this.brandsService.validateBrandId(brandId);
+
+    const existedBlock = await this.brandBlockDraftRepository.findOne({
+      where: {
+        id: blockId,
+        brand_draft: {
+          brand_id: brandId,
+          brand: {
+            members: {
+              user_id: currentUser.id
+            }
+          }
+        }
+      }
+    });
+    if (!existedBlock) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    // Save new block image
+    let savedImagePath = null;
+    if (updateBrandBlockDto.type === BlockType.IMAGE && image) {
+      savedImagePath = this.uploadFileService.saveBrandLogo(image);
+    }
+
+    Object.assign(existedBlock, updateBrandBlockDto);
+    existedBlock.image = savedImagePath;
+    const updatedBlock = await this.brandBlockDraftRepository.save(existedBlock);
+
+    this.uploadFileService.removeOldFile(existedBlock.image);
+    return updatedBlock;
+  }
+
+  /** 
+   * Describe: Update brand blocks order
+  */
+  async updateBrandBlocksOrder(
+    currentUser: User,
+    brandId: string,
+    updateSocialPlatformsOrderDto: UpdateBlockOrderDto
+  ) {
+    this.brandsService.validateBrandId(brandId);
+
+    const { ids: blockIds } = updateSocialPlatformsOrderDto;
   }
 
   /** 

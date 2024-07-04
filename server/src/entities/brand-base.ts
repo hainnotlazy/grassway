@@ -191,7 +191,7 @@ export abstract class BrandBlockBase {
   @Column({ length: 80 })
   title: string;
 
-  @Column({ nullable: true, length: 100 })
+  @Column({ nullable: true, length: 150 })
   description: string;
 
   @Column({ nullable: true })

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { BrandsController } from './brands.controller';
 import { BrandsService } from './brands.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Brand, BrandDraft, BrandMember, BrandSocialPlatforms, BrandSocialPlatformsDraft, User } from 'src/entities';
+import { Brand, BrandBlock, BrandBlockDraft, BrandDraft, BrandMember, BrandSocialPlatforms, BrandSocialPlatformsDraft, User } from 'src/entities';
 import { SharedModule } from 'src/shared/shared.module';
 import { BrandDraftService } from './brand-draft.service';
 import { BrandsGateway } from './brands.gateway';
@@ -15,8 +15,10 @@ import { JwtConfigOptions } from 'src/config';
       Brand, 
       BrandSocialPlatforms,
       BrandMember,
+      BrandBlock,
       BrandDraft,
       BrandSocialPlatformsDraft,
+      BrandBlockDraft,
       User
     ]),
     JwtModule.registerAsync({

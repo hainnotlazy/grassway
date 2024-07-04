@@ -1,5 +1,5 @@
-import { Body, Controller, DefaultValuePipe, Get, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from './dtos';
+import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto } from './dtos';
 import { BrandsService } from './brands.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities';
@@ -49,6 +49,22 @@ export class BrandsController {
     return this.brandsService.createBrand(currentUser, createBrandDto, logo);
   }
 
+  @Post("/draft/:id/blocks")
+  @UseInterceptors(FileInterceptor("image"))
+  createBrandBlock(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() createBrandBlockDto: BrandBlockDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandDraftService.createBrandBlock(
+      currentUser, 
+      id, 
+      createBrandBlockDto, 
+      image
+    );
+  }
+
   @Put("/draft/:id/design")
   @UseInterceptors(FileInterceptor("logo"))
   updateBrandDesignDraft(
@@ -89,5 +105,32 @@ export class BrandsController {
       id, 
       updateSocialPlatformsDto
     );
+  }
+
+  @Put("/draft/:id/blocks/:blockId")
+  @UseInterceptors(FileInterceptor("image"))
+  updateBrandBlockDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,  
+    @Param("blockId", ParseIntPipe) blockId: number,
+    @Body() updateBrandBlockDto: BrandBlockDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandDraftService.updateBrandBlock(
+      currentUser,
+      id,
+      blockId,
+      updateBrandBlockDto,
+      image
+    )
+  }
+
+  @Put("/draft/:id/blocks/order")
+  updateBrandBlockOrderDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateBlockOrderDto: UpdateBlockOrderDto
+  ) {
+    
   }
 }

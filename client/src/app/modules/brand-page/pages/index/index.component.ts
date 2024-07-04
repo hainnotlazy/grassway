@@ -28,7 +28,8 @@ export class IndexPage implements OnInit {
       switchMap((prefix: string) => this.brandsService.getBrandByPrefix(prefix)),
       tap(brand => {
         this.brand = brand;
-      })
+      }),
+      untilDestroyed(this)
     ).subscribe();
 
     this.brandsService.getNewDesign().pipe(

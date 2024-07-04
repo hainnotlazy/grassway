@@ -13,4 +13,6 @@ export * from "./brand.entity";
 export * from "./brand-draft.entity";
 export * from "./brand-social-platforms.entity";
 export * from "./brand-social-platforms-draft.entity";
+export * from "./brand-block.entity";
+export * from "./brand-block-draft.entity";
 export * from "./brand-member.entity";
