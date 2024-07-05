@@ -15,3 +15,5 @@ export * from "./brand-draft.model";
 export * from "./brand-member.model";
 export * from "./brand-social-platforms.model";
 export * from "./brand-social-platforms-draft.model";
+export * from "./brand-block.model";
+export * from "./brand-block-draft.model";

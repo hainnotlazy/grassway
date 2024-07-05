@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs';
-import { SOCIAL_PLATFORMS_COLORED } from 'src/app/core/constants/social-platforms.constant';
+import { SOCIAL_PLATFORMS_COLORED, SocialPlatform } from 'src/app/core/constants/social-platforms.constant';
 import { UpdateSocialPlatformsDto } from 'src/app/core/dtos';
 import { BrandSocialPlatformsDraft } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
@@ -81,7 +81,7 @@ export class SocialsFormComponent implements OnInit {
     ).subscribe();
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<SocialPlatform[]>) {
     moveItemInArray(this.DND_SOCIAL_PLATFORMS, event.previousIndex, event.currentIndex);
     this.updatePlatformsOrder()
   }

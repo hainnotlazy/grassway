@@ -17,8 +17,8 @@ import { BrandsService } from 'src/app/core/services';
 })
 export class BrandDesignTabComponent {
   fetchedDesign = false;
-  brandId?: string;
-  brandSocialPlatforms?: BrandSocialPlatformsDraft;
+  brandId!: string;
+  brandSocialPlatforms!: BrandSocialPlatformsDraft;
   designForm = new FormGroup({
     title: new FormControl("", [
       Validators.required,
@@ -48,7 +48,9 @@ export class BrandDesignTabComponent {
       tap(brand => this.brandId = brand.id),
       switchMap(brand => this.brandsService.getBrandDraft(brand.id)),
       tap(brandDraft => {
-        this.brandSocialPlatforms = brandDraft.social_platforms;
+        if (brandDraft.social_platforms) {
+          this.brandSocialPlatforms = brandDraft.social_platforms;
+        }
         this.patchValueDesignForm(brandDraft);
 
         const controlNames = Object.keys(this.designForm.controls);

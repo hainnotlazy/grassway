@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Brand, BrandDraft } from '../models';
+import { Brand, BrandBlockDraft, BrandDraft } from '../models';
 import { BrandsSocket } from '../sockets';
 import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from '../dtos';
 import { BehaviorSubject, filter, map } from 'rxjs';
@@ -48,6 +48,10 @@ export class BrandsService {
   getBrandDraft(brandId: string) {
     // Add query as get draft data
     return this.httpClient.get<BrandDraft>(`api/brands/draft/${brandId}/design`);
+  }
+
+  getBrandBlocks(brandId: string) {
+    return this.httpClient.get<BrandBlockDraft[]>(`api/brands/draft/${brandId}/blocks`);
   }
 
   getNewDesign() {

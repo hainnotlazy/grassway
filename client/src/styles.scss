@@ -181,3 +181,7 @@ body {
     transform: rotate(25deg);
   }
 }
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}

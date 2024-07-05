@@ -1,4 +1,4 @@
-import { BlockShadow, BlockShape, BrandFont, BrandLayout, SocialIconPosition, SocialIconStyle } from "./brand.enum";
+import { BlockImageRatio, BlockShadow, BlockShape, BlockType, BrandFont, BrandLayout, SocialIconPosition, SocialIconStyle } from "./brand.enum";
 
 export interface BrandBase {
   title: string;
@@ -41,5 +41,16 @@ export interface BrandSocialPlatformsBase {
   discord_order: number;
   github_order: number;
   website_order: number;
+  updated_at: Date;
+}
+
+export interface BrandBlockBase {
+  type: BlockType;
+  title: string;
+  description: string;
+  image: string;
+  image_ratio: BlockImageRatio;
+  order: number;
+  youtube_url: string;
   updated_at: Date;
 }

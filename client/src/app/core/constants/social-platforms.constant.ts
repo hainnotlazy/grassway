@@ -1,4 +1,4 @@
-interface SocialPlatform {
+export interface SocialPlatform {
   name: string;
   icon: string;
   placeholder: string;
