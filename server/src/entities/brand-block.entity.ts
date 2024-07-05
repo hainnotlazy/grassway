@@ -1,10 +1,10 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { BrandBlockBase } from "./brand-base";
 import { Brand } from "./brand.entity";
 
 @Entity()
 export class BrandBlock extends BrandBlockBase {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @PrimaryColumn("uuid")

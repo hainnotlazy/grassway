@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { debounceTime, distinctUntilChanged, filter, map, of, switchMap, takeUntil, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, of, switchMap, take, tap } from 'rxjs';
 import { camelCaseToSnackCase } from 'src/app/core/helpers';
-import { BrandSocialPlatformsDraft } from 'src/app/core/models';
+import { BrandDraft, BrandSocialPlatformsDraft } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
 
 @UntilDestroy()
@@ -17,7 +16,7 @@ import { BrandsService } from 'src/app/core/services';
   }
 })
 export class BrandDesignTabComponent {
-  fetchedBrand = false;
+  fetchedDesign = false;
   brandId?: string;
   brandSocialPlatforms?: BrandSocialPlatformsDraft;
   designForm = new FormGroup({
@@ -44,47 +43,40 @@ export class BrandDesignTabComponent {
 
   constructor(
     private brandsService: BrandsService,
-    private route: ActivatedRoute,
-    private router: Router
   ) {
-    this.router.events.pipe(
-      filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
-      map(() => this.route.snapshot.paramMap.get("brandId") as string),
-      distinctUntilChanged(),
-      tap((brandId) => {
-        this.fetchedBrand = false;
-        this.brandId = brandId;
-      }),
-      switchMap((brandId: string) => this.brandsService.getBrandDraft(brandId)),
-      tap((brandDraft) => {
+    this.brandsService.currentBrand$.pipe(
+      tap(brand => this.brandId = brand.id),
+      switchMap(brand => this.brandsService.getBrandDraft(brand.id)),
+      tap(brandDraft => {
         this.brandSocialPlatforms = brandDraft.social_platforms;
-      }),
-      tap((brandDraft) => {
-        this.designForm.patchValue({
-          title: brandDraft.title,
-          description: brandDraft.description,
-          logo: brandDraft.logo,
-          layout: brandDraft.layout,
-          headerColor: brandDraft.header_color,
-          backgroundColor: brandDraft.background_color,
-          titleColor: brandDraft.title_color,
-          descriptionColor: brandDraft.description_color,
-          blockShape: brandDraft.block_shape,
-          blockShadow: brandDraft.block_shadow,
-          blockColor: brandDraft.block_color,
-          blockTextColor: brandDraft.block_text_color,
-          font: brandDraft.font
-        })
-      }),
-      tap(() => {
+        this.patchValueDesignForm(brandDraft);
+
         const controlNames = Object.keys(this.designForm.controls);
         controlNames.forEach((controlName) => {
           this.designChangeHandler(controlName);
         });
-        this.fetchedBrand = true;
       }),
-      untilDestroyed(this)
+      finalize(() => this.fetchedDesign = true),
+      take(1),
     ).subscribe();
+  }
+
+  private patchValueDesignForm(brandDraft: BrandDraft) {
+    this.designForm.patchValue({
+      title: brandDraft.title,
+      description: brandDraft.description,
+      logo: brandDraft.logo,
+      layout: brandDraft.layout,
+      headerColor: brandDraft.header_color,
+      backgroundColor: brandDraft.background_color,
+      titleColor: brandDraft.title_color,
+      descriptionColor: brandDraft.description_color,
+      blockShape: brandDraft.block_shape,
+      blockShadow: brandDraft.block_shadow,
+      blockColor: brandDraft.block_color,
+      blockTextColor: brandDraft.block_text_color,
+      font: brandDraft.font
+    })
   }
 
   private designChangeHandler(
@@ -106,11 +98,7 @@ export class BrandDesignTabComponent {
           { [controlNameSnackCase]: value }
         );
       }),
-      takeUntil(
-        this.router.events.pipe(
-          filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd)
-        )
-      ),
+      untilDestroyed(this)
     ).subscribe();
   }
 }

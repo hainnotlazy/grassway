@@ -107,6 +107,19 @@ export class BrandsController {
     );
   }
 
+  @Put("/draft/:id/blocks/order")
+  updateBrandBlockOrderDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateBlockOrderDto: UpdateBlockOrderDto
+  ) {
+    return this.brandDraftService.updateBrandBlocksOrder(
+      currentUser,
+      id,
+      updateBlockOrderDto
+    )
+  }
+
   @Put("/draft/:id/blocks/:blockId")
   @UseInterceptors(FileInterceptor("image"))
   updateBrandBlockDraft(
@@ -123,14 +136,5 @@ export class BrandsController {
       updateBrandBlockDto,
       image
     )
-  }
-
-  @Put("/draft/:id/blocks/order")
-  updateBrandBlockOrderDraft(
-    @CurrentUser() currentUser: User,
-    @Param("id") id: string,
-    @Body() updateBlockOrderDto: UpdateBlockOrderDto
-  ) {
-    
   }
 }

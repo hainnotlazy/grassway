@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Brand, BrandDraft } from '../models';
 import { BrandsSocket } from '../sockets';
 import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from '../dtos';
+import { BehaviorSubject, filter, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,23 @@ export class BrandsService {
     "youtube", "tiktok", "linkedin", "discord", "github", "website", "invited_users"
   ];
 
+  /**
+   * Current brand for managing
+   */
+  private readonly currentBrandSubject = new BehaviorSubject<Brand | null>(null);
+  currentBrand$ = this.currentBrandSubject.asObservable().pipe(
+    filter(brand => !!brand),
+    map(brand => brand as Brand)
+  );
+
   constructor(
     private httpClient: HttpClient,
     private socket: BrandsSocket
   ) { }
+
+  setCurrentBrand(brand: Brand | null) {
+    this.currentBrandSubject.next(brand);
+  }
 
   getBrands() {
     return this.httpClient.get<Brand[]>("api/brands");

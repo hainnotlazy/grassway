@@ -1,8 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { debounceTime, distinctUntilChanged, filter, switchMap, take } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs';
 import { SOCIAL_PLATFORMS_COLORED } from 'src/app/core/constants/social-platforms.constant';
 import { UpdateSocialPlatformsDto } from 'src/app/core/dtos';
 import { BrandSocialPlatformsDraft } from 'src/app/core/models';
@@ -15,11 +15,11 @@ import { FormValidator } from 'src/app/core/validators/form.validator';
   templateUrl: './socials-form.component.html',
   styleUrls: ['./socials-form.component.scss'],
 })
-export class SocialsFormComponent implements OnChanges {
+export class SocialsFormComponent implements OnInit {
   readonly DND_SOCIAL_PLATFORMS = SOCIAL_PLATFORMS_COLORED;
+  brandId!: string;
 
   @Input() socialPlatforms!: BrandSocialPlatformsDraft;
-  @Input() brandId!: string;
 
   form = new FormGroup({
     facebook: new FormControl("", [
@@ -62,20 +62,23 @@ export class SocialsFormComponent implements OnChanges {
 
   constructor(
     private brandsService: BrandsService,
-  ) {}
+  ) {
+    this.brandsService.currentBrand$.pipe(
+      tap(brand => this.brandId = brand.id),
+      take(1),
+    ).subscribe();
+  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes["socialPlatforms"]) {
-      this.form.patchValue(this.socialPlatforms);
-      this.sortPlatforms();
-      this.form.valueChanges.pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        filter(() => this.form.valid),
-        switchMap(data => this.brandsService.updateSocialPlatformsDraft(this.brandId, data as UpdateSocialPlatformsDto)),
-        untilDestroyed(this)
-      ).subscribe();
-    }
+  ngOnInit() {
+    this.form.patchValue(this.socialPlatforms);
+    this.sortPlatforms();
+    this.form.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      filter(() => this.form.valid),
+      switchMap(data => this.brandsService.updateSocialPlatformsDraft(this.brandId, data as UpdateSocialPlatformsDto)),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   drop(event: CdkDragDrop<string[]>) {

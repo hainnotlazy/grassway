@@ -1,4 +1,4 @@
-<ng-container *ngIf="fetchedBrand && brandId">
+<ng-container *ngIf="fetchedDesign; else loadingTab">
   <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
     <app-profile-form
       [logoControl]="designForm.controls.logo"
@@ -23,7 +23,6 @@
   >
     <app-socials-form
       [socialPlatforms]="brandSocialPlatforms"
-      [brandId]="brandId"
     ></app-socials-form>
   </div>
 
@@ -40,3 +39,7 @@
     <app-font-form [fontControl]="designForm.controls.font"></app-font-form>
   </div>
 </ng-container>
+
+<ng-template #loadingTab>
+  <app-loading-tab [description]="'Loading brand design...'"></app-loading-tab>
+</ng-template>

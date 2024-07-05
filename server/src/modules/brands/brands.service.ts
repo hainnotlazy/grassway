@@ -46,7 +46,7 @@ export class BrandsService {
   async getBrandById(currentUser: User, id: string) {
     this.validateBrandId(id);
 
-    return this.brandRepository.findOne({  
+    const brand = this.brandRepository.findOne({  
       where: {
         id,
         members: {
@@ -56,6 +56,12 @@ export class BrandsService {
         }
       },
     });
+
+    if (!brand) {
+      throw new BadRequestException("Brand not found");
+    }
+
+    return brand;
   }
 
   async createBrand(

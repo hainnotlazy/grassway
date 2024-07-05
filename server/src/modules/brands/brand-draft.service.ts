@@ -98,7 +98,7 @@ export class BrandDraftService {
 
     const block = this.brandBlockDraftRepository.create({
       ...createBrandBlockDto,
-      brand_draft: brand,
+      brand_id: brandId,
       image: savedImagePath
     });
 
@@ -144,7 +144,11 @@ export class BrandDraftService {
     existedBlock.image = savedImagePath;
     const updatedBlock = await this.brandBlockDraftRepository.save(existedBlock);
 
-    this.uploadFileService.removeOldFile(existedBlock.image);
+    // Remove old block image
+    if (updateBrandBlockDto.type === BlockType.IMAGE && image && existedBlock.image) {
+      this.uploadFileService.removeOldFile(existedBlock.image);
+    }
+
     return updatedBlock;
   }
 
@@ -158,7 +162,34 @@ export class BrandDraftService {
   ) {
     this.brandsService.validateBrandId(brandId);
 
+    // Check permission
+    const isMember = await this.brandDraftRepository.findOne({
+      where: {
+        brand_id: brandId,
+        brand: {
+          members: {
+            user_id: currentUser.id
+          }
+        }
+      }
+    });
+    if (!isMember) {  
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
     const { ids: blockIds } = updateSocialPlatformsOrderDto;
+    const cases = blockIds
+      .map((id, index) => `WHEN id = '${id}' THEN ${blockIds.length - index}`)
+      .join(' ');
+
+    const query = this.brandBlockDraftRepository
+    .createQueryBuilder()
+    .update(BrandBlockDraft)
+    .set({ order: () => `CASE ${cases} END` })
+    .where('id IN (:...ids)', { ids: blockIds })
+    .andWhere('brand_id = :brandId', { brandId })
+
+    await query.execute();
   }
 
   /** 
@@ -267,9 +298,7 @@ export class BrandDraftService {
       brand_draft: {
         brand: {
           members: {
-            user: {
-              id: currentUser.id
-            }
+            user_id: currentUser.id
           }
         }
       }

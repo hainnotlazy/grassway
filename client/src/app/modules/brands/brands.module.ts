@@ -18,6 +18,8 @@ import { ProfileFormComponent } from './components/profile-form/profile-form.com
 import { FontFormComponent } from './components/font-form/font-form.component';
 import { BlocksFormComponent } from './components/blocks-form/blocks-form.component';
 import { SocialsFormComponent } from './components/socials-form/socials-form.component';
+import { BrandBuildTabComponent } from './components/brand-build-tab/brand-build-tab.component';
+import { LoadingTabComponent } from './components/loading-tab/loading-tab.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { SocialsFormComponent } from './components/socials-form/socials-form.com
     ProfileFormComponent,
     FontFormComponent,
     BlocksFormComponent,
-    SocialsFormComponent
+    SocialsFormComponent,
+    BrandBuildTabComponent,
+    LoadingTabComponent
   ],
   imports: [
     CommonModule,
