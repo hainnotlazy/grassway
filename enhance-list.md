@@ -4,5 +4,7 @@
 - sharp logo uploaded
 - query
 
+- tag entity
+
 ## TODO:
 - push noti when brand created

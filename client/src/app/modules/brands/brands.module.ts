@@ -20,6 +20,12 @@ import { BlocksFormComponent } from './components/blocks-form/blocks-form.compon
 import { SocialsFormComponent } from './components/socials-form/socials-form.component';
 import { BrandBuildTabComponent } from './components/brand-build-tab/brand-build-tab.component';
 import { LoadingTabComponent } from './components/loading-tab/loading-tab.component';
+import { ButtonBlockComponent } from './components/button-block/button-block.component';
+import { ImageBlockComponent } from './components/image-block/image-block.component';
+import { YoutubeBlockComponent } from './components/youtube-block/youtube-block.component';
+import { CreateBlockDialogComponent } from './components/create-block-dialog/create-block-dialog.component';
+import { BrandLinksTabComponent } from './components/brand-links-tab/brand-links-tab.component';
+import { CreateLinkDialogComponent } from './components/create-link-dialog/create-link-dialog.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +45,13 @@ import { LoadingTabComponent } from './components/loading-tab/loading-tab.compon
     BlocksFormComponent,
     SocialsFormComponent,
     BrandBuildTabComponent,
-    LoadingTabComponent
+    LoadingTabComponent,
+    ButtonBlockComponent,
+    ImageBlockComponent,
+    YoutubeBlockComponent,
+    CreateBlockDialogComponent,
+    BrandLinksTabComponent,
+    CreateLinkDialogComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto } from './dtos';
+import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto, CreateLinkDto } from './dtos';
 import { BrandsService } from './brands.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities';
@@ -28,6 +28,15 @@ export class BrandsController {
     return this.brandsService.getBrandById(currentUser, id);
   }
 
+  @Post("/:id/urls")
+  createLink(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() createLinkDto: CreateLinkDto
+  ) {
+    return this.brandsService.createLink(currentUser, id, createLinkDto);
+  }
+
   @PublicRoute()
   @Get("/prefix/:prefix")
   getBrandByPrefix(@Param("prefix") prefix: string) {
@@ -37,6 +46,11 @@ export class BrandsController {
   @Get("/draft/:id/design")
   getBrandDesignDraft(@CurrentUser() currentUser: User, @Param("id") id: string) {
     return this.brandDraftService.getBrandDesign(currentUser, id);
+  }
+
+  @Get("/draft/:id/blocks")
+  getBrandBlocksDraft(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    return this.brandDraftService.getBrandBlocks(currentUser, id);
   }
 
   @Post()

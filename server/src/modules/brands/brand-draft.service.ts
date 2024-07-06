@@ -65,6 +65,31 @@ export class BrandDraftService {
     return brand;
   }
 
+  /** 
+   * Describe: Get brand blocks
+  */
+  async getBrandBlocks(currentUser: User, brandId: string) {
+    this.brandsService.validateBrandId(brandId);
+
+    const blocks = await this.brandBlockDraftRepository.find({
+      where: {
+        brand_id: brandId,
+        brand_draft: {
+          brand: {
+            members: {
+              user_id: currentUser.id
+            }  
+          }
+        }
+      },
+      order: {
+        order: "DESC"
+      }
+    })
+
+    return blocks;
+  }
+
   /**
    * Describe: Create brand block 
   */ 

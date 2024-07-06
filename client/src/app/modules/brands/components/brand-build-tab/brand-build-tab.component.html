@@ -2,7 +2,11 @@
   *ngIf="fetchedBuild; else loading"
   class="py-4 space-y-4 break-all"
 >
-  <button class="bg-secondary hover:bg-secondary/80 flex items-center gap-2 px-3 py-2 text-white rounded shadow">
+  <button
+    class="bg-secondary hover:bg-secondary/80 flex items-center gap-2 px-3 py-2 text-white rounded shadow"
+    type="button"
+    (click)="openCreateBlockDialog()"
+  >
     <i class="icon-add"></i>
     Add
   </button>
@@ -12,130 +16,16 @@
     (cdkDropListDropped)="drop($event)"
     class="space-y-4"
   >
-    <div *ngFor="let block of blocks" cdkDrag class="bg-slate-100 border-slate-300 flex gap-2 p-4 border rounded-md shadow">
-      <i cdkDragHandle class="icon-drag text-xl text-gray-600 cursor-pointer"></i>
+    <ng-container *ngFor="let block of blocks" [ngSwitch]="block.type">
+      <app-button-block cdkDrag *ngSwitchCase="'button'" [block]="block">
+        <i cdkDragHandle class="icon-drag text-xl text-gray-600 cursor-pointer"></i>
+      </app-button-block>
 
-      <div class="flex flex-col flex-grow gap-2">
-        <div class="text-karla flex items-center gap-1 font-semibold">
-          <i class="icon-link rotate-45"></i>
-          <span>Button</span>
-        </div>
-        <div class="flex flex-col items-start gap-1">
-          <h6 class="text-secondary text-lg font-semibold">{{ block.title }}</h6>
-          <small class="text-gray-500">Chat application</small>
-          <a routerLink="#" class="hover:underline hover:text-primary text-sm font-semibold text-gray-700">https://grassway.xyz/l/yuhat</a>
-          <a href="#" class="hover:underline text-sm text-gray-600">https://yuhat.com</a>
-        </div>
-      </div>
+      <app-image-block cdkDrag *ngSwitchCase="'image'" [block]="block"></app-image-block>
 
-      <div class="break-keep flex items-start gap-3">
-        <button class="hover:text-blue-700 flex items-center gap-1 text-blue-500">
-          <i class="icon-edit"></i> Edit
-        </button>
-        <button class="hover:text-red-700 flex items-center gap-1 text-red-500">
-          <i class="icon-delete"></i> Delete
-        </button>
-      </div>
-    </div>
+      <app-youtube-block cdkDrag *ngSwitchCase="'youtube'" [block]="block"></app-youtube-block>
+    </ng-container>
   </div>
-
-  <!-- <div class="bg-slate-100 border-slate-300 flex gap-2 p-4 border rounded-md shadow">
-    <i class="icon-drag text-xl text-gray-600 cursor-pointer"></i>
-
-    <div class="flex flex-col flex-grow gap-2">
-      <div class="text-karla flex items-center gap-1 font-semibold">
-        <i class="icon-link rotate-45"></i>
-        <span>Button</span>
-      </div>
-      <div class="flex flex-col items-start gap-1">
-        <h6 class="text-secondary text-lg font-semibold">Yuhat</h6>
-        <small class="text-gray-500">Chat application</small>
-        <a routerLink="#" class="hover:underline hover:text-primary text-sm font-semibold text-gray-700">https://grassway.xyz/l/yuhat</a>
-        <a href="#" class="hover:underline text-sm text-gray-600">https://yuhat.com</a>
-      </div>
-    </div>
-
-    <div class="break-keep flex items-start gap-3">
-      <button class="hover:text-blue-700 flex items-center gap-1 text-blue-500">
-        <i class="icon-edit"></i> Edit
-      </button>
-      <button class="hover:text-red-700 flex items-center gap-1 text-red-500">
-        <i class="icon-delete"></i> Delete
-      </button>
-    </div>
-  </div>
-
-  <div class="bg-slate-100 border-slate-300 flex gap-2 p-4 border rounded-md shadow">
-    <i class="icon-drag text-xl text-gray-600 cursor-pointer"></i>
-
-    <div class="flex flex-col flex-grow gap-2">
-      <div class="text-karla flex items-center gap-1 font-semibold">
-        <i class="icon-image"></i>
-        <span>Image</span>
-      </div>
-      <div class="flex gap-4">
-        <img
-          class="aspect-square border border-gray-500 rounded-md"
-          src="https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt=""
-          width="130"
-          height="130"
-          draggable="false"
-        >
-        <div class="flex flex-col items-start gap-1">
-          <h6 class="text-secondary text-lg font-semibold">haii-task</h6>
-          <small class="text-gray-500">Todo app</small>
-          <a routerLink="#" class="hover:underline hover:text-primary inline-block text-sm font-semibold text-gray-700">https://grassway.xyz/l/haii-task</a>
-          <a href="#" class="hover:underline text-sm text-gray-600">https://haii-task.com</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="break-keep flex items-start gap-3">
-      <button class="hover:text-blue-700 flex items-center gap-1 text-blue-500">
-        <i class="icon-edit"></i> Edit
-      </button>
-      <button class="hover:text-red-700 flex items-center gap-1 text-red-500">
-        <i class="icon-delete"></i> Delete
-      </button>
-    </div>
-  </div>
-
-  <div class="bg-slate-100 border-slate-300 flex gap-2 p-4 border rounded-md shadow">
-    <i class="icon-drag text-xl text-gray-600 cursor-pointer"></i>
-
-    <div class="flex flex-col flex-grow gap-2">
-      <div class="text-karla flex items-center gap-1 font-semibold">
-        <i class="icon-youtube"></i>
-        <span>Youtube</span>
-      </div>
-      <div class="flex gap-4">
-        <img
-          class="aspect-square border border-gray-500 rounded-md"
-          src="https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt=""
-          width="130"
-          height="130"
-          draggable="false"
-        >
-        <div class="flex flex-col items-start gap-1">
-          <h6 class="text-secondary text-lg font-semibold">grassway introduction</h6>
-          <small class="text-gray-500">introduce video</small>
-          <a href="#" class="hover:underline hover:text-primary inline-block text-sm font-semibold text-gray-700">https://www.youtube.com/watch?v=yjmp8CoZBIo</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="break-keep flex items-start gap-3">
-      <button class="hover:text-blue-700 flex items-center gap-1 text-blue-500">
-        <i class="icon-edit"></i> Edit
-      </button>
-      <button class="hover:text-red-700 flex items-center gap-1 text-red-500">
-        <i class="icon-delete"></i> Delete
-      </button>
-    </div>
-  </div> -->
-
 </div>
 
 <ng-template #loading>

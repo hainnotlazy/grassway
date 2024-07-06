@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-paginate';
 import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions } from 'src/common/models/get-urls-options.model';
-import { User, Url, TaggedUrl, UrlAnalytics } from 'src/entities';
+import { User, Url, TaggedUrl, UrlAnalytics, Brand } from 'src/entities';
 import { DataSource, In, Repository } from 'typeorm';
 import { v4 as uuidiv4 } from "uuid";
 import * as CryptoJS from 'crypto-js';
@@ -134,7 +134,7 @@ export class UrlsService {
   /** 
    * Describe: Shorten url for authenticated user
   */
-  async shortenUrl(currentUser: User, url: Partial<Url>) {
+  async shortenUrl(currentUser: User, url: Partial<Url>, brand?: Brand) {
     const { origin_url, title, description, custom_back_half, password } = url;
 
     const backHalf = await this.generateBackHalf();
@@ -150,7 +150,8 @@ export class UrlsService {
     }
     const shortenedUrl = this.urlRepository.create({ 
       origin_url, 
-      owner: currentUser,
+      owner: !brand ? currentUser : null,
+      brand,
       back_half: backHalf ,
       title,
       description,
@@ -526,7 +527,7 @@ export class UrlsService {
   /** 
    * Describe: Generate backHalf
   */
-  private async generateBackHalf() {
+  async generateBackHalf() {
     let backHalf = uuidiv4().split("-")[0];
     while (true) {
       // Check if backHalf is existed

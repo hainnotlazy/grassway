@@ -4,6 +4,9 @@ import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, 
 import { User } from "./user.entity";
 import { TaggedUrl } from "./tagged-url.entity";
 import { UrlAnalytics } from "./url-analytics.entity";
+import { BrandBlockDraft } from "./brand-block-draft.entity";
+import { BrandBlock } from "./brand-block.entity";
+import { Brand } from "./brand.entity";
 
 @Entity()
 export class Url {
@@ -11,16 +14,27 @@ export class Url {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.urls)
+  @ManyToOne(() => User, user => user.urls, { nullable: true })
   @JoinColumn({ name: "owner_id" })
   @Exclude()
   owner: User;
+
+  @ManyToOne(() => Brand, brand => brand.urls, { nullable: true })
+  @JoinColumn({ name: "brand_id" })
+  @Exclude()
+  brand: Brand;
 
   @OneToMany(() => TaggedUrl, taggedUrl => taggedUrl.url)
   tags: TaggedUrl[];
 
   @OneToOne(() => UrlAnalytics, urlAnalytics => urlAnalytics.url)
   analytics: UrlAnalytics;
+
+  @OneToMany(() => BrandBlock, brandBlockDraft => brandBlockDraft.url)
+  blocks: BrandBlock[];
+
+  @OneToMany(() => BrandBlockDraft, brandBlockDraft => brandBlockDraft.url)
+  blocks_draft: BrandBlockDraft[];
 
   @ApiProperty()
   @Column()

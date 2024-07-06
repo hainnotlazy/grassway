@@ -1,0 +1,17 @@
+<div
+  *ngIf="fetchedLinks; else loading"
+  class="py-4 space-y-4 break-all"
+>
+  <button
+    class="bg-secondary hover:bg-secondary/80 flex items-center gap-2 px-3 py-2 text-white rounded shadow"
+    type="button"
+    (click)="openCreateLinkDialog()"
+  >
+    <i class="icon-add"></i>
+    New link
+  </button>
+</div>
+
+<ng-template #loading>
+  <app-loading-tab [description]="'Loading brand links...'"></app-loading-tab>
+</ng-template>

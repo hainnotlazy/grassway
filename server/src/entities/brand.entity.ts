@@ -4,11 +4,15 @@ import { BrandMember } from "./brand-member.entity";
 import { BrandDraft } from "./brand-draft.entity";
 import { BrandBase } from "./brand-base";
 import { BrandBlock } from "./brand-block.entity";
+import { Url } from "./url.entity";
 
 @Entity()
 export class Brand extends BrandBase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @OneToMany(() => Url, url => url.brand)
+  urls: Url[];
 
   @OneToOne(() => BrandSocialPlatforms, social_platforms => social_platforms.brand)
   social_platforms: BrandSocialPlatforms;

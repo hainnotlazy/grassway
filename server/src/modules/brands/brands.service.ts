@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
-import { CreateBrandDto } from './dtos';
+import { CreateBrandDto, CreateLinkDto } from './dtos';
 import { isUUID } from 'class-validator';
+import { UrlsService } from '../urls/urls.service';
 
 @Injectable()
 export class BrandsService {
@@ -22,7 +23,8 @@ export class BrandsService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
-    private readonly uploadFileService: UploadFileService
+    private readonly uploadFileService: UploadFileService,
+    private readonly urlsService: UrlsService,
   ) {}
 
   /**
@@ -150,6 +152,33 @@ export class BrandsService {
     } finally {
       queryRunner.release();
     }
+  }
+
+  /**
+   * Describe: Create link
+  */
+  async createLink(
+    currentUser: User,
+    brandId: string,
+    createLinkDto: CreateLinkDto
+  ) {
+    this.validateBrandId(brandId);
+
+    const existedBrand = await this.brandRepository.findOne({
+      where: {
+        id: brandId,
+        members: {
+          user: {
+            id: currentUser.id
+          }
+        }
+      }
+    });
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    return await this.urlsService.shortenUrl(currentUser, createLinkDto, existedBrand);
   }
 
   async validateBrandPrefix(prefix: string) {

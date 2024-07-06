@@ -1,6 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, UpdateDateColumn } from "typeorm";
 import { BlockImageRatio, BlockShadow, BlockShape, BlockType, BrandFont, BrandLayout, SocialIconPosition, SocialIconStyle } from "./brand.enum";
-import { Url } from "./url.entity";
 
 export abstract class BrandBase {
   @Column({ length: 80 })
@@ -185,8 +184,6 @@ export abstract class BrandBlockBase {
     default: BlockType.BUTTON
   })
   type: BlockType;
-
-  // url: Url;
 
   @Column({ length: 80 })
   title: string;

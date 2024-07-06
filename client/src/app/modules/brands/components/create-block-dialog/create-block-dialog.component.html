@@ -1,0 +1,145 @@
+<div class="!flex items-center gap-2 !pt-4" mat-dialog-title>
+  <h6 class="text-poetsen-one text-2xl">Create new block</h6>
+  <button
+    class="hover:text-gray-800 flex items-center ml-auto text-gray-500"
+    tabindex="-1"
+    mat-dialog-close>
+    <i class="icon-close"></i>
+  </button>
+</div>
+
+<form
+  [formGroup]="form"
+  class="space-y-2"
+  mat-dialog-content
+>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col flex-grow gap-2">
+      <label class="text-gray-600">Type:<small class="text-red-500">*</small></label>
+      <mat-chip-listbox formControlName="type">
+        <mat-chip-option [value]="BlockType.BUTTON" color="accent">Button</mat-chip-option>
+        <mat-chip-option [value]="BlockType.IMAGE" color="accent">Image</mat-chip-option>
+        <mat-chip-option [value]="BlockType.YOUTUBE" color="accent">Youtube</mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+  </div>
+
+  <ng-container *ngIf="form.controls.type.value === BlockType.IMAGE">
+    <div class="flex flex-col gap-2">
+      <label class="text-gray-600">Image:<small class="text-red-500">*</small></label>
+      <app-input-image
+        class="block"
+        [control]="form.controls.image"
+      ></app-input-image>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-gray-600">Aspect Ratio:<small class="text-red-500">*</small></label>
+      <mat-chip-listbox formControlName="imageRatio">
+        <mat-chip-option [value]="BlockImageRatio.RATIO_ORIGIN" color="accent">Original</mat-chip-option>
+        <mat-chip-option [value]="BlockImageRatio.RATIO_1_1" color="accent">1:1</mat-chip-option>
+        <mat-chip-option [value]="BlockImageRatio.RATIO_3_2" color="accent">3:2</mat-chip-option>
+        <mat-chip-option [value]="BlockImageRatio.RATIO_16_9" color="accent">16:9</mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+  </ng-container>
+
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col flex-grow gap-2">
+      <label class="text-gray-600" for="title">Title:<small class="text-red-500">*</small></label>
+      <mat-form-field
+        class="w-full"
+        color="accent"
+        appearance="outline"
+      >
+        <input
+          id="title"
+          formControlName="title"
+          type="text"
+          matInput
+          placeholder="Block's title"
+        >
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-600" for="description">Description:</label>
+    <mat-form-field
+      class="w-full"
+      color="accent"
+      appearance="outline"
+    >
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Block's description"
+        rows="2"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-gray-600" for="url">Destination URL:</label>
+    <mat-radio-group
+      formControlName="urlType"
+      class="space-x-2"
+      color="accent"
+    >
+      <mat-radio-button value="new">Create new</mat-radio-button>
+      <mat-radio-button value="existed">Select existing link</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field
+      class="w-full"
+      color="accent"
+      appearance="outline"
+    >
+      <input
+        id="url"
+        formControlName="url"
+        type="text"
+        matInput
+        placeholder="https://example.com/long-url"
+      >
+    </mat-form-field>
+  </div>
+
+  <ng-container *ngIf="form.controls.type.value === BlockType.YOUTUBE">
+    <div class="flex flex-col gap-2">
+      <div class="flex flex-col flex-grow gap-2">
+        <label class="text-gray-600" for="youtubeUrl">Youtube video url:<small class="text-red-500">*</small></label>
+        <mat-form-field
+          class="w-full"
+          color="accent"
+          appearance="outline"
+        >
+          <input
+            id="youtubeUrl"
+            formControlName="youtubeUrl"
+            type="text"
+            matInput
+            placeholder="https://youtube.com/embed/video-id"
+          >
+        </mat-form-field>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="flex items-center justify-end gap-4">
+    <button
+      class="hover:shadow-md hover:text-black px-3 py-2 text-gray-600 border rounded-md"
+      type="button"
+      mat-dialog-close
+    >
+      Cancel
+    </button>
+    <button
+      class="bg-secondary hover:bg-secondary/80 disabled:bg-gray-400 flex items-center justify-center gap-2 px-3 py-2 text-white rounded-md shadow-md"
+      type="submit"
+    >
+      Create
+    </button>
+  </div>
+
+</form>

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Brand, BrandBlockDraft, BrandDraft } from '../models';
 import { BrandsSocket } from '../sockets';
-import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from '../dtos';
+import { CreateBrandDto, ShortenUrlDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from '../dtos';
 import { BehaviorSubject, filter, map } from 'rxjs';
 
 @Injectable({
@@ -75,6 +75,10 @@ export class BrandsService {
     }
 
     return this.httpClient.post<Brand>("api/brands", formData);
+  }
+
+  createLink(brandId: string, createLinkDto: ShortenUrlDto) {
+    return this.httpClient.post<Brand>(`api/brands/${brandId}/urls`, createLinkDto);
   }
 
   validateBrandPrefix(prefix: string) {

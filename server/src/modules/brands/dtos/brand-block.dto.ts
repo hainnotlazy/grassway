@@ -28,4 +28,8 @@ export class BrandBlockDto {
   @IsString()
   @IsOptional()
   youtube_url?: string;
+
+  // @IsString()
+  // @IsNotEmpty()
+  // url: string;
 }

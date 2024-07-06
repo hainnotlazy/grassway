@@ -28,7 +28,7 @@ export class BrandMember {
     default: BrandMemberRole.MEMBER,
     enum: BrandMemberRole
   })
-  role: string;
+  role: BrandMemberRole;
 
   @CreateDateColumn()
   created_at: Date;
