@@ -49,7 +49,8 @@ const components = [
   ],
   exports: [
     TagBadgeComponent,
-    LoadingSectionComponent
+    LoadingSectionComponent,
+    DeleteDialogComponent
   ]
 })
 export class UrlModule { }

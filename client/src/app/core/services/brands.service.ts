@@ -129,4 +129,8 @@ export class BrandsService {
       updateSocialPlatformsDto
     );
   }
+
+  removeBrandLink(brandId: string, urlId: number) {
+    return this.httpClient.delete(`api/brands/${brandId}/urls/${urlId}`);
+  }
 }

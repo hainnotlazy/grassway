@@ -50,6 +50,7 @@ class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border
       [cdkCopyToClipboard]="link.client + (link.custom_back_half || link.back_half)"
       #copyTooltip="matTooltip"
       type="button"
+      (click)="onCopy()"
       matTooltip="Copy"
       matTooltipPosition="above"
     >
@@ -73,6 +74,7 @@ class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border
       matTooltip="Delete"
       matTooltipPosition="above"
       type="button"
+      (click)="onDelete()"
     >
       <i class="hover:text-black hover:shadow icon-delete p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>

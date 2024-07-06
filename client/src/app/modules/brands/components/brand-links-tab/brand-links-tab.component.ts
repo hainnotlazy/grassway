@@ -22,7 +22,7 @@ export class BrandLinksTabComponent {
   currentPage = 1;
   totalPage = 1;
 
-  private linksSubject = new BehaviorSubject<Url[] | null>(null);
+  linksSubject = new BehaviorSubject<Url[] | null>(null);
   links$: Observable<ExtendedUrl[]> = this.linksSubject.asObservable().pipe(
     filter(urls => !!urls),
     map(urls => urls as Url[]),
@@ -58,9 +58,10 @@ export class BrandLinksTabComponent {
     });
 
     dialogRef.afterClosed().pipe(
+      filter(data => data),
       switchMap((url: Url) => this.links$.pipe(
-        map(currentUrls => [url, ...currentUrls]),
         take(1),
+        map(currentUrls => [url, ...currentUrls]),
       )),
       tap(urls => this.linksSubject.next(urls)),
       untilDestroyed(this)
@@ -78,8 +79,8 @@ export class BrandLinksTabComponent {
           return response.data;
         }),
         switchMap(urls => this.links$.pipe(
+          take(1),
           map(currentUrls => [...currentUrls, ...urls]),
-          take(1)
         )),
         tap(urls => this.linksSubject.next(urls)),
         finalize(() => this.isLoading = false),

@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto, CreateLinkDto } from './dtos';
 import { BrandsService } from './brands.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
@@ -168,4 +168,12 @@ export class BrandsController {
       image
     )
   }
+
+  @Delete("/:id/urls/:urlId")
+  deleteLink(
+    @CurrentUser() currentUser: User, 
+    @Param("id") brandId: string, 
+    @Param("urlId", ParseIntPipe) urlId: number) {
+    return this.brandsService.removeUrl(currentUser, brandId, urlId);
+  } 
 }

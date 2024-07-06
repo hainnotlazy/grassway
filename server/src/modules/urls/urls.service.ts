@@ -368,10 +368,10 @@ export class UrlsService {
       });
       await queryRunner.manager.delete(UrlAnalytics, {
         url_id: urlId
-      })
+      });
       await queryRunner.manager.delete(Url, {
         id: urlId
-      })
+      });
 
       await queryRunner.commitTransaction();
     } catch (error) {

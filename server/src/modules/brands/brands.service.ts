@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft } from 'src/entities';
+import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft, Url, TaggedUrl, UrlAnalytics, BrandBlock, BrandBlockDraft } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { CreateBrandDto, CreateLinkDto } from './dtos';
@@ -23,6 +23,8 @@ export class BrandsService {
     private readonly brandSocialPlatformsDraftRepository: Repository<BrandSocialPlatformsDraft>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Url)
+    private readonly urlRepository: Repository<Url>,
     private readonly dataSource: DataSource,
     private readonly uploadFileService: UploadFileService,
     private readonly urlsService: UrlsService,
@@ -216,6 +218,64 @@ export class BrandsService {
     });
 
     return existedBrand;
+  }
+
+  /**
+   * Describe: Remove url
+  */
+  async removeUrl(currentUser: User, brandId: string, urlId: number) {
+    this.validateBrandId(brandId);
+
+    const existedLink = await this.urlRepository.findOne({
+      where: {
+        id: urlId,
+        brand: {
+          id: brandId,
+          members: {
+            user_id: currentUser.id
+          }
+        }
+      },
+      relations: ["blocks", "blocks_draft"]
+    })
+    if (!existedLink) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    } else if (existedLink.blocks.length > 0 || existedLink.blocks_draft.length > 0) {
+      throw new BadRequestException("You can't delete this link because it's being used in blocks");
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.delete(TaggedUrl, { 
+        url_id: urlId
+      });
+      await queryRunner.manager.delete(UrlAnalytics, {
+        url_id: urlId
+      });
+      await queryRunner.manager.delete(BrandBlock, {
+        url: {
+          id: urlId
+        }
+      });
+      await queryRunner.manager.delete(BrandBlockDraft, {
+        url: {
+          id: urlId
+        }
+      });
+      await queryRunner.manager.delete(Url, {
+        id: urlId
+      });
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed when delete brand link");
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /**

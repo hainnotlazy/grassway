@@ -18,7 +18,12 @@
     [infiniteScrollThrottle]="150"
     (scrolled)="onScrollDown()"
   >
-    <app-brand-link *ngFor="let link of links$ | async" [link]="link"></app-brand-link>
+    <app-brand-link
+      *ngFor="let link of links$ | async; let i = index"
+      [brandId]="brandId"
+      [link]="link"
+      [linksSubject]="linksSubject"
+    ></app-brand-link>
 
     <app-loading-section
       [currentPage]="currentPage"
