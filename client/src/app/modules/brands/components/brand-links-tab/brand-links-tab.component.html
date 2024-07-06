@@ -1,6 +1,6 @@
 <div
   *ngIf="fetchedLinks; else loading"
-  class="py-4 space-y-4 break-all"
+  class="pt-4 space-y-4 overflow-hidden break-all"
 >
   <button
     class="bg-secondary hover:bg-secondary/80 flex items-center gap-2 px-3 py-2 text-white rounded shadow"
@@ -10,6 +10,21 @@
     <i class="icon-add"></i>
     New link
   </button>
+
+  <div
+    class="space-y-4"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="150"
+    (scrolled)="onScrollDown()"
+  >
+    <app-brand-link *ngFor="let link of links$ | async" [link]="link"></app-brand-link>
+
+    <app-loading-section
+      [currentPage]="currentPage"
+      [totalPage]="totalPage"
+    ></app-loading-section>
+  </div>
 </div>
 
 <ng-template #loading>

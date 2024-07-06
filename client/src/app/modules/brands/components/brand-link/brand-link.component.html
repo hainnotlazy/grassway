@@ -1,0 +1,80 @@
+<div
+class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow"
+>
+  <div class="self-center -mt-12">
+    <img
+      class="w-8 h-8 border border-gray-500 rounded-full"
+      [src]="'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=' + link.origin_url + '&size=32'"
+      [alt]="'Link of ' + link.origin_url"
+      width="32"
+      height="32"
+      draggable="false"
+    >
+  </div>
+  <div class="flex flex-col flex-grow gap-6">
+    <div class="link-info flex flex-col flex-grow gap-1">
+      <h6 class="text-jost text-secondary flex items-center gap-2 text-lg font-semibold break-all cursor-default">
+        <small class="animate-pulse">{{ link.is_active ? '🟢' : '🔴' }}</small>
+        {{ link.title }} - {{ link.id }}
+        <i
+          *ngIf="link.description"
+          class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
+          [matTooltip]="link.description"
+          matTooltipPosition="above"
+        ></i>
+        <i
+          *ngIf="link.use_password"
+          class="icon-key text-yellow-600 rotate-45"
+          matTooltip="Private link"
+          matTooltipPosition="above"
+        ></i>
+      </h6>
+      <a
+        class="hover:underline hover:text-primary w-fit text-sm font-semibold text-gray-500 break-all"
+        [routerLink]="'/l/' + (link.custom_back_half ? link.custom_back_half : link.back_half)"
+      >
+        {{ link.client + (link.custom_back_half || link.back_half) }}
+      </a>
+      <a class="hover:underline hover:text-black w-fit text-sm text-gray-500 break-all" [href]="link.origin_url">{{ link.origin_url }}</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="flex items-center gap-1">
+        <i class="icon-calendar"></i>
+        <span>{{ link.created_at | date:"MMM dd, yyyy" }}</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="self-start space-x-3">
+    <button
+      [cdkCopyToClipboard]="link.client + (link.custom_back_half || link.back_half)"
+      #copyTooltip="matTooltip"
+      type="button"
+      matTooltip="Copy"
+      matTooltipPosition="above"
+    >
+      <i class="hover:text-black hover:shadow icon-copy p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+    <button
+      matTooltip="View QR Code"
+      matTooltipPosition="above"
+      type="button"
+    >
+      <i class="hover:text-black hover:shadow icon-qr-code p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+    <button
+      matTooltip="Edit"
+      matTooltipPosition="above"
+      type="button"
+    >
+      <i class="hover:text-black hover:shadow icon-edit p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+    <button
+      matTooltip="Delete"
+      matTooltipPosition="above"
+      type="button"
+    >
+      <i class="hover:text-black hover:shadow icon-delete p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+    </button>
+  </div>
+</div>

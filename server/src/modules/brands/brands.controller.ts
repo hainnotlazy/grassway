@@ -5,6 +5,7 @@ import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BrandDraftService } from './brand-draft.service';
+import { LinkActiveOptions, LinkTypeOptions } from 'src/common/models';
 
 @Controller('brands')
 export class BrandsController {
@@ -26,6 +27,22 @@ export class BrandsController {
   @Get("/:id")
   getBrand(@CurrentUser() currentUser: User, @Param("id") id: string) {
     return this.brandsService.getBrandById(currentUser, id);
+  }
+
+  @Get("/:id/urls")
+  getLinks(
+    @CurrentUser() currentUser: User, 
+    @Param("id") id: string,
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("search", new DefaultValuePipe("")) search: string,
+  ) {
+    return this.brandsService.getLinks(currentUser, id, {
+      limit: 20,
+      page: page || 1,
+      linkActiveOptions: LinkActiveOptions.ALL,
+      linkTypeOptions: LinkTypeOptions.ALL,
+      search,
+    });
   }
 
   @Post("/:id/urls")

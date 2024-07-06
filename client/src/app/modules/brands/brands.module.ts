@@ -26,6 +26,8 @@ import { YoutubeBlockComponent } from './components/youtube-block/youtube-block.
 import { CreateBlockDialogComponent } from './components/create-block-dialog/create-block-dialog.component';
 import { BrandLinksTabComponent } from './components/brand-links-tab/brand-links-tab.component';
 import { CreateLinkDialogComponent } from './components/create-link-dialog/create-link-dialog.component';
+import { BrandLinkComponent } from './components/brand-link/brand-link.component';
+import { UrlModule } from '../url/url.module';
 
 @NgModule({
   declarations: [
@@ -51,11 +53,13 @@ import { CreateLinkDialogComponent } from './components/create-link-dialog/creat
     YoutubeBlockComponent,
     CreateBlockDialogComponent,
     BrandLinksTabComponent,
-    CreateLinkDialogComponent
+    CreateLinkDialogComponent,
+    BrandLinkComponent
   ],
   imports: [
     CommonModule,
     BrandsRoutingModule,
+    UrlModule,
     SharedModule
   ]
 })

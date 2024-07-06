@@ -21,3 +21,7 @@ export function changeStatus(status: boolean) {
 export function camelCaseToSnackCase(text: string) {
   return text.replace(/([A-Z])/g, '_$1').toLowerCase();
 }
+
+export function getValueInNumber(value: string | number) {
+  return typeof value === "string" ? parseInt(value) : value;
+}

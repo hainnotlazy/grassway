@@ -65,14 +65,26 @@ export class UrlsService {
   /**
    * Describe: Get paginated urls by user 
   */
-  async getUrls(currentUser: User, options: GetUrlsOptions) {
+  async getUrls(
+    currentUser: User, 
+    brand: Brand, 
+    options: GetUrlsOptions,
+    path: string = "/api/urls"
+  ) {
     const { limit, page, linkActiveOptions, linkTypeOptions, startDate, endDate, search, tagId } = options;
 
     // Create query builder
     const queryBuilder = this.urlRepository.createQueryBuilder("urls")
       .leftJoinAndSelect("urls.owner", "owner")
       .leftJoinAndSelect("urls.tags", "tags")
-      .where("urls.owner = :ownerId", { ownerId: currentUser.id })
+      .leftJoinAndSelect("urls.brand", "brand")
+
+    // Add filter owner & brand
+    if (brand) {
+      queryBuilder.where("urls.brand = :brandId", { brandId: brand.id });
+    } else {
+      queryBuilder.where("urls.owner = :ownerId", { ownerId: currentUser.id });
+    }
     
     // Add filter link active
     if (linkActiveOptions === LinkActiveOptions.ACTIVE) {
@@ -112,7 +124,7 @@ export class UrlsService {
     return paginate({
       limit,
       page,
-      path: "/api/urls",
+      path,
       select: [
         "id",
         "origin_url",

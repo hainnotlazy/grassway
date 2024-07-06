@@ -6,6 +6,7 @@ import { UploadFileService } from 'src/shared/services/upload-file/upload-file.s
 import { CreateBrandDto, CreateLinkDto } from './dtos';
 import { isUUID } from 'class-validator';
 import { UrlsService } from '../urls/urls.service';
+import { GetUrlsOptions } from 'src/common/models';
 
 @Injectable()
 export class BrandsService {
@@ -152,6 +153,34 @@ export class BrandsService {
     } finally {
       queryRunner.release();
     }
+  }
+
+  /**
+   * Describe: Get links
+  */
+  async getLinks(currentUser: User, brandId: string, options: GetUrlsOptions) {
+    this.validateBrandId(brandId);
+
+    const existedBrand = await this.brandRepository.findOne({
+      where: {
+        id: brandId,
+        members: {
+          user: {
+            id: currentUser.id
+          }
+        }
+      }
+    });
+    if (!existedBrand) {
+      throw new BadRequestException("Brand not found or you don't have permission to view this brand");
+    }
+
+    return this.urlsService.getUrls(
+      currentUser, 
+      existedBrand, 
+      options,
+      `/api/brands/${brandId}/urls`
+    );
   }
 
   /**

@@ -7,6 +7,7 @@ import { finalize, take, tap } from 'rxjs';
 import { shortenUrlRequirements, ValidationMessage } from 'src/app/core/forms';
 import { changeStatus, getObjectKeys } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces';
+import { Url } from 'src/app/core/models';
 import { BrandsService, UrlsService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 
@@ -63,8 +64,8 @@ export class CreateLinkDialogComponent {
         custom_back_half: this.form.get("customBackHalf")?.value as string,
         password: this.form.get("password")?.value as string
       }).pipe(
-        tap(() => {
-          this.handleShortenSuccess();
+        tap((link) => {
+          this.handleShortenSuccess(link);
         }, (error) => {
           this.handleShortenFail(error);
         }),
@@ -76,13 +77,13 @@ export class CreateLinkDialogComponent {
     }
   }
 
-  private handleShortenSuccess() {
+  private handleShortenSuccess(link: Url) {
     this.snackbar.open("Shortened new link", "x", {
       duration: 4000,
       horizontalPosition: "right",
       verticalPosition: "top"
     })
-    this.dialogRef.close();
+    this.dialogRef.close(link);
   }
 
   private handleShortenFail(error: any) {

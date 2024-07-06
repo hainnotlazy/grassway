@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Brand, BrandBlockDraft, BrandDraft } from '../models';
+import { Brand, BrandBlockDraft, BrandDraft, Url } from '../models';
 import { BrandsSocket } from '../sockets';
 import { CreateBrandDto, ShortenUrlDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from '../dtos';
 import { BehaviorSubject, filter, map } from 'rxjs';
+import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions, UrlsResponse } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +59,15 @@ export class BrandsService {
     return this.socket.fromEvent<BrandDraft>(this.NEW_DESIGN_EVENT_NAME);
   }
 
+  getBrandLinks(brandId: string, options: GetUrlsOptions) {
+    const {
+      page = 1,
+      search = "",
+    } = options;
+
+    return this.httpClient.get<UrlsResponse>(`api/brands/${brandId}/urls?page=${page}&search=${search}`);
+  }
+
   createBrand(createBrandDto: CreateBrandDto) {
     const formData = new FormData();
 
@@ -78,7 +88,7 @@ export class BrandsService {
   }
 
   createLink(brandId: string, createLinkDto: ShortenUrlDto) {
-    return this.httpClient.post<Brand>(`api/brands/${brandId}/urls`, createLinkDto);
+    return this.httpClient.post<Url>(`api/brands/${brandId}/urls`, createLinkDto);
   }
 
   validateBrandPrefix(prefix: string) {

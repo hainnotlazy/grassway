@@ -66,7 +66,7 @@ export class UrlsController {
     @Query("search", new DefaultValuePipe("")) search: string,
     @Query("tag_id", new DefaultValuePipe("")) tagId: string,
   ) {
-    return this.urlsService.getUrls(currentUser, {
+    return this.urlsService.getUrls(currentUser, null, {
       limit: 20,
       page: page || 1,
       linkActiveOptions: linkActive,
