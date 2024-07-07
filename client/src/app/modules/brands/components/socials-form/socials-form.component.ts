@@ -2,7 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { debounceTime, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, take, tap } from 'rxjs';
 import { SOCIAL_PLATFORMS_COLORED, SocialPlatform } from 'src/app/core/constants/social-platforms.constant';
 import { UpdateSocialPlatformsDto } from 'src/app/core/dtos';
 import { BrandSocialPlatformsDraft } from 'src/app/core/models';
@@ -18,6 +18,7 @@ import { FormValidator } from 'src/app/core/validators/form.validator';
 export class SocialsFormComponent implements OnInit {
   readonly DND_SOCIAL_PLATFORMS = SOCIAL_PLATFORMS_COLORED;
   brandId!: string;
+  isProcessing = false;
 
   @Input() socialPlatforms!: BrandSocialPlatformsDraft;
 
@@ -64,8 +65,8 @@ export class SocialsFormComponent implements OnInit {
     private brandsService: BrandsService,
   ) {
     this.brandsService.currentBrand$.pipe(
-      tap(brand => this.brandId = brand.id),
       take(1),
+      tap(brand => this.brandId = brand.id),
     ).subscribe();
   }
 
@@ -82,6 +83,11 @@ export class SocialsFormComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<SocialPlatform[]>) {
+    if (this.isProcessing) {
+      return;
+    }
+
+    this.isProcessing = true;
     moveItemInArray(this.DND_SOCIAL_PLATFORMS, event.previousIndex, event.currentIndex);
     this.updatePlatformsOrder()
   }
@@ -115,7 +121,7 @@ export class SocialsFormComponent implements OnInit {
         website_order: this.getPlatformOrder("website"),
       }
     ).pipe(
-      take(1)
+      finalize(() => this.isProcessing = false),
     ).subscribe();
   }
 }

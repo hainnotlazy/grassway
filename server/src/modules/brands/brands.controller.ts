@@ -179,10 +179,21 @@ export class BrandsController {
   }
 
   @Delete("/:id/urls/:urlId")
-  deleteLink(
+  async deleteLink(
     @CurrentUser() currentUser: User, 
     @Param("id") brandId: string, 
     @Param("urlId", ParseIntPipe) urlId: number) {
-    return this.brandsService.removeUrl(currentUser, brandId, urlId);
+    await this.brandsService.removeUrl(currentUser, brandId, urlId);
+    return;
   } 
+
+  @Delete("/draft/:id/blocks/:blockId")
+  async deleteBlock(
+    @CurrentUser() currentUser: User,
+    @Param("id") brandId: string,
+    @Param("blockId", ParseIntPipe) blockId: number
+  ) {
+    await this.brandDraftService.removeBlock(currentUser, brandId, blockId);
+    return;
+  }
 }

@@ -35,6 +35,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { InputColorPickerComponent } from './components/input-color-picker/input-color-picker.component';
 import { InputImageComponent } from './components/input-image/input-image.component';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 
 const MatModules = [
   MatFormFieldModule,
@@ -69,6 +70,7 @@ const ExternalModules = [
 const Components = [
   InputColorPickerComponent,
   InputImageComponent,
+  DeleteDialogComponent
 ]
 
 const Pipes = [
@@ -81,7 +83,7 @@ const Pipes = [
 @NgModule({
   declarations: [
     ...Pipes,
-    ...Components
+    ...Components,
   ],
   imports: [
     CommonModule,

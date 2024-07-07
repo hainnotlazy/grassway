@@ -18,11 +18,21 @@
     class="space-y-4"
   >
     <ng-container *ngFor="let block of blocks" [ngSwitch]="block.type">
-      <app-button-block cdkDrag *ngSwitchCase="'button'" [block]="block">
+      <app-button-block
+        cdkDrag
+        *ngSwitchCase="'button'"
+        [block]="block"
+        (deleted)="onDeletedBlock($event)"
+      >
         <ng-container [ngTemplateOutlet]="dragButton"></ng-container>
       </app-button-block>
 
-      <app-image-block cdkDrag *ngSwitchCase="'image'" [block]="block">
+      <app-image-block
+        cdkDrag
+        *ngSwitchCase="'image'"
+        [block]="block"
+        (deleted)="onDeletedBlock($event)"
+      >
         <ng-container [ngTemplateOutlet]="dragButton"></ng-container>
       </app-image-block>
 

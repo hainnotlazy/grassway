@@ -9,7 +9,6 @@ import { LinkComponent } from './components/link/link.component';
 import { StatusFilterComponent } from './components/status-filter/status-filter.component';
 import { LoadingSectionComponent } from './components/loading-section/loading-section.component';
 import { AdvancedFilterComponent } from './components/advanced-filter/advanced-filter.component';
-import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { QrcodeDialogComponent } from './components/qrcode-dialog/qrcode-dialog.component';
 import { EditFormDialogComponent } from './components/edit-form-dialog/edit-form-dialog.component';
 import { BulkSelectComponent } from './components/bulk-select/bulk-select.component';
@@ -28,7 +27,6 @@ const components = [
   StatusFilterComponent,
   LoadingSectionComponent,
   AdvancedFilterComponent,
-  DeleteDialogComponent,
   QrcodeDialogComponent,
   EditFormDialogComponent,
   BulkSelectComponent,
@@ -51,7 +49,6 @@ const components = [
     TagBadgeComponent,
     LoadingSectionComponent,
     QrcodeDialogComponent,
-    DeleteDialogComponent
   ]
 })
 export class UrlModule { }

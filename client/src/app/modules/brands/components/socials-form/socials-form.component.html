@@ -8,13 +8,21 @@
     cdkDropList
     class="space-y-2"
     (cdkDropListDropped)="drop($event)"
+    [cdkDropListAutoScrollDisabled]="isProcessing"
   >
     <div
       cdkDrag
       *ngFor="let platform of DND_SOCIAL_PLATFORMS"
       class="flex items-center gap-4 px-4 py-2 bg-gray-300 border border-gray-400 rounded-md shadow"
     >
-      <i cdkDragHandle class="icon-drag text-xl text-gray-600 cursor-pointer"></i>
+      <i
+        cdkDragHandle
+        class="icon-drag text-xl"
+        [ngClass]="{
+          'text-gray-300': isProcessing,
+          'text-gray-600 cursor-pointer': !isProcessing
+        }"
+      ></i>
       <div class="gap-x-4 gap-y-2 flex flex-wrap items-center flex-grow">
         <label
           class="flex flex-grow items-center gap-2 bg-white px-4 py-1.5 rounded-md border border-gray-400"

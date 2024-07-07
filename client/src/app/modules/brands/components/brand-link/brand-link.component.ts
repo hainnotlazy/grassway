@@ -3,12 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, filter, finalize, map, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, switchMap, take, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { ExtendedUrl, Url } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
-import { DeleteDialogComponent } from 'src/app/modules/url/components/delete-dialog/delete-dialog.component';
 import { QrcodeDialogComponent } from 'src/app/modules/url/components/qrcode-dialog/qrcode-dialog.component';
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -54,9 +54,14 @@ export class BrandLinkComponent {
 
   onDelete() {
     this.dialog.closeAll();
-    const dialogRef = this.dialog.open(DeleteDialogComponent);
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: "Are you sure you want to delete this link?",
+      }
+    });
 
     dialogRef.afterClosed().pipe(
+      take(1),
       filter(data => data),
       switchMap(() => this.brandsService.removeBrandLink(this.brandId, this.link.id)),
       tap(() => {
@@ -64,7 +69,6 @@ export class BrandLinkComponent {
       }, error => {
         this.handleDeleteFail(error);
       }),
-      take(1),
       untilDestroyed(this)
     ).subscribe();
   }

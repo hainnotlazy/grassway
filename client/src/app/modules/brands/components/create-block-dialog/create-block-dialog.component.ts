@@ -75,6 +75,23 @@ export class CreateBlockDialogComponent {
       tap(brand => this.brandId = brand.id),
     ).subscribe();
 
+    this.form.controls.type.valueChanges.pipe(
+      tap(type => {
+        if (type !== BlockType.YOUTUBE) {
+          this.form.controls.url.setValidators([
+            Validators.required,
+            FormValidator.validUrl
+          ]);
+          this.form.controls.youtubeUrl.removeValidators(Validators.required);
+        } else {
+          this.form.controls.url.clearValidators();
+          this.form.controls.youtubeUrl.addValidators(Validators.required);
+        }
+        this.form.controls.url.updateValueAndValidity();
+      }),
+      untilDestroyed(this),
+    ).subscribe();
+
     this.form.controls.urlType.valueChanges.pipe(
       tap(value => {
         if (value === "new") {
@@ -114,7 +131,6 @@ export class CreateBlockDialogComponent {
   onSubmit() {
     if (this.form.invalid || this.isProcessing) return;
 
-    this.isProcessing = true;
     const urlType = this.form.controls.urlType.value;
     const createBlockDto: BrandBlockDto = {
       type: this.form.controls.type.value as BlockType,
@@ -135,6 +151,7 @@ export class CreateBlockDialogComponent {
       createBlockDto.url_id = this.selectedUrl.id;
     }
 
+    this.isProcessing = true;
     this.brandsService.createBlock(this.brandId, createBlockDto).pipe(
       tap((block) => {
         this.handleCreateBlockSuccess(block);

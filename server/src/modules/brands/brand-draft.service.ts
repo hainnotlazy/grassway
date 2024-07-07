@@ -374,4 +374,34 @@ export class BrandDraftService {
     Object.assign(existedBrand, updateSocialPlatformsDto);
     return await this.brandSocialPlatformsDraftRepository.save(existedBrand);
   }
+
+  /**
+   * Describe: Remove brand block
+  */
+  async removeBlock(
+    currentUser: User,
+    brandId: string,
+    blockId: number
+  ) {
+    this.brandsService.validateBrandId(brandId);
+
+    const existedBlock = await this.brandBlockDraftRepository.findOne({
+      where: {
+        brand_id: brandId,
+        id: blockId,
+        brand_draft: {
+          brand: {
+            members: {
+              user_id: currentUser.id
+            }
+          }
+        }
+      }
+    });
+    if (!existedBlock) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    await this.brandBlockDraftRepository.remove(existedBlock);
+  }
 }

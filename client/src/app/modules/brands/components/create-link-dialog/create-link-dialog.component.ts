@@ -47,8 +47,8 @@ export class CreateLinkDialogComponent {
     private snackbar: MatSnackBar,
   ) {
     this.brandsService.currentBrand$.pipe(
-      tap(brand => this.brandId = brand.id),
       take(1),
+      tap(brand => this.brandId = brand.id),
       untilDestroyed(this)
     ).subscribe();
   }

@@ -6,8 +6,8 @@ import { finalize, tap } from 'rxjs';
 import { changeStatus } from 'src/app/core/helpers';
 import { Tag } from 'src/app/core/models';
 import { TagsService } from 'src/app/core/services';
-import { DeleteTagDialogComponent } from '../delete-tag-dialog/delete-tag-dialog.component';
 import { ErrorResponse } from 'src/app/core/interfaces';
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -40,7 +40,11 @@ export class TagComponent {
     }
 
     this.isDeleting = changeStatus(this.isDeleting);
-    const dialogRef = this.dialog.open(DeleteTagDialogComponent);
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: "Are you sure you want to delete this tag?"
+      }
+    });
 
     dialogRef.afterClosed().pipe(
       tap(data => {

@@ -45,6 +45,7 @@ export class BrandDesignTabComponent {
     private brandsService: BrandsService,
   ) {
     this.brandsService.currentBrand$.pipe(
+      take(1),
       tap(brand => this.brandId = brand.id),
       switchMap(brand => this.brandsService.getBrandDraft(brand.id)),
       tap(brandDraft => {
@@ -59,7 +60,6 @@ export class BrandDesignTabComponent {
         });
       }),
       finalize(() => this.fetchedDesign = true),
-      take(1),
     ).subscribe();
   }
 

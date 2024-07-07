@@ -9,6 +9,7 @@ const descriptionRequirements = {
 }
 
 const youtubeUrlRequirements = {
+  required: true,
   invalidSocialLink: true,
   maxlength: 255
 }
@@ -45,6 +46,7 @@ export const blockRequirements = {
       ...youtubeUrlRequirements
     },
     validationMsg: {
+      required: "Youtube URL is required",
       invalidYoutubeEmbedLink: "Invalid Youtube embed url",
       maxlength: `Youtube URL must be at most ${youtubeUrlRequirements.maxlength} characters`
     }

@@ -168,4 +168,8 @@ export class BrandsService {
   removeBrandLink(brandId: string, urlId: number) {
     return this.httpClient.delete(`api/brands/${brandId}/urls/${urlId}`);
   }
+
+  removeBrandBlock(brandId: string, blockId: number) {
+    return this.httpClient.delete(`api/brands/draft/${brandId}/blocks/${blockId}`);
+  }
 }

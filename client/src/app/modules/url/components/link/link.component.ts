@@ -3,13 +3,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ExtendedUrl, Url, Tag } from 'src/app/core/models';
-import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { UrlsService } from 'src/app/core/services';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 import { EditFormDialogComponent } from '../edit-form-dialog/edit-form-dialog.component';
 import { ErrorResponse } from 'src/app/core/interfaces';
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -82,7 +82,11 @@ export class LinkComponent {
 
   onOpenDeleteDialog() {
     this.dialog.closeAll();
-    const deleteDialog = this.dialog.open(DeleteDialogComponent);
+    const deleteDialog = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: "Are you sure you want to delete this link?"
+      }
+    });
 
     deleteDialog.afterClosed().pipe(
       filter(data => data),

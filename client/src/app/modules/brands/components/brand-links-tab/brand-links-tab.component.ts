@@ -39,6 +39,7 @@ export class BrandLinksTabComponent {
     private dialog: MatDialog
   ) {
     this.brandsService.currentBrand$.pipe(
+      take(1),
       tap(brand => this.brandId = brand.id),
       switchMap(brand => this.brandsService.getBrandLinks(brand.id, {})),
       tap(response => {
@@ -46,7 +47,6 @@ export class BrandLinksTabComponent {
         this.linksSubject.next(response.data);
       }),
       finalize(() => this.fetchedLinks = true),
-      take(1),
       untilDestroyed(this)
     ).subscribe();
   }
@@ -58,6 +58,7 @@ export class BrandLinksTabComponent {
     });
 
     dialogRef.afterClosed().pipe(
+      take(1),
       filter(data => data),
       switchMap((url: Url) => this.links$.pipe(
         take(1),
@@ -84,7 +85,6 @@ export class BrandLinksTabComponent {
         )),
         tap(urls => this.linksSubject.next(urls)),
         finalize(() => this.isLoading = false),
-        take(1),
         untilDestroyed(this)
       ).subscribe()
     }

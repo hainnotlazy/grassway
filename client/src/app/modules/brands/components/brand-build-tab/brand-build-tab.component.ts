@@ -61,6 +61,10 @@ export class BrandBuildTabComponent {
     ).subscribe();
   }
 
+  onDeletedBlock(deletedBlock: BrandBlockDraft) {
+    this.blocks = this.blocks.filter(block => block.id !== deletedBlock.id);
+  }
+
   private getBlocksIdOrder(): number[] {
     return this.blocks.map(block => block.id);
   }
