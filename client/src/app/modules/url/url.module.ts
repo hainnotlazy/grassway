@@ -50,6 +50,7 @@ const components = [
   exports: [
     TagBadgeComponent,
     LoadingSectionComponent,
+    QrcodeDialogComponent,
     DeleteDialogComponent
   ]
 })

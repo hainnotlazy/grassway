@@ -5,6 +5,7 @@
 - query
 
 - tag entity
+- truncate all 255 chars
 
 ## TODO:
 - push noti when brand created

@@ -12,6 +12,7 @@
   [formGroup]="form"
   class="space-y-2"
   mat-dialog-content
+  (submit)="onSubmit()"
 >
   <div class="flex flex-col gap-2">
     <div class="flex flex-col flex-grow gap-2">
@@ -59,6 +60,12 @@
           matInput
           placeholder="Block's title"
         >
+        <mat-error
+          class="text-jost text-sm"
+          *ngFor="let error of getObjectKeys(form.controls.title.errors)"
+        >
+          {{ titleValidationMsg[error] }}
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -76,10 +83,16 @@
         placeholder="Block's description"
         rows="2"
       ></textarea>
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(form.controls.description.errors)"
+      >
+        {{ descriptionValidationMsg[error] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
-  <div class="flex flex-col gap-2">
+  <div *ngIf="form.controls.type.value !== BlockType.YOUTUBE" class="flex flex-col gap-2">
     <label class="text-gray-600" for="url">Destination URL:</label>
     <mat-radio-group
       formControlName="urlType"
@@ -91,6 +104,7 @@
     </mat-radio-group>
 
     <mat-form-field
+      *ngIf="form.controls.urlType.value === 'new'"
       class="w-full"
       color="accent"
       appearance="outline"
@@ -102,6 +116,42 @@
         matInput
         placeholder="https://example.com/long-url"
       >
+      <mat-error
+        class="text-jost text-sm"
+        *ngFor="let error of getObjectKeys(form.controls.url.errors)"
+      >
+        {{ urlValidationMsg[error] }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field
+      *ngIf="form.controls.urlType.value === 'existed'"
+      class="w-full"
+      color="accent"
+      appearance="outline"
+    >
+      <mat-icon matPrefix>
+        search
+      </mat-icon>
+      <input
+        id="url"
+        formControlName="url"
+        [matAutocomplete]="auto"
+        type="text"
+        matInput
+        placeholder="Search by title, destination, back-half or custom back-half"
+      >
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of filteredUrls$ | async"
+          class="!py-2 space-y-1"
+          [value]="option.client + (option.custom_back_half || option.back_half)"
+          (onSelectionChange)="onSelectUrl(option)"
+        >
+          <p class="font-semibold text-gray-600">{{ option.title }} ({{ option.origin_url }})</p>
+          <p class="text-gray-500">{{ option.client + (option.custom_back_half || option.back_half) }}</p>
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
   </div>
 
@@ -121,10 +171,18 @@
             matInput
             placeholder="https://youtube.com/embed/video-id"
           >
+          <mat-error
+            class="text-jost text-sm"
+            *ngFor="let error of getObjectKeys(form.controls.youtubeUrl.errors)"
+          >
+            {{ youtubeUrlValidationMsg[error] }}
+          </mat-error>
         </mat-form-field>
       </div>
     </div>
   </ng-container>
+
+  <p *ngIf="formError" class="text-center text-red-500">{{ formError }}</p>
 
   <div class="flex items-center justify-end gap-4">
     <button
@@ -141,5 +199,4 @@
       Create
     </button>
   </div>
-
 </form>

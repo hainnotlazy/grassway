@@ -45,6 +45,15 @@ export class BrandsController {
     });
   }
 
+  @Get("/:id/urls/filter")
+  getFilteredLinks(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Query("query", new DefaultValuePipe("")) query: string,
+  ) {
+    return this.brandsService.getFilteredLinks(currentUser, id, query);
+  }
+
   @Post("/:id/urls")
   createLink(
     @CurrentUser() currentUser: User,

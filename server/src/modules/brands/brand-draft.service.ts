@@ -1,15 +1,18 @@
 import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto, UpdateSocialPlatformsDto, BrandBlockDto, UpdateBlockOrderDto } from './dtos';
-import { User, BrandDraft, BrandMember, BrandSocialPlatformsDraft, BrandBlockDraft, BlockType } from 'src/entities';
+import { User, BrandDraft, BrandMember, BrandSocialPlatformsDraft, BrandBlockDraft, BlockType, Url, Brand } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { BrandsGateway } from './brands.gateway';
 import { BrandsService } from './brands.service';
+import { UrlsService } from '../urls/urls.service';
 
 @Injectable()
 export class BrandDraftService {
   constructor(
+    @InjectRepository(Brand)
+    private readonly brandRepository: Repository<Brand>,
     @InjectRepository(BrandDraft)
     private readonly brandDraftRepository: Repository<BrandDraft>,
     @InjectRepository(BrandMember)
@@ -19,6 +22,7 @@ export class BrandDraftService {
     @InjectRepository(BrandBlockDraft)
     private readonly brandBlockDraftRepository: Repository<BrandBlockDraft>,
     private brandsService: BrandsService,
+    private urlsService: UrlsService,
     private dataSource: DataSource,
     private brandsGateway: BrandsGateway,
     private uploadFileService: UploadFileService
@@ -101,30 +105,64 @@ export class BrandDraftService {
   ) {
     this.brandsService.validateBrandId(brandId);
 
-    const brand = await this.brandDraftRepository.findOne({
+    const existedBrand = await this.brandRepository.findOne({
       where: {
-        brand_id: brandId,
-        brand: {
-          members: {
-            user_id: currentUser.id
-          }
+        id: brandId,
+        members: {
+          user_id: currentUser.id
         }
       }
     })
-    if (!brand) {
+    if (!existedBrand) {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
 
     // Save block image
+    const {
+      type,
+      title,
+      description,
+      youtube_url,
+      image_ratio,
+      url: newOriginUrl, 
+      url_id: urlId
+    } = createBrandBlockDto;
+    let url: Url;
     let savedImagePath = null;
     if (createBrandBlockDto.type === BlockType.IMAGE && image) {
       savedImagePath = this.uploadFileService.saveBrandLogo(image);
     }
 
+    if (newOriginUrl) {
+      url = await this.urlsService.shortenUrl(
+        null, 
+        { origin_url: newOriginUrl },
+        existedBrand
+      );
+    } else if (urlId) {
+      url = await this.urlsService.getUrlById(urlId);
+    }
+
+    const lastBlockOrder = await this.brandBlockDraftRepository.findOne({
+      where: {
+        brand_id: brandId
+      },
+      order: {
+        order: "DESC"
+      }
+    });
+    const order = lastBlockOrder ? lastBlockOrder.order + 1 : 0;
+
     const block = this.brandBlockDraftRepository.create({
-      ...createBrandBlockDto,
       brand_id: brandId,
-      image: savedImagePath
+      image: savedImagePath,
+      image_ratio,
+      type,
+      title,
+      description,
+      youtube_url,
+      url,
+      order
     });
 
     return this.brandBlockDraftRepository.save(block);

@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft, Url, TaggedUrl, UrlAnalytics, BrandBlock, BrandBlockDraft } from 'src/entities';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Or, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { CreateBrandDto, CreateLinkDto } from './dtos';
 import { isUUID } from 'class-validator';
@@ -183,6 +183,49 @@ export class BrandsService {
       options,
       `/api/brands/${brandId}/urls`
     );
+  }
+
+  /**
+   * Describe: Get filtered links
+  */
+  async getFilteredLinks(
+    currentUser: User, 
+    brandId: string, 
+    query: string
+  ) {
+    this.validateBrandId(brandId);
+
+    const brandCondition = {
+      id: brandId,
+      members: {
+        user_id: currentUser.id
+      }
+    };
+
+    return await this.urlRepository.find({
+      where: [
+        { 
+          brand: brandCondition,
+          title: ILike(`%${query}%`)
+        },
+        {
+          brand: brandCondition,
+          origin_url: ILike(`%${query}%`)
+        },
+        {
+          brand: brandCondition,
+          back_half: ILike(`%${query}%`)
+        },
+        {
+          brand: brandCondition,
+          custom_back_half: ILike(`%${query}%`)
+        }
+      ],
+      order: {
+        id: "DESC"
+      },
+      take: 5
+    });
   }
 
   /**

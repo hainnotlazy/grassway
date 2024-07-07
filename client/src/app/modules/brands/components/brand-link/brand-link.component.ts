@@ -8,6 +8,7 @@ import { ErrorResponse } from 'src/app/core/interfaces';
 import { ExtendedUrl, Url } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
 import { DeleteDialogComponent } from 'src/app/modules/url/components/delete-dialog/delete-dialog.component';
+import { QrcodeDialogComponent } from 'src/app/modules/url/components/qrcode-dialog/qrcode-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -42,6 +43,13 @@ export class BrandLinkComponent {
     setTimeout(() => {
       this.copyTooltip.message = "Copy";
     }, 500)
+  }
+
+  openQRCodeDialog() {
+    this.dialog.closeAll();
+    this.dialog.open(QrcodeDialogComponent, {
+      data: this.link
+    })
   }
 
   onDelete() {

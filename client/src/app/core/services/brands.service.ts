@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Brand, BrandBlockDraft, BrandDraft, Url } from '../models';
+import { BlockType, Brand, BrandBlockDraft, BrandDraft, Url } from '../models';
 import { BrandsSocket } from '../sockets';
-import { CreateBrandDto, ShortenUrlDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from '../dtos';
+import { BrandBlockDto, CreateBrandDto, ShortenUrlDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto } from '../dtos';
 import { BehaviorSubject, filter, map } from 'rxjs';
-import { GetUrlsOptions, LinkActiveOptions, LinkTypeOptions, UrlsResponse } from '../interfaces';
+import { GetUrlsOptions, UrlsResponse } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +68,10 @@ export class BrandsService {
     return this.httpClient.get<UrlsResponse>(`api/brands/${brandId}/urls?page=${page}&search=${search}`);
   }
 
+  getFilteredBrandLinks(brandId: string, query: string) {
+    return this.httpClient.get<Url[]>(`api/brands/${brandId}/urls/filter?query=${query}`);
+  }
+
   createBrand(createBrandDto: CreateBrandDto) {
     const formData = new FormData();
 
@@ -85,6 +89,29 @@ export class BrandsService {
     }
 
     return this.httpClient.post<Brand>("api/brands", formData);
+  }
+
+  createBlock(brandId: string, createBlockDto: BrandBlockDto) {
+    const formData = new FormData();
+    const formFields: string[] = ["type", "title", "description"];
+
+    if (createBlockDto.type === BlockType.IMAGE) {
+      formFields.push("image", "image_ratio");
+    }
+    if (createBlockDto.type === BlockType.YOUTUBE) {
+      formFields.push("youtube_url");
+    } else {
+      createBlockDto.url && formFields.push("url");
+      createBlockDto.url_id && formFields.push("url_id");
+    }
+
+    for (const field of formFields) {
+      if (createBlockDto[field]) {
+        formData.append(field, createBlockDto[field]);
+      }
+    }
+
+    return this.httpClient.post<BrandBlockDraft>(`api/brands/draft/${brandId}/blocks`, formData);
   }
 
   createLink(brandId: string, createLinkDto: ShortenUrlDto) {

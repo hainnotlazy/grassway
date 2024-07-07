@@ -45,6 +45,17 @@ export class FormValidator {
     };
   }
 
+  static validYoutubeEmbedLink(control: AbstractControl) {
+    const url = control.value;
+    if (!url) return null;
+
+    const pattern = /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/.+$/;
+    if (pattern && !pattern.test(url)) {
+      return { invalidYoutubeEmbedLink: true };
+    }
+    return null;
+  }
+
   static brandPrefixExisted(brandsService: BrandsService, currentBrandPrefix?: string): AsyncValidatorFn {
     return control => {
       if (!control.value || control.value === currentBrandPrefix) return of(null);
