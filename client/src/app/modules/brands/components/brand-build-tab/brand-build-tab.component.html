@@ -14,14 +14,17 @@
   <div
     cdkDropList
     (cdkDropListDropped)="drop($event)"
+    [cdkDropListDisabled]="isProcessing"
     class="space-y-4"
   >
     <ng-container *ngFor="let block of blocks" [ngSwitch]="block.type">
       <app-button-block cdkDrag *ngSwitchCase="'button'" [block]="block">
-        <i cdkDragHandle class="icon-drag text-xl text-gray-600 cursor-pointer"></i>
+        <ng-container [ngTemplateOutlet]="dragButton"></ng-container>
       </app-button-block>
 
-      <app-image-block cdkDrag *ngSwitchCase="'image'" [block]="block"></app-image-block>
+      <app-image-block cdkDrag *ngSwitchCase="'image'" [block]="block">
+        <ng-container [ngTemplateOutlet]="dragButton"></ng-container>
+      </app-image-block>
 
       <app-youtube-block cdkDrag *ngSwitchCase="'youtube'" [block]="block"></app-youtube-block>
     </ng-container>
@@ -30,4 +33,15 @@
 
 <ng-template #loading>
   <app-loading-tab [description]="'Loading brand build...'"></app-loading-tab>
+</ng-template>
+
+<ng-template #dragButton>
+  <i
+    cdkDragHandle
+    class="icon-drag text-xl"
+    [ngClass]="{
+      'text-gray-300': isProcessing,
+      'text-gray-600 cursor-pointer': !isProcessing
+    }"
+  ></i>
 </ng-template>

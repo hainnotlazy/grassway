@@ -88,7 +88,8 @@ export class BrandDraftService {
       },
       order: {
         order: "DESC"
-      }
+      },
+      relations: ["url"]
     })
 
     return blocks;
@@ -221,7 +222,7 @@ export class BrandDraftService {
   async updateBrandBlocksOrder(
     currentUser: User,
     brandId: string,
-    updateSocialPlatformsOrderDto: UpdateBlockOrderDto
+    updateBlocksOrderDto: UpdateBlockOrderDto
   ) {
     this.brandsService.validateBrandId(brandId);
 
@@ -240,7 +241,7 @@ export class BrandDraftService {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
 
-    const { ids: blockIds } = updateSocialPlatformsOrderDto;
+    const { ids: blockIds } = updateBlocksOrderDto;
     const cases = blockIds
       .map((id, index) => `WHEN id = '${id}' THEN ${blockIds.length - index}`)
       .join(' ');

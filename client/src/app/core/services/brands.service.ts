@@ -137,6 +137,14 @@ export class BrandsService {
     return this.httpClient.put<BrandDraft>(`api/brands/draft/${brandId}/design`, formData);
   }
 
+  updateBlocksOrder(brandId: string, updateBlocksOrderDto: number[]) {
+    return this.httpClient.put<BrandDraft>(
+      `api/brands/draft/${brandId}/blocks/order`, {
+        ids: updateBlocksOrderDto
+      }
+    );
+  }
+
   updateSocialPlatformsDraftOrder(
     brandId: string,
     updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto

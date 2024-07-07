@@ -1,5 +1,5 @@
 <ng-container *ngIf="fetchedDesign; else loadingTab">
-  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
     <app-profile-form
       [logoControl]="designForm.controls.logo"
       [titleControl]="designForm.controls.title"
@@ -7,7 +7,7 @@
     ></app-profile-form>
   </div>
 
-  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
     <app-page-form
       [layoutControl]="designForm.controls.layout"
       [headerColorControl]="designForm.controls.headerColor"
@@ -19,14 +19,14 @@
 
   <div
     *ngIf="brandSocialPlatforms"
-    class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow"
+    class="p-4 bg-white border border-gray-300 rounded-md shadow"
   >
     <app-socials-form
       [socialPlatforms]="brandSocialPlatforms"
     ></app-socials-form>
   </div>
 
-  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
     <app-blocks-form
       [blockShapeControl]="designForm.controls.blockShape"
       [blockShadowControl]="designForm.controls.blockShadow"
@@ -35,7 +35,7 @@
     ></app-blocks-form>
   </div>
 
-  <div class="bg-slate-100 border-slate-300 p-4 border rounded-md shadow">
+  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
     <app-font-form [fontControl]="designForm.controls.font"></app-font-form>
   </div>
 </ng-container>

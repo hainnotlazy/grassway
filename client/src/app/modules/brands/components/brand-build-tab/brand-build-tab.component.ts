@@ -17,6 +17,7 @@ export class BrandBuildTabComponent {
   fetchedBuild = false;
   brandId!: string;
   blocks: BrandBlockDraft[] = [];
+  isProcessing = false;
 
   constructor(
     private brandsService: BrandsService,
@@ -47,6 +48,20 @@ export class BrandBuildTabComponent {
   }
 
   drop(event: CdkDragDrop<BrandBlockDraft[]>) {
+    if (this.isProcessing) {
+      return;
+    }
+
+    this.isProcessing = true;
     moveItemInArray(this.blocks, event.previousIndex, event.currentIndex);
+
+    this.brandsService.updateBlocksOrder(this.brandId, this.getBlocksIdOrder()).pipe(
+      finalize(() => this.isProcessing = false),
+      untilDestroyed(this)
+    ).subscribe();
+  }
+
+  private getBlocksIdOrder(): number[] {
+    return this.blocks.map(block => block.id);
   }
 }

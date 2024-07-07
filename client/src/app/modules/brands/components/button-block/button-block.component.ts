@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { BrandBlockDraft } from 'src/app/core/models';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-button-block',
@@ -10,5 +11,7 @@ import { BrandBlockDraft } from 'src/app/core/models';
   }
 })
 export class ButtonBlockComponent {
+  client = `${environment.client}/l/`;
+
   @Input() block!: BrandBlockDraft;
 }

@@ -15,7 +15,7 @@ class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border
     <div class="link-info flex flex-col flex-grow gap-1">
       <h6 class="text-jost text-secondary flex items-center gap-2 text-lg font-semibold break-all cursor-default">
         <small class="animate-pulse">{{ link.is_active ? '🟢' : '🔴' }}</small>
-        {{ link.title }} - {{ link.id }}
+        {{ link.title }}
         <i
           *ngIf="link.description"
           class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"

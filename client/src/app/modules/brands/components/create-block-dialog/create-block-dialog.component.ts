@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, switchMap, take, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import { BrandBlockDto } from 'src/app/core/dtos';
 import { blockRequirements, ValidationMessage } from 'src/app/core/forms';
 import { getObjectKeys } from 'src/app/core/helpers';
@@ -112,7 +112,7 @@ export class CreateBlockDialogComponent {
   }
 
   onSubmit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid || this.isProcessing) return;
 
     this.isProcessing = true;
     const urlType = this.form.controls.urlType.value;
@@ -141,6 +141,7 @@ export class CreateBlockDialogComponent {
       }, error => {
         this.handleCreateBlockFailed(error);
       }),
+      finalize(() => this.isProcessing = false),
       untilDestroyed(this),
     ).subscribe();
   }
