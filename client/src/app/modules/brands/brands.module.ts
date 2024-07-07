@@ -28,6 +28,7 @@ import { BrandLinksTabComponent } from './components/brand-links-tab/brand-links
 import { CreateLinkDialogComponent } from './components/create-link-dialog/create-link-dialog.component';
 import { BrandLinkComponent } from './components/brand-link/brand-link.component';
 import { UrlModule } from '../url/url.module';
+import { UpdateBlockDialogComponent } from './components/update-block-dialog/update-block-dialog.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { UrlModule } from '../url/url.module';
     CreateBlockDialogComponent,
     BrandLinksTabComponent,
     CreateLinkDialogComponent,
-    BrandLinkComponent
+    BrandLinkComponent,
+    UpdateBlockDialogComponent
   ],
   imports: [
     CommonModule,

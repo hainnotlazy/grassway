@@ -50,7 +50,7 @@
     </li>
 
     <li>
-      <a
+      <button
         class="hover:text-white hover:bg-secondary relative px-4 py-2.5 flex items-center justify-between w-full cursor-pointer"
         [ngClass]="{
           'active shadow': isInBrandRoute
@@ -62,10 +62,10 @@
           class="icon-chevron-down text-end transition-all duration-500"
           [class]="{'rotate-180': isBrandItemOpen}"
         ></i>
-      </a>
+      </button>
 
       <ul class="bg-slate-800 brand-sub-items" [class.show]="isBrandItemOpen">
-        <li *ngFor="let brand of brands">
+        <li *ngFor="let brand of brands$ | async">
           <a
             class="relative pr-4 pl-8 hover:text-white hover:bg-slate-700 py-2.5 block space-x-1 break-all"
             [routerLink]="['brands', brand.id, 'manage']"

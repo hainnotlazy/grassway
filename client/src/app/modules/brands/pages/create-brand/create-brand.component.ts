@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map, take, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { Brand } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
@@ -131,6 +131,10 @@ export class CreateBrandPage {
   }
 
   private handleCreateSuccess(brand: Brand) {
+    this.brandsService.brands$.pipe(
+      take(1),
+      tap(brands => this.brandsService.setBrands([brand, ...brands])),
+    ).subscribe();
     this.snackbar.open("Brand created successfully", "x", {
       duration: 3000,
       verticalPosition: "top",

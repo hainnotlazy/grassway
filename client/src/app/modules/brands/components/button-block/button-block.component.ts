@@ -8,6 +8,7 @@ import { BrandBlockDraft } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
 import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 import { environment } from 'src/environments/environment';
+import { UpdateBlockDialogComponent } from '../update-block-dialog/update-block-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -37,6 +38,16 @@ export class ButtonBlockComponent {
     ).subscribe();
   }
 
+  openEditDialog() {
+    this.dialog.closeAll();
+    const dialogRef = this.dialog.open(UpdateBlockDialogComponent, {
+      width: '600px',
+      data: {
+        block: this.block
+      }
+    });
+  }
+
   openDeleteDialog() {
     this.dialog.closeAll();
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
@@ -53,7 +64,7 @@ export class ButtonBlockComponent {
     ).subscribe();
   }
 
-  onDelete() {
+  private onDelete() {
     if (this.isProcessing) {
       return;
     }

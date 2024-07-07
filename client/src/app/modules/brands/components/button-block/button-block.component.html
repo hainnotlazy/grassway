@@ -25,7 +25,11 @@
   </div>
 
   <div class="break-keep flex items-start gap-3">
-    <button class="hover:text-blue-700 flex items-center gap-1 text-blue-500">
+    <button
+      class="hover:text-blue-700 flex items-center gap-1 text-blue-500"
+      type="button"
+      (click)="openEditDialog()"
+    >
       <i class="icon-edit"></i> Edit
     </button>
     <button

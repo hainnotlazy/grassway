@@ -23,7 +23,8 @@ export class SidebarComponent {
   fetchedBrands = false;
   isBrandItemOpen = false;
   isInBrandRoute = false;
-  brands: Brand[] = [];
+  // brands: Brand[] = [];
+  brands$ = this.brandsService.brands$;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -65,11 +66,11 @@ export class SidebarComponent {
 
     this.brandsService.getBrands().pipe(
       tap((brands) => {
-        this.brands = brands;
+        this.brandsService.setBrands(brands);
         this.isBrandItemOpen = true;
         this.fetchedBrands = true;
       }),
-      take(1),
+      untilDestroyed(this)
     ).subscribe();
   }
 }

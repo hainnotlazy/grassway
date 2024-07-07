@@ -17,6 +17,12 @@ export class BrandsService {
   ];
 
   /**
+   * List of brands
+  */
+  private readonly brandsSubject = new BehaviorSubject<Brand[]>([]);
+  brands$ = this.brandsSubject.asObservable();
+
+  /**
    * Current brand for managing
    */
   private readonly currentBrandSubject = new BehaviorSubject<Brand | null>(null);
@@ -29,6 +35,10 @@ export class BrandsService {
     private httpClient: HttpClient,
     private socket: BrandsSocket
   ) { }
+
+  setBrands(brands: Brand[]) {
+    this.brandsSubject.next(brands);
+  }
 
   setCurrentBrand(brand: Brand | null) {
     this.currentBrandSubject.next(brand);
