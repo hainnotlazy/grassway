@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, filter, finalize, map, scan, take, tap } from 'rxjs';
+import { BehaviorSubject, filter, finalize, map, Observable, scan, take, tap } from 'rxjs';
+import { getValueInNumber } from 'src/app/core/helpers';
 import { UrlsResponse, LinkActiveOptions } from 'src/app/core/interfaces';
-import { Url } from 'src/app/core/models';
+import { ExtendedUrl, Url } from 'src/app/core/models';
 import { UrlsService, UserSettingService } from 'src/app/core/services';
 import { environment } from 'src/environments/environment';
 
@@ -20,12 +21,12 @@ export class IndexPage {
   userSetting$ = this.userSettingService.getUserSetting();
 
   private infiniteLoadSubject = new BehaviorSubject<UrlsResponse | null>(null);
-  infiniteLoad$ = this.infiniteLoadSubject.asObservable().pipe(
+  infiniteLoad$: Observable<ExtendedUrl[]> = this.infiniteLoadSubject.asObservable().pipe(
     filter(response => !!response),
     map(response => response as UrlsResponse),
     tap((response: UrlsResponse) => {
-      this.currentPage = this.getValueInNumber(response.meta.currentPage);
-      this.totalPage = this.getValueInNumber(response.meta.totalPages);
+      this.currentPage = getValueInNumber(response.meta.currentPage);
+      this.totalPage = getValueInNumber(response.meta.totalPages);
     }),
     scan((accumulatorResponse: Url[], response: UrlsResponse) => {
       return [...accumulatorResponse, ...response.data];
@@ -46,7 +47,6 @@ export class IndexPage {
       page: 1,
       linkActiveOptions: LinkActiveOptions.ALL
     }).pipe(
-      take(1),
       tap((response) => {
         this.infiniteLoadSubject.next(response);
       }),
@@ -68,9 +68,5 @@ export class IndexPage {
         untilDestroyed(this)
       ).subscribe()
     }
-  }
-
-  private getValueInNumber(value: string | number) {
-    return typeof value === "string" ? parseInt(value) : value;
   }
 }
