@@ -155,6 +155,29 @@ export class BrandsService {
     );
   }
 
+  updateBlock(brandId: string, blockId: number, updateBlockDto: BrandBlockDto) {
+    const formData = new FormData();
+    const formFields: string[] = ["type", "title", "description"];
+
+    if (updateBlockDto.type === BlockType.IMAGE) {
+      formFields.push("image", "image_ratio");
+    }
+    if (updateBlockDto.type === BlockType.YOUTUBE) {
+      formFields.push("youtube_url");
+    } else {
+      updateBlockDto.url && formFields.push("url");
+      updateBlockDto.url_id && formFields.push("url_id");
+    }
+
+    for (const field of formFields) {
+      if (updateBlockDto[field]) {
+        formData.append(field, updateBlockDto[field]);
+      }
+    }
+
+    return this.httpClient.put<BrandBlockDraft>(`api/brands/draft/${brandId}/blocks/${blockId}`, formData);
+  }
+
   updateSocialPlatformsDraftOrder(
     brandId: string,
     updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto

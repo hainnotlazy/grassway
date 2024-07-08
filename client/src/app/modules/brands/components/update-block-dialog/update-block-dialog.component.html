@@ -30,6 +30,7 @@
       <label class="text-gray-600">Image:</label>
       <app-input-image
         class="block"
+        [imageUrl]="defaultBlockImage"
         [control]="form.controls.image"
       ></app-input-image>
     </div>
@@ -196,7 +197,7 @@
       class="bg-secondary hover:bg-secondary/80 disabled:bg-gray-400 flex items-center justify-center gap-2 px-3 py-2 text-white rounded-md shadow-md"
       type="submit"
       [class]="{'disabled:bg-sky-400': isProcessing}"
-      [disabled]="form.invalid || isProcessing"
+      [disabled]="form.invalid || isProcessing || !form.dirty"
     >
       <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
       {{ isProcessing ? "Processing..." : "Save" }}

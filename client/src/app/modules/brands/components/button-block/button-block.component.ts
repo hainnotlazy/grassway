@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, finalize, take, tap } from 'rxjs';
+import { filter, finalize, map, ObjectUnsubscribedError, take, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { BrandBlockDraft } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
@@ -46,6 +46,16 @@ export class ButtonBlockComponent {
         block: this.block
       }
     });
+
+    dialogRef.afterClosed().pipe(
+      take(1),
+      filter(data => !!data),
+      map(data => data as BrandBlockDraft),
+      tap(editedBlock => {
+        Object.assign(this.block, editedBlock);
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   openDeleteDialog() {

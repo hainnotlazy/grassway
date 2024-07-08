@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, finalize, take, tap } from 'rxjs';
+import { filter, finalize, map, take, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { BrandBlockDraft } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
 import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 import { environment } from 'src/environments/environment';
+import { UpdateBlockDialogComponent } from '../update-block-dialog/update-block-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -35,6 +36,26 @@ export class ImageBlockComponent {
     this.brandsService.currentBrand$.pipe(
       take(1),
       tap(brand => this.brandId = brand.id),
+    ).subscribe();
+  }
+
+  openEditDialog() {
+    this.dialog.closeAll();
+    const dialogRef = this.dialog.open(UpdateBlockDialogComponent, {
+      width: '600px',
+      data: {
+        block: this.block
+      }
+    });
+
+    dialogRef.afterClosed().pipe(
+      take(1),
+      filter(data => !!data),
+      map(data => data as BrandBlockDraft),
+      tap(editedBlock => {
+        Object.assign(this.block, editedBlock);
+      }),
+      untilDestroyed(this)
     ).subscribe();
   }
 

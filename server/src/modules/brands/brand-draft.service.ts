@@ -118,7 +118,6 @@ export class BrandDraftService {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
 
-    // Save block image
     const {
       type,
       title,
@@ -198,19 +197,41 @@ export class BrandDraftService {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
 
-    // Save new block image
+    const {
+      url: newOriginUrl, 
+      url_id: urlId
+    } = updateBrandBlockDto;
+    let url: Url;
+    let oldImagePath = null;
     let savedImagePath = null;
-    if (updateBrandBlockDto.type === BlockType.IMAGE && image) {
-      savedImagePath = this.uploadFileService.saveBrandLogo(image);
+
+    if (newOriginUrl) {
+      url = await this.urlsService.shortenUrl(
+        null, 
+        { origin_url: newOriginUrl },
+        await this.brandRepository.findOneBy({ id: brandId })
+      );
+    } else if (urlId) {
+      url = await this.urlsService.getUrlById(urlId);
     }
 
     Object.assign(existedBlock, updateBrandBlockDto);
-    existedBlock.image = savedImagePath;
+    existedBlock.url = url;
+    if (updateBrandBlockDto.type === BlockType.IMAGE && image) {
+      savedImagePath = this.uploadFileService.saveBrandLogo(image);
+      oldImagePath = existedBlock.image;
+      existedBlock.image = savedImagePath;
+    }
+    
     const updatedBlock = await this.brandBlockDraftRepository.save(existedBlock);
 
     // Remove old block image
-    if (updateBrandBlockDto.type === BlockType.IMAGE && image && existedBlock.image) {
-      this.uploadFileService.removeOldFile(existedBlock.image);
+    if (
+      updateBrandBlockDto.type === BlockType.IMAGE 
+      && image 
+      && oldImagePath
+    ) {
+      this.uploadFileService.removeOldFile(oldImagePath);
     }
 
     return updatedBlock;

@@ -24,7 +24,14 @@
         [block]="block"
         (deleted)="onDeletedBlock($event)"
       >
-        <ng-container [ngTemplateOutlet]="dragButton"></ng-container>
+        <i
+          cdkDragHandle
+          class="icon-drag text-xl"
+          [ngClass]="{
+            'text-gray-300': isProcessing,
+            'text-gray-600 cursor-pointer': !isProcessing
+          }"
+        ></i>
       </app-button-block>
 
       <app-image-block
@@ -33,7 +40,14 @@
         [block]="block"
         (deleted)="onDeletedBlock($event)"
       >
-        <ng-container [ngTemplateOutlet]="dragButton"></ng-container>
+        <i
+          cdkDragHandle
+          class="icon-drag text-xl"
+          [ngClass]="{
+            'text-gray-300': isProcessing,
+            'text-gray-600 cursor-pointer': !isProcessing
+          }"
+        ></i>
       </app-image-block>
 
       <app-youtube-block cdkDrag *ngSwitchCase="'youtube'" [block]="block"></app-youtube-block>
@@ -43,15 +57,4 @@
 
 <ng-template #loading>
   <app-loading-tab [description]="'Loading brand build...'"></app-loading-tab>
-</ng-template>
-
-<ng-template #dragButton>
-  <i
-    cdkDragHandle
-    class="icon-drag text-xl"
-    [ngClass]="{
-      'text-gray-300': isProcessing,
-      'text-gray-600 cursor-pointer': !isProcessing
-    }"
-  ></i>
 </ng-template>

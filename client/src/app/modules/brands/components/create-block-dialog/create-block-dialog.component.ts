@@ -20,6 +20,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./create-block-dialog.component.scss']
 })
 export class CreateBlockDialogComponent {
+  readonly defaultBlockImage = "/assets/images/default-block-image.jpg";
   readonly BlockType = BlockType;
   readonly BlockImageRatio = BlockImageRatio;
 
@@ -64,6 +65,7 @@ export class CreateBlockDialogComponent {
       FormValidator.validUrl
     ])
   });
+  formControls = this.form.controls;
 
   constructor(
     private brandsService: BrandsService,
@@ -75,45 +77,28 @@ export class CreateBlockDialogComponent {
       tap(brand => this.brandId = brand.id),
     ).subscribe();
 
-    this.form.controls.type.valueChanges.pipe(
+    this.formControls.type.valueChanges.pipe(
+      filter(type => !!type),
+      map(type => type as BlockType),
       tap(type => {
-        if (type !== BlockType.YOUTUBE) {
-          this.form.controls.url.setValidators([
-            Validators.required,
-            FormValidator.validUrl
-          ]);
-          this.form.controls.youtubeUrl.removeValidators(Validators.required);
-        } else {
-          this.form.controls.url.clearValidators();
-          this.form.controls.youtubeUrl.addValidators(Validators.required);
-        }
-        this.form.controls.url.updateValueAndValidity();
+        this.watchTypeChanges(type);
       }),
       untilDestroyed(this),
     ).subscribe();
 
-    this.form.controls.urlType.valueChanges.pipe(
+    this.formControls.urlType.valueChanges.pipe(
+      filter(value => value === "new" || value === "existed"),
+      map(value => value as ("new" | "existed")),
       tap(value => {
-        if (value === "new") {
-          this.form.controls.url.setValue("");
-          this.selectedUrl = undefined;
-          this.form.controls.url.setValidators([
-            Validators.required,
-            FormValidator.validUrl
-          ]);
-        } else {
-          this.form.controls.url.setValue("");
-          this.form.controls.url.clearValidators();
-        }
-        this.form.controls.url.updateValueAndValidity();
+        this.watchUrlTypeChanges(value);
       }),
       untilDestroyed(this),
     ).subscribe();
 
-    this.filteredUrls$ = this.form.controls.url.valueChanges.pipe(
+    this.filteredUrls$ = this.formControls.url.valueChanges.pipe(
       debounceTime(300),
-      filter(() => this.form.controls.type.value !== BlockType.YOUTUBE),
-      filter(() => this.form.controls.urlType.value === "existed"),
+      filter(() => this.formControls.type.value !== BlockType.YOUTUBE),
+      filter(() => this.formControls.urlType.value === "existed"),
       filter(value => !!value),
       map(value => value as string),
       distinctUntilChanged(),
@@ -131,18 +116,18 @@ export class CreateBlockDialogComponent {
   onSubmit() {
     if (this.form.invalid || this.isProcessing) return;
 
-    const urlType = this.form.controls.urlType.value;
+    const urlType = this.formControls.urlType.value;
     const createBlockDto: BrandBlockDto = {
-      type: this.form.controls.type.value as BlockType,
-      title: this.form.controls.title.value as string,
-      description: this.form.controls.description.value as string,
-      image: this.form.controls.image.value as string,
-      image_ratio: this.form.controls.imageRatio.value as BlockImageRatio,
-      youtube_url: this.form.controls.youtubeUrl.value as string,
+      type: this.formControls.type.value as BlockType,
+      title: this.formControls.title.value as string,
+      description: this.formControls.description.value as string,
+      image: this.formControls.image.value as string,
+      image_ratio: this.formControls.imageRatio.value as BlockImageRatio,
+      youtube_url: this.formControls.youtubeUrl.value as string,
     }
 
     if (urlType === "new") {
-      createBlockDto.url = this.form.controls.url.value as string;
+      createBlockDto.url = this.formControls.url.value as string;
     } else if (urlType === "existed") {
       if (!this.selectedUrl) {
         this.formError = "Please select valid existed url";
@@ -192,5 +177,38 @@ export class CreateBlockDialogComponent {
       horizontalPosition: "right",
       verticalPosition: "top"
     })
+  }
+
+  private watchTypeChanges(typeChange: BlockType) {
+    if (typeChange === BlockType.YOUTUBE) {
+      this.formControls.url.clearValidators();
+      this.formControls.youtubeUrl.addValidators(Validators.required);
+    } else {
+      this.formControls.youtubeUrl.clearValidators();
+
+      if (this.formControls.urlType.value === "new") {
+        this.formControls.url.setValidators([
+          Validators.required,
+          FormValidator.validUrl
+        ]);
+      }
+    }
+    this.formControls.youtubeUrl.updateValueAndValidity();
+    this.formControls.url.updateValueAndValidity();
+  }
+
+  private watchUrlTypeChanges(urlTypeChange: "new" | "existed") {
+    if (urlTypeChange === "new") {
+      this.formControls.url.setValue("");
+      this.selectedUrl = undefined;
+      this.formControls.url.setValidators([
+        Validators.required,
+        FormValidator.validUrl
+      ]);
+    } else {
+      this.formControls.url.setValue("");
+      this.formControls.url.clearValidators();
+    }
+    this.formControls.url.updateValueAndValidity();
   }
 }

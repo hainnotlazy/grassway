@@ -7,8 +7,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./input-image.component.scss']
 })
 export class InputImageComponent implements OnChanges {
-  imageUrl = "./assets/images/grassway-logo.png";
-
+  @Input() imageUrl = "./assets/images/grassway-logo.png";
   @Input() control!: FormControl<string | null>;
 
   @ViewChild("imageInput") imageInput?: ElementRef;
