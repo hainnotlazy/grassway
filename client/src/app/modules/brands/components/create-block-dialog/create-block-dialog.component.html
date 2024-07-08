@@ -95,11 +95,7 @@
 
   <div *ngIf="form.controls.type.value !== BlockType.YOUTUBE" class="flex flex-col gap-2">
     <label class="text-gray-600" for="url">Destination URL:</label>
-    <mat-radio-group
-      formControlName="urlType"
-      class="space-x-2"
-      color="accent"
-    >
+    <mat-radio-group formControlName="urlType" color="accent">
       <mat-radio-button value="new">Create new</mat-radio-button>
       <mat-radio-button value="existed">Select existing link</mat-radio-button>
     </mat-radio-group>

@@ -1,58 +1,60 @@
-<div class="flex gap-2 p-4 bg-white border border-gray-300 rounded-md shadow">
+<div class="border-slate-300 flex flex-wrap items-start gap-2 p-4 bg-white border rounded-md shadow">
   <ng-content></ng-content>
 
-  <div class="flex flex-col flex-grow gap-2">
-    <div class="text-karla flex items-center gap-1 font-semibold">
-      <i class="icon-image"></i>
-      <span>Image</span>
-    </div>
-    <div class="flex gap-4">
-      <img
-        class="aspect-square border border-gray-500 rounded-md"
-        [src]="block.image || defaultImage"
-        [alt]="'Block ' + block.id + ' image'"
-        width="130"
-        height="130"
-        draggable="false"
-      >
-      <div class="flex flex-col items-start gap-1">
-        <h6 class="text-secondary text-lg font-semibold">{{ block.title }}</h6>
-        <small class="text-gray-500">{{ block.description }}</small>
-        <a
-          [routerLink]="['/l/' , (block.url?.custom_back_half || block.url?.back_half)]"
-          class="hover:underline hover:text-primary inline-block text-sm font-semibold text-gray-700"
+  <div class="sm:w-auto flex flex-col-reverse flex-grow w-full gap-2">
+    <div class="flex flex-col flex-grow gap-2 -mt-8">
+      <div class="text-karla flex items-center gap-1 font-semibold">
+        <i class="icon-image"></i>
+        <span>Image</span>
+      </div>
+      <div class="sm:flex-row flex flex-col gap-4">
+        <img
+          class="aspect-square self-center border border-gray-500 rounded-md"
+          [src]="block.image || defaultImage"
+          [alt]="'Block ' + block.id + ' image'"
+          width="130"
+          height="130"
+          draggable="false"
         >
-          {{ client + (block.url?.custom_back_half || block.url?.back_half) }}
-        </a>
-        <a
-          [href]="block.url?.origin_url"
-          class="hover:underline text-sm text-gray-600"
-        >
-          {{ block.url?.origin_url }}
-        </a>
+        <div class="flex flex-col items-start gap-1">
+          <h6 class="text-secondary text-lg font-semibold">{{ block.title }}</h6>
+          <small class="text-gray-500">{{ block.description }}</small>
+          <a
+            [routerLink]="['/l/' , (block.url?.custom_back_half || block.url?.back_half)]"
+            class="hover:underline hover:text-primary inline-block text-sm font-semibold text-gray-700"
+          >
+            {{ client + (block.url?.custom_back_half || block.url?.back_half) }}
+          </a>
+          <a
+            [href]="block.url?.origin_url"
+            class="hover:underline text-sm text-gray-600"
+          >
+            {{ block.url?.origin_url }}
+          </a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="break-keep flex items-start gap-3">
-    <button
-      class="hover:text-blue-700 flex items-center gap-1 text-blue-500"
-      type="button"
-      (click)="openEditDialog()"
-    >
-      <i class="icon-edit"></i> Edit
-    </button>
-    <button
-      class="hover:text-red-700 disabled:text-sky-400 flex items-center gap-1 text-red-500"
-      [disabled]="isProcessing"
-      (click)="openDeleteDialog()"
-      type="button"
-    >
-      <i [ngClass]="{
-        'icon-delete': !isProcessing,
-        'icon-spinner spinning': isProcessing
-      }"></i>
-      {{ isProcessing ? 'Deleting...' : 'Delete' }}
-    </button>
+    <div class="break-keep z-1 flex items-start self-end gap-3">
+      <button
+        class="hover:text-blue-700 flex items-center gap-1 text-blue-500"
+        type="button"
+        (click)="openEditDialog()"
+      >
+        <i class="icon-edit"></i> Edit
+      </button>
+      <button
+        class="hover:text-red-700 disabled:text-sky-400 flex items-center gap-1 text-red-500"
+        [disabled]="isProcessing"
+        (click)="openDeleteDialog()"
+        type="button"
+      >
+        <i [ngClass]="{
+          'icon-delete': !isProcessing,
+          'icon-spinner spinning': isProcessing
+        }"></i>
+        {{ isProcessing ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
   </div>
 </div>
