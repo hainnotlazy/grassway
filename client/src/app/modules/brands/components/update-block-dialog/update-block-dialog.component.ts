@@ -101,7 +101,7 @@ export class UpdateBlockDialogComponent {
       image: data.block.image,
       imageRatio: data.block.image_ratio,
       youtubeUrl: data.block.youtube_url,
-      url: `${this.client}${data.block.url?.custom_back_half || data.block.url?.back_half}`
+      url: data.block.url && `${this.client}${data.block.url?.custom_back_half || data.block.url?.back_half}`
     });
     this.selectedUrl = data.block.url;
 
@@ -138,10 +138,13 @@ export class UpdateBlockDialogComponent {
       youtube_url: this.formControls.youtubeUrl.value as string,
     }
 
-    if (urlType === "new") {
+    if (urlType === "new" && this.formControls.type.value !== BlockType.YOUTUBE) {
       updateBlockDto.url = this.formControls.url.value as string;
-    } else if (urlType === "existed") {
-      if (this.data.block.url?.id !== this.selectedUrl?.id) {
+    } else if (urlType === "existed" && this.formControls.type.value !== BlockType.YOUTUBE) {
+      if (!this.selectedUrl) {
+        this.formError = "Please select valid existed url";
+        return;
+      } else if (this.data.block.url?.id !== this.selectedUrl?.id) {
         updateBlockDto.url_id = this.selectedUrl?.id;
       }
     }

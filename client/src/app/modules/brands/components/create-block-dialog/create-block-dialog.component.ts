@@ -126,9 +126,9 @@ export class CreateBlockDialogComponent {
       youtube_url: this.formControls.youtubeUrl.value as string,
     }
 
-    if (urlType === "new") {
+    if (urlType === "new" && this.formControls.type.value !== BlockType.YOUTUBE) {
       createBlockDto.url = this.formControls.url.value as string;
-    } else if (urlType === "existed") {
+    } else if (urlType === "existed" && this.formControls.type.value !== BlockType.YOUTUBE) {
       if (!this.selectedUrl) {
         this.formError = "Please select valid existed url";
         return;

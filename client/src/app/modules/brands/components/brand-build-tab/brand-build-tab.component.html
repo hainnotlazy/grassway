@@ -50,7 +50,21 @@
         ></i>
       </app-image-block>
 
-      <app-youtube-block cdkDrag *ngSwitchCase="'youtube'" [block]="block"></app-youtube-block>
+      <app-youtube-block
+        cdkDrag
+        *ngSwitchCase="'youtube'"
+        [block]="block"
+        (deleted)="onDeletedBlock($event)"
+      >
+        <i
+          cdkDragHandle
+          class="icon-drag text-xl"
+          [ngClass]="{
+            'text-gray-300': isProcessing,
+            'text-gray-600 cursor-pointer': !isProcessing
+          }"
+        ></i>
+      </app-youtube-block>
     </ng-container>
   </div>
 </div>
