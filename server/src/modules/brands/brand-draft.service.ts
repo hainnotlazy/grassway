@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto, UpdateSocialPlatformsDto, BrandBlockDto, UpdateBlockOrderDto } from './dtos';
-import { User, BrandDraft, BrandMember, BrandSocialPlatformsDraft, BrandBlockDraft, BlockType, Url, Brand } from 'src/entities';
+import { User, BrandDraft, BrandSocialPlatformsDraft, BrandBlockDraft, BlockType, Url, Brand } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { BrandsGateway } from './brands.gateway';
@@ -15,8 +15,6 @@ export class BrandDraftService {
     private readonly brandRepository: Repository<Brand>,
     @InjectRepository(BrandDraft)
     private readonly brandDraftRepository: Repository<BrandDraft>,
-    @InjectRepository(BrandMember)
-    private readonly brandMemberRepository: Repository<BrandMember>,
     @InjectRepository(BrandSocialPlatformsDraft)
     private readonly brandSocialPlatformsDraftRepository: Repository<BrandSocialPlatformsDraft>,
     @InjectRepository(BrandBlockDraft)
@@ -27,31 +25,41 @@ export class BrandDraftService {
     private brandsGateway: BrandsGateway,
     private uploadFileService: UploadFileService
   ) {}
-  
+
   /**
    * Describe: Get brand by prefix
   */
-  async getBrandByPrefix(prefix: string) {
-    const brand = await this.brandDraftRepository.findOne({
+  async getBrandByPrefix(currentUser: User, prefix: string) {
+    const existedBrand = await this.brandDraftRepository.findOne({
       where: {
-        prefix
+        prefix,
+        brand: {
+          members: {
+            user_id: currentUser.id
+          }
+        },
       },
-      relations: ["social_platforms"]
+      relations: ["social_platforms", "blocks", "blocks.url"],
+      order: {
+        blocks: {
+          order: "DESC"
+        }
+      }
     })
-    if (!brand) {
+    if (!existedBrand) {
       throw new NotFoundException("Brand not found or you are not a member of this brand");
     }
 
-    return brand;
+    return existedBrand;
   }
 
   /**
    * Describe: Get brand design
   */
-  async getBrandDesign(currentUser: User, brandId: string) {
+  async getDesign(currentUser: User, brandId: string) {
     this.brandsService.validateBrandId(brandId);
 
-    const brand = await this.brandDraftRepository.findOne({
+    const existedBrand = await this.brandDraftRepository.findOne({
       where: {
         brand_id: brandId,
         brand: {
@@ -62,17 +70,17 @@ export class BrandDraftService {
       },
       relations: ["social_platforms"]
     })
-    if (!brand) {
+    if (!existedBrand) {
       throw new BadRequestException("Brand not found or you are not a member of this brand");
     }
 
-    return brand;
+    return existedBrand;
   }
 
   /** 
    * Describe: Get brand blocks
   */
-  async getBrandBlocks(currentUser: User, brandId: string) {
+  async getBlocks(currentUser: User, brandId: string) {
     this.brandsService.validateBrandId(brandId);
 
     const blocks = await this.brandBlockDraftRepository.find({
@@ -98,7 +106,7 @@ export class BrandDraftService {
   /**
    * Describe: Create brand block 
   */ 
-  async createBrandBlock(
+  async createBlock(
     currentUser: User,
     brandId: string,
     createBrandBlockDto: BrandBlockDto,
@@ -164,14 +172,18 @@ export class BrandDraftService {
       url,
       order
     });
+    const savedBlock = await this.brandBlockDraftRepository.save(block);
 
-    return this.brandBlockDraftRepository.save(block);
+    // Push block changes to live preview (allow it run even though returned savedBlock to controller)
+    this.handleEmitBlockChanges(currentUser, brandId);
+
+    return savedBlock;
   }
 
   /**
    * Describe: Update brand block
   */
-  async updateBrandBlock(
+  async updateBlock(
     currentUser: User,
     brandId: string,
     blockId: number,
@@ -225,6 +237,9 @@ export class BrandDraftService {
     
     const updatedBlock = await this.brandBlockDraftRepository.save(existedBlock);
 
+    // Push block changes to live preview (allow it run even though returned updatedBlock to controller)
+    this.handleEmitBlockChanges(currentUser, brandId);
+
     // Remove old block image
     if (
       updateBrandBlockDto.type === BlockType.IMAGE 
@@ -240,25 +255,15 @@ export class BrandDraftService {
   /** 
    * Describe: Update brand blocks order
   */
-  async updateBrandBlocksOrder(
+  async updateBlocksOrder(
     currentUser: User,
     brandId: string,
     updateBlocksOrderDto: UpdateBlockOrderDto
   ) {
     this.brandsService.validateBrandId(brandId);
 
-    // Check permission
-    const isMember = await this.brandDraftRepository.findOne({
-      where: {
-        brand_id: brandId,
-        brand: {
-          members: {
-            user_id: currentUser.id
-          }
-        }
-      }
-    });
-    if (!isMember) {  
+    const existedBrand = await this.getBrandById(currentUser, brandId);
+    if (!existedBrand) {  
       throw new BadRequestException("You don't have permission to edit this brand");
     }
 
@@ -275,12 +280,15 @@ export class BrandDraftService {
     .andWhere('brand_id = :brandId', { brandId })
 
     await query.execute();
+
+    // Push block changes to live preview (allow it run even though returned done to controller)
+    this.handleEmitBlockChanges(currentUser, brandId);
   }
 
   /** 
    * Describe: Update brand design
   */
-  async updateBrandDesign(
+  async updateDesign(
     currentUser: User,
     brandId: string,
     updateBrandDesignDto: UpdateBrandDesignDto,
@@ -288,16 +296,7 @@ export class BrandDraftService {
   ) {
     this.brandsService.validateBrandId(brandId);
 
-    const existedBrand = await this.brandDraftRepository.findOne({
-      where: {
-        brand_id: brandId,
-        brand: {
-          members: {
-            user_id: currentUser.id
-          }
-        }
-      }
-    });
+    const existedBrand = await this.getBrandById(currentUser, brandId);
     if (!existedBrand) {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
@@ -314,86 +313,76 @@ export class BrandDraftService {
     }
 
     try {
-      // Update brand draft
+      // Update brand design
       Object.assign(existedBrand, updateBrandDesignDto);
       if (savedLogoPath) {
         existedBrand.logo = savedLogoPath;
       }
-      const updatedBrandDraft = await queryRunner.manager.save(existedBrand);
+      const updatedBrand = await queryRunner.manager.save(existedBrand);
 
       // Commit transaction
       await queryRunner.commitTransaction();
 
-      // Push new design to live preview
-      await this.brandsGateway.emitNewDesign(currentUser.id, updatedBrandDraft);
+      // Push changes to live preview (allow it run even though returned updatedBrand to controller)
+      this.brandsGateway.emitDraftChanged(currentUser.id, updatedBrand);
 
-      return updatedBrandDraft;
+      return updatedBrand;
     } catch (error) {
       // Rollback transaction
       await queryRunner.rollbackTransaction();
       logo && this.uploadFileService.removeOldFile(savedLogoPath);
-      throw new InternalServerErrorException("Failed when update brand draft");
+      throw new InternalServerErrorException("Failed to update brand design draft!");
     } finally {
       await queryRunner.release();
     }
   }
 
   /**
-   * Describe: Update brand social platforms order
-  */
-  async updateBrandSocialPlatformsOrder(
-    currentUser: User,
-    brandId: string,
-    updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto
-  ) {
-    this.brandsService.validateBrandId(brandId);
-
-    const existedBrand = await this.brandSocialPlatformsDraftRepository.findOne({
-      where: {
-        brand_id: brandId,
-        brand_draft: {
-          brand: {
-            members: {
-              user_id: currentUser.id
-            }
-          }
-        }
-      }
-    })
-    if (!existedBrand) {
-      throw new BadRequestException("You don't have permission to edit this brand");
-    }
-
-    Object.assign(existedBrand, updateSocialPlatformsOrderDto);
-    return this.brandSocialPlatformsDraftRepository.save(existedBrand);
-  }
-
-  /**
    * Describe: Update brand social platforms
   */
-  async updateBrandSocialPlatform(
+  async updateSocialPlatform(
     currentUser: User,
     brandId: string,
     updateSocialPlatformsDto: UpdateSocialPlatformsDto
   ) {
     this.brandsService.validateBrandId(brandId);
 
-    const existedBrand = await this.brandSocialPlatformsDraftRepository.findOneBy({
-      brand_id: brandId,
-      brand_draft: {
-        brand: {
-          members: {
-            user_id: currentUser.id
-          }
-        }
-      }
-    })
+    const existedBrand = await this.getBrandById(currentUser, brandId, ["social_platforms"]);
     if (!existedBrand) {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
 
-    Object.assign(existedBrand, updateSocialPlatformsDto);
-    return await this.brandSocialPlatformsDraftRepository.save(existedBrand);
+    Object.assign(existedBrand.social_platforms, updateSocialPlatformsDto);
+    const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand);
+
+    // Push changes to live preview (allow it run even though returned updatedBrand to controller)
+    this.brandsGateway.emitDraftChanged(currentUser.id, updatedBrand);
+
+    return updatedBrand;
+  }
+
+  /**
+   * Describe: Update brand social platforms order
+  */
+  async updateSocialPlatformsOrder(
+    currentUser: User,
+    brandId: string,
+    updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto
+  ) {
+    this.brandsService.validateBrandId(brandId);
+
+    const existedBrand = await this.getBrandById(currentUser, brandId, ["social_platforms"]);
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    Object.assign(existedBrand.social_platforms, updateSocialPlatformsOrderDto);
+    const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand);
+
+    // Push changes to live preview (allow it run even though returned updatedBrand to controller)
+    this.brandsGateway.emitDraftChanged(currentUser.id, updatedBrand);
+
+    return updatedBrand;
   }
 
   /**
@@ -424,5 +413,39 @@ export class BrandDraftService {
     }
 
     await this.brandBlockDraftRepository.remove(existedBlock);
+
+    // Push changes to live preview (allow it run even though returned done to controller)
+    this.handleEmitBlockChanges(currentUser, brandId);
+  }
+
+  /**
+   * Describe: Get brand by id
+  */
+  private async getBrandById(
+    currentUser: User, 
+    brandId: string,
+    relations: string[] = [],
+  ) {
+    return await this.brandDraftRepository.findOne({
+      where: {
+        brand: {
+          id: brandId,
+          members: {
+            user_id: currentUser.id
+          }
+        },
+      },
+      relations
+    })
+  }
+
+  /**
+   * Describe: Handle emit block changes
+  */
+  private async handleEmitBlockChanges(currentUser: User, brandId: string) {
+    const existedBrand = await this.getBrandById(currentUser, brandId, ["blocks", "blocks.url"]);
+
+    // Push changes to live preview
+    await this.brandsGateway.emitDraftChanged(currentUser.id, existedBrand);
   }
 }

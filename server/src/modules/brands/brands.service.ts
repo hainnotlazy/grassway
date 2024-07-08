@@ -1,7 +1,7 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft, Url, TaggedUrl, UrlAnalytics, BrandBlock, BrandBlockDraft } from 'src/entities';
-import { DataSource, ILike, Or, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { CreateBrandDto, CreateLinkDto } from './dtos';
 import { isUUID } from 'class-validator';
@@ -51,24 +51,109 @@ export class BrandsService {
   async getBrandById(currentUser: User, id: string) {
     this.validateBrandId(id);
 
-    const brand = this.brandRepository.findOne({  
+    const existedBrand = this.brandRepository.findOne({  
       where: {
         id,
         members: {
-          user: {
-            id: currentUser.id
-          }
+          user_id: currentUser.id
         }
       },
     });
 
-    if (!brand) {
-      throw new BadRequestException("Brand not found");
+    if (!existedBrand) {
+      throw new BadRequestException("Brand not found or you are not a member of this brand"); 
     }
 
-    return brand;
+    return existedBrand;
   }
 
+  /**
+   * Describe: Get brand by prefix
+  */
+  async getBrandByPrefix(prefix: string) {
+    const existedBrand = await this.brandRepository.findOne({
+      where: {
+        prefix
+      },
+      relations: ["social_platforms", "blocks", "blocks.url"],
+      order: {
+        blocks: {
+          order: "DESC"
+        }
+      }
+    });
+    if (!existedBrand) {
+      throw new NotFoundException("Brand did not exist!");
+    }
+
+    return existedBrand;
+  }
+
+  /**
+   * Describe: Get links
+  */
+  async getLinks(currentUser: User, brandId: string, options: GetUrlsOptions) {
+    this.validateBrandId(brandId);
+
+    const existedBrand = await this.getBrand(currentUser, brandId);
+    if (!existedBrand) {
+      throw new BadRequestException("Brand not found or you are not a member of this brand");
+    }
+
+    return this.urlsService.getUrls(
+      currentUser, 
+      existedBrand, 
+      options,
+      `/api/brands/${brandId}/urls`
+    );
+  }
+
+  /**
+   * Describe: Get filtered links
+  */
+  async getFilteredLinks(
+    currentUser: User, 
+    brandId: string, 
+    query: string
+  ) {
+    this.validateBrandId(brandId);
+
+    const brandCondition = {
+      id: brandId,
+      members: {
+        user_id: currentUser.id
+      }
+    };
+
+    return await this.urlRepository.find({
+      where: [
+        { 
+          brand: brandCondition,
+          title: ILike(`%${query}%`)
+        },
+        {
+          brand: brandCondition,
+          origin_url: ILike(`%${query}%`)
+        },
+        {
+          brand: brandCondition,
+          back_half: ILike(`%${query}%`)
+        },
+        {
+          brand: brandCondition,
+          custom_back_half: ILike(`%${query}%`)
+        }
+      ],
+      order: {
+        id: "DESC"
+      },
+      take: 5
+    });
+  }
+
+  /**
+   * Describe: Create brand
+  */
   async createBrand(
     currentUser: User,
     createBrandDto: CreateBrandDto,
@@ -151,81 +236,10 @@ export class BrandsService {
       // Rollback transaction
       await queryRunner.rollbackTransaction();
       logo && this.uploadFileService.removeOldFile(savedLogoPath);
-      throw new InternalServerErrorException("Failed when create brand");
+      throw new InternalServerErrorException("Failed to create brand");
     } finally {
       queryRunner.release();
     }
-  }
-
-  /**
-   * Describe: Get links
-  */
-  async getLinks(currentUser: User, brandId: string, options: GetUrlsOptions) {
-    this.validateBrandId(brandId);
-
-    const existedBrand = await this.brandRepository.findOne({
-      where: {
-        id: brandId,
-        members: {
-          user: {
-            id: currentUser.id
-          }
-        }
-      }
-    });
-    if (!existedBrand) {
-      throw new BadRequestException("Brand not found or you don't have permission to view this brand");
-    }
-
-    return this.urlsService.getUrls(
-      currentUser, 
-      existedBrand, 
-      options,
-      `/api/brands/${brandId}/urls`
-    );
-  }
-
-  /**
-   * Describe: Get filtered links
-  */
-  async getFilteredLinks(
-    currentUser: User, 
-    brandId: string, 
-    query: string
-  ) {
-    this.validateBrandId(brandId);
-
-    const brandCondition = {
-      id: brandId,
-      members: {
-        user_id: currentUser.id
-      }
-    };
-
-    return await this.urlRepository.find({
-      where: [
-        { 
-          brand: brandCondition,
-          title: ILike(`%${query}%`)
-        },
-        {
-          brand: brandCondition,
-          origin_url: ILike(`%${query}%`)
-        },
-        {
-          brand: brandCondition,
-          back_half: ILike(`%${query}%`)
-        },
-        {
-          brand: brandCondition,
-          custom_back_half: ILike(`%${query}%`)
-        }
-      ],
-      order: {
-        id: "DESC"
-      },
-      take: 5
-    });
   }
 
   /**
@@ -238,16 +252,7 @@ export class BrandsService {
   ) {
     this.validateBrandId(brandId);
 
-    const existedBrand = await this.brandRepository.findOne({
-      where: {
-        id: brandId,
-        members: {
-          user: {
-            id: currentUser.id
-          }
-        }
-      }
-    });
+    const existedBrand = await this.getBrand(currentUser, brandId);
     if (!existedBrand) {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
@@ -255,6 +260,9 @@ export class BrandsService {
     return await this.urlsService.shortenUrl(currentUser, createLinkDto, existedBrand);
   }
 
+  /**
+   * Describe: Validate brand prefix
+  */
   async validateBrandPrefix(prefix: string) {
     const existedBrand = await this.brandRepository.findOneBy({
       prefix
@@ -315,7 +323,7 @@ export class BrandsService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      throw new InternalServerErrorException("Failed when delete brand link");
+      throw new InternalServerErrorException("Failed to delete brand link");
     } finally {
       await queryRunner.release();
     }
@@ -328,5 +336,21 @@ export class BrandsService {
     if (!isUUID(brandId)) {
       throw new BadRequestException("Invalid brand id");
     }
+  }
+  
+  private async getBrand(
+    currentUser: User,
+    brandId: string,
+    relations: string[] = []
+  ) {
+    return await this.brandRepository.findOne({
+      where: {
+        id: brandId,
+        members: {
+          user_id: currentUser.id
+        }
+      },
+      relations
+    })
   }
 }

@@ -12,17 +12,34 @@ import { BrandsService } from 'src/app/core/services';
   styleUrls: ['./index.component.scss']
 })
 export class IndexPage implements OnInit {
+  isLivePreview = false;
   brand?: BrandDraft;
 
   constructor(
     private brandsService: BrandsService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    // this.router.events.pipe(
+    //   filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
+    //   map(() => this.route.snapshot),
+    //   tap(routeSnapshot => {
+    //     const livePreviewValue = routeSnapshot.queryParamMap.get("livePreview");
+    //     if (livePreviewValue) {
+    //       this.isLivePreview = livePreviewValue.toLowerCase() === "true";
+    //     }
+    //   }),
+    //   map(routeSnapshot => routeSnapshot.paramMap.get("prefix")),
+    //   filter(prefix => !!prefix),
+    //   map(prefix => prefix as string),
+    //   switchMap(prefix => this.brandsService.getBrandByPrefix(prefix)),
+    // ).subscribe();
+  }
 
   ngOnInit() {
     this.router.events.pipe(
       filter(event => (event instanceof Scroll || event instanceof NavigationEnd)),
+      tap(() => console.log(this.route.snapshot.queryParams)),
       map(() => this.route.snapshot.paramMap.get("prefix") as string),
       distinctUntilChanged(),
       switchMap((prefix: string) => this.brandsService.getBrandByPrefix(prefix)),
@@ -32,14 +49,14 @@ export class IndexPage implements OnInit {
       untilDestroyed(this)
     ).subscribe();
 
-    this.brandsService.getNewDesign().pipe(
-      tap(newChanges => {
-        if (this.brand) {
-          Object.assign(this.brand, newChanges);
-        }
-      }),
-      untilDestroyed(this)
-    ).subscribe();
+    // this.brandsService.getNewDesign().pipe(
+    //   tap(newChanges => {
+    //     if (this.brand) {
+    //       Object.assign(this.brand, newChanges);
+    //     }
+    //   }),
+    //   untilDestroyed(this)
+    // ).subscribe();
   }
 
   hexToRgba(hex: string, opacity: number) {

@@ -12,7 +12,7 @@ import { SOCKET_ORIGIN } from 'src/config/socket.config';
   maxHttpBufferSize: 1e7 //1MB
 })
 export class BrandsGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  private readonly NEW_DESIGN_EVENT_NAME = "NewDesign"; 
+  private readonly DRAFT_CHANGED_EVENT_NAME = "DraftChanged"; 
   @WebSocketServer() server: Server;
 
   constructor(
@@ -53,7 +53,7 @@ export class BrandsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (err) {}
   }
 
-  async emitNewDesign(userId: number, brandDraft: BrandDraft): Promise<boolean> {
+  async emitDraftChanged(userId: number, brandDraft: BrandDraft): Promise<boolean> {
     try {
       const socketId = await this.redisService.getKey({
         key: userId.toString(),
@@ -62,7 +62,7 @@ export class BrandsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (!socketId) return false;
 
-      return this.server.to(socketId).emit(this.NEW_DESIGN_EVENT_NAME, brandDraft);
+      return this.server.to(socketId).emit(this.DRAFT_CHANGED_EVENT_NAME, brandDraft);
     } catch (err) {
       return false;
     }

@@ -4,6 +4,7 @@ export * from "./user-setting.service";
 export * from "./urls.service";
 export * from "./analytics.service";
 export * from "./brands.service";
+export * from "./brands-draft.service";
 export * from "./notification.service";
 export * from "./ref.service";
 export * from "./tags.service";

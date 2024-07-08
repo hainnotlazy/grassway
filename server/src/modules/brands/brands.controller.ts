@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto, CreateLinkDto } from './dtos';
 import { BrandsService } from './brands.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
@@ -29,6 +29,12 @@ export class BrandsController {
     return this.brandsService.getBrandById(currentUser, id);
   }
 
+  @PublicRoute()
+  @Get("/prefix/:prefix")
+  getBrandByPrefix(@Param("prefix") prefix: string) {
+    return this.brandsService.getBrandByPrefix(prefix);
+  }
+
   @Get("/:id/urls")
   getLinks(
     @CurrentUser() currentUser: User, 
@@ -54,31 +60,6 @@ export class BrandsController {
     return this.brandsService.getFilteredLinks(currentUser, id, query);
   }
 
-  @Post("/:id/urls")
-  createLink(
-    @CurrentUser() currentUser: User,
-    @Param("id") id: string,
-    @Body() createLinkDto: CreateLinkDto
-  ) {
-    return this.brandsService.createLink(currentUser, id, createLinkDto);
-  }
-
-  @PublicRoute()
-  @Get("/prefix/:prefix")
-  getBrandByPrefix(@Param("prefix") prefix: string) {
-    return this.brandDraftService.getBrandByPrefix(prefix);
-  }
-
-  @Get("/draft/:id/design")
-  getBrandDesignDraft(@CurrentUser() currentUser: User, @Param("id") id: string) {
-    return this.brandDraftService.getBrandDesign(currentUser, id);
-  }
-
-  @Get("/draft/:id/blocks")
-  getBrandBlocksDraft(@CurrentUser() currentUser: User, @Param("id") id: string) {
-    return this.brandDraftService.getBrandBlocks(currentUser, id);
-  }
-
   @Post()
   @UseInterceptors(FileInterceptor("logo"))
   createBrand(
@@ -89,93 +70,13 @@ export class BrandsController {
     return this.brandsService.createBrand(currentUser, createBrandDto, logo);
   }
 
-  @Post("/draft/:id/blocks")
-  @UseInterceptors(FileInterceptor("image"))
-  createBrandBlock(
+  @Post("/:id/urls")
+  createLink(
     @CurrentUser() currentUser: User,
     @Param("id") id: string,
-    @Body() createBrandBlockDto: BrandBlockDto,
-    @UploadedFile() image: Express.Multer.File
+    @Body() createLinkDto: CreateLinkDto
   ) {
-    return this.brandDraftService.createBrandBlock(
-      currentUser, 
-      id, 
-      createBrandBlockDto, 
-      image
-    );
-  }
-
-  @Put("/draft/:id/design")
-  @UseInterceptors(FileInterceptor("logo"))
-  updateBrandDesignDraft(
-    @CurrentUser() currentUser: User,
-    @Param("id") id: string,
-    @Body() updateBrandDesignDto: UpdateBrandDesignDto,
-    @UploadedFile() logo: Express.Multer.File
-  ) {
-    return this.brandDraftService.updateBrandDesign(
-      currentUser, 
-      id, 
-      updateBrandDesignDto, 
-      logo
-    );
-  }
-
-  @Put("/draft/:id/social-platforms/order") 
-  updateBrandSocialPlatformsDraftOrder(
-    @CurrentUser() currentUser: User,
-    @Param("id") id: string,
-    @Body() updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto
-  ) {
-    return this.brandDraftService.updateBrandSocialPlatformsOrder(
-      currentUser, 
-      id, 
-      updateSocialPlatformsOrderDto
-    );
-  }
-
-  @Put("/draft/:id/social-platforms") 
-  updateBrandSocialPlatformsDraft(
-    @CurrentUser() currentUser: User,
-    @Param("id") id: string,
-    @Body() updateSocialPlatformsDto: UpdateSocialPlatformsDto
-  ) {
-    return this.brandDraftService.updateBrandSocialPlatform(
-      currentUser, 
-      id, 
-      updateSocialPlatformsDto
-    );
-  }
-
-  @Put("/draft/:id/blocks/order")
-  updateBrandBlockOrderDraft(
-    @CurrentUser() currentUser: User,
-    @Param("id") id: string,
-    @Body() updateBlockOrderDto: UpdateBlockOrderDto
-  ) {
-    return this.brandDraftService.updateBrandBlocksOrder(
-      currentUser,
-      id,
-      updateBlockOrderDto
-    )
-  }
-
-  @Put("/draft/:id/blocks/:blockId")
-  @UseInterceptors(FileInterceptor("image"))
-  updateBrandBlockDraft(
-    @CurrentUser() currentUser: User,
-    @Param("id") id: string,  
-    @Param("blockId", ParseIntPipe) blockId: number,
-    @Body() updateBrandBlockDto: BrandBlockDto,
-    @UploadedFile() image: Express.Multer.File
-  ) {
-    return this.brandDraftService.updateBrandBlock(
-      currentUser,
-      id,
-      blockId,
-      updateBrandBlockDto,
-      image
-    )
+    return this.brandsService.createLink(currentUser, id, createLinkDto);
   }
 
   @Delete("/:id/urls/:urlId")
@@ -187,6 +88,124 @@ export class BrandsController {
     return;
   } 
 
+  /** Routes to interact with brand draft */
+  // -------------------------------------
+
+  @Get("/draft/prefix/:prefix")
+  getBrandDraftByPrefix(
+    @CurrentUser() currentUser: User,
+    @Param("prefix") prefix: string
+  ) {
+    return this.brandDraftService.getBrandByPrefix(currentUser, prefix);
+  }
+
+  @Get("/draft/:id/design")
+  getBrandDesignDraft(
+    @CurrentUser() currentUser: User, 
+    @Param("id") id: string
+  ) {
+    return this.brandDraftService.getDesign(currentUser, id);
+  }
+
+  @Put("/draft/:id/design")
+  @UseInterceptors(FileInterceptor("logo"))
+  updateBrandDesignDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateBrandDesignDto: UpdateBrandDesignDto,
+    @UploadedFile() logo: Express.Multer.File
+  ) {
+    return this.brandDraftService.updateDesign(
+      currentUser, 
+      id, 
+      updateBrandDesignDto, 
+      logo
+    );
+  }
+
+  @Put("/draft/:id/social-platforms") 
+  updateBrandSocialPlatformsDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateSocialPlatformsDto: UpdateSocialPlatformsDto
+  ) {
+    return this.brandDraftService.updateSocialPlatform(
+      currentUser, 
+      id, 
+      updateSocialPlatformsDto
+    );
+  }
+
+  @Put("/draft/:id/social-platforms/order") 
+  updateBrandSocialPlatformsDraftOrder(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateSocialPlatformsOrderDto: UpdateSocialPlatformsOrderDto
+  ) {
+    return this.brandDraftService.updateSocialPlatformsOrder(
+      currentUser, 
+      id, 
+      updateSocialPlatformsOrderDto
+    );
+  }
+
+  @Get("/draft/:id/blocks")
+  getBrandBlocksDraft(
+    @CurrentUser() currentUser: User, 
+    @Param("id") id: string
+  ) {
+    return this.brandDraftService.getBlocks(currentUser, id);
+  }
+
+  @Post("/draft/:id/blocks")
+  @UseInterceptors(FileInterceptor("image"))
+  createBrandBlockDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() createBrandBlockDto: BrandBlockDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandDraftService.createBlock(
+      currentUser, 
+      id, 
+      createBrandBlockDto, 
+      image
+    );
+  }
+
+  @Put("/draft/:id/blocks/:blockId")
+  @UseInterceptors(FileInterceptor("image"))
+  updateBrandBlockDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") brandId: string,  
+    @Param("blockId", ParseIntPipe) blockId: number,
+    @Body() updateBrandBlockDto: BrandBlockDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandDraftService.updateBlock(
+      currentUser,
+      brandId,
+      blockId,
+      updateBrandBlockDto,
+      image
+    )
+  }
+
+  @Put("/draft/:id/blocks/order")
+  @HttpCode(204)
+  async updateBrandBlockOrderDraft(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateBlockOrderDto: UpdateBlockOrderDto
+  ) {
+    await this.brandDraftService.updateBlocksOrder(
+      currentUser,
+      id,
+      updateBlockOrderDto
+    );
+    return;
+  }
+  
   @Delete("/draft/:id/blocks/:blockId")
   async deleteBlock(
     @CurrentUser() currentUser: User,
