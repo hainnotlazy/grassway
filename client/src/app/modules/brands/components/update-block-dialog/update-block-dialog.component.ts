@@ -9,7 +9,7 @@ import { blockRequirements, ValidationMessage } from 'src/app/core/forms';
 import { getObjectKeys } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { BlockImageRatio, BlockType, BrandBlockDraft, ExtendedUrl, Url } from 'src/app/core/models';
-import { BrandsService } from 'src/app/core/services';
+import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 import { environment } from 'src/environments/environment';
 
@@ -67,6 +67,7 @@ export class UpdateBlockDialogComponent {
 
   constructor(
     private brandsService: BrandsService,
+    private brandsDraftService: BrandsDraftService,
     private dialogRef: MatDialogRef<UpdateBlockDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: { block: BrandBlockDraft },
     private snackbar: MatSnackBar
@@ -150,7 +151,7 @@ export class UpdateBlockDialogComponent {
     }
 
     this.isProcessing = true;
-    this.brandsService.updateBlock(this.brandId, this.data.block.id, updateBlockDto).pipe(
+    this.brandsDraftService.updateBlock(this.brandId, this.data.block.id, updateBlockDto).pipe(
       tap((block) => {
         this.handleUpdateBlockSuccess(block);
       }, error => {

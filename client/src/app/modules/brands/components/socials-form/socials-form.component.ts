@@ -6,7 +6,7 @@ import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, take, 
 import { SOCIAL_PLATFORMS_COLORED, SocialPlatform } from 'src/app/core/constants/social-platforms.constant';
 import { UpdateSocialPlatformsDto } from 'src/app/core/dtos';
 import { BrandSocialPlatformsDraft } from 'src/app/core/models';
-import { BrandsService } from 'src/app/core/services';
+import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 
 @UntilDestroy()
@@ -63,6 +63,7 @@ export class SocialsFormComponent implements OnInit {
 
   constructor(
     private brandsService: BrandsService,
+    private brandsDraftService: BrandsDraftService
   ) {
     this.brandsService.currentBrand$.pipe(
       take(1),
@@ -77,7 +78,7 @@ export class SocialsFormComponent implements OnInit {
       debounceTime(500),
       distinctUntilChanged(),
       filter(() => this.form.valid),
-      switchMap(data => this.brandsService.updateSocialPlatformsDraft(this.brandId, data as UpdateSocialPlatformsDto)),
+      switchMap(data => this.brandsDraftService.updateSocialPlatforms(this.brandId, data as UpdateSocialPlatformsDto)),
       untilDestroyed(this)
     ).subscribe();
   }
@@ -107,7 +108,7 @@ export class SocialsFormComponent implements OnInit {
   }
 
   private updatePlatformsOrder() {
-    this.brandsService.updateSocialPlatformsDraftOrder(
+    this.brandsDraftService.updateSocialPlatformsOrder(
       this.brandId,
       {
         facebook_order: this.getPlatformOrder("facebook"),

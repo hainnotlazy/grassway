@@ -4,7 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, distinctUntilChanged, finalize, of, switchMap, take, tap } from 'rxjs';
 import { camelCaseToSnackCase } from 'src/app/core/helpers';
 import { BrandDraft, BrandSocialPlatformsDraft } from 'src/app/core/models';
-import { BrandsService } from 'src/app/core/services';
+import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({
@@ -43,11 +43,12 @@ export class BrandDesignTabComponent {
 
   constructor(
     private brandsService: BrandsService,
+    private brandsDraftService: BrandsDraftService
   ) {
     this.brandsService.currentBrand$.pipe(
       take(1),
       tap(brand => this.brandId = brand.id),
-      switchMap(brand => this.brandsService.getBrandDraft(brand.id)),
+      switchMap(brand => this.brandsDraftService.getDesign(brand.id)),
       tap(brandDraft => {
         if (brandDraft.social_platforms) {
           this.brandSocialPlatforms = brandDraft.social_platforms;
@@ -95,7 +96,7 @@ export class BrandDesignTabComponent {
           return of(null);
         }
 
-        return this.brandsService.updateDesignDraft(
+        return this.brandsDraftService.updateDesign(
           this.brandId as string,
           { [controlNameSnackCase]: value }
         );

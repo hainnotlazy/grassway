@@ -1,0 +1,30 @@
+<ng-container
+  *ngIf="socialPlatforms.icon_style === socialIconStyle.COLOR"
+  [ngTemplateOutlet]="color"
+></ng-container>
+
+<ng-template #color>
+  <ng-container *ngFor="let platform of SOCIAL_PLATFORMS_COLORED">
+    <a
+      *ngIf="platform.destination"
+      [href]="platform.destination"
+    >
+      <img
+        [src]="platform.icon"
+        [alt]="platform.name + '\'s icon'"
+        width="30"
+        height="30"
+        loading="eager"
+        draggable="false"
+      >
+    </a>
+  </ng-container>
+</ng-template>
+
+<ng-template #black>
+
+</ng-template>
+
+<ng-template #white>
+
+</ng-template>

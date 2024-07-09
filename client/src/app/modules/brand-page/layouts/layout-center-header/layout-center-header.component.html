@@ -10,20 +10,23 @@
 
     <div class="header-content relative z-10 p-4 space-y-3 text-white bg-transparent">
       <h1
-        class="text-3xl font-semibold text-center"
+        class="text-3xl font-semibold text-center select-none"
         [style.color]="brand.title_color"
       >
         {{ brand.title }}
       </h1>
       <img
-        class="min-h-44 min-w-44 aspect-square mx-auto border-2 rounded-full"
+        class="min-h-44 min-w-44 aspect-square mx-auto border-4 rounded-full"
         [style]="{
           'border-color': brand.background_color
         }"
-        src="https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt=""
+        [src]="brand.logo"
+        [alt]="brand.title + '\'s logo'"
+        fetchPriority="high"
         width="176"
         height="176"
+        draggable="false"
+        loading="eager"
       >
       <p
         class="text-center text-blue-800"
@@ -31,34 +34,10 @@
       >
         {{ brand.description }}
       </p>
-      <div class="flex items-center justify-center gap-2">
-        <button>
-          <img
-            src="assets/images/icon-facebook-colored.svg"
-            alt=""
-            width="30"
-            height="30"
-          >
-        </button>
-
-        <button>
-          <img
-            src="assets/images/icon-instagram-colored.svg"
-            alt=""
-            width="30"
-            height="30"
-          >
-        </button>
-
-        <button>
-          <img
-            src="assets/images/icon-discord-colored.svg"
-            alt=""
-            width="30"
-            height="30"
-          >
-        </button>
-      </div>
+      <app-social-platforms
+        *ngIf="brand.social_platforms"
+        [socialPlatforms]="brand.social_platforms"
+      ></app-social-platforms>
     </div>
   </header>
 

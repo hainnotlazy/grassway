@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
-import { BrandDraft } from 'src/app/core/models';
-import { BrandsService } from 'src/app/core/services';
+import { BehaviorSubject, filter, finalize, map, Observable, switchMap, take, takeUntil, tap } from 'rxjs';
+import { Brand, BrandDraft } from 'src/app/core/models';
+import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 
 @UntilDestroy()
 @Component({
@@ -12,51 +12,41 @@ import { BrandsService } from 'src/app/core/services';
   styleUrls: ['./index.component.scss']
 })
 export class IndexPage implements OnInit {
-  isLivePreview = false;
-  brand?: BrandDraft;
+  private readonly isLivePreviewSubject = new BehaviorSubject<boolean>(false);
+  brand?: Brand | BrandDraft;
 
   constructor(
     private brandsService: BrandsService,
+    private brandsDraftService: BrandsDraftService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    // this.router.events.pipe(
-    //   filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
-    //   map(() => this.route.snapshot),
-    //   tap(routeSnapshot => {
-    //     const livePreviewValue = routeSnapshot.queryParamMap.get("livePreview");
-    //     if (livePreviewValue) {
-    //       this.isLivePreview = livePreviewValue.toLowerCase() === "true";
-    //     }
-    //   }),
-    //   map(routeSnapshot => routeSnapshot.paramMap.get("prefix")),
-    //   filter(prefix => !!prefix),
-    //   map(prefix => prefix as string),
-    //   switchMap(prefix => this.brandsService.getBrandByPrefix(prefix)),
-    // ).subscribe();
+    this.router.events.pipe(
+      filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
+      map(() => this.route.snapshot),
+      tap(routeSnapshot => {
+        const livePreviewValue = routeSnapshot.queryParamMap.get("livePreview");
+        if (livePreviewValue && livePreviewValue.toLowerCase() === "true") {
+          this.isLivePreviewSubject.next(true);
+        } else {
+          this.isLivePreviewSubject.next(false);
+        }
+      }),
+      map(routeSnapshot => routeSnapshot.paramMap.get("prefix")),
+      filter(prefix => !!prefix),
+      map(prefix => prefix as string),
+      switchMap(prefix => this.getBrand(prefix)),
+      tap(brand => this.brand = brand),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   ngOnInit() {
     this.router.events.pipe(
-      filter(event => (event instanceof Scroll || event instanceof NavigationEnd)),
-      tap(() => console.log(this.route.snapshot.queryParams)),
-      map(() => this.route.snapshot.paramMap.get("prefix") as string),
-      distinctUntilChanged(),
-      switchMap((prefix: string) => this.brandsService.getBrandByPrefix(prefix)),
-      tap(brand => {
-        this.brand = brand;
-      }),
+      filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
+      switchMap(() => this.livePreview()),
       untilDestroyed(this)
     ).subscribe();
-
-    // this.brandsService.getNewDesign().pipe(
-    //   tap(newChanges => {
-    //     if (this.brand) {
-    //       Object.assign(this.brand, newChanges);
-    //     }
-    //   }),
-    //   untilDestroyed(this)
-    // ).subscribe();
   }
 
   hexToRgba(hex: string, opacity: number) {
@@ -65,5 +55,25 @@ export class IndexPage implements OnInit {
     var g = parseInt(hex.substring(2, 4), 16);
     var b = parseInt(hex.substring(4, 6), 16);
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  }
+
+  private livePreview() {
+    return this.brandsDraftService.watchDraftChanged().pipe(
+      filter(latestBrand => latestBrand.brand_id === (this.brand as BrandDraft).brand_id),
+      tap(latestBrand => Object.assign(this.brand as BrandDraft, latestBrand)),
+    );
+  }
+
+  private getBrand(prefix: string): Observable<Brand | BrandDraft> {
+    return this.isLivePreviewSubject.asObservable().pipe(
+      take(1),
+      switchMap(isLivePreview => {
+        if (isLivePreview) {
+          return this.brandsDraftService.getBrandByPrefix(prefix);
+        } else {
+          return this.brandsService.getBrandByPrefix(prefix);
+        }
+      })
+    )
   }
 }

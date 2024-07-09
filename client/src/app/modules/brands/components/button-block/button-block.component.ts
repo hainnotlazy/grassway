@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, finalize, map, ObjectUnsubscribedError, take, tap } from 'rxjs';
+import { filter, finalize, map, take, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { BrandBlockDraft } from 'src/app/core/models';
-import { BrandsService } from 'src/app/core/services';
+import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 import { environment } from 'src/environments/environment';
 import { UpdateBlockDialogComponent } from '../update-block-dialog/update-block-dialog.component';
@@ -29,6 +29,7 @@ export class ButtonBlockComponent {
 
   constructor(
     private brandsService: BrandsService,
+    private brandsDraftService: BrandsDraftService,
     private snackbar: MatSnackBar,
     private dialog: MatDialog
   ) {
@@ -80,7 +81,7 @@ export class ButtonBlockComponent {
     }
 
     this.isProcessing = true;
-    this.brandsService.removeBrandBlock(this.brandId, this.block.id).pipe(
+    this.brandsDraftService.removeBlock(this.brandId, this.block.id).pipe(
       tap(() => {
         this.deleted.emit(this.block);
       }, error => {

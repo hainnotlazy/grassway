@@ -59,17 +59,7 @@ export class BrandDraftService {
   async getDesign(currentUser: User, brandId: string) {
     this.brandsService.validateBrandId(brandId);
 
-    const existedBrand = await this.brandDraftRepository.findOne({
-      where: {
-        brand_id: brandId,
-        brand: {
-          members: {
-            user_id: currentUser.id
-          }
-        }
-      },
-      relations: ["social_platforms"]
-    })
+    const existedBrand = await this.getBrandById(currentUser, brandId, ["social_platforms"]);
     if (!existedBrand) {
       throw new BadRequestException("Brand not found or you are not a member of this brand");
     }
@@ -353,10 +343,10 @@ export class BrandDraftService {
     }
 
     Object.assign(existedBrand.social_platforms, updateSocialPlatformsDto);
-    const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand);
+    const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand.social_platforms);
 
     // Push changes to live preview (allow it run even though returned updatedBrand to controller)
-    this.brandsGateway.emitDraftChanged(currentUser.id, updatedBrand);
+    this.brandsGateway.emitDraftChanged(currentUser.id, existedBrand);
 
     return updatedBrand;
   }
@@ -377,10 +367,10 @@ export class BrandDraftService {
     }
 
     Object.assign(existedBrand.social_platforms, updateSocialPlatformsOrderDto);
-    const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand);
+    const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand.social_platforms);
 
     // Push changes to live preview (allow it run even though returned updatedBrand to controller)
-    this.brandsGateway.emitDraftChanged(currentUser.id, updatedBrand);
+    this.brandsGateway.emitDraftChanged(currentUser.id, existedBrand);
 
     return updatedBrand;
   }

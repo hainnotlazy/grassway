@@ -2,6 +2,7 @@ export interface SocialPlatform {
   name: string;
   icon: string;
   placeholder: string;
+  destination?: string;
 }
 
 export const SOCIAL_PLATFORMS_COLORED: SocialPlatform[] = [

@@ -9,7 +9,7 @@ import { blockRequirements, ValidationMessage } from 'src/app/core/forms';
 import { getObjectKeys } from 'src/app/core/helpers';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { BlockImageRatio, BlockType, BrandBlockDraft, ExtendedUrl, Url } from 'src/app/core/models';
-import { BrandsService } from 'src/app/core/services';
+import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 import { environment } from 'src/environments/environment';
 
@@ -69,6 +69,7 @@ export class CreateBlockDialogComponent {
 
   constructor(
     private brandsService: BrandsService,
+    private brandsDraftService: BrandsDraftService,
     private snackbar: MatSnackBar,
     private dialogRef: MatDialogRef<CreateBlockDialogComponent>
   ) {
@@ -137,7 +138,7 @@ export class CreateBlockDialogComponent {
     }
 
     this.isProcessing = true;
-    this.brandsService.createBlock(this.brandId, createBlockDto).pipe(
+    this.brandsDraftService.createBlock(this.brandId, createBlockDto).pipe(
       tap((block) => {
         this.handleCreateBlockSuccess(block);
       }, error => {
