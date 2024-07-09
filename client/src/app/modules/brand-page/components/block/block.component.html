@@ -1,0 +1,101 @@
+<ng-container
+  *ngIf="block.type === BlockType.BUTTON"
+  [ngTemplateOutlet]="button"
+></ng-container>
+
+<ng-container
+  *ngIf="block.type === BlockType.IMAGE"
+  [ngTemplateOutlet]="image"
+></ng-container>
+
+<ng-container
+  *ngIf="block.type === BlockType.YOUTUBE"
+  [ngTemplateOutlet]="youtube"
+></ng-container>
+
+<ng-template #button>
+  <a
+    class="hover:brightness-90 block px-4 py-3 text-center transition-all duration-300 ease-in-out border select-none"
+    [routerLink]="['/l', block.url?.custom_back_half || block.url?.back_half]"
+    [style]="{
+      'background-color': blockColor,
+      'color': blockTextColor
+    }"
+    [ngClass]="{
+      'shadow-md': blockShadow === BlockShadow.SHADOW,
+      'shadow-2xl': blockShadow === BlockShadow.HEAVY_SHADOW,
+      'rounded-full': blockShape === BlockShape.PILL_NO_BORDER || blockShape === BlockShape.PILL_BORDER,
+      'rounded-md': blockShape === BlockShape.ROUNDED_NO_BORDER || blockShape === BlockShape.ROUNDED_BORDER,
+      'border-slate-800': blockShape === BlockShape.PILL_BORDER || blockShape === BlockShape.ROUNDED_BORDER || blockShape === BlockShape.NO_ROUNDED_BORDER,
+      'border-transparent': blockShape !== BlockShape.PILL_BORDER && blockShape !== BlockShape.ROUNDED_BORDER && blockShape !== BlockShape.NO_ROUNDED_BORDER
+    }"
+  >
+    {{ block.title }}
+  </a>
+</ng-template>
+
+<ng-template #image>
+  <a
+    class="group block space-y-2"
+    [routerLink]="['/l', block.url?.custom_back_half || block.url?.back_half]"
+  >
+    <div class="relative">
+      <img
+        class="group-hover:brightness-75 w-full h-auto transition-all duration-300 ease-in-out border select-none"
+        width="650"
+        height="650"
+        [src]="client + '/' + block.image"
+        [alt]="block.title + '\'s image'"
+        [ngClass]="{
+          'shadow-md': blockShadow === BlockShadow.SHADOW,
+          'shadow-2xl': blockShadow === BlockShadow.HEAVY_SHADOW,
+          'rounded-2xl': blockShape === BlockShape.PILL_NO_BORDER || blockShape === BlockShape.PILL_BORDER,
+          'rounded-md': blockShape === BlockShape.ROUNDED_NO_BORDER || blockShape === BlockShape.ROUNDED_BORDER,
+          'border-slate-800': blockShape === BlockShape.PILL_BORDER || blockShape === BlockShape.ROUNDED_BORDER || blockShape === BlockShape.NO_ROUNDED_BORDER,
+          'border-transparent': blockShape !== BlockShape.PILL_BORDER && blockShape !== BlockShape.ROUNDED_BORDER && blockShape !== BlockShape.NO_ROUNDED_BORDER,
+          'aspect-auto': block.image_ratio === BlockImageRatio.RATIO_ORIGIN,
+          'aspect-square': block.image_ratio === BlockImageRatio.RATIO_1_1,
+          'aspect-rectangle': block.image_ratio === BlockImageRatio.RATIO_3_2,
+          'aspect-video': block.image_ratio === BlockImageRatio.RATIO_16_9,
+        }"
+        draggable="false"
+      >
+      <i class="icon-link top-1/2 left-1/2 group-hover:opacity-100 group-hover:scale-125 bg-slate-500 absolute flex items-center justify-center p-4 text-4xl text-white transition-all duration-500 ease-in-out scale-100 rotate-45 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"></i>
+    </div>
+    <h6
+      class="font-semibold"
+      [style.color]="descriptionColor"
+    >
+      {{ block.title }}
+    </h6>
+    <small
+      class="brightness-90"
+      [style.color]="descriptionColor"
+    >
+      {{ block.description }}
+    </small>
+  </a>
+</ng-template>
+
+<ng-template #youtube>
+  <iframe
+    class="aspect-youtube-video w-full h-auto border"
+    [ngClass]="{
+      'shadow-md': blockShadow === BlockShadow.SHADOW,
+      'shadow-2xl': blockShadow === BlockShadow.HEAVY_SHADOW,
+      'rounded-2xl': blockShape === BlockShape.PILL_NO_BORDER || blockShape === BlockShape.PILL_BORDER,
+      'rounded-md': blockShape === BlockShape.ROUNDED_NO_BORDER || blockShape === BlockShape.ROUNDED_BORDER,
+      'border-slate-800': blockShape === BlockShape.PILL_BORDER || blockShape === BlockShape.ROUNDED_BORDER || blockShape === BlockShape.NO_ROUNDED_BORDER,
+      'border-transparent': blockShape !== BlockShape.PILL_BORDER && blockShape !== BlockShape.ROUNDED_BORDER && blockShape !== BlockShape.NO_ROUNDED_BORDER,
+      'aspect-auto': block.image_ratio === BlockImageRatio.RATIO_ORIGIN,
+    }"
+    width="650"
+    height="365"
+    [src]="block.youtube_url | safe: 'resourceUrl'"
+    [title]="block.title + '\'s video'"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  ></iframe>
+</ng-template>

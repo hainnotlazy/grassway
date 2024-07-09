@@ -6,6 +6,8 @@ import { IndexPage } from './pages/index/index.component';
 import { LayoutCurlyHeaderComponent } from './layouts/layout-curly-header/layout-curly-header.component';
 import { LayoutCenterHeaderComponent } from './layouts/layout-center-header/layout-center-header.component';
 import { SocialPlatformsComponent } from './components/social-platforms/social-platforms.component';
+import { BlockComponent } from './components/block/block.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -13,10 +15,12 @@ import { SocialPlatformsComponent } from './components/social-platforms/social-p
     LayoutCurlyHeaderComponent,
     LayoutCenterHeaderComponent,
     SocialPlatformsComponent,
+    BlockComponent,
   ],
   imports: [
     CommonModule,
-    BrandPageRoutingModule
+    BrandPageRoutingModule,
+    SharedModule
   ]
 })
 export class BrandPageModule { }

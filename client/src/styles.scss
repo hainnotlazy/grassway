@@ -157,6 +157,10 @@ body {
   z-index: 9999;
 }
 
+.aspect-rectangle {
+  aspect-ratio: 3 / 2;
+}
+
 .spinning {
   animation: rotate 2s linear infinite;
 }

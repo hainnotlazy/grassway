@@ -1,4 +1,5 @@
 import { BlockImageRatio, BlockShadow, BlockShape, BlockType, BrandFont, BrandLayout, SocialIconPosition, SocialIconStyle } from "./brand.enum";
+import { Url } from "./url.model";
 
 export interface BrandBase {
   title: string;
@@ -46,6 +47,7 @@ export interface BrandSocialPlatformsBase {
 
 export interface BrandBlockBase {
   type: BlockType;
+  url?: Url;
   title: string;
   description: string;
   image: string;

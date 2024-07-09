@@ -46,7 +46,7 @@ export abstract class BrandBase {
   background_color: string;
 
   @Column({
-    default: "#000000",
+    default: "#ffffff",
     length: 7
   })
   title_color: string;
@@ -72,13 +72,13 @@ export abstract class BrandBase {
   block_shadow: BlockShadow;
 
   @Column({
-    default: "#ffffff",
+    default: "#000000",
     length: 7
   })
   block_color: string;
 
   @Column({
-    default: "#000000",
+    default: "#ffffff",
     length: 7
   })
   block_text_color: string;

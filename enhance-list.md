@@ -7,6 +7,7 @@
 - tag entity
 - truncate all 255 chars
 - live preview function
+- default brand logo
 
 ## TODO:
 - push noti when brand created

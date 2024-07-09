@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { BrandsService } from 'src/app/core/services';
+import { environment } from 'src/environments/environment';
 
 @UntilDestroy()
 @Component({
@@ -15,6 +16,7 @@ import { BrandsService } from 'src/app/core/services';
   }
 })
 export class ManageBrandPage {
+  readonly client = environment.client;
   brand$ = this.brandsService.currentBrand$;
   fetchedBrand = false;
   showLivePreview$: Observable<boolean>;
