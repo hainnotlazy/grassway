@@ -1,0 +1,47 @@
+<div mat-dialog-title class="!flex items-center justify-center !p-4">
+  <i
+    class="icon-delete-forever text-rose-600 text-6xl"
+  ></i>
+</div>
+
+<mat-dialog-content>
+  <h6 class="mb-4 font-semibold text-center text-red-600">{{ title }}</h6>
+  <p class="text-start mb-2 text-black">
+    To confirm, please type "<span class="font-bold">{{ itemName }}</span>"
+  </p>
+  <mat-form-field
+    class="w-full !-mb-3"
+    appearance="outline"
+    color="accent"
+  >
+    <input
+      matInput
+      [formControl]="itemNameControl"
+      type="text"
+      [placeholder]="itemName"
+    />
+  </mat-form-field>
+  <p *ngIf="formError" class="text-center text-red-500">{{ formError }}</p>
+</mat-dialog-content>
+
+<div
+  mat-dialog-actions
+  align="end"
+  class="!p-4 !pt-0 space-x-3"
+>
+  <button
+    class="hover:shadow px-3 py-2 border rounded-md"
+    type="button"
+    mat-dialog-close
+  >
+    Cancel
+  </button>
+  <button
+    class="!bg-rose-500 !text-white hover:!bg-rose-400 px-3 py-2 rounded-md focus:outline-none hover:shadow"
+    type="button"
+    cdkFocusInitial
+    (click)="onDeleteClick()"
+  >
+    Delete permanently
+  </button>
+</div>

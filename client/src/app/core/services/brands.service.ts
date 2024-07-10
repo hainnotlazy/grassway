@@ -87,6 +87,13 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Get role
+  */
+  getRole(brandId: string) {
+    return this.httpClient.get<BrandMember>(`api/brands/${brandId}/role`);
+  }
+
+  /**
    * Describe: Validate brand prefix
   */
   validateBrandPrefix(prefix: string) {
@@ -134,6 +141,13 @@ export class BrandsService {
   */
   transferOwnership(brandId: string, memberId: number) {
     return this.httpClient.put<void>(`api/brands/${brandId}/members/${memberId}/transfer-ownership`, {});
+  }
+
+  /**
+   * Describe: Delete brand
+  */
+  deleteBrand(brandId: string) {
+    return this.httpClient.delete<void>(`api/brands/${brandId}`);
   }
 
   /**

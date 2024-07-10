@@ -30,6 +30,12 @@ export class BrandMember {
   })
   role: BrandMemberRole;
 
+  @Column({ 
+    type: "boolean", 
+    default: false 
+  })
+  joined: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

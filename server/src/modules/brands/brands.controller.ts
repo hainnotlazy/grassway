@@ -40,6 +40,11 @@ export class BrandsController {
     return this.brandsService.getMembers(currentUser, id);
   }
 
+  @Get("/:id/role")
+  getRole(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    return this.brandsService.getRole(currentUser, id);
+  }
+
   @Get("/:id/urls")
   getLinks(
     @CurrentUser() currentUser: User, 
@@ -101,6 +106,12 @@ export class BrandsController {
     @Param("memberId", ParseIntPipe) memberId: number
   ) {
     await this.brandsService.transferOwnership(currentUser, brandId, memberId);
+    return;
+  }
+
+  @Delete("/:id")
+  async deleteBrand(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    await this.brandsService.deleteBrand(currentUser, id);
     return;
   }
 

@@ -10,11 +10,13 @@
           <h5 class="text-primary text-lg font-semibold">QR Settings</h5>
         </mat-panel-title>
         <mat-panel-description>
-          <mat-icon class="text-end flex-grow">settings</mat-icon>
+          <mat-icon class="text-end text-primary flex-grow">settings</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <app-qr-code-form></app-qr-code-form>
+      <ng-template matExpansionPanelContent>
+        <app-qr-code-form></app-qr-code-form>
+      </ng-template>
     </mat-expansion-panel>
 
     <mat-expansion-panel
@@ -27,38 +29,50 @@
           <h5 class="text-primary text-lg font-semibold">Members</h5>
         </mat-panel-title>
         <mat-panel-description>
-          <mat-icon class="text-end flex-grow">group</mat-icon>
+          <mat-icon class="text-end text-primary flex-grow">group</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div *ngIf="fetchedMember" class="space-y-2">
-        <app-brand-member
-          *ngFor="let member of members"
-          [member]="member"
-          [isOwner]="isOwner"
-          [isProcessingSubject]="isProcessingSubject"
-          (transferredOwnership)="onTransferredOwnership($event)"
-          (deleted)="onMemberDeleted($event)"
-        ></app-brand-member>
-      </div>
+      <ng-template matExpansionPanelContent>
+        <div *ngIf="fetchedMember" class="space-y-2">
+          <app-brand-member
+            *ngFor="let member of members"
+            [member]="member"
+            [isOwner]="isOwner"
+            [isProcessingSubject]="isProcessingSubject"
+            (transferredOwnership)="onTransferredOwnership($event)"
+            (deleted)="onMemberDeleted($event)"
+          ></app-brand-member>
+        </div>
+      </ng-template>
     </mat-expansion-panel>
 
     <mat-expansion-panel
+      *ngIf="isOwner"
       hideToggle
       expanded
       class="border border-gray-300 rounded-md !shadow-md"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <h5 class="text-primary text-lg font-semibold">Remove</h5>
+          <h5 class="text-lg font-semibold text-red-600">Destroy</h5>
         </mat-panel-title>
         <mat-panel-description>
-          <mat-icon class="text-end flex-grow">delete</mat-icon>
+          <mat-icon class="text-end flex-grow text-red-600">delete</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
+      <ng-template matExpansionPanelContent>
+        <button
+          class="px-4 py-2.5 bg-red-500 text-white rounded-md shadow-md border border-gray-300 hover:bg-red-600 mb-3"
+          type="button"
+          (click)="onDestroyBrand()"
+          >
+          Destroy this brand
+        </button>
+        <p class="italic text-red-500">*Note: All data associated with this brand will be permanently deleted and cannot be recovered.</p>
+      </ng-template>
     </mat-expansion-panel>
-
   </mat-accordion>
 
 </div>

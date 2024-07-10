@@ -37,6 +37,7 @@ import { InputColorPickerComponent } from './components/input-color-picker/input
 import { InputImageComponent } from './components/input-image/input-image.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { SafePipe } from 'safe-pipe';
+import { DestroyDialogComponent } from './components/destroy-dialog/destroy-dialog.component';
 
 const MatModules = [
   MatFormFieldModule,
@@ -71,7 +72,8 @@ const ExternalModules = [
 const Components = [
   InputColorPickerComponent,
   InputImageComponent,
-  DeleteDialogComponent
+  DeleteDialogComponent,
+  DestroyDialogComponent,
 ]
 
 const Pipes = [

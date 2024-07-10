@@ -170,6 +170,20 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Get role
+  */
+  async getRole(currentUser: User, brandId: string) {
+    this.validateBrandId(brandId);
+
+    return this.brandMemberRepository.findOne({
+      where: {
+        brand_id: brandId,
+        user_id: currentUser.id
+      }
+    });
+  }
+
+  /**
    * Describe: Create brand
   */
   async createBrand(
@@ -256,7 +270,7 @@ export class BrandsService {
       logo && this.uploadFileService.removeOldFile(savedLogoPath);
       throw new InternalServerErrorException("Failed to create brand");
     } finally {
-      queryRunner.release();
+      await queryRunner.release();
     }
   }
 
@@ -319,6 +333,9 @@ export class BrandsService {
   ) {
     this.validateBrandId(brandId);
     this.isBrandOwner(currentUser, brandId);
+    if (currentUser.id === memberId) {
+      throw new BadRequestException("You can't transfer ownership to yourself");
+    }
 
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -345,6 +362,48 @@ export class BrandsService {
       throw new InternalServerErrorException("Failed to transfer ownership");
     } finally {
       queryRunner.release();
+    }
+  }
+
+  /**
+   * Describe: Delete brand
+  */
+  async deleteBrand(currentUser: User, brandId: string) {
+    this.validateBrandId(brandId);
+    this.isBrandOwner(currentUser, brandId);
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.delete(BrandBlock, { brand_id: brandId });
+      await queryRunner.manager.delete(BrandBlockDraft, { brand_id: brandId });
+      await queryRunner.manager.delete(BrandSocialPlatforms, { brand_id: brandId });
+      await queryRunner.manager.delete(BrandSocialPlatformsDraft, { brand_id: brandId });
+      await queryRunner.manager.delete(BrandMember, { brand_id: brandId });
+
+      const urls = await queryRunner.manager.find(Url, {
+        where: {
+          brand: {
+            id: brandId
+          }
+        }
+      });
+      for (const url of urls) {
+        await queryRunner.manager.delete(UrlAnalytics, { url_id: url.id });
+        await queryRunner.manager.delete(Url, { id: url.id });
+      }
+
+      await queryRunner.manager.delete(BrandDraft, { brand_id: brandId });
+      await queryRunner.manager.delete(Brand, { id: brandId });
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed to delete brand");
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -412,6 +471,9 @@ export class BrandsService {
   async removeMember(currentUser: User, brandId: string, memberId: number) {
     this.validateBrandId(brandId);
     this.isBrandOwner(currentUser, brandId);
+    if (currentUser.id === memberId) {
+      throw new BadRequestException("You can't remove yourself");
+    }
 
     return await this.brandMemberRepository.delete({
       brand_id: brandId,
@@ -451,7 +513,7 @@ export class BrandsService {
       role: BrandMemberRole.OWNER
     });
     if (!isOwner) {
-      throw new BadRequestException("You are not owner to remove this member");
+      throw new BadRequestException("You are not owner of this brand to do this action");
     }
   }
 }

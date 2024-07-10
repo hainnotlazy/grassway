@@ -12,6 +12,7 @@ export interface BrandMember {
   user?: User;
   brand?: Brand;
   role: BrandMemberRole;
+  joined: boolean;
   created_at: Date;
   updated_at: Date;
 }
