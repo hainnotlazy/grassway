@@ -1,0 +1,46 @@
+<div *ngIf="member.user" class="hover:bg-slate-200 flex items-center gap-4 px-4 py-1 rounded-lg">
+  <img
+    class="border border-gray-300 rounded-lg"
+    [src]="client + member.user.avatar"
+    [alt]="member.user.fullname + '\'s avatar'"
+    width="50"
+    height="50"
+    loading="eager"
+    draggable="false"
+  >
+  <div class="flex flex-col w-1/4">
+    <span class="font-semibold text-gray-600">{{ member.user.fullname }}</span>
+    <span class="text-gray-400">{{ member.user.email || member.user.username }}</span>
+  </div>
+  <span class="font-semibold" [ngClass]="{
+    'text-blue-600': member.role === BrandMemberRole.MEMBER,
+    'text-orange-500': member.role === BrandMemberRole.OWNER
+  }">
+    【{{ member.role.toLowerCase() | titlecase }}】
+  </span>
+  <div class="flex-grow">
+    <button
+      *ngIf="isOwner"
+      class="hover:bg-orange-500 hover:shadow-md disabled:bg-sky-400 flex items-center gap-2 px-3 py-2 mx-auto text-white bg-orange-600 rounded shadow"
+      type="button"
+      [disabled]="isProcessingSubject.asObservable() | async"
+      (click)="onTransferOwnership()"
+    >
+      <i *ngIf="isProcessingSubject.asObservable() | async" class="icon-spinner spinning"></i>
+      Transfer ownership
+    </button>
+  </div>
+
+  <button
+    *ngIf="isOwner"
+    class="disabled:text-sky-400 flex items-center text-xl text-red-600"
+    type="button"
+    [disabled]="isProcessingSubject.asObservable() | async"
+    (click)="onRemoveMember()"
+  >
+    <i [ngClass]="{
+      'icon-spinner spinning': isProcessingSubject.asObservable() | async,
+      'icon-delete': !(isProcessingSubject.asObservable() | async)
+    }"></i>
+  </button>
+</div>

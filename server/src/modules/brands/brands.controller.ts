@@ -35,6 +35,11 @@ export class BrandsController {
     return this.brandsService.getBrandByPrefix(prefix);
   }
 
+  @Get("/:id/members")
+  getMembers(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    return this.brandsService.getMembers(currentUser, id);
+  }
+
   @Get("/:id/urls")
   getLinks(
     @CurrentUser() currentUser: User, 
@@ -88,6 +93,17 @@ export class BrandsController {
     return this.brandsService.updateQrCodeSettings(currentUser, id, updateQrCodeDto);
   }
 
+  @Put("/:id/members/:memberId/transfer-ownership") 
+  @HttpCode(204)
+  async transferOwnership(
+    @CurrentUser() currentUser: User,
+    @Param("id") brandId: string,
+    @Param("memberId", ParseIntPipe) memberId: number
+  ) {
+    await this.brandsService.transferOwnership(currentUser, brandId, memberId);
+    return;
+  }
+
   @Delete("/:id/urls/:urlId")
   async deleteLink(
     @CurrentUser() currentUser: User, 
@@ -96,6 +112,16 @@ export class BrandsController {
     await this.brandsService.removeUrl(currentUser, brandId, urlId);
     return;
   } 
+
+  @Delete("/:id/members/:memberId")
+  async removeMember(
+    @CurrentUser() currentUser: User,
+    @Param("id") brandId: string,
+    @Param("memberId", ParseIntPipe) memberId: number
+  ) {
+    await this.brandsService.removeMember(currentUser, brandId, memberId);
+    return;
+  }
 
   /** Routes to interact with brand draft */
   // -------------------------------------

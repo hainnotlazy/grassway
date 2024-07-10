@@ -31,7 +31,16 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <p>asadsadsa</p>
+      <div *ngIf="fetchedMember" class="space-y-2">
+        <app-brand-member
+          *ngFor="let member of members"
+          [member]="member"
+          [isOwner]="isOwner"
+          [isProcessingSubject]="isProcessingSubject"
+          (transferredOwnership)="onTransferredOwnership($event)"
+          (deleted)="onMemberDeleted($event)"
+        ></app-brand-member>
+      </div>
     </mat-expansion-panel>
 
     <mat-expansion-panel
@@ -48,7 +57,6 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <p>asadsadsa</p>
     </mat-expansion-panel>
 
   </mat-accordion>

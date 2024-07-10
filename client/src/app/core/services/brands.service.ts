@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Brand, Url } from '../models';
+import { Brand, BrandMember, Url } from '../models';
 import { CreateBrandDto, ShortenUrlDto, UpdateQrCodeSettingsDto } from '../dtos';
 import { BehaviorSubject, filter, map } from 'rxjs';
 import { GetUrlsOptions, UrlsResponse } from '../interfaces';
@@ -80,6 +80,13 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Get brand members
+  */
+  getBrandMembers(brandId: string) {
+    return this.httpClient.get<BrandMember[]>(`api/brands/${brandId}/members`);
+  }
+
+  /**
    * Describe: Validate brand prefix
   */
   validateBrandPrefix(prefix: string) {
@@ -123,9 +130,23 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Transfer ownership
+  */
+  transferOwnership(brandId: string, memberId: number) {
+    return this.httpClient.put<void>(`api/brands/${brandId}/members/${memberId}/transfer-ownership`, {});
+  }
+
+  /**
    * Describe: Remove link
   */
   removeBrandLink(brandId: string, urlId: number) {
     return this.httpClient.delete(`api/brands/${brandId}/urls/${urlId}`);
+  }
+
+  /**
+   * Describe: Remove member
+  */
+  removeMember(brandId: string, memberId: number) {
+    return this.httpClient.delete<void>(`api/brands/${brandId}/members/${memberId}`);
   }
 }

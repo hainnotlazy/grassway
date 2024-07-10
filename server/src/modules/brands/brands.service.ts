@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft, Url, TaggedUrl, UrlAnalytics, BrandBlock, BrandBlockDraft } from 'src/entities';
-import { DataSource, ILike, Repository } from 'typeorm';
+import { DataSource, ILike, Not, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { CreateBrandDto, CreateLinkDto, UpdateQrCodeDto } from './dtos';
 import { isUUID } from 'class-validator';
@@ -152,6 +152,24 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Get members
+  */
+  async getMembers(currentUser: User, brandId: string) {
+    this.validateBrandId(brandId);
+
+    return await this.brandMemberRepository.find({
+      where: {
+        brand_id: brandId,
+        user_id: Not(currentUser.id)
+      },
+      relations: ["user"],
+      order: {
+        role: "ASC"
+      }
+    })
+  }
+
+  /**
    * Describe: Create brand
   */
   async createBrand(
@@ -292,6 +310,45 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Transfer ownership
+  */
+  async transferOwnership(
+    currentUser: User,
+    brandId: string,
+    memberId: number
+  ) {
+    this.validateBrandId(brandId);
+    this.isBrandOwner(currentUser, brandId);
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.update(BrandMember, {
+        brand_id: brandId,
+        user_id: memberId
+      }, {
+        role: BrandMemberRole.OWNER
+      });
+
+      await queryRunner.manager.update(BrandMember, {
+        brand_id: brandId,
+        user_id: currentUser.id
+      }, {
+        role: BrandMemberRole.MEMBER
+      });
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed to transfer ownership");
+    } finally {
+      queryRunner.release();
+    }
+  }
+
+  /**
    * Describe: Remove url
   */
   async removeUrl(currentUser: User, brandId: string, urlId: number) {
@@ -350,6 +407,19 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Remove member
+  */
+  async removeMember(currentUser: User, brandId: string, memberId: number) {
+    this.validateBrandId(brandId);
+    this.isBrandOwner(currentUser, brandId);
+
+    return await this.brandMemberRepository.delete({
+      brand_id: brandId,
+      user_id: memberId
+    })
+  }
+
+  /**
    * Describe: Validate brand id
   */
   validateBrandId(brandId: string): void {
@@ -372,5 +442,16 @@ export class BrandsService {
       },
       relations
     })
+  }
+
+  private async isBrandOwner(currentUser: User, brandId: string) {
+    const isOwner = await this.brandMemberRepository.findOneBy({
+      brand_id: brandId,
+      user_id: currentUser.id,
+      role: BrandMemberRole.OWNER
+    });
+    if (!isOwner) {
+      throw new BadRequestException("You are not owner to remove this member");
+    }
   }
 }
