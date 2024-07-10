@@ -29,6 +29,8 @@ import { CreateLinkDialogComponent } from './components/create-link-dialog/creat
 import { BrandLinkComponent } from './components/brand-link/brand-link.component';
 import { UrlModule } from '../url/url.module';
 import { UpdateBlockDialogComponent } from './components/update-block-dialog/update-block-dialog.component';
+import { BrandSettingsTabComponent } from './components/brand-settings-tab/brand-settings-tab.component';
+import { QrCodeFormComponent } from './components/qr-code-form/qr-code-form.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import { UpdateBlockDialogComponent } from './components/update-block-dialog/upd
     BrandLinksTabComponent,
     CreateLinkDialogComponent,
     BrandLinkComponent,
-    UpdateBlockDialogComponent
+    UpdateBlockDialogComponent,
+    BrandSettingsTabComponent,
+    QrCodeFormComponent
   ],
   imports: [
     CommonModule,

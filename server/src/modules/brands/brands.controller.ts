@@ -1,5 +1,5 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto, CreateLinkDto } from './dtos';
+import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto, CreateLinkDto, UpdateQrCodeDto } from './dtos';
 import { BrandsService } from './brands.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities';
@@ -77,6 +77,15 @@ export class BrandsController {
     @Body() createLinkDto: CreateLinkDto
   ) {
     return this.brandsService.createLink(currentUser, id, createLinkDto);
+  }
+
+  @Put("/:id/qr-code")
+  updateQrCodeSettings(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() updateQrCodeDto: UpdateQrCodeDto
+  ) {
+    return this.brandsService.updateQrCodeSettings(currentUser, id, updateQrCodeDto);
   }
 
   @Delete("/:id/urls/:urlId")

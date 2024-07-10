@@ -5,3 +5,4 @@ export * from "./update-social-platforms-order.dto";
 export * from "./update-block-order.dto";
 export * from "./brand-block.dto";
 export * from "./create-link.dto";
+export * from "./update-qr-code.dto";

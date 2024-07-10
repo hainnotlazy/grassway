@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft, Url, TaggedUrl, UrlAnalytics, BrandBlock, BrandBlockDraft } from 'src/entities';
 import { DataSource, ILike, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
-import { CreateBrandDto, CreateLinkDto } from './dtos';
+import { CreateBrandDto, CreateLinkDto, UpdateQrCodeDto } from './dtos';
 import { isUUID } from 'class-validator';
 import { UrlsService } from '../urls/urls.service';
 import { GetUrlsOptions } from 'src/common/models';
@@ -269,6 +269,26 @@ export class BrandsService {
     });
 
     return existedBrand;
+  }
+
+  /**
+   * Describe: Update qr code settings
+  */
+  async updateQrCodeSettings(
+    currentUser: User,
+    brandId: string,
+    updateQrCodeDto: UpdateQrCodeDto
+  ) {
+    this.validateBrandId(brandId);
+
+    const existedBrand = await this.getBrand(currentUser, brandId);
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    Object.assign(existedBrand, updateQrCodeDto);
+    
+    return await this.brandRepository.save(existedBrand);
   }
 
   /**

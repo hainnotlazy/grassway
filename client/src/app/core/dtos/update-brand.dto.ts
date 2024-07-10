@@ -40,3 +40,8 @@ export interface UpdateSocialPlatformsOrderDto {
   github_order: number;
   website_order: number;
 }
+
+export interface UpdateQrCodeSettingsDto {
+  qr_code_background_color?: string;
+  qr_code_foreground_color?: string;
+}
