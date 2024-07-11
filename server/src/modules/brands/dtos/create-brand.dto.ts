@@ -28,7 +28,7 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?facebook\.com\/.+$/, 
     { message: "Invalid facebook url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   facebook: string;
 
   @IsString()
@@ -37,7 +37,7 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?instagram\.com\/.+$/, 
     { message: "Invalid instagram url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   instagram?: string;
 
   @IsString()
@@ -46,7 +46,7 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?x\.com\/.+$/, 
     { message: "Invalid X (Formerly Twitter) url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   x?: string;
 
   @IsString()
@@ -55,7 +55,7 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?youtube\.com\/.+$/, 
     { message: "Invalid youtube url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   youtube?: string;
 
   @IsString()
@@ -64,7 +64,7 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?tiktok\.com\/.+$/, 
     { message: "Invalid tiktok url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   tiktok?: string;
 
   @IsString()
@@ -73,7 +73,7 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?linkedin\.com\/.+$/, 
     { message: "Invalid linkedin url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   linkedin?: string;
 
   @IsString()
@@ -82,7 +82,7 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?discord\.gg\/.+$/, 
     { message: "Invalid discord url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   discord?: string;
 
   @IsString()
@@ -91,12 +91,12 @@ export class CreateBrandDto {
     /^(https?:\/\/)?(www\.)?github\.com\/.+$/, 
     { message: "Invalid github url" }
   )
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   github?: string;
 
   @IsString()
   @IsOptional()
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
   website?: string;
 
   @IsArray()
