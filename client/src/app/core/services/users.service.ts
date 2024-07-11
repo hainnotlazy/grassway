@@ -36,8 +36,11 @@ export class UsersService {
   /**
    * Describe: Filter users by username or email
   */
-  filterUsers(query: string) {
-    return this.httpClient.get<User[]>(`api/users/filter?query=${query}`);
+  filterUsers(query: string, excludedUserIds: number[] = []) {
+    return this.httpClient.get<User[]>(
+      `api/users/filter?query=${query}`
+      + (excludedUserIds.length ? excludedUserIds.map(id => `&excluded_user=${id}`).join("") : "")
+    );
   }
 
   /**

@@ -1,0 +1,68 @@
+<div class="!flex items-center gap-2 !pt-4" mat-dialog-title>
+  <h6 class="text-poetsen-one text-2xl">Invite new member</h6>
+  <button
+    class="hover:text-gray-800 flex items-center ml-auto text-gray-500"
+    tabindex="-1"
+    mat-dialog-close>
+    <i class="icon-close"></i>
+  </button>
+</div>
+
+<mat-form-field
+  class="w-full"
+  appearance="outline"
+  color="accent"
+  mat-dialog-content
+>
+  <mat-chip-grid #tagChipGrid>
+    <mat-chip-row
+      *ngFor="let user of selectedUsers"
+      (removed)="removeSelectedUser(user)"
+      class="!bg-white border border-gray-300"
+    >
+      <app-create-brand-option-user [user]="user" [imageSize]="26"></app-create-brand-option-user>
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-row>
+  </mat-chip-grid>
+  <input
+    #userInput
+    placeholder="Enter user's username or email"
+    [formControl]="userControl"
+    [matChipInputFor]="tagChipGrid"
+    [matAutocomplete]="tagAuto"
+    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+    (matChipInputTokenEnd)="addUser($event)"
+  />
+  <mat-autocomplete #tagAuto="matAutocomplete" (optionSelected)="selectUser($event)">
+    <mat-option *ngFor="let user of filteredUsers" [value]="user">
+      <app-create-brand-option-user [user]="user"></app-create-brand-option-user>
+    </mat-option>
+  </mat-autocomplete>
+  <mat-hint>Invitation will be sent to these users</mat-hint>
+</mat-form-field>
+
+<div
+  mat-dialog-actions
+  align="end"
+  class="!p-4 !pt-0 space-x-3 space-y-2 !-mt-4"
+>
+  <button
+    class="hover:shadow px-3 py-2 border rounded-md"
+    type="button"
+    mat-dialog-close
+  >
+    Cancel
+  </button>
+  <button
+    class="!bg-secondary !text-white hover:!bg-secondary/80 px-3 py-2 rounded-md focus:outline-none hover:shadow flex items-center gap-2 disabled:bg-sky-400"
+    type="button"
+    cdkFocusInitial
+    [disabled]="isProcessing"
+    (click)="onSendInvitation()"
+  >
+    <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
+    Send invitation
+  </button>
+</div>

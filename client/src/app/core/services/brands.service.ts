@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Brand, BrandMember, Url } from '../models';
+import { Brand, BrandMember, Url, User } from '../models';
 import { CreateBrandDto, ShortenUrlDto, UpdateQrCodeSettingsDto } from '../dtos';
 import { BehaviorSubject, filter, map } from 'rxjs';
 import { GetUrlsOptions, UrlsResponse } from '../interfaces';
@@ -120,6 +120,15 @@ export class BrandsService {
     }
 
     return this.httpClient.post<Brand>("api/brands", formData);
+  }
+
+  /**
+   * Describe: Send invitation
+  */
+  sendInvitation(brandId: string, invitedUsersId: number[]) {
+    return this.httpClient.post<BrandMember[]>(`api/brands/${brandId}/members/send-invitation`, {
+      ids: invitedUsersId
+    });
   }
 
   /**

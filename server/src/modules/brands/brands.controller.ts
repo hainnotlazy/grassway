@@ -6,6 +6,7 @@ import { User } from 'src/entities';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BrandDraftService } from './brand-draft.service';
 import { LinkActiveOptions, LinkTypeOptions } from 'src/common/models';
+import { SendInvitationDto } from './dtos/send-invitation.dto';
 
 @Controller('brands')
 export class BrandsController {
@@ -79,6 +80,16 @@ export class BrandsController {
   ) {
     return this.brandsService.createBrand(currentUser, createBrandDto, logo);
   }
+
+  @Post("/:id/members/send-invitation")
+  sendInvitation(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() sendInvitationDto: SendInvitationDto
+  ) {
+    return this.brandsService.sendInvitation(currentUser, id, sendInvitationDto.ids);
+  }
+
 
   @Post("/:id/urls")
   createLink(

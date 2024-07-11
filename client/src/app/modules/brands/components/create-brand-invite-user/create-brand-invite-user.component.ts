@@ -42,7 +42,7 @@ export class CreateBrandInviteUserComponent implements OnInit {
         }
       }),
       filter(value => !!value),
-      switchMap(value => this.usersService.filterUsers(value as string)),
+      switchMap(value => this.usersService.filterUsers(value as string, this.selectedUsers.map(user => user.id))),
       tap(users => {
         this.filteredUsers = users;
       }),

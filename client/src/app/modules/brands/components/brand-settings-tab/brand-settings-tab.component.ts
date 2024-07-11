@@ -3,11 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, catchError, filter, finalize, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, finalize, map, switchMap, take, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { Brand, BrandMember, BrandMemberRole } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
 import { DestroyDialogComponent } from 'src/app/shared/components/destroy-dialog/destroy-dialog.component';
+import { InviteUserDialogComponent } from '../invite-user-dialog/invite-user-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -41,6 +42,24 @@ export class BrandSettingsTabComponent {
     ).subscribe();
   }
 
+  openInviteUserDialog() {
+    this.dialog.closeAll();
+
+    const inviteUserDialog = this.dialog.open(InviteUserDialogComponent, {
+      data: {
+        membersId: this.members.map(member => member.user?.id),
+      },
+      width: "500px",
+      disableClose: true,
+    })
+
+    inviteUserDialog.afterClosed().pipe(
+      filter(data => !!data),
+      map(data => data as BrandMember[]),
+      tap(data => this.members = [...this.members, ...data]),
+    ).subscribe();
+  }
+
   onTransferredOwnership(member: BrandMember) {
     this.isOwner = false;
     this.members = this.members.map(m => {
@@ -59,14 +78,14 @@ export class BrandSettingsTabComponent {
   onDestroyBrand() {
     this.dialog.closeAll();
 
-    const dialogRef = this.dialog.open(DestroyDialogComponent, {
+    const destroyDialog = this.dialog.open(DestroyDialogComponent, {
       data: {
         title: `You are going to delete permanently brand ${this.brand.title}`,
         itemName: this.brand.title,
       }
     });
 
-    dialogRef.afterClosed().pipe(
+    destroyDialog.afterClosed().pipe(
       take(1),
       filter(data => !!data),
       switchMap(() => this.brandsService.deleteBrand(this.brand.id)),

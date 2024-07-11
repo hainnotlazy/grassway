@@ -38,6 +38,15 @@
 
       <ng-template matExpansionPanelContent>
         <div class="space-y-2">
+          <button
+            *ngIf="isOwner"
+            class="bg-secondary hover:bg-secondary/80 flex items-center gap-2 px-3 py-2 ml-auto text-white rounded shadow"
+            type="button"
+            (click)="openInviteUserDialog()"
+          >
+            <i class="icon-person-add"></i>
+            Invite new member
+          </button>
           <app-brand-member
             *ngFor="let member of members"
             [member]="member"

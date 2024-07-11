@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, NotificationType, UserNotification } from 'src/entities';
-import { Like, Not, Repository } from 'typeorm';
+import { In, Like, Not, Repository } from 'typeorm';
 import { UpdateProfileDto, ChangePasswordDto, VerifyEmailDto, ResetPasswordDto } from './dtos';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -68,11 +68,16 @@ export class UsersService {
   /** 
    * Describe: Filter users by username or email
   */
-  async filterUsers(currentUser: User, query: string) {
+  async filterUsers(
+    currentUser: User, 
+    query: string,
+    excludedUser: number[] = []
+  ) {
     const users = await this.userRepository.find({
       where: [
-        { id: Not(currentUser.id), username: Like(`%${query}%`), is_active: true },
-        { id: Not(currentUser.id), email: Like(`%${query}%`), is_active: true }
+        { id: Not(In([currentUser.id, ...excludedUser])), username: Like(`%${query}%`), is_active: true },
+        { id: Not(In([currentUser.id, ...excludedUser])), email: Like(`%${query}%`), is_active: true },
+        { id: Not(In([currentUser.id, ...excludedUser])), fullname: Like(`%${query}%`), is_active: true },
       ],
       take: 5,
       order: {

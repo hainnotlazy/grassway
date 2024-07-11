@@ -275,6 +275,57 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Send invitations
+  */
+  async sendInvitation(
+    currentUser: User,
+    brandId: string,
+    invitedUsersId: number[] 
+  ) {
+    this.validateBrandId(brandId);
+    const existedBrand = await this.brandRepository.findOneBy({ 
+      id: brandId,
+      members: {
+        user_id: currentUser.id,
+        role: BrandMemberRole.OWNER,
+      }
+    });
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to send invitation");
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const handledUsers: BrandMember[] = [];
+      for (const userId of invitedUsersId) {
+        const existedUser = await this.userRepository.findOneBy({ id: userId });
+        if (!existedUser) {
+          continue;
+        }
+
+        const brandMember = this.brandMemberRepository.create({
+          brand: existedBrand,
+          user: existedUser,
+          role: BrandMemberRole.MEMBER
+        });
+        await queryRunner.manager.save(brandMember);
+        handledUsers.push(brandMember);
+      }
+
+      await queryRunner.commitTransaction();
+      return handledUsers;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed to send invitations");
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  /**
    * Describe: Create link
   */
   async createLink(

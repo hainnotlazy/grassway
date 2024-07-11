@@ -1,10 +1,12 @@
-import { Body, Controller, DefaultValuePipe, Get, HttpCode, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { filter } from 'rxjs';
+import { Body, Controller, DefaultValuePipe, Get, HttpCode, Param, ParseArrayPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities';
 import { UpdateProfileDto, VerifyEmailDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto } from './dtos';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { isNumberString } from 'class-validator';
 
 @ApiTags("Users")
 @Controller('users')
@@ -58,8 +60,12 @@ export class UsersController {
   filterUsers(
     @CurrentUser() currentUser: User,
     @Query("query", new DefaultValuePipe("")) query: string,
+    @Query("excluded_user", new DefaultValuePipe([]), ParseArrayPipe) excludedUserIds: string[],
   ) {
-    return this.usersService.filterUsers(currentUser, query);
+    const excludedUserIdsInNumber = excludedUserIds
+      .filter(id => isNumberString(id))
+      .map(id => parseInt(id));
+    return this.usersService.filterUsers(currentUser, query, excludedUserIdsInNumber);
   }
 
   @Get("/:id")

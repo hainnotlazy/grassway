@@ -32,6 +32,7 @@ import { UpdateBlockDialogComponent } from './components/update-block-dialog/upd
 import { BrandSettingsTabComponent } from './components/brand-settings-tab/brand-settings-tab.component';
 import { QrCodeFormComponent } from './components/qr-code-form/qr-code-form.component';
 import { BrandMemberComponent } from './components/brand-member/brand-member.component';
+import { InviteUserDialogComponent } from './components/invite-user-dialog/invite-user-dialog.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { BrandMemberComponent } from './components/brand-member/brand-member.com
     UpdateBlockDialogComponent,
     BrandSettingsTabComponent,
     QrCodeFormComponent,
-    BrandMemberComponent
+    BrandMemberComponent,
+    InviteUserDialogComponent
   ],
   imports: [
     CommonModule,

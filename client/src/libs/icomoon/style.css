@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?gtcz3e');
-  src:  url('fonts/icomoon.eot?gtcz3e#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?gtcz3e') format('truetype'),
-    url('fonts/icomoon.woff?gtcz3e') format('woff'),
-    url('fonts/icomoon.svg?gtcz3e#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?xt93qt');
+  src:  url('fonts/icomoon.eot?xt93qt#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?xt93qt') format('truetype'),
+    url('fonts/icomoon.woff?xt93qt') format('woff'),
+    url('fonts/icomoon.svg?xt93qt#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,32 +25,35 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-open-in-new-tab:before {
+.icon-person-add:before {
   content: "\e900";
 }
-.icon-publish-changes:before {
+.icon-open-in-new-tab:before {
   content: "\e901";
 }
-.icon-delete-forever:before {
+.icon-publish-changes:before {
   content: "\e902";
 }
-.icon-image:before {
+.icon-delete-forever:before {
   content: "\e903";
 }
-.icon-youtube:before {
+.icon-image:before {
   content: "\e904";
 }
-.icon-drag:before {
+.icon-youtube:before {
   content: "\e905";
 }
-.icon-download:before {
+.icon-drag:before {
   content: "\e906";
+}
+.icon-download:before {
+  content: "\e907";
 }
 .icon-add-box:before {
   content: "\e933";
 }
 .icon-launch:before {
-  content: "\e907";
+  content: "\e908";
 }
 .icon-excited:before {
   content: "\e931";
@@ -80,7 +83,7 @@
   content: "\e929";
 }
 .icon-add:before {
-  content: "\e908";
+  content: "\e909";
 }
 .icon-brain:before {
   content: "\e923";
@@ -98,25 +101,25 @@
   content: "\e927";
 }
 .icon-tags:before {
-  content: "\e909";
-}
-.icon-warning:before {
   content: "\e90a";
 }
-.icon-key:before {
+.icon-warning:before {
   content: "\e90b";
 }
-.icon-visibility-off:before {
+.icon-key:before {
   content: "\e90c";
 }
-.icon-visibility:before {
+.icon-visibility-off:before {
   content: "\e90d";
 }
-.icon-password:before {
+.icon-visibility:before {
   content: "\e90e";
 }
-.icon-twitter:before {
+.icon-password:before {
   content: "\e90f";
+}
+.icon-twitter:before {
+  content: "\e910";
 }
 .icon-camera:before {
   content: "\e91b";
@@ -125,80 +128,80 @@
   content: "\e91a";
 }
 .icon-account:before {
-  content: "\e910";
-}
-.icon-logout:before {
   content: "\e911";
 }
-.icon-bar-chart:before {
+.icon-logout:before {
   content: "\e912";
 }
-.icon-calendar:before {
+.icon-bar-chart:before {
   content: "\e913";
 }
-.icon-edit:before {
+.icon-calendar:before {
   content: "\e914";
 }
-.icon-close:before {
+.icon-edit:before {
   content: "\e915";
 }
-.icon-delete:before {
+.icon-close:before {
   content: "\e916";
 }
-.icon-filter:before {
+.icon-delete:before {
   content: "\e917";
 }
-.icon-qr-code:before {
+.icon-filter:before {
   content: "\e918";
 }
-.icon-chart:before {
+.icon-qr-code:before {
   content: "\e919";
 }
-.icon-chevron-left:before {
+.icon-chart:before {
   content: "\e91c";
 }
-.icon-chevron-up:before {
+.icon-chevron-left:before {
   content: "\e91d";
 }
-.icon-chevron-down:before {
+.icon-chevron-up:before {
   content: "\e91e";
 }
-.icon-star:before {
+.icon-chevron-down:before {
   content: "\e91f";
 }
-.icon-settings:before {
+.icon-star:before {
   content: "\e920";
 }
-.icon-info:before {
+.icon-settings:before {
   content: "\e921";
 }
-.icon-rewrite:before {
+.icon-info:before {
   content: "\e922";
 }
-.icon-click:before {
+.icon-rewrite:before {
   content: "\e928";
 }
-.icon-chevron-right:before {
+.icon-click:before {
   content: "\e932";
 }
-.icon-link:before {
+.icon-chevron-right:before {
   content: "\e934";
 }
-.icon-copy:before {
+.icon-link:before {
   content: "\e935";
 }
-.icon-slack:before {
+.icon-copy:before {
   content: "\e936";
 }
-.icon-facebook:before {
+.icon-slack:before {
   content: "\e937";
 }
-.icon-github:before {
+.icon-facebook:before {
   content: "\e938";
 }
-.icon-google:before {
+.icon-github:before {
   content: "\e939";
 }
-.icon-grassway-text:before {
+.icon-google:before {
   content: "\e93a";
+}
+.icon-grassway-text:before {
+  content: "\e93b";
 }

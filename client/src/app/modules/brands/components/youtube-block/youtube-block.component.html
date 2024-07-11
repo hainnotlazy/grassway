@@ -20,7 +20,8 @@
           <h6 class="text-secondary text-lg font-semibold">{{ block.title }}</h6>
           <small class="text-gray-500">{{ block.description }}</small>
           <a
-            href="#"
+            [href]="block.youtube_url"
+            target="_blank"
             class="hover:underline hover:text-primary inline-block text-sm font-semibold text-gray-700"
           >
             {{ block.youtube_url }}
