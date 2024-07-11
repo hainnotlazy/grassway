@@ -1,25 +1,43 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ExtendedUrl } from 'src/app/core/models';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { finalize, tap } from 'rxjs';
+import { QrCodeDialogDto } from 'src/app/core/dtos';
+import { UserSetting } from 'src/app/core/models';
 import { UserSettingService } from 'src/app/core/services';
 
+@UntilDestroy()
 @Component({
-  selector: 'app-qrcode-dialog',
-  templateUrl: './qrcode-dialog.component.html',
-  styleUrls: ['./qrcode-dialog.component.scss']
+  selector: 'app-qr-code-dialog',
+  templateUrl: './qr-code-dialog.component.html',
+  styleUrls: ['./qr-code-dialog.component.scss'],
 })
-export class QrcodeDialogComponent {
+export class QrCodeDialogComponent {
   screenWidth = window.screen.width;
 
-  userSetting$ = this.userSettingService.getUserSetting();
+  shortenedLink = "";
+  userSetting: Partial<UserSetting> = {};
+  fetchedUserSetting = true;
 
   constructor(
     private userSettingService: UserSettingService,
     private snackbar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
-    public data: ExtendedUrl
-  ) {}
+    public data: QrCodeDialogDto
+  ) {
+    this.shortenedLink = data.url.client + (data.url.custom_back_half || data.url.back_half);
+    if (data.fetchUserSettings) {
+      this.fetchedUserSetting = false;
+      this.userSettingService.getUserSetting().pipe(
+        tap(settings => this.userSetting = settings),
+        finalize(() => this.fetchedUserSetting = true),
+        untilDestroyed(this)
+      ).subscribe();
+    } else {
+      Object.assign(this.userSetting, this.data);
+    }
+  }
 
   saveQRImage(element: any) {
     const parentElement = element.qrcElement.nativeElement
@@ -35,7 +53,7 @@ export class QrcodeDialogComponent {
       const link = document.createElement("a")
       link.href = url;
       // name of the file
-      link.download = this.data.title;
+      link.download = this.data.url.title;
       link.click();
 
       // Show notification that download was successful

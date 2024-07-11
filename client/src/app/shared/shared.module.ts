@@ -38,6 +38,8 @@ import { InputImageComponent } from './components/input-image/input-image.compon
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { SafePipe } from 'safe-pipe';
 import { DestroyDialogComponent } from './components/destroy-dialog/destroy-dialog.component';
+import { QrCodeDialogComponent } from './components/qr-code-dialog/qr-code-dialog.component';
+import { RouterModule } from '@angular/router';
 
 const MatModules = [
   MatFormFieldModule,
@@ -74,6 +76,7 @@ const Components = [
   InputImageComponent,
   DeleteDialogComponent,
   DestroyDialogComponent,
+  QrCodeDialogComponent,
 ]
 
 const Pipes = [
@@ -90,6 +93,7 @@ const Pipes = [
   ],
   imports: [
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
     ...MatModules,
     ...ExternalModules,

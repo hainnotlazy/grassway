@@ -5,3 +5,4 @@ export * from "./update-url.dto";
 export * from "./create-brand.dto";
 export * from "./update-brand.dto";
 export * from "./brand-block.dto";
+export * from "./qr-code-dialog.dto";

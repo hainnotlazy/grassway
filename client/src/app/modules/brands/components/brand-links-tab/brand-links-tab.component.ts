@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BrandsService } from 'src/app/core/services';
+import { BrandsService, UrlsService } from 'src/app/core/services';
 import { CreateLinkDialogComponent } from '../create-link-dialog/create-link-dialog.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, filter, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import { UrlsResponse } from 'src/app/core/interfaces';
 import { getValueInNumber } from 'src/app/core/helpers';
-import { ExtendedUrl, Url } from 'src/app/core/models';
+import { Brand, ExtendedUrl, Url } from 'src/app/core/models';
 import { environment } from 'src/environments/environment';
+import { FormControl } from '@angular/forms';
 
 @UntilDestroy()
 @Component({
@@ -17,10 +18,12 @@ import { environment } from 'src/environments/environment';
 })
 export class BrandLinksTabComponent {
   fetchedLinks = false;
-  brandId!: string;
+  brand!: Brand;
   isLoading = false;
   currentPage = 1;
   totalPage = 1;
+
+  searchControl = new FormControl("");
 
   linksSubject = new BehaviorSubject<Url[] | null>(null);
   links$: Observable<ExtendedUrl[]> = this.linksSubject.asObservable().pipe(
@@ -40,13 +43,26 @@ export class BrandLinksTabComponent {
   ) {
     this.brandsService.currentBrand$.pipe(
       take(1),
-      tap(brand => this.brandId = brand.id),
+      tap(brand => this.brand = brand),
       switchMap(brand => this.brandsService.getBrandLinks(brand.id, {})),
       tap(response => {
         this.setPaginatedPage(response);
         this.linksSubject.next(response.data);
       }),
       finalize(() => this.fetchedLinks = true),
+    ).subscribe();
+
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      map(value => value as string),
+      switchMap(value => this.brandsService.getBrandLinks(this.brand.id, {
+        search: value
+      })),
+      tap(response => {
+        this.setPaginatedPage(response);
+        this.linksSubject.next(response.data);
+      }),
       untilDestroyed(this)
     ).subscribe();
   }
@@ -72,8 +88,9 @@ export class BrandLinksTabComponent {
   onScrollDown() {
     if (this.currentPage < this.totalPage && !this.isLoading) {
       this.isLoading = true;
-      this.brandsService.getBrandLinks(this.brandId, {
-        page: this.currentPage + 1
+      this.brandsService.getBrandLinks(this.brand.id, {
+        page: this.currentPage + 1,
+        search: this.searchControl.value as string
       }).pipe(
         map(response => {
           this.setPaginatedPage(response);

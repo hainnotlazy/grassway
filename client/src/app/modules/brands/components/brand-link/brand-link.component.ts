@@ -4,11 +4,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, filter, map, switchMap, take, tap } from 'rxjs';
+import { QrCodeDialogDto } from 'src/app/core/dtos';
 import { ErrorResponse } from 'src/app/core/interfaces';
-import { ExtendedUrl, Url } from 'src/app/core/models';
+import { Brand, ExtendedUrl, Url } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
-import { QrcodeDialogComponent } from 'src/app/modules/url/components/qrcode-dialog/qrcode-dialog.component';
 import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
+import { QrCodeDialogComponent } from 'src/app/shared/components/qr-code-dialog/qr-code-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -20,7 +21,7 @@ import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/d
   }
 })
 export class BrandLinkComponent {
-  @Input() brandId!: string;
+  @Input() brand!: Brand;
   @Input() link!: ExtendedUrl;
   @Input() linksSubject!: BehaviorSubject<Url[] | null>;
 
@@ -47,8 +48,15 @@ export class BrandLinkComponent {
 
   openQRCodeDialog() {
     this.dialog.closeAll();
-    this.dialog.open(QrcodeDialogComponent, {
-      data: this.link
+    this.dialog.open(QrCodeDialogComponent, {
+      data: {
+        url: this.link,
+        fetchUserSettings: false,
+        qr_code_background_color: this.brand.qr_code_background_color,
+        qr_code_foreground_color: this.brand.qr_code_foreground_color,
+        qr_code_show_logo: true,
+        qr_code_logo_url: this.brand.logo
+      } as QrCodeDialogDto
     })
   }
 
@@ -63,7 +71,7 @@ export class BrandLinkComponent {
     dialogRef.afterClosed().pipe(
       take(1),
       filter(data => data),
-      switchMap(() => this.brandsService.removeBrandLink(this.brandId, this.link.id)),
+      switchMap(() => this.brandsService.removeBrandLink(this.brand.id, this.link.id)),
       tap(() => {
         this.handleDeleteSuccess()
       }, error => {

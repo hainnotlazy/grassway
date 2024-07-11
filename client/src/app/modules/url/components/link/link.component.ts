@@ -6,10 +6,11 @@ import { ExtendedUrl, Url, Tag } from 'src/app/core/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { UrlsService } from 'src/app/core/services';
 import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
-import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 import { EditFormDialogComponent } from '../edit-form-dialog/edit-form-dialog.component';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
+import { QrCodeDialogComponent } from 'src/app/shared/components/qr-code-dialog/qr-code-dialog.component';
+import { QrCodeDialogDto } from 'src/app/core/dtos';
 
 @UntilDestroy()
 @Component({
@@ -56,8 +57,11 @@ export class LinkComponent {
 
   onOpenQRCodeDialog() {
     this.dialog.closeAll();
-    this.dialog.open(QrcodeDialogComponent, {
-      data: this.url
+    this.dialog.open(QrCodeDialogComponent, {
+      data: {
+        url: this.url,
+        fetchUserSettings: true
+      } as QrCodeDialogDto
     })
   }
 

@@ -10,14 +10,14 @@
   </button>
 </div>
 
-<mat-dialog-content *ngIf="userSetting$ | async as userSetting">
+<mat-dialog-content *ngIf="fetchedUserSetting">
   <div class="flex items-center justify-center !my-4">
     <qrcode
       #qrcode
-      [qrdata]="data.client + (data.custom_back_half || data.back_half)"
-      [alt]="'QR-Code of ' + data.title"
-      [colorDark]="userSetting.qr_code_background_color"
-      [colorLight]="userSetting.qr_code_foreground_color"
+      [qrdata]="shortenedLink"
+      [alt]="'QR-Code of ' + data.url.title"
+      [colorDark]="userSetting.qr_code_background_color || '#ffffff'"
+      [colorLight]="userSetting.qr_code_foreground_color || '#000000'"
       [elementType]="'canvas'"
       [errorCorrectionLevel]="'H'"
       [imageSrc]="
@@ -34,9 +34,9 @@
 
   <a
     class="text-primary hover:text-secondary block mb-4 font-semibold text-center break-all"
-    [routerLink]="'l/' + (data.custom_back_half || data.back_half)"
+    [routerLink]="'l/' + (data.url.custom_back_half || data.url.back_half)"
   >
-    {{ data.client + (data.custom_back_half || data.back_half) }}
+    {{ shortenedLink }}
   </a>
 
   <button

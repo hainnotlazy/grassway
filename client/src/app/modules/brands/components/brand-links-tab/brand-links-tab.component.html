@@ -2,14 +2,26 @@
   *ngIf="fetchedLinks; else loading"
   class="pt-4 space-y-4 overflow-hidden break-all"
 >
-  <button
-    class="bg-secondary hover:bg-secondary/80 flex items-center gap-2 px-3 py-2 text-white rounded shadow"
-    type="button"
-    (click)="openCreateLinkDialog()"
-  >
-    <i class="icon-add"></i>
-    New link
-  </button>
+  <div class="flex items-center justify-between gap-4">
+    <button
+      class="bg-secondary hover:bg-secondary/80 flex items-center gap-2 px-3 py-2 text-white rounded shadow"
+      type="button"
+      (click)="openCreateLinkDialog()"
+    >
+      <i class="icon-add"></i>
+      New link
+    </button>
+
+    <div class="flex items-center gap-2 px-2 py-1 bg-white border border-gray-300 rounded-md">
+      <i class="icon-search text-lg"></i>
+      <input
+        class="outline-none w-48 py-1.5"
+        [formControl]="searchControl"
+        type="text"
+        placeholder="Search links"
+      >
+    </div>
+  </div>
 
   <div
     class="space-y-4"
@@ -20,7 +32,7 @@
   >
     <app-brand-link
       *ngFor="let link of links$ | async; let i = index"
-      [brandId]="brandId"
+      [brand]="brand"
       [link]="link"
       [linksSubject]="linksSubject"
     ></app-brand-link>
