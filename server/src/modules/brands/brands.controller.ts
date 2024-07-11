@@ -89,6 +89,16 @@ export class BrandsController {
     return this.brandsService.createLink(currentUser, id, createLinkDto);
   }
 
+  @Put("/:id/publish-changes")
+  @HttpCode(204)
+  async publishChanges(
+    @CurrentUser() currentUser: User, 
+    @Param("id") id: string
+  ) {
+    await this.brandsService.publishChanges(currentUser, id);
+    return;
+  }
+
   @Put("/:id/qr-code")
   updateQrCodeSettings(
     @CurrentUser() currentUser: User,

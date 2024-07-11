@@ -324,6 +324,58 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Publish changes
+  */
+  async publishChanges(currentUser: User, brandId: string) {
+    this.validateBrandId(brandId);
+
+    const existedBrand = await this.brandDraftRepository.findOne({
+      where: {
+        brand_id: brandId,
+        brand: {
+          members: {
+            user_id: currentUser.id
+          }
+        }
+      },
+      relations: ["blocks", "blocks.url", "social_platforms"]
+    });
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.update(BrandSocialPlatforms, {
+        brand_id: brandId
+      }, existedBrand.social_platforms);
+
+      await queryRunner.manager.delete(BrandBlock, {});
+      for (const block of existedBrand.blocks) {
+        delete block.id;
+        await queryRunner.manager.save(BrandBlock, block);
+      }
+
+      delete existedBrand.brand_id;
+      delete existedBrand.blocks;
+      delete existedBrand.social_platforms;
+      await queryRunner.manager.update(Brand, {
+        id: brandId
+      }, existedBrand);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed to publish changes");
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  /**
    * Describe: Transfer ownership
   */
   async transferOwnership(

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?gbpra5');
-  src:  url('fonts/icomoon.eot?gbpra5#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?gbpra5') format('truetype'),
-    url('fonts/icomoon.woff?gbpra5') format('woff'),
-    url('fonts/icomoon.svg?gbpra5#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?gtcz3e');
+  src:  url('fonts/icomoon.eot?gtcz3e#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?gtcz3e') format('truetype'),
+    url('fonts/icomoon.woff?gtcz3e') format('woff'),
+    url('fonts/icomoon.svg?gtcz3e#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,26 +25,32 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-delete-forever:before {
+.icon-open-in-new-tab:before {
   content: "\e900";
 }
-.icon-image:before {
+.icon-publish-changes:before {
   content: "\e901";
 }
-.icon-youtube:before {
+.icon-delete-forever:before {
   content: "\e902";
 }
-.icon-drag:before {
+.icon-image:before {
   content: "\e903";
 }
-.icon-download:before {
+.icon-youtube:before {
   content: "\e904";
+}
+.icon-drag:before {
+  content: "\e905";
+}
+.icon-download:before {
+  content: "\e906";
 }
 .icon-add-box:before {
   content: "\e933";
 }
 .icon-launch:before {
-  content: "\e905";
+  content: "\e907";
 }
 .icon-excited:before {
   content: "\e931";
@@ -74,7 +80,7 @@
   content: "\e929";
 }
 .icon-add:before {
-  content: "\e906";
+  content: "\e908";
 }
 .icon-brain:before {
   content: "\e923";
@@ -92,25 +98,25 @@
   content: "\e927";
 }
 .icon-tags:before {
-  content: "\e907";
-}
-.icon-warning:before {
-  content: "\e908";
-}
-.icon-key:before {
   content: "\e909";
 }
-.icon-visibility-off:before {
+.icon-warning:before {
   content: "\e90a";
 }
-.icon-visibility:before {
+.icon-key:before {
   content: "\e90b";
 }
-.icon-password:before {
+.icon-visibility-off:before {
   content: "\e90c";
 }
-.icon-twitter:before {
+.icon-visibility:before {
   content: "\e90d";
+}
+.icon-password:before {
+  content: "\e90e";
+}
+.icon-twitter:before {
+  content: "\e90f";
 }
 .icon-camera:before {
   content: "\e91b";
@@ -119,80 +125,80 @@
   content: "\e91a";
 }
 .icon-account:before {
-  content: "\e90e";
-}
-.icon-logout:before {
-  content: "\e90f";
-}
-.icon-bar-chart:before {
   content: "\e910";
 }
-.icon-calendar:before {
+.icon-logout:before {
   content: "\e911";
 }
-.icon-edit:before {
+.icon-bar-chart:before {
   content: "\e912";
 }
-.icon-close:before {
+.icon-calendar:before {
   content: "\e913";
 }
-.icon-delete:before {
+.icon-edit:before {
   content: "\e914";
 }
-.icon-filter:before {
+.icon-close:before {
   content: "\e915";
 }
-.icon-qr-code:before {
+.icon-delete:before {
   content: "\e916";
 }
-.icon-chart:before {
+.icon-filter:before {
   content: "\e917";
 }
-.icon-chevron-left:before {
+.icon-qr-code:before {
   content: "\e918";
 }
-.icon-chevron-up:before {
+.icon-chart:before {
   content: "\e919";
 }
-.icon-chevron-down:before {
+.icon-chevron-left:before {
   content: "\e91c";
 }
-.icon-star:before {
+.icon-chevron-up:before {
   content: "\e91d";
 }
-.icon-settings:before {
+.icon-chevron-down:before {
   content: "\e91e";
 }
-.icon-info:before {
+.icon-star:before {
   content: "\e91f";
 }
-.icon-rewrite:before {
+.icon-settings:before {
   content: "\e920";
 }
-.icon-click:before {
+.icon-info:before {
   content: "\e921";
 }
-.icon-chevron-right:before {
+.icon-rewrite:before {
   content: "\e922";
 }
-.icon-link:before {
+.icon-click:before {
   content: "\e928";
 }
-.icon-copy:before {
+.icon-chevron-right:before {
   content: "\e932";
 }
-.icon-slack:before {
+.icon-link:before {
   content: "\e934";
 }
-.icon-facebook:before {
+.icon-copy:before {
   content: "\e935";
 }
-.icon-github:before {
+.icon-slack:before {
   content: "\e936";
 }
-.icon-google:before {
+.icon-facebook:before {
   content: "\e937";
 }
-.icon-grassway-text:before {
+.icon-github:before {
   content: "\e938";
+}
+.icon-google:before {
+  content: "\e939";
+}
+.icon-grassway-text:before {
+  content: "\e93a";
 }

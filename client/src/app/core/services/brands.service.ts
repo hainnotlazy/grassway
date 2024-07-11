@@ -140,7 +140,14 @@ export class BrandsService {
    * Describe: Transfer ownership
   */
   transferOwnership(brandId: string, memberId: number) {
-    return this.httpClient.put<void>(`api/brands/${brandId}/members/${memberId}/transfer-ownership`, {});
+    return this.httpClient.put<void>(`api/brands/${brandId}/members/${memberId}/transfer-ownership`, null);
+  }
+
+  /**
+   * Describe: Publish changes
+  */
+  publishChanges(brandId: string) {
+    return this.httpClient.put<void>(`api/brands/${brandId}/publish-changes`, null);
   }
 
   /**

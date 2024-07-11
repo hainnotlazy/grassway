@@ -1,4 +1,7 @@
-<div class="mt-4">
+<div
+  *ngIf="fetchedMember; else loading"
+  class="mt-4"
+>
   <mat-accordion multi class="space-y-4">
     <mat-expansion-panel
       hideToggle
@@ -34,7 +37,7 @@
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
-        <div *ngIf="fetchedMember" class="space-y-2">
+        <div class="space-y-2">
           <app-brand-member
             *ngFor="let member of members"
             [member]="member"
@@ -74,5 +77,8 @@
       </ng-template>
     </mat-expansion-panel>
   </mat-accordion>
-
 </div>
+
+<ng-template #loading>
+  <app-loading-tab [description]="'Loading brand settings...'"></app-loading-tab>
+</ng-template>

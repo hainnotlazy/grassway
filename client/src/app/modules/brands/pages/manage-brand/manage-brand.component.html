@@ -2,11 +2,46 @@
   *ngIf="fetchedBrand; else loading"
   class="my-4 space-y-4"
 >
-  <div class="space-y-1">
-    <h1 class="text-poetsen-one text-3xl">
-      Brand: <span class="text-primary">{{ (brand$ | async)?.title }}</span>
-    </h1>
-    <p class="italic text-gray-500">Manage all about your brand!</p>
+  <div class="sm:flex-row sm:items-center flex flex-col gap-4">
+    <div class="space-y-1">
+      <h1 class="text-poetsen-one text-3xl">
+        Brand:
+        <span class="text-primary">
+          {{ (brand$ | async)?.title }}
+          <button
+            class="hover:text-blue-400 text-xl text-blue-600"
+            [cdkCopyToClipboard]="client + '/m/' + (brand$ | async)?.prefix"
+            (click)="onCopy()"
+            type="button"
+          >
+            <i class="icon-copy"></i>
+          </button>
+        </span>
+      </h1>
+      <p class="italic text-gray-500">Manage all about your brand!</p>
+    </div>
+    <div class="sm:text-end flex-grow space-x-2">
+      <a
+        class="px-4 py-2.5 h-11 rounded-md shadow-md text-white bg-primary hover:bg-primary/80 inline-flex items-center gap-2"
+        [href]="client + '/m/' + (brand$ | async)?.prefix"
+        target="_blank"
+      >
+        <i class="icon-open-in-new-tab"></i>
+        <span class="sm:inline hidden">View in new tab</span>
+      </a>
+      <button
+        class="px-4 py-2.5 rounded-md shadow-md text-white bg-primary hover:bg-primary/80 disabled:bg-sky-400 inline-flex items-center gap-2"
+        type="button"
+        (click)="onPublishChanges()"
+        [disabled]="isProcessing"
+      >
+        <i [ngClass]="{
+          'icon-spinner spinning': isProcessing,
+          'icon-publish-changes': !isProcessing,
+        }"></i>
+        {{ isProcessing ? 'Processing...' : 'Publish changes' }}
+      </button>
+    </div>
   </div>
   <div class="flex gap-4">
     <mat-tab-group
@@ -16,12 +51,6 @@
       animationDuration="0ms"
       color="accent"
     >
-      <mat-tab label="Settings">
-        <ng-template matTabContent>
-          <app-brand-settings-tab></app-brand-settings-tab>
-        </ng-template>
-      </mat-tab>
-
       <mat-tab label="Build">
         <ng-template matTabContent>
           <app-brand-build-tab></app-brand-build-tab>
@@ -42,6 +71,12 @@
 
       <mat-tab label="Analytics">
         Not implement yet
+      </mat-tab>
+
+      <mat-tab label="Settings">
+        <ng-template matTabContent>
+          <app-brand-settings-tab></app-brand-settings-tab>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
 
