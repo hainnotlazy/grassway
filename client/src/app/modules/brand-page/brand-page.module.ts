@@ -11,6 +11,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { LayoutNoHeaderComponent } from './layouts/layout-no-header/layout-no-header.component';
 import { LayoutLeftHeaderComponent } from './layouts/layout-left-header/layout-left-header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { FooterComponent } from './components/footer/footer.component';
     LayoutNoHeaderComponent,
     LayoutLeftHeaderComponent,
     FooterComponent,
+    NotFoundComponent,
+    UnauthorizedComponent,
   ],
   imports: [
     CommonModule,

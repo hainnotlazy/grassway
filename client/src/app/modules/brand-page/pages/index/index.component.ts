@@ -1,7 +1,8 @@
-import { Component, OnInit, Pipe } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, filter, finalize, map, Observable, switchMap, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { Brand, BrandDraft, BrandLayout } from 'src/app/core/models';
 import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 
@@ -14,13 +15,16 @@ import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 export class IndexPage implements OnInit {
   readonly BrandLayout = BrandLayout;
   private readonly isLivePreviewSubject = new BehaviorSubject<boolean>(false);
+
   brand?: Brand | BrandDraft;
+  disallowedLivePreview = false;
 
   constructor(
     private brandsService: BrandsService,
     private brandsDraftService: BrandsDraftService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) {
     this.router.events.pipe(
       filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
@@ -37,7 +41,10 @@ export class IndexPage implements OnInit {
       filter(prefix => !!prefix),
       map(prefix => prefix as string),
       switchMap(prefix => this.getBrand(prefix)),
-      tap(brand => this.brand = brand),
+      tap(brand => {
+        this.brand = brand;
+        this.titleService.setTitle(`${(brand.title || "") + " |"} Grassway Brands`);
+      }),
       tap(() => this.sortBlocksOrder()),
       untilDestroyed(this)
     ).subscribe();
@@ -72,7 +79,6 @@ export class IndexPage implements OnInit {
           filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
         )
       ),
-      finalize(() => console.log("done")),
       untilDestroyed(this)
     ).subscribe();
   }
@@ -82,7 +88,12 @@ export class IndexPage implements OnInit {
       take(1),
       switchMap(isLivePreview => {
         if (isLivePreview) {
-          return this.brandsDraftService.getBrandByPrefix(prefix);
+          return this.brandsDraftService.getBrandByPrefix(prefix).pipe(
+            catchError(error => {
+              this.disallowedLivePreview = true;
+              return of(error);
+            })
+          );
         } else {
           return this.brandsService.getBrandByPrefix(prefix);
         }

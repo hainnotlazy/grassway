@@ -60,7 +60,7 @@ const routes: Routes = [
   },
   {
     path: "m",
-    title: "Brand | Grassway",
+    title: "Grassway Brands",
     children: [
       {
         path: "",

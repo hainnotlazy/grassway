@@ -1,5 +1,5 @@
 <div
-  *ngIf="brand"
+  *ngIf="brand && !disallowedLivePreview"
   [ngSwitch]="brand.layout"
   class="brand-card min-h-screen"
   [ngClass]="'text-' + brand.font"
@@ -25,3 +25,6 @@
     [brand]="brand"
   ></app-layout-center-header>
 </div>
+
+<app-not-found *ngIf="!brand"></app-not-found>
+<app-unauthorized *ngIf="disallowedLivePreview"></app-unauthorized>
