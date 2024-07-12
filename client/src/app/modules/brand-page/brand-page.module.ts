@@ -9,6 +9,8 @@ import { SocialPlatformsComponent } from './components/social-platforms/social-p
 import { BlockComponent } from './components/block/block.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { LayoutNoHeaderComponent } from './layouts/layout-no-header/layout-no-header.component';
+import { LayoutLeftHeaderComponent } from './layouts/layout-left-header/layout-left-header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { LayoutNoHeaderComponent } from './layouts/layout-no-header/layout-no-he
     SocialPlatformsComponent,
     BlockComponent,
     LayoutNoHeaderComponent,
+    LayoutLeftHeaderComponent,
+    FooterComponent,
   ],
   imports: [
     CommonModule,

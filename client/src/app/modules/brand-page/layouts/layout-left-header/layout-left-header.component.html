@@ -9,14 +9,8 @@
     ></div>
 
     <div class="header-content relative z-10 p-4 space-y-3 text-white bg-transparent">
-      <h1
-        class="text-3xl font-semibold text-center select-none"
-        [style.color]="brand.title_color"
-      >
-        {{ brand.title }}
-      </h1>
       <img
-        class="min-h-44 min-w-44 aspect-square mx-auto border-4 rounded-full select-none"
+        class="min-h-44 min-w-44 aspect-square border-4 rounded-full select-none"
         [style]="{
           'border-color': brand.background_color,
           'filter': 'drop-shadow(0rem 0.5rem 0.5rem ' + brand.background_color + ')'
@@ -29,8 +23,14 @@
         draggable="false"
         loading="eager"
       >
+      <h1
+        class="text-start pl-4 text-3xl font-semibold select-none"
+        [style.color]="brand.title_color"
+      >
+        {{ brand.title }}
+      </h1>
       <p
-        class="text-center text-blue-800"
+        class="text-start pl-4 text-blue-800"
         [style.color]="brand.description_color"
       >
         {{ brand.description }}
@@ -38,6 +38,7 @@
       <app-social-platforms
         *ngIf="brand.social_platforms && brand.social_platforms.icon_position === SocialIconPosition.TOP"
         [socialPlatforms]="brand.social_platforms"
+        class="pl-2 !justify-start !w-full"
       ></app-social-platforms>
     </div>
   </header>

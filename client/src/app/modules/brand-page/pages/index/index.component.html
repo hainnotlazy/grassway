@@ -15,6 +15,11 @@
     [brand]="brand"
   ></app-layout-curly-header>
 
+  <app-layout-left-header
+    *ngSwitchCase="BrandLayout.LEFT_HEADER"
+    [brand]="brand"
+  ></app-layout-left-header>
+
   <app-layout-center-header
     *ngSwitchCase="BrandLayout.CENTER_HEADER"
     [brand]="brand"

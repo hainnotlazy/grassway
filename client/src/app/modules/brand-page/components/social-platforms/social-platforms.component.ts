@@ -7,7 +7,7 @@ import { BrandSocialPlatformsBase, SocialIconStyle } from 'src/app/core/models';
   templateUrl: './social-platforms.component.html',
   styleUrls: ['./social-platforms.component.scss'],
   host: {
-    class: "flex flex-wrap sm:w-auto w-3/4 mx-auto items-center justify-center gap-3"
+    class: "flex flex-wrap sm:w-auto w-3/4 mx-auto items-center justify-center gap-3 select-none"
   }
 })
 export class SocialPlatformsComponent implements OnInit, OnChanges {

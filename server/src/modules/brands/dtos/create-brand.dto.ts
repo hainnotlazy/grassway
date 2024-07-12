@@ -96,7 +96,19 @@ export class CreateBrandDto {
 
   @IsString()
   @IsOptional()
-  @Transform(({ value }: TransformFnParams) => value ? value.trim() : null)
+  @Transform(({ value }: TransformFnParams) => {
+    if (value) {
+      value = value.trim();
+
+      // Add prefix http|https if not present
+      if (!value.startsWith("http://") && !value.startsWith("https://")) {
+        return `https://${value}`;
+      }
+      return value;
+    }
+
+    return null;
+  })
   website?: string;
 
   @IsArray()
