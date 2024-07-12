@@ -7,6 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BrandDraftService } from './brand-draft.service';
 import { LinkActiveOptions, LinkTypeOptions } from 'src/common/models';
 import { SendInvitationDto } from './dtos/send-invitation.dto';
+import { UpdateShortenUrlDto } from '../urls/dtos';
 
 @Controller('brands')
 export class BrandsController {
@@ -117,6 +118,16 @@ export class BrandsController {
     @Body() updateQrCodeDto: UpdateQrCodeDto
   ) {
     return this.brandsService.updateQrCodeSettings(currentUser, id, updateQrCodeDto);
+  }
+
+  @Put("/:id/urls/:urlId")
+  updateLink(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Param("urlId", ParseIntPipe) urlId: number,
+    @Body() updateShortenUrlDto: UpdateShortenUrlDto
+  ) {
+    return this.brandsService.updateLink(currentUser, id, urlId, updateShortenUrlDto);
   }
 
   @Put("/:id/members/:memberId/transfer-ownership") 

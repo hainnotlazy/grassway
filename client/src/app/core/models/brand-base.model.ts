@@ -6,8 +6,6 @@ export interface BrandBase {
   description: string;
   prefix: string;
   logo: string;
-  qr_code_background_color: string;
-  qr_code_foreground_color: string;
   layout: BrandLayout;
   header_color: string;
   background_color: string;

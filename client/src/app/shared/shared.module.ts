@@ -40,6 +40,8 @@ import { SafePipe } from 'safe-pipe';
 import { DestroyDialogComponent } from './components/destroy-dialog/destroy-dialog.component';
 import { QrCodeDialogComponent } from './components/qr-code-dialog/qr-code-dialog.component';
 import { RouterModule } from '@angular/router';
+import { EditLinkDialogComponent } from './components/edit-link-dialog/edit-link-dialog.component';
+import { OptionTagComponent } from './components/option-tag/option-tag.component';
 
 const MatModules = [
   MatFormFieldModule,
@@ -77,6 +79,8 @@ const Components = [
   DeleteDialogComponent,
   DestroyDialogComponent,
   QrCodeDialogComponent,
+  EditLinkDialogComponent,
+  OptionTagComponent
 ]
 
 const Pipes = [

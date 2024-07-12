@@ -5,11 +5,16 @@ import { DataSource, ILike, Not, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { CreateBrandDto, CreateLinkDto, UpdateQrCodeDto } from './dtos';
 import { isUUID } from 'class-validator';
+import * as CryptoJS from 'crypto-js';
 import { UrlsService } from '../urls/urls.service';
 import { GetUrlsOptions } from 'src/common/models';
+import { UpdateShortenUrlDto } from '../urls/dtos';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class BrandsService {
+  private readonly ENCRYPTION_SECRET = this.configService.get("ENCRYPTION_SECRET");
+
   constructor(
     @InjectRepository(Brand)
     private readonly brandRepository: Repository<Brand>,
@@ -28,6 +33,7 @@ export class BrandsService {
     private readonly dataSource: DataSource,
     private readonly uploadFileService: UploadFileService,
     private readonly urlsService: UrlsService,
+    private readonly configService: ConfigService
   ) {}
 
   /**
@@ -375,12 +381,51 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Update link
+  */
+  async updateLink(
+    currentUser: User,
+    brandId: string,
+    urlId: number,
+    updateShortenUrlDto: UpdateShortenUrlDto
+  ) {
+    this.validateBrandId(brandId);
+    const existedBrand = await this.getBrand(currentUser, brandId);
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    const existedUrl = await this.urlRepository.findOneBy({ 
+      id: urlId,
+      brand: {
+        id: brandId
+      }
+    });
+
+    if (updateShortenUrlDto.change_password) {
+      Object.assign(existedUrl, updateShortenUrlDto);
+      if (updateShortenUrlDto.password) {
+        existedUrl.password = CryptoJS.AES.encrypt(updateShortenUrlDto.password, this.ENCRYPTION_SECRET).toString();
+        existedUrl.use_password = true;
+      } else {
+        existedUrl.password = null;
+        existedUrl.use_password = false;
+      }
+    } else {
+      updateShortenUrlDto.password = existedUrl.password;
+      Object.assign(existedUrl, updateShortenUrlDto);
+    }
+
+    return await this.urlRepository.save(existedUrl);
+  }
+
+  /**
    * Describe: Publish changes
   */
   async publishChanges(currentUser: User, brandId: string) {
     this.validateBrandId(brandId);
 
-    const existedBrand = await this.brandDraftRepository.findOne({
+    const existedBrandDraft = await this.brandDraftRepository.findOne({
       where: {
         brand_id: brandId,
         brand: {
@@ -391,7 +436,7 @@ export class BrandsService {
       },
       relations: ["blocks", "blocks.url", "social_platforms"]
     });
-    if (!existedBrand) {
+    if (!existedBrandDraft) {
       throw new BadRequestException("You don't have permission to edit this brand");
     }
 
@@ -402,20 +447,20 @@ export class BrandsService {
     try {
       await queryRunner.manager.update(BrandSocialPlatforms, {
         brand_id: brandId
-      }, existedBrand.social_platforms);
+      }, existedBrandDraft.social_platforms);
 
       await queryRunner.manager.delete(BrandBlock, {});
-      for (const block of existedBrand.blocks) {
+      for (const block of existedBrandDraft.blocks) {
         delete block.id;
         await queryRunner.manager.save(BrandBlock, block);
       }
 
-      delete existedBrand.brand_id;
-      delete existedBrand.blocks;
-      delete existedBrand.social_platforms;
+      delete existedBrandDraft.brand_id;
+      delete existedBrandDraft.blocks;
+      delete existedBrandDraft.social_platforms;
       await queryRunner.manager.update(Brand, {
         id: brandId
-      }, existedBrand);
+      }, existedBrandDraft);
 
       await queryRunner.commitTransaction();
     } catch (err) {

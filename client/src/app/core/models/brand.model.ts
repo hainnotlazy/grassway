@@ -10,5 +10,7 @@ export interface Brand extends BrandBase {
   members?: BrandMember[];
   blocks?: BrandBlock[];
   draft?: BrandDraft;
+  qr_code_background_color: string;
+  qr_code_foreground_color: string;
   created_at: Date;
 }

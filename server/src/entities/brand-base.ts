@@ -15,18 +15,6 @@ export abstract class BrandBase {
   logo: string;
 
   @Column({
-    default: "#000000",
-    length: 7
-  })
-  qr_code_background_color: string;
-
-  @Column({
-    default: "#ffffff",
-    length: 7
-  })
-  qr_code_foreground_color: string;
-
-  @Column({
     type: "enum",
     enum: BrandLayout,
     default: BrandLayout.NO_HEADER

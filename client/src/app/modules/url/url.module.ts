@@ -12,7 +12,6 @@ import { AdvancedFilterComponent } from './components/advanced-filter/advanced-f
 import { EditFormDialogComponent } from './components/edit-form-dialog/edit-form-dialog.component';
 import { BulkSelectComponent } from './components/bulk-select/bulk-select.component';
 import { SearchComponent } from './components/search/search.component';
-import { OptionTagComponent } from './components/option-tag/option-tag.component';
 import { TagBadgeComponent } from './components/tag-badge/tag-badge.component';
 
 const pages = [
@@ -29,7 +28,6 @@ const components = [
   EditFormDialogComponent,
   BulkSelectComponent,
   SearchComponent,
-  OptionTagComponent,
   TagBadgeComponent
 ]
 

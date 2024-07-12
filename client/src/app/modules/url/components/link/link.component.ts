@@ -57,11 +57,11 @@ export class LinkComponent {
 
   onOpenQRCodeDialog() {
     this.dialog.closeAll();
-    this.dialog.open(QrCodeDialogComponent, {
+    this.dialog.open<QrCodeDialogComponent, QrCodeDialogDto>(QrCodeDialogComponent, {
       data: {
         url: this.url,
         fetchUserSettings: true
-      } as QrCodeDialogDto
+      }
     })
   }
 

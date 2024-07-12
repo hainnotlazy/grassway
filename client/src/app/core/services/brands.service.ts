@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Brand, BrandMember, Url, User } from '../models';
-import { CreateBrandDto, ShortenUrlDto, UpdateQrCodeSettingsDto } from '../dtos';
+import { CreateBrandDto, ShortenUrlDto, UpdateQrCodeSettingsDto, UpdateUrlDto } from '../dtos';
 import { BehaviorSubject, filter, map } from 'rxjs';
 import { GetUrlsOptions, UrlsResponse } from '../interfaces';
 
@@ -143,6 +143,13 @@ export class BrandsService {
   */
   updateQrCodeSettings(brandId: string, updateQrCodeSettingsDto: UpdateQrCodeSettingsDto) {
     return this.httpClient.put<Brand>(`api/brands/${brandId}/qr-code`, updateQrCodeSettingsDto);
+  }
+
+  /**
+   * Describe: Update brand link
+  */
+  updateBrandLink(brandId: string, updateUrlDto: UpdateUrlDto) {
+    return this.httpClient.put<Url>(`api/brands/${brandId}/urls/${updateUrlDto.id}`, updateUrlDto);
   }
 
   /**

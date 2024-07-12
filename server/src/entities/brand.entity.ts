@@ -1,4 +1,4 @@
-import { CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BrandSocialPlatforms } from "./brand-social-platforms.entity";
 import { BrandMember } from "./brand-member.entity";
 import { BrandDraft } from "./brand-draft.entity";
@@ -25,6 +25,18 @@ export class Brand extends BrandBase {
 
   @OneToOne(() => BrandDraft, draft => draft.brand)
   draft: BrandDraft;
+
+  @Column({
+    default: "#000000",
+    length: 7
+  })
+  qr_code_background_color: string;
+
+  @Column({
+    default: "#ffffff",
+    length: 7
+  })
+  qr_code_foreground_color: string;
 
   @CreateDateColumn()
   created_at: Date;

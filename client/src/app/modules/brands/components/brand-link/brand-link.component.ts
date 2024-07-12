@@ -4,11 +4,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, filter, map, switchMap, take, tap } from 'rxjs';
-import { QrCodeDialogDto } from 'src/app/core/dtos';
+import { EditLinkDialogDto, QrCodeDialogDto } from 'src/app/core/dtos';
 import { ErrorResponse } from 'src/app/core/interfaces';
 import { Brand, ExtendedUrl, Url } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
 import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
+import { EditLinkDialogComponent } from 'src/app/shared/components/edit-link-dialog/edit-link-dialog.component';
 import { QrCodeDialogComponent } from 'src/app/shared/components/qr-code-dialog/qr-code-dialog.component';
 
 @UntilDestroy()
@@ -48,7 +49,7 @@ export class BrandLinkComponent {
 
   openQRCodeDialog() {
     this.dialog.closeAll();
-    this.dialog.open(QrCodeDialogComponent, {
+    this.dialog.open<QrCodeDialogComponent, QrCodeDialogDto>(QrCodeDialogComponent, {
       data: {
         url: this.link,
         fetchUserSettings: false,
@@ -56,8 +57,42 @@ export class BrandLinkComponent {
         qr_code_foreground_color: this.brand.qr_code_foreground_color,
         qr_code_show_logo: true,
         qr_code_logo_url: this.brand.logo
-      } as QrCodeDialogDto
+      }
     })
+  }
+
+  openEditDialog() {
+    this.dialog.closeAll();
+
+    const editDialog = this.dialog.open<EditLinkDialogComponent, EditLinkDialogDto>(
+      EditLinkDialogComponent,
+      {
+        width: '600px',
+        data: {
+          brand: this.brand,
+          url: this.link,
+        }
+      }
+    );
+
+    editDialog.afterClosed().pipe(
+      filter(data => !!data),
+      map(data => data as Url),
+      tap(updatedLink => Object.assign(this.link, updatedLink)),
+      switchMap(() => this.linksSubject.asObservable()),
+      take(1),
+      filter(urls => !!urls),
+      map(urls => urls as Url[]),
+      map(urls => {
+        urls.splice(
+          urls.findIndex(url => url.id === this.link.id),
+          1,
+          this.link
+        );
+        return urls;
+      }),
+      tap(urls => this.linksSubject.next(urls)),
+    ).subscribe();
   }
 
   onDelete() {
