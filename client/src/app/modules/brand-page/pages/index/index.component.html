@@ -5,13 +5,18 @@
   [ngClass]="'text-' + brand.font"
   [style.background]="hexToRgba(brand.background_color, 0.3)"
 >
+  <app-layout-no-header
+    *ngSwitchCase="BrandLayout.NO_HEADER"
+    [brand]="brand"
+  ></app-layout-no-header>
+
   <app-layout-curly-header
-    *ngSwitchCase="'curly-header'"
+    *ngSwitchCase="BrandLayout.CURLY_HEADER"
     [brand]="brand"
   ></app-layout-curly-header>
 
   <app-layout-center-header
-    *ngSwitchCase="'center-header'"
+    *ngSwitchCase="BrandLayout.CENTER_HEADER"
     [brand]="brand"
   ></app-layout-center-header>
 </div>

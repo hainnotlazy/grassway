@@ -1,5 +1,8 @@
 .brand {
+  filter: drop-shadow(0 .4rem 4.8rem rgba(0,0,0,.36));
+
   header {
+    filter: drop-shadow(0rem -1rem 1rem rgba(0,0,0,.16));
     .header-background {
       height: 12.5rem;
     }

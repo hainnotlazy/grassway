@@ -8,6 +8,7 @@ import { LayoutCenterHeaderComponent } from './layouts/layout-center-header/layo
 import { SocialPlatformsComponent } from './components/social-platforms/social-platforms.component';
 import { BlockComponent } from './components/block/block.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { LayoutNoHeaderComponent } from './layouts/layout-no-header/layout-no-header.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     LayoutCenterHeaderComponent,
     SocialPlatformsComponent,
     BlockComponent,
+    LayoutNoHeaderComponent,
   ],
   imports: [
     CommonModule,

@@ -35,6 +35,7 @@
     *ngIf="platform.destination"
     class="flex items-center"
     [href]="platform.destination"
+    target="_blank"
   >
     <img
       *ngIf="socialPlatforms.icon_style === socialIconStyle.COLOR; else defaultIcon"

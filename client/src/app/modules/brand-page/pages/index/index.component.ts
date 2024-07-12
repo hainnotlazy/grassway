@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
-import { Brand, BrandDraft } from 'src/app/core/models';
+import { Brand, BrandDraft, BrandLayout } from 'src/app/core/models';
 import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 
 @UntilDestroy()
@@ -12,6 +12,7 @@ import { BrandsDraftService, BrandsService } from 'src/app/core/services';
   styleUrls: ['./index.component.scss']
 })
 export class IndexPage implements OnInit {
+  readonly BrandLayout = BrandLayout;
   private readonly isLivePreviewSubject = new BehaviorSubject<boolean>(false);
   brand?: Brand | BrandDraft;
 

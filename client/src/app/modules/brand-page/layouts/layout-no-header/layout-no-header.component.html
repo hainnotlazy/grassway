@@ -2,29 +2,12 @@
   class="brand mx-auto rounded-md rounded-bl-none rounded-br-none shadow-md"
   [style.background]="brand.background_color"
 >
-  <header class="rounded-tl-md rounded-tr-md relative overflow-hidden">
-    <div
-      class="header-background"
-      [style.background]="brand.background_color"
-    ></div>
-
-    <div
-      class="-top-3 absolute w-full h-64 bg-no-repeat bg-cover"
-      [style.background]="brand.header_color"
-      style="clip-path: polygon(0% 0%, 0% 100%, 0.818% 99.342%, 0.818% 99.342%, 10.507% 92.4%, 20.353% 87.015%, 30.317% 83.189%, 40.358% 80.92%, 50.437% 80.209%, 60.514% 81.054%, 70.549% 83.456%, 80.501% 87.415%, 90.331% 92.929%, 100% 100%, 100% 0%, 0% 0%);">
-    </div>
-
+  <header class="relative">
     <div class="header-content relative z-10 p-4 space-y-3 text-white bg-transparent">
-      <h1
-        class="text-3xl font-semibold text-center"
-        [style.color]="brand.title_color"
-      >
-        {{ brand.title }}
-      </h1>
       <img
-        class="min-h-44 min-w-44 aspect-square mx-auto border-4 rounded-full"
+        class="min-h-44 min-w-44 aspect-square mx-auto mt-8 border-4 rounded-full"
         [style]="{
-          'border-color': brand.background_color
+          'border-color': brand.header_color
         }"
         [src]="brand.logo"
         [alt]="brand.title + '\'s logo'"
@@ -34,6 +17,12 @@
         draggable="false"
         loading="eager"
       >
+      <h1
+        class="text-3xl font-semibold text-center select-none"
+        [style.color]="brand.title_color"
+      >
+        {{ brand.title }}
+      </h1>
       <p
         class="text-center text-blue-800"
         [style.color]="brand.description_color"
@@ -47,7 +36,6 @@
     </div>
   </header>
 
-
   <main class="p-4 space-y-5">
     <app-block
       *ngFor="let block of brand.blocks"
@@ -60,13 +48,12 @@
     ></app-block>
   </main>
 
-
   <app-social-platforms
     *ngIf="brand.social_platforms && brand.social_platforms.icon_position === SocialIconPosition.BOTTOM"
     [socialPlatforms]="brand.social_platforms"
   ></app-social-platforms>
 
   <footer class="p-4">
-    <p class="text-center text-gray-800">Powered by Grassway</p>
+    <p class="font-semibold text-center text-gray-800 select-none">Powered by Grassway</p>
   </footer>
 </div>
