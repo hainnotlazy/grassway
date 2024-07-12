@@ -1,4 +1,4 @@
-import { BlockShadow, BlockShape, BrandFont, BrandLayout } from "../models/brand.enum";
+import { BlockShadow, BlockShape, BrandFont, BrandLayout, SocialIconPosition, SocialIconStyle } from "../models/brand.enum";
 
 export interface UpdateBrandDesignDto {
   title?: string;
@@ -18,6 +18,8 @@ export interface UpdateBrandDesignDto {
 }
 
 export interface UpdateSocialPlatformsDto {
+  icon_style?: SocialIconStyle;
+  icon_position?: SocialIconPosition;
   facebook?: string;
   instagram?: string;
   x?: string;

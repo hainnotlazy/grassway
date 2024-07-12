@@ -1,7 +1,16 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsOptional, IsString, Matches } from "class-validator";
+import { IsEnum, IsOptional, IsString, Matches } from "class-validator";
+import { SocialIconPosition, SocialIconStyle } from "src/entities";
 
 export class UpdateSocialPlatformsDto {
+  @IsEnum(SocialIconStyle)
+  @IsOptional()
+  icon_style?: SocialIconStyle;
+
+  @IsEnum(SocialIconPosition)
+  @IsOptional()
+  icon_position?: SocialIconPosition;
+
   @IsString()
   @IsOptional()
   @Matches(

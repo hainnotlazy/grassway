@@ -1,3 +1,4 @@
+import { getObjectValues } from 'src/app/core/helpers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -5,7 +6,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, take, tap } from 'rxjs';
 import { SOCIAL_PLATFORMS_COLORED, SocialPlatform } from 'src/app/core/constants/social-platforms.constant';
 import { UpdateSocialPlatformsDto } from 'src/app/core/dtos';
-import { BrandSocialPlatformsDraft } from 'src/app/core/models';
+import { BrandSocialPlatformsDraft, SocialIconPosition, SocialIconStyle } from 'src/app/core/models';
 import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 import { FormValidator } from 'src/app/core/validators/form.validator';
 
@@ -17,12 +18,18 @@ import { FormValidator } from 'src/app/core/validators/form.validator';
 })
 export class SocialsFormComponent implements OnInit {
   readonly DND_SOCIAL_PLATFORMS = SOCIAL_PLATFORMS_COLORED;
+  readonly SocialIconStyle = SocialIconStyle;
+  readonly SocialIconPosition = SocialIconPosition;
+  readonly getObjectValues = getObjectValues;
+
   brandId!: string;
   isProcessing = false;
 
   @Input() socialPlatforms!: BrandSocialPlatformsDraft;
 
   form = new FormGroup({
+    icon_style: new FormControl(SocialIconStyle.COLOR),
+    icon_position: new FormControl(SocialIconPosition.TOP),
     facebook: new FormControl("", [
       Validators.maxLength(255),
       FormValidator.validSocialLink("facebook")
