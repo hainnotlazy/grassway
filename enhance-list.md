@@ -6,9 +6,6 @@
 
 - tag entity
 - truncate all 255 chars
-- live preview function
-- default brand logo
-- remove block & brand image after deleted
 
 ## TODO:
 - push noti when brand created

@@ -130,7 +130,7 @@ export class BrandDraftService {
     let url: Url;
     let savedImagePath = null;
     if (createBrandBlockDto.type === BlockType.IMAGE && image) {
-      savedImagePath = this.uploadFileService.saveBrandLogo(image);
+      savedImagePath = this.uploadFileService.saveBlockImage(image);
     }
 
     if (newOriginUrl) {
@@ -222,7 +222,7 @@ export class BrandDraftService {
     Object.assign(existedBlock, updateBrandBlockDto);
     existedBlock.url = url;
     if (updateBrandBlockDto.type === BlockType.IMAGE && image) {
-      savedImagePath = this.uploadFileService.saveBrandLogo(image);
+      savedImagePath = this.uploadFileService.saveBlockImage(image);
       oldImagePath = existedBlock.image;
       existedBlock.image = savedImagePath;
     }
@@ -301,7 +301,7 @@ export class BrandDraftService {
     // Save brand logo
     let savedLogoPath = null;
     if (logo) {
-      savedLogoPath = this.uploadFileService.saveBrandLogo(logo);
+      savedLogoPath = await this.uploadFileService.saveBrandLogo(logo);
     }
 
     try {

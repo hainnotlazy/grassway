@@ -1,6 +1,6 @@
 import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UnauthorizedException } from '@nestjs/common';
+import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { RedisDatabase, RedisService } from 'src/shared/services/redis/redis.service';
 import { UserNotification } from 'src/entities';
 import { JwtService } from '@nestjs/jwt';
@@ -11,7 +11,7 @@ import { SOCKET_ORIGIN } from 'src/config/socket.config';
   namespace: "notification",
   maxHttpBufferSize: 1e7 //1MB
 })
-export class NotificationGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class NotificationGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {
   private readonly NEW_NOTIFICATION_EVENT_NAME = "NewNotification"; 
   @WebSocketServer() server: Server;
 
@@ -19,6 +19,10 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
     private redisService: RedisService,
     private jwtService: JwtService
   ) {}
+
+  async onModuleInit() {
+    await this.redisService.flushDatabase(RedisDatabase.NOTIFICATION_SOCKET);
+  }
 
   async handleConnection(socket: Socket) {
     try {

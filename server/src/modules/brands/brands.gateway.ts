@@ -1,8 +1,8 @@
 import { RedisDatabase, RedisService } from 'src/shared/services/redis/redis.service';
-import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException } from '@nestjs/common';
+import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { BrandDraft } from 'src/entities';
 import { SOCKET_ORIGIN } from 'src/config/socket.config';
 
@@ -11,18 +11,42 @@ import { SOCKET_ORIGIN } from 'src/config/socket.config';
   namespace: "brands",
   maxHttpBufferSize: 1e7 //1MB
 })
-export class BrandsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class BrandsGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {
   private readonly DRAFT_CHANGED_EVENT_NAME = "DraftChanged"; 
   @WebSocketServer() server: Server;
 
   constructor(
     private redisService: RedisService,
     private jwtService: JwtService
-  ) {
-    this.redisService.flushDatabase(RedisDatabase.BRAND);
+  ) {}
+
+  async onModuleInit() {
+    await this.redisService.flushDatabase(RedisDatabase.BRAND);
   }
 
   async handleConnection(socket: Socket) {
+    try {
+      if (!socket.handshake.headers.authorization) {
+        this.disconnectSocket(socket, 401);
+      }
+    } catch (err) {
+      this.disconnectSocket(socket);
+    }
+  }
+
+  async handleDisconnect(socket: Socket) {
+    try {
+      const userId = socket.data.user.userId;
+      await this.redisService.removeKey({
+        key: userId.toString(),
+        database: RedisDatabase.BRAND
+      });
+      socket.disconnect();
+    } catch (err) {}
+  }
+  
+  @SubscribeMessage("register")
+  async registerGetNewChanges(socket: Socket) {
     try {
       const accessToken = socket.handshake.headers.authorization.replace("Bearer ", "");
       const user = await this.extractTokenPayload(accessToken);
@@ -42,17 +66,6 @@ export class BrandsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (err) {
       this.disconnectSocket(socket);
     }
-  }
-
-  async handleDisconnect(socket: Socket) {
-    try {
-      const userId = socket.data.user.userId;
-      await this.redisService.removeKey({
-        key: userId.toString(),
-        database: RedisDatabase.BRAND
-      });
-      socket.disconnect();
-    } catch (err) {}
   }
 
   async emitDraftChanged(userId: number, brandDraft: BrandDraft): Promise<boolean> {

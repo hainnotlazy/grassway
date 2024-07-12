@@ -211,7 +211,7 @@ export class BrandsService {
     // Save brand logo
     let savedLogoPath = null;
     if (logo) {
-      savedLogoPath = this.uploadFileService.saveBrandLogo(logo);
+      savedLogoPath = await this.uploadFileService.saveBrandLogo(logo);
     }
 
     try {
@@ -518,7 +518,18 @@ export class BrandsService {
   */
   async deleteBrand(currentUser: User, brandId: string) {
     this.validateBrandId(brandId);
-    this.isBrandOwner(currentUser, brandId);
+    const existedBrand = await this.brandRepository.findOne({
+      where: {
+        id: brandId,
+        members: {
+          user_id: currentUser.id,
+          role: BrandMemberRole.OWNER
+        }
+      }
+    });
+    if (!existedBrand) {
+      throw new BadRequestException("You are not owner of this brand to do this action");
+    }
 
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -551,6 +562,7 @@ export class BrandsService {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException("Failed to delete brand");
     } finally {
+      this.uploadFileService.removeOldFile(existedBrand.logo);
       await queryRunner.release();
     }
   }

@@ -8,12 +8,17 @@ import { BrandBlockDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSo
   providedIn: 'root'
 })
 export class BrandsDraftService {
+  private readonly REGISTER_EVENT_NAME = "register";
   private readonly DRAFT_CHANGED_EVENT_NAME = "DraftChanged";
 
   constructor(
     private httpClient: HttpClient,
     private socket: BrandsSocket
   ) { }
+
+  registerGetNewChanges() {
+    return this.socket.emit(this.REGISTER_EVENT_NAME);
+  }
 
   watchDraftChanged() {
     return this.socket.fromEvent<BrandDraft>(this.DRAFT_CHANGED_EVENT_NAME);

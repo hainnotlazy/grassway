@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, filter, finalize, map, Observable, switchMap, take, takeUntil, tap } from 'rxjs';
@@ -62,6 +62,7 @@ export class IndexPage implements OnInit {
   }
 
   private livePreview(): void {
+    this.brandsDraftService.registerGetNewChanges();
     this.brandsDraftService.watchDraftChanged().pipe(
       filter(latestBrand => latestBrand.brand_id === (this.brand as BrandDraft).brand_id),
       tap(latestBrand => Object.assign(this.brand as BrandDraft, latestBrand)),
