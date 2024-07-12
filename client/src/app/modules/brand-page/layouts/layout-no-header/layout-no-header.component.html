@@ -9,7 +9,7 @@
         [style]="{
           'border-color': brand.header_color
         }"
-        [src]="brand.logo"
+        [src]="brand.logo || defaultBrandLogo"
         [alt]="brand.title + '\'s logo'"
         fetchPriority="high"
         width="176"

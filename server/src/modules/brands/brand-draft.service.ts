@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateBrandDesignDto, UpdateSocialPlatformsOrderDto, UpdateSocialPlatformsDto, BrandBlockDto, UpdateBlockOrderDto } from './dtos';
-import { User, BrandDraft, BrandSocialPlatformsDraft, BrandBlockDraft, BlockType, Url, Brand } from 'src/entities';
+import { User, BrandDraft, BrandSocialPlatformsDraft, BrandBlockDraft, BlockType, Url, Brand, BrandMember } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UploadFileService } from 'src/shared/services/upload-file/upload-file.service';
 import { BrandsGateway } from './brands.gateway';
@@ -19,6 +19,8 @@ export class BrandDraftService {
     private readonly brandSocialPlatformsDraftRepository: Repository<BrandSocialPlatformsDraft>,
     @InjectRepository(BrandBlockDraft)
     private readonly brandBlockDraftRepository: Repository<BrandBlockDraft>,
+    @InjectRepository(BrandMember)
+    private readonly brandMemberRepository: Repository<BrandMember>,
     private brandsService: BrandsService,
     private urlsService: UrlsService,
     private dataSource: DataSource,
@@ -165,7 +167,7 @@ export class BrandDraftService {
     const savedBlock = await this.brandBlockDraftRepository.save(block);
 
     // Push block changes to live preview (allow it run even though returned savedBlock to controller)
-    this.handleEmitBlockChanges(currentUser, brandId);
+    this.pushBlockChangesToMembers(brandId);
 
     return savedBlock;
   }
@@ -228,7 +230,7 @@ export class BrandDraftService {
     const updatedBlock = await this.brandBlockDraftRepository.save(existedBlock);
 
     // Push block changes to live preview (allow it run even though returned updatedBlock to controller)
-    this.handleEmitBlockChanges(currentUser, brandId);
+    this.pushBlockChangesToMembers(brandId);
 
     // Remove old block image
     if (
@@ -272,7 +274,7 @@ export class BrandDraftService {
     await query.execute();
 
     // Push block changes to live preview (allow it run even though returned done to controller)
-    this.handleEmitBlockChanges(currentUser, brandId);
+    this.pushBlockChangesToMembers(brandId);
   }
 
   /** 
@@ -314,7 +316,7 @@ export class BrandDraftService {
       await queryRunner.commitTransaction();
 
       // Push changes to live preview (allow it run even though returned updatedBrand to controller)
-      this.brandsGateway.emitDraftChanged(currentUser.id, updatedBrand);
+      this.pushChangesToMembers(existedBrand);
 
       return updatedBrand;
     } catch (error) {
@@ -346,7 +348,7 @@ export class BrandDraftService {
     const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand.social_platforms);
 
     // Push changes to live preview (allow it run even though returned updatedBrand to controller)
-    this.brandsGateway.emitDraftChanged(currentUser.id, existedBrand);
+    this.pushChangesToMembers(existedBrand);
 
     return updatedBrand;
   }
@@ -370,7 +372,7 @@ export class BrandDraftService {
     const updatedBrand = await this.brandSocialPlatformsDraftRepository.save(existedBrand.social_platforms);
 
     // Push changes to live preview (allow it run even though returned updatedBrand to controller)
-    this.brandsGateway.emitDraftChanged(currentUser.id, existedBrand);
+    this.pushChangesToMembers(existedBrand);
 
     return updatedBrand;
   }
@@ -405,7 +407,25 @@ export class BrandDraftService {
     await this.brandBlockDraftRepository.remove(existedBlock);
 
     // Push changes to live preview (allow it run even though returned done to controller)
-    this.handleEmitBlockChanges(currentUser, brandId);
+    this.pushBlockChangesToMembers(brandId);
+  }
+
+  /** 
+   * Describe: Handle to push new draft changes to live preview to all members of brand
+  */
+  async pushChangesToMembers(latestDraft: BrandDraft): Promise<void> {
+    await new Promise(async (resolve, reject) => {
+      resolve(await this.brandMemberRepository.find({ 
+        where: { 
+          brand_id: latestDraft.brand_id,
+          joined: true
+        }
+      }));
+    }).then((members: BrandMember[]) => {
+      for (const member of members) {
+        this.brandsGateway.emitDraftChanged(member.user_id, latestDraft);
+      }
+    });
   }
 
   /**
@@ -430,12 +450,24 @@ export class BrandDraftService {
   }
 
   /**
-   * Describe: Handle emit block changes
+   * Describe: Handle emit block changes to live preview to all members of brand
   */
-  private async handleEmitBlockChanges(currentUser: User, brandId: string) {
-    const existedBrand = await this.getBrandById(currentUser, brandId, ["blocks", "blocks.url"]);
+  private async pushBlockChangesToMembers(brandId: string) {
+    const existedBrand = await this.brandDraftRepository.findOne({
+      where: {
+        brand: {
+          id: brandId,
+          members: {
+            joined: true
+          }
+        },
+      },
+      relations: ["blocks", "blocks.url", "brand", "brand.members"],
+    })
 
     // Push changes to live preview
-    await this.brandsGateway.emitDraftChanged(currentUser.id, existedBrand);
+    for (const member of existedBrand.brand.members) {
+      await this.brandsGateway.emitDraftChanged(member.user_id, existedBrand);
+    }
   }
 }

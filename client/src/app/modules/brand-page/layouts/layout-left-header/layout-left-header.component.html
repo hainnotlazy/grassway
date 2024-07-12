@@ -15,7 +15,7 @@
           'border-color': brand.background_color,
           'filter': 'drop-shadow(0rem 0.5rem 0.5rem ' + brand.background_color + ')'
         }"
-        [src]="brand.logo"
+        [src]="brand.logo || defaultBrandLogo"
         [alt]="brand.title + '\'s logo'"
         fetchPriority="high"
         width="176"

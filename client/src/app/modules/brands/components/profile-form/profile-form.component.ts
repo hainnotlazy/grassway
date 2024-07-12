@@ -9,6 +9,8 @@ import { getObjectKeys } from 'src/app/core/helpers';
   styleUrls: ['./profile-form.component.scss']
 })
 export class ProfileFormComponent {
+  readonly defaultBrandLogo = "/assets/images/default-brand-logo.jpg";
+
   @Input() logoControl!: FormControl;
   @Input() titleControl!: FormControl;
   @Input() descriptionControl!: FormControl;

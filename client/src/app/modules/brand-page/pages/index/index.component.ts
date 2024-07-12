@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, filter, finalize, map, Observable, switchMap, take, takeUntil, tap } from 'rxjs';
 import { Brand, BrandDraft, BrandLayout } from 'src/app/core/models';
 import { BrandsDraftService, BrandsService } from 'src/app/core/services';
 
@@ -44,9 +44,11 @@ export class IndexPage implements OnInit {
   }
 
   ngOnInit() {
-    this.router.events.pipe(
-      filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
-      switchMap(() => this.livePreview()),
+    this.isLivePreviewSubject.asObservable().pipe(
+      filter(isLivePreview => isLivePreview),
+      tap(() => {
+        this.livePreview();
+      }),
       untilDestroyed(this)
     ).subscribe();
   }
@@ -59,12 +61,19 @@ export class IndexPage implements OnInit {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   }
 
-  private livePreview() {
-    return this.brandsDraftService.watchDraftChanged().pipe(
+  private livePreview(): void {
+    this.brandsDraftService.watchDraftChanged().pipe(
       filter(latestBrand => latestBrand.brand_id === (this.brand as BrandDraft).brand_id),
       tap(latestBrand => Object.assign(this.brand as BrandDraft, latestBrand)),
       tap(() => this.sortBlocksOrder()),
-    );
+      takeUntil(
+        this.router.events.pipe(
+          filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
+        )
+      ),
+      finalize(() => console.log("done")),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   private getBrand(prefix: string): Observable<Brand | BrandDraft> {

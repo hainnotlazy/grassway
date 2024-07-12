@@ -44,7 +44,7 @@
         class="group-hover:brightness-75 w-full h-auto transition-all duration-300 ease-in-out border select-none"
         width="650"
         height="650"
-        [src]="client + '/' + block.image"
+        [src]="block.image || defaultBlockImage"
         [alt]="block.title + '\'s image'"
         [ngClass]="{
           'shadow-md': blockShadow === BlockShadow.SHADOW,
@@ -58,6 +58,7 @@
           'aspect-rectangle': block.image_ratio === BlockImageRatio.RATIO_3_2,
           'aspect-video': block.image_ratio === BlockImageRatio.RATIO_16_9,
         }"
+        loading="lazy"
         draggable="false"
       >
       <i class="icon-open-in-new-tab group-hover:opacity-100 group-hover:scale-125 top-4 right-4 absolute flex items-center justify-center text-2xl text-white transition-all duration-500 ease-in-out scale-100 rounded-full opacity-0"></i>

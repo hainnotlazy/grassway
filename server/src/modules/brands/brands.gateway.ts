@@ -18,7 +18,9 @@ export class BrandsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private redisService: RedisService,
     private jwtService: JwtService
-  ) {}
+  ) {
+    this.redisService.flushDatabase(RedisDatabase.BRAND);
+  }
 
   async handleConnection(socket: Socket) {
     try {

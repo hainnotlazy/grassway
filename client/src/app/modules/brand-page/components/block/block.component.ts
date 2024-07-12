@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { BlockImageRatio, BlockShadow, BlockShape, BlockType, BrandBlockBase } from 'src/app/core/models';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-block',
@@ -11,7 +10,7 @@ import { environment } from 'src/environments/environment';
   }
 })
 export class BlockComponent {
-  readonly client = environment.client;
+  readonly defaultBlockImage = "/assets/images/default-block-image.jpg";
   readonly BlockType = BlockType;
   readonly BlockShape = BlockShape;
   readonly BlockShadow = BlockShadow;

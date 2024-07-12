@@ -7,6 +7,7 @@ import { Brand, BrandDraft, SocialIconPosition } from 'src/app/core/models';
   styleUrls: ['./layout-left-header.component.scss']
 })
 export class LayoutLeftHeaderComponent {
+  readonly defaultBrandLogo = "/assets/images/default-brand-logo.jpg";
   readonly SocialIconPosition = SocialIconPosition;
 
   @Input() brand!: Brand | BrandDraft;
