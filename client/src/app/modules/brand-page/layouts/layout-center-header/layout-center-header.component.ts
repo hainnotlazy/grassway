@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Brand, BrandDraft } from 'src/app/core/models';
+import { Brand, BrandDraft, SocialIconPosition } from 'src/app/core/models';
 
 @Component({
   selector: 'app-layout-center-header',
@@ -7,5 +7,7 @@ import { Brand, BrandDraft } from 'src/app/core/models';
   styleUrls: ['./layout-center-header.component.scss']
 })
 export class LayoutCenterHeaderComponent {
+  readonly SocialIconPosition = SocialIconPosition;
+
   @Input() brand!: Brand | BrandDraft;
 }

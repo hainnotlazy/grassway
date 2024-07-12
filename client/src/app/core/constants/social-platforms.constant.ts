@@ -53,3 +53,50 @@ export const SOCIAL_PLATFORMS_COLORED: SocialPlatform[] = [
   },
 ];
 
+export const SOCIAL_PLATFORMS_DEFAULT: SocialPlatform[] = [
+  {
+    name: "facebook",
+    icon: "icon-facebook-lint",
+    placeholder: "https://facebook.com/your-brand"
+  },
+  {
+    name: "instagram",
+    icon: "icon-instagram",
+    placeholder: "https://instagram.com/your-brand"
+  },
+  {
+    name: "x",
+    icon: "icon-twitter",
+    placeholder: "https://x.com/your-brand"
+  },
+  {
+    name: "youtube",
+    icon: "icon-youtube-fill",
+    placeholder: "https://youtube.com/your-brand"
+  },
+  {
+    name: "tiktok",
+    icon: "icon-tiktok",
+    placeholder: "https://tiktok.com/your-brand"
+  },
+  {
+    name: "linkedin",
+    icon: "icon-linkedin",
+    placeholder: "https://linkedin.com/your-brand"
+  },
+  {
+    name: "discord",
+    icon: "icon-discord",
+    placeholder: "https://discord.com/your-brand"
+  },
+  {
+    name: "github",
+    icon: "icon-github",
+    placeholder: "https://github.com/your-brand"
+  },
+  {
+    name: "website",
+    icon: "icon-public",
+    placeholder: "https://your-brand.com"
+  },
+];

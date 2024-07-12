@@ -1,10 +1,10 @@
-<ng-container
+<!-- <ng-container
   *ngIf="socialPlatforms.icon_style === socialIconStyle.COLOR"
   [ngTemplateOutlet]="color"
 ></ng-container>
 
 <ng-template #color>
-  <ng-container *ngFor="let platform of SOCIAL_PLATFORMS_COLORED">
+  <ng-container *ngFor="let platform of SOCIAL_PLATFORMS">
     <a
       *ngIf="platform.destination"
       [href]="platform.destination"
@@ -27,4 +27,32 @@
 
 <ng-template #white>
 
-</ng-template>
+</ng-template> -->
+
+
+<ng-container *ngFor="let platform of SOCIAL_PLATFORMS">
+  <a
+    *ngIf="platform.destination"
+    class="flex items-center"
+    [href]="platform.destination"
+  >
+    <img
+      *ngIf="socialPlatforms.icon_style === socialIconStyle.COLOR; else defaultIcon"
+      [src]="platform.icon"
+      [alt]="platform.name + '\'s icon'"
+      width="30"
+      height="30"
+      loading="eager"
+      draggable="false"
+    >
+    <ng-template #defaultIcon>
+      <i
+        class="text-2xl"
+        [ngClass]="[
+          platform.icon,
+          socialPlatforms.icon_style === socialIconStyle.WHITE ? 'text-white' : 'text-black'
+        ]"
+      ></i>
+    </ng-template>
+  </a>
+</ng-container>

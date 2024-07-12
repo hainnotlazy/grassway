@@ -35,7 +35,7 @@
         {{ brand.description }}
       </p>
       <app-social-platforms
-        *ngIf="brand.social_platforms"
+        *ngIf="brand.social_platforms && brand.social_platforms.icon_position === SocialIconPosition.TOP"
         [socialPlatforms]="brand.social_platforms"
       ></app-social-platforms>
     </div>
@@ -52,6 +52,11 @@
       [blockTextColor]="brand.block_text_color"
     ></app-block>
   </main>
+
+  <app-social-platforms
+    *ngIf="brand.social_platforms && brand.social_platforms.icon_position === SocialIconPosition.BOTTOM"
+    [socialPlatforms]="brand.social_platforms"
+  ></app-social-platforms>
 
   <footer class="p-4">
     <p class="font-semibold text-center text-gray-800 select-none">Powered by Grassway</p>
