@@ -34,7 +34,7 @@ export abstract class BrandBase {
   background_color: string;
 
   @Column({
-    default: "#ffffff",
+    default: "#000000",
     length: 7
   })
   title_color: string;

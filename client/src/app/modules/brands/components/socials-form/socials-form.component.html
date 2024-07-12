@@ -67,7 +67,7 @@
         *ngFor="let style of getObjectValues(SocialIconStyle)"
         [value]="style"
       >
-        {{ style | titlecase }}
+        {{ style.split("-").join(" ") | titlecase }}
       </mat-radio-button>
     </mat-radio-group>
   </div>

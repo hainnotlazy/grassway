@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { SOCIAL_PLATFORMS_COLORED, SOCIAL_PLATFORMS_DEFAULT, SocialPlatform } from 'src/app/core/constants/social-platforms.constant';
+import { SOCIAL_PLATFORMS_COLORED, SOCIAL_PLATFORMS_DEFAULT, SOCIAL_PlATFORMS_NEXT_GEN, SocialPlatform } from 'src/app/core/constants/social-platforms.constant';
 import { BrandSocialPlatformsBase, SocialIconStyle } from 'src/app/core/models';
 
 @Component({
@@ -22,10 +22,7 @@ export class SocialPlatformsComponent implements OnInit, OnChanges {
   }
 
   private renderSocialPlatforms() {
-    this.SOCIAL_PLATFORMS =
-      this.socialPlatforms.icon_style === SocialIconStyle.COLOR
-      ? SOCIAL_PLATFORMS_COLORED
-      : SOCIAL_PLATFORMS_DEFAULT;
+    this.SOCIAL_PLATFORMS = this.getSocialPlatforms();
 
     for (let i = 0; i < this.SOCIAL_PLATFORMS.length; i++) {
       const platform = this.SOCIAL_PLATFORMS[i];
@@ -37,6 +34,19 @@ export class SocialPlatformsComponent implements OnInit, OnChanges {
     this.sortPlatforms(this.SOCIAL_PLATFORMS);
   }
 
+  private getSocialPlatforms() {
+    if (this.socialPlatforms.icon_style === SocialIconStyle.COLOR) {
+      return SOCIAL_PLATFORMS_COLORED;
+    } else if (
+      this.socialPlatforms.icon_style === SocialIconStyle.BLACK ||
+      this.socialPlatforms.icon_style === SocialIconStyle.WHITE
+    ) {
+      return SOCIAL_PLATFORMS_DEFAULT;
+    } else {
+      return SOCIAL_PlATFORMS_NEXT_GEN;
+    }
+  }
+
   private sortPlatforms(platforms: SocialPlatform[]) {
     return platforms.sort((a, b) => {
       const platformA = a.name;
@@ -45,5 +55,16 @@ export class SocialPlatformsComponent implements OnInit, OnChanges {
       // @ts-ignore
       return this.socialPlatforms[`${platformB}_order`] - this.socialPlatforms[`${platformA}_order`];
     })
+  }
+
+  getIconClassNames(platformIcon: string) {
+    return `text-2xl ${platformIcon} ${this.isWhiteIconStyle() ? 'text-white' : 'text-black'}`;
+  }
+
+  isWhiteIconStyle() {
+    return (
+      this.socialPlatforms.icon_style === SocialIconStyle.WHITE
+      || this.socialPlatforms.icon_style === SocialIconStyle.WHITE_FILLED
+    );
   }
 }

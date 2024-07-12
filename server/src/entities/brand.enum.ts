@@ -38,7 +38,9 @@ export enum BrandFont {
 export enum SocialIconStyle {
   COLOR = "color",
   BLACK = "black",
-  WHITE = "white"
+  WHITE = "white",
+  BLACK_FILLED = "black-filled",
+  WHITE_FILLED = "white-filled",
 }
 
 export enum SocialIconPosition {

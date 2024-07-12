@@ -100,3 +100,51 @@ export const SOCIAL_PLATFORMS_DEFAULT: SocialPlatform[] = [
     placeholder: "https://your-brand.com"
   },
 ];
+
+export const SOCIAL_PlATFORMS_NEXT_GEN: SocialPlatform[]= [
+  {
+    name: "facebook",
+    icon: "icon-facebook-gen-2",
+    placeholder: "https://facebook.com/your-brand"
+  },
+  {
+    name: "instagram",
+    icon: "icon-instagram-gen-2",
+    placeholder: "https://instagram.com/your-brand"
+  },
+  {
+    name: "x",
+    icon: "icon-x-gen-2",
+    placeholder: "https://x.com/your-brand"
+  },
+  {
+    name: "youtube",
+    icon: "icon-youtube-gen-2",
+    placeholder: "https://youtube.com/your-brand"
+  },
+  {
+    name: "tiktok",
+    icon: "icon-tiktok-gen-2",
+    placeholder: "https://tiktok.com/your-brand"
+  },
+  {
+    name: "linkedin",
+    icon: "icon-linkedin",
+    placeholder: "https://linkedin.com/your-brand"
+  },
+  {
+    name: "discord",
+    icon: "icon-discord-gen-2",
+    placeholder: "https://discord.com/your-brand"
+  },
+  {
+    name: "github",
+    icon: "icon-github-gen-2",
+    placeholder: "https://github.com/your-brand"
+  },
+  {
+    name: "website",
+    icon: "icon-public-gen-2",
+    placeholder: "https://your-brand.com"
+  },
+];
