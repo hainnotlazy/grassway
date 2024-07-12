@@ -56,6 +56,17 @@ export class FormValidator {
     return null;
   }
 
+  static validBrandPrefix(control: AbstractControl) {
+    const url = control.value;
+    if (!url) return null;
+
+    const pattern = /^[a-zA-Z0-9]+$/;
+    if (pattern && !pattern.test(url)) {
+      return { invalidPrefix: true };
+    }
+    return null;
+  }
+
   static brandPrefixExisted(brandsService: BrandsService, currentBrandPrefix?: string): AsyncValidatorFn {
     return control => {
       if (!control.value || control.value === currentBrandPrefix) return of(null);

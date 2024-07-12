@@ -16,6 +16,7 @@ export class CreateBrandDto {
 
   @IsString()
   @IsNotEmpty()
+  @Matches(/^[a-zA-Z0-9_-]+$/, { message: "Invalid prefix. Only letters and numbers allowed" })
   @Transform(({ value }: TransformFnParams) => value?.trim())
   prefix: string;
 

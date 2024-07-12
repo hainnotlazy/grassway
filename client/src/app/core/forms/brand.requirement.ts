@@ -8,7 +8,8 @@ const prefixRequirements = {
   required: true,
   minlength: 3,
   maxlength: 255,
-  existed: true
+  existed: true,
+  invalidPrefix: true
 }
 
 const descriptionRequirements = {
@@ -66,6 +67,7 @@ export const createBrandRequirements = {
       required: "Prefix is required",
       minlength: `Prefix must be at least ${prefixRequirements.minlength} characters`,
       maxlength: `Prefix must be at most ${prefixRequirements.maxlength} characters`,
+      invalidPrefix: "Prefix should include only letters and numbers",
       existed: "Prefix has already been taken"
     }
   },
