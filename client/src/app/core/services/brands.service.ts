@@ -132,6 +132,13 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Handle invitation
+  */
+  handleInvitation(brandId: string, response: boolean) {
+    return this.httpClient.put<BrandMember>(`api/brands/${brandId}/members/handle-invitation`, { response });
+  }
+
+  /**
    * Describe: Create link
   */
   createLink(brandId: string, createLinkDto: ShortenUrlDto) {

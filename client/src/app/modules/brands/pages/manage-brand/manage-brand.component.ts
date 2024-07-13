@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, distinctUntilChanged, filter, finalize, map, switchMap, take, tap } from 'rxjs';
 import { ErrorResponse } from 'src/app/core/interfaces';
+import { BrandMember } from 'src/app/core/models';
 import { BrandsService } from 'src/app/core/services';
 import { environment } from 'src/environments/environment';
 
@@ -20,6 +21,7 @@ import { environment } from 'src/environments/environment';
 export class ManageBrandPage {
   readonly client = environment.client;
   brand$ = this.brandsService.currentBrand$;
+  joinedBrand = false;
   fetchedBrand = false;
   isProcessing = false;
   showLivePreview$: Observable<boolean>;
@@ -43,9 +45,14 @@ export class ManageBrandPage {
       switchMap((brandId: string) => this.brandsService.getBrandById(brandId)),
       tap(brand => {
         this.brandsService.setCurrentBrand(brand);
-        this.fetchedBrand = true;
       }, () => {
         this.router.navigate(["/u/brands"]);
+      }),
+      switchMap(() => this.brand$),
+      switchMap(brand => this.brandsService.getRole(brand.id)),
+      tap((role: BrandMember) => {
+        this.joinedBrand = role.joined;
+        this.fetchedBrand = true;
       }),
       untilDestroyed(this)
     ).subscribe();
@@ -80,6 +87,10 @@ export class ManageBrandPage {
       finalize(() => this.isProcessing = false),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  onJoinBrand() {
+    this.joinedBrand = true;
   }
 
   private handlePublishFailed(error: any) {

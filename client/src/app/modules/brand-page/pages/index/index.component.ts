@@ -18,6 +18,7 @@ export class IndexPage implements OnInit {
 
   brand?: Brand | BrandDraft;
   disallowedLivePreview = false;
+  brandNotFound = false;
 
   constructor(
     private brandsService: BrandsService,
@@ -44,6 +45,8 @@ export class IndexPage implements OnInit {
       tap(brand => {
         this.brand = brand;
         this.titleService.setTitle(`${(brand.title || "") + " |"} Grassway Brands`);
+      }, () => {
+        this.brandNotFound = true;
       }),
       tap(() => this.sortBlocksOrder()),
       untilDestroyed(this)

@@ -1,9 +1,9 @@
-<mat-form-field class="-mb-5" appearance="outline" color="accent">
-  <mat-icon matPrefix>search</mat-icon>
+<div class="focus-within:border-secondary flex items-center gap-2 px-2 py-1 bg-white border border-gray-300 rounded-md">
+  <i class="icon-search text-lg"></i>
   <input
+    class="outline-none w-48 py-1.5"
     [formControl]="searchControl"
     type="text"
-    matInput
     placeholder="Search..."
   >
-</mat-form-field>
+</div>

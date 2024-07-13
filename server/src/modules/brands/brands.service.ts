@@ -57,7 +57,7 @@ export class BrandsService {
   async getBrandById(currentUser: User, id: string) {
     this.validateBrandId(id);
 
-    const existedBrand = this.brandRepository.findOne({  
+    const existedBrand = await this.brandRepository.findOne({  
       where: {
         id,
         members: {
@@ -170,6 +170,7 @@ export class BrandsService {
       },
       relations: ["user"],
       order: {
+        joined: "DESC",
         role: "ASC"
       }
     })
@@ -226,7 +227,8 @@ export class BrandsService {
       const brandOwner = this.brandMemberRepository.create({
         brand: savedBrand,
         user: currentUser,
-        role: BrandMemberRole.OWNER
+        role: BrandMemberRole.OWNER,
+        joined: true
       });
       await queryRunner.manager.save(brandOwner);
 
@@ -328,6 +330,37 @@ export class BrandsService {
       throw new InternalServerErrorException("Failed to send invitations");
     } finally {
       await queryRunner.release();
+    }
+  }
+
+  /**
+   * Describe: Handle invitation
+  */
+  async handleInvitation(
+    currentUser: User,
+    brandId: string,
+    response: boolean
+  ) {
+    this.validateBrandId(brandId);
+
+    const existedMember = await this.brandMemberRepository.findOne({
+      where: {
+        brand_id: brandId,
+        user_id: currentUser.id,
+        role: BrandMemberRole.MEMBER
+      }
+    });
+    if (!existedMember) {
+      throw new BadRequestException("Brand not found or you don't have invitation for this brand");
+    } else if (existedMember && existedMember.joined) {
+      throw new BadRequestException("You already joined this brand");
+    } 
+
+    if (response) {
+      existedMember.joined = response;
+      return await this.brandMemberRepository.save(existedMember);
+    } else {
+      return await this.brandMemberRepository.remove(existedMember);
     }
   }
 

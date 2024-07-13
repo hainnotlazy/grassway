@@ -12,12 +12,24 @@
     <span class="font-semibold text-gray-600">{{ member.user.fullname }}</span>
     <span class="text-gray-400">{{ member.user.email || member.user.username }}</span>
   </div>
-  <span class="order-3 font-semibold" [ngClass]="{
+  <span
+    *ngIf="member.joined; else invited"
+    class="order-3 font-semibold"
+    [ngClass]="{
     'text-blue-600': member.role === BrandMemberRole.MEMBER,
     'text-orange-500': member.role === BrandMemberRole.OWNER
   }">
     【{{ member.role.toLowerCase() | titlecase }}】
   </span>
+  <ng-template #invited>
+    <span
+      class="order-3 font-semibold text-gray-600"
+      matTooltip="The sent invitation is awaiting acceptance"
+      matTooltipPosition="above"
+    >
+      【Pending】
+    </span>
+  </ng-template>
   <div class="sm:w-auto basis-3/4 sm:basis-auto sm:order-4 flex-grow order-5">
     <button
       *ngIf="isOwner"

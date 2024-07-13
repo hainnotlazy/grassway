@@ -1,5 +1,5 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto, CreateLinkDto, UpdateQrCodeDto } from './dtos';
+import { CreateBrandDto, UpdateBrandDesignDto, UpdateSocialPlatformsDto, UpdateSocialPlatformsOrderDto, BrandBlockDto, UpdateBlockOrderDto, CreateLinkDto, UpdateQrCodeDto, HandleInvitationDto } from './dtos';
 import { BrandsService } from './brands.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities';
@@ -109,6 +109,18 @@ export class BrandsController {
   ) {
     await this.brandsService.publishChanges(currentUser, id);
     return;
+  }
+
+  @Put("/:id/members/handle-invitation")
+  async handleInvitation(
+    @CurrentUser() currentUser: User,
+    @Param("id") id: string,
+    @Body() handleInvitationDto: HandleInvitationDto
+  ) {
+    const accepted = handleInvitationDto.response;
+    const member = await this.brandsService.handleInvitation(currentUser, id, accepted);
+
+    return accepted ? member : ""; 
   }
 
   @Put("/:id/qr-code")

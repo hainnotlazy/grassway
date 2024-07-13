@@ -20,7 +20,7 @@
       </h1>
       <p class="italic text-gray-500">Manage all about your brand!</p>
     </div>
-    <div class="sm:text-end flex-grow space-x-2">
+    <div *ngIf="joinedBrand" class="sm:text-end flex-grow space-x-2">
       <a
         class="px-4 py-2.5 h-11 rounded-md shadow-md text-white bg-primary hover:bg-primary/80 inline-flex items-center gap-2"
         [href]="client + '/m/' + (brand$ | async)?.prefix"
@@ -43,7 +43,7 @@
       </button>
     </div>
   </div>
-  <div class="flex gap-4">
+  <div *ngIf="joinedBrand; else invitation" class="flex gap-4">
     <mat-tab-group
       class="flex-grow"
       mat-stretch-tabs="false"
@@ -88,6 +88,10 @@
     ></iframe>
   </div>
 </div>
+
+<ng-template #invitation>
+  <app-invitation class="block mt-4" (accepted)="onJoinBrand()"></app-invitation>
+</ng-template>
 
 <ng-template #loading>
   <app-loading-tab [description]="'Loading your Brand...'"></app-loading-tab>
