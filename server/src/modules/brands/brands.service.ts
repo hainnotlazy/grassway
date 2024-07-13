@@ -1,3 +1,4 @@
+import { BrandNotificationService } from './brand-notification.service';
 import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, BrandSocialPlatforms, Brand, BrandMember, BrandMemberRole, BrandDraft, BrandSocialPlatformsDraft, Url, TaggedUrl, UrlAnalytics, BrandBlock, BrandBlockDraft } from 'src/entities';
@@ -32,8 +33,9 @@ export class BrandsService {
     private readonly urlRepository: Repository<Url>,
     private readonly dataSource: DataSource,
     private readonly uploadFileService: UploadFileService,
+    private readonly configService: ConfigService,
     private readonly urlsService: UrlsService,
-    private readonly configService: ConfigService
+    private readonly brandNotificationService: BrandNotificationService
   ) {}
 
   /**
@@ -216,6 +218,9 @@ export class BrandsService {
     }
 
     try {
+      // Invited user for emit notification
+      const invitedUsers: User[] = [];
+
       // Save brand
       const brand = this.brandRepository.create({
         ...createBrandDto,
@@ -246,6 +251,7 @@ export class BrandsService {
             role: BrandMemberRole.MEMBER
           });
           await queryRunner.manager.save(brandMember);
+          invitedUsers.push(existedUser);
         }
       }
 
@@ -271,6 +277,13 @@ export class BrandsService {
 
       // Commit transaction
       await queryRunner.commitTransaction();
+
+      // Emit notification (run in background)
+      this.brandNotificationService.sendCreatedBrandEvent(savedBrand);
+      for (const invitedUser of invitedUsers) {
+        this.brandNotificationService.sendInvitationEvent(savedBrand, invitedUser);
+      }
+
       return savedBrand;
     } catch (err) {
       // Rollback transaction
@@ -307,6 +320,9 @@ export class BrandsService {
     await queryRunner.startTransaction();
 
     try {
+      // Invited user for emit notification
+      const invitedUsers: User[] = []; 
+      
       const handledUsers: BrandMember[] = [];
       for (const userId of invitedUsersId) {
         const existedUser = await this.userRepository.findOneBy({ id: userId });
@@ -321,9 +337,16 @@ export class BrandsService {
         });
         await queryRunner.manager.save(brandMember);
         handledUsers.push(brandMember);
+        invitedUsers.push(existedUser);
       }
 
       await queryRunner.commitTransaction();
+      
+      // Emit notification (run in background)
+      for (const invitedUser of invitedUsers) {
+        this.brandNotificationService.sendInvitationEvent(existedBrand, invitedUser);
+      }
+
       return handledUsers;
     } catch (err) {
       await queryRunner.rollbackTransaction();
@@ -348,7 +371,8 @@ export class BrandsService {
         brand_id: brandId,
         user_id: currentUser.id,
         role: BrandMemberRole.MEMBER
-      }
+      },
+      relations: ["brand"]
     });
     if (!existedMember) {
       throw new BadRequestException("Brand not found or you don't have invitation for this brand");
@@ -358,7 +382,12 @@ export class BrandsService {
 
     if (response) {
       existedMember.joined = response;
-      return await this.brandMemberRepository.save(existedMember);
+      const updatedMember = await this.brandMemberRepository.save(existedMember);
+
+      // Emit notification (run in background)
+      this.brandNotificationService.sendMemberJoinedEvent(existedMember.brand, currentUser);
+
+      return updatedMember;
     } else {
       return await this.brandMemberRepository.remove(existedMember);
     }
@@ -564,6 +593,15 @@ export class BrandsService {
       throw new BadRequestException("You are not owner of this brand to do this action");
     }
 
+    // Get members to emit notification when brand was destroyed
+    const brandMembers = await this.brandMemberRepository.find({
+      where: {
+        brand_id: brandId,
+        joined: true
+      },
+      relations: ["user"]
+    })
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -591,6 +629,13 @@ export class BrandsService {
       await queryRunner.manager.delete(Brand, { id: brandId });
 
       await queryRunner.commitTransaction();
+
+      // Emit notification (run in background)
+      for (const member of brandMembers) {
+        if (member.joined) {
+          this.brandNotificationService.sendDestroyBrandEvent(existedBrand, member.user);
+        }
+      }
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException("Failed to delete brand");

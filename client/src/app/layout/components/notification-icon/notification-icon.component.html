@@ -1,9 +1,14 @@
 <i
   class="text-3xl"
   [ngClass]="{
-    'icon-info text-blue-700': type === 'information',
-    'icon-celebration text-yellow-500': type === 'congratulation',
-    'icon-user-settings text-sky-500': type === 'update_profile',
-    'icon-settings text-slate-600': type === 'update_settings',
+    'icon-info text-blue-700': type === NotificationType.INFORMATION,
+    'icon-celebration text-yellow-500': type === NotificationType.CONGRATULATION,
+    'icon-user-settings text-sky-500': type === NotificationType.UPDATE_PROFILE,
+    'icon-settings text-slate-600': type === NotificationType.UPDATE_SETTINGS,
+    'icon-new-release text-orange-500': type === NotificationType.BRAND_CREATED,
+    'icon-mail text-green-500': type === NotificationType.BRAND_INVITATION,
+    'icon-group-add text-blue-600': type === NotificationType.BRAND_MEMBER_JOINED,
+    'icon-group-remove text-red-500': type === NotificationType.BRAND_MEMBER_LEFT,
+    'icon-delete-forever text-red-600': type === NotificationType.BRAND_DESTROYED
   }"
 ></i>

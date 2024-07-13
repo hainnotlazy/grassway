@@ -7,5 +7,7 @@ import { NotificationType } from 'src/app/core/models';
   styleUrls: ['./notification-icon.component.scss']
 })
 export class NotificationIconComponent {
+  readonly NotificationType = NotificationType;
+
   @Input() type!: NotificationType;
 }

@@ -9,6 +9,8 @@ import { BrandsGateway } from './brands.gateway';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigOptions } from 'src/config';
 import { UrlsModule } from '../urls/urls.module';
+import { NotificationModule } from '../notification/notification.module';
+import { BrandNotificationService } from './brand-notification.service';
 
 @Module({
   imports: [
@@ -27,12 +29,14 @@ import { UrlsModule } from '../urls/urls.module';
       useClass: JwtConfigOptions
     }),
     SharedModule,
-    UrlsModule
+    UrlsModule,
+    NotificationModule
   ],
   controllers: [BrandsController],
   providers: [
     BrandsService,
     BrandDraftService,
+    BrandNotificationService,
     BrandsGateway
   ]
 })
