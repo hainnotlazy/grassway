@@ -50,9 +50,11 @@ export class AnalyticsService {
    * Describe: Get new public analytics then save it in redis
   */
   private async handleGetPublicAnalytics(): Promise<PublicLinksAnalytics> {
-    const totalLinks = await this.getTotalLinks();
-    const totalCustomBackHalfLinks = await this.getTotalCustomBackHalfLinks();
-    const totalVisited = await this.getTotalVisited();
+    const [totalLinks, totalCustomBackHalfLinks, totalVisited] = await Promise.all([
+      this.getTotalLinks(),
+      this.getTotalCustomBackHalfLinks(),
+      this.getTotalVisited()
+    ]);
 
     // Cache data 
     const setKeyOptions = {
@@ -88,23 +90,29 @@ export class AnalyticsService {
    * Describe: Get personal analytics
   */
   async getAnalytics(currentUser: User): Promise<PersonalLinksAnalytics> {
-    // Get total visited & redirected success
-    const totalVisited = await this.getTotalVisited(currentUser.id);
-    const totalRedirectedSuccess = await this.getTotalRedirectedSuccess(currentUser.id);
-
-    // Get total clicks by devices
     const [
-      totalClicksByDesktop, 
-      totalClicksByTablet, 
-      totalClicksByMobile
-    ] = await this.getVisitedByDevices(currentUser.id);
-
-    // Get total active & inactive links
-    const totalActiveLinks = await this.getTotalActiveLinks(currentUser.id);
-    const totalInactiveLinks = await this.getTotalInactiveLinks(currentUser.id);
-
-    // Get total referrers
-    const totalReferrers = await this.getReferrersStatics(currentUser.id);
+      // Get total visited & redirected success
+      totalVisited,
+      totalRedirectedSuccess,
+      // Get total clicks by devices
+      [
+        totalClicksByDesktop, 
+        totalClicksByTablet, 
+        totalClicksByMobile
+      ],
+      // Get total active & inactive links
+      totalActiveLinks,
+      totalInactiveLinks,
+      // Get total referrers
+      totalReferrers
+    ] = await Promise.all([
+      this.getTotalVisited(currentUser.id),
+      this.getTotalRedirectedSuccess(currentUser.id),
+      this.getVisitedByDevices(currentUser.id),
+      this.getTotalActiveLinks(currentUser.id),
+      this.getTotalInactiveLinks(currentUser.id),
+      this.getReferrersStatics(currentUser.id)
+    ]);
 
     return {
       totalVisited: this.parseValueIntoNumber(totalVisited),
@@ -253,6 +261,7 @@ export class AnalyticsService {
   */
   private async getReferrersStatics(userId: number) {
     const statics = await this.urlAnalyticsRepository.createQueryBuilder("url_analytics")
+      .leftJoinAndSelect("url_analytics.url", "url")
       .select([
         "sum(url_analytics.referrer_from_google) as total_referrer_from_google",
         "sum(url_analytics.referrer_from_facebook) as total_referrer_from_facebook",
@@ -263,6 +272,7 @@ export class AnalyticsService {
         "sum(url_analytics.referrer_from_linkedin) as total_referrer_from_linkedin",
         "sum(url_analytics.referrer_from_unknown) as total_referrer_from_unknown"
       ])
+      .where("url.owner_id = :ownerId", { ownerId: userId })
       .getRawMany();
 
     const totalReferrers = {
