@@ -44,6 +44,6 @@ export class NotificationService {
   }
 
   deleteNotification(id: number) {
-    return this.httpClient.delete(`api/notification/${id}`);
+    return this.httpClient.delete<void>(`api/notification/${id}`);
   }
 }

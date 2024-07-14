@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, filter, finalize, scan, shareReplay, startWith, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, map, of, switchMap, take, tap } from 'rxjs';
 import { GetNotificationOptions, NotificationResponse } from 'src/app/core/interfaces';
 import { UserNotification } from 'src/app/core/models';
 import { NotificationService } from 'src/app/core/services';
+import { NotificationUnreadCountComponent } from '../notification-unread-count/notification-unread-count.component';
 
 @UntilDestroy()
 @Component({
@@ -14,115 +15,81 @@ import { NotificationService } from 'src/app/core/services';
     class: 'relative',
   }
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent {
   isProcessing = false;
   isNotificationMenuOpen = false;
   totalItems = 0;
   currentPage = 1;
   totalPages = 1;
-  isInitialLoad = false;
   isLoading = false;
   hasLoadingError = false;
 
-  private getNotificationsOptions: GetNotificationOptions = {
+  @ViewChild(NotificationUnreadCountComponent) unreadCountComponent!: NotificationUnreadCountComponent;
+
+  getNotificationsOptions: GetNotificationOptions = {
     limit: 20,
     page: 1
   };
 
-  private listNotificationsSubject = new BehaviorSubject<NotificationResponse | null>(null);
-  private listNotifications$ = this.listNotificationsSubject.asObservable();
-
-  updateNotificationSubject = new BehaviorSubject<UserNotification | null | "all">(null);
-  updateNotification$ = this.updateNotificationSubject.asObservable();
-
-  removeNotificationSubject = new BehaviorSubject<UserNotification | null>(null);
-  removeNotification$ = this.removeNotificationSubject.asObservable();
-  private removedNotificationId: number[] = [];
-
-  notifications$ = combineLatest([
-    this.listNotifications$,
-    this.notificationService.getNewNotification().pipe(startWith(null)),
-    this.updateNotification$,
-    this.removeNotification$
-  ]).pipe(
-    filter(([notification]) => !!notification),
-    tap(([notification, newNotification]) => {
-      const responseMeta = (notification as NotificationResponse).meta;
-      this.totalItems = responseMeta.totalItems;
-      this.currentPage = responseMeta.currentPage;
-      this.totalPages = responseMeta.totalPages;
-
-      if (this.totalItems === 0 && newNotification) {
-        this.totalItems = 1;
-      }
-    }),
-    scan((accumulator: UserNotification[], [notifications, newNotification, updatedNotification, removedNotification]) => {
-      accumulator = [...accumulator, ...(notifications as NotificationResponse).data];
-
-      // Add new notification
-      if (newNotification) {
-        accumulator = [newNotification, ...accumulator];
-      }
-
-      // Update notification
-      if (updatedNotification && updatedNotification !== "all") {
-        accumulator = accumulator.map(notification => {
-          if (notification.id === updatedNotification.id) {
-            return updatedNotification;
-          }
-          return notification;
-        });
-      }
-
-      // Remove notification
-      if (removedNotification) {
-        this.removedNotificationId.push(removedNotification.id);
-      }
-      accumulator = accumulator.filter(notification => !this.removedNotificationId.includes(notification.id));
-
-      // Remove duplicate notification
-      accumulator = this.removeDuplicateNotification(accumulator);
-
-      return accumulator;
-    }, []),
-    tap(() => {
-      if (this.isLoading && this.isInitialLoad) {
-        this.isLoading = false;
-      }
-      this.isInitialLoad = true;
-    }),
-    shareReplay({ bufferSize: 1, refCount: true })
+  notificationsSubject = new BehaviorSubject<UserNotification[]>([]);
+  notifications$ = this.notificationsSubject.asObservable().pipe(
+    map(notifications => this.removeDuplicateNotification(notifications))
   );
 
   constructor(
     private notificationService: NotificationService
-  ) {}
-
-  async ngOnInit() {
+  ) {
     this.notificationService.listNotifications(this.getNotificationsOptions).pipe(
       tap(response => {
-        this.listNotificationsSubject.next(response);
+        this.setPaginatedPage(response);
+        this.notificationsSubject.next(response.data);
       }, () => {
         this.hasLoadingError = true;
       }),
       untilDestroyed(this),
     ).subscribe();
+
+    this.notificationService.getNewNotification().pipe(
+      switchMap(newNotification => this.notifications$.pipe(
+        take(1),
+        map(currentNotifications => [newNotification, ...currentNotifications]),
+      )),
+      tap(notifications => {
+        // Calculate current page after get new notification
+        const limit = this.getNotificationsOptions.limit;
+        const totalItems = notifications.length;
+        const currentPage = Math.floor(totalItems / limit);
+
+        Object.assign(this.getNotificationsOptions, {
+          page: currentPage
+        });
+
+        this.notificationsSubject.next(notifications);
+        this.unreadCountComponent.increaseCounter();
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   onScrollDown() {
-    if (
-      this.isInitialLoad
-      && !this.isLoading
-      && this.currentPage < this.totalPages
-    ) {
+    if (!this.isLoading && this.currentPage < this.totalPages) {
       this.isLoading = true;
       this.getNotificationsOptions.page++;
       this.notificationService.listNotifications(this.getNotificationsOptions).pipe(
-        tap(response => {
-          this.listNotificationsSubject.next(response);
-        }, () => {
-          this.hasLoadingError = true;
+        map(response => {
+          this.setPaginatedPage(response);
+          return response.data;
         }),
+        switchMap(notifications => this.notifications$.pipe(
+          take(1),
+          map(currentNotifications => [...currentNotifications, ...notifications]),
+        )),
+        tap(notifications => this.notificationsSubject.next(notifications)),
+        catchError(error => {
+          this.hasLoadingError = true;
+          return of(error);
+        }),
+        finalize(() => this.isLoading = false),
         untilDestroyed(this),
       ).subscribe();
     }
@@ -135,12 +102,13 @@ export class NotificationComponent implements OnInit {
     this.notificationService.changeAllNotificationStatus(true).pipe(
       switchMap(() => this.notifications$),
       take(1),
-      tap((notifications: UserNotification[]) => {
-        for (const notification of notifications) {
-          notification.is_read = true;
-          this.updateNotificationSubject.next(notification);
-        }
-        this.updateNotificationSubject.next("all");
+      map(notifications => notifications.map(notification => {
+        notification.is_read = true;
+        return notification;
+      })),
+      tap(notifications => {
+        this.notificationsSubject.next(notifications);
+        this.unreadCountComponent.resetCounter();
       }),
       finalize(() => this.isProcessing = false),
       untilDestroyed(this)
@@ -152,4 +120,11 @@ export class NotificationComponent implements OnInit {
       index === self.findIndex(s => s.id === source.id)
     );
   };
+
+  private setPaginatedPage(response: NotificationResponse) {
+    const responseMeta = response.meta;
+    this.totalItems = responseMeta.totalItems;
+    this.currentPage = responseMeta.currentPage;
+    this.totalPages = responseMeta.totalPages;
+  }
 }

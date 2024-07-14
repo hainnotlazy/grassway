@@ -8,7 +8,7 @@
   ></div>
   <app-notification-icon [type]="notification.type"></app-notification-icon>
   <div class="flex-grow">
-    <span class="text-primary font-semibold">{{ notification.title }}</span>
+    <span class="text-primary font-semibold">{{ notification.title }} - {{ notification.id }}</span>
     <p class="text-karla text-sm text-gray-500">{{ notification.description }}</p>
     <small>{{ notification.created_at | timeAgo | async }}</small>
   </div>
@@ -29,8 +29,8 @@
       <button
         class="text-start hover:bg-gray-200 disabled:bg-white disabled:text-sky-400 disabled:cursor-not-allowed flex items-center gap-1 px-3 py-2"
         type="button"
-        (click)="onChangeStatus(!notification.is_read)"
         [disabled]="isProcessing"
+        (click)="onChangeStatus(!notification.is_read)"
       >
         <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
         Mark as {{ notification.is_read ? 'unread' : 'read' }}
@@ -38,8 +38,8 @@
       <button
         class="text-start hover:bg-gray-200 disabled:text-sky-400 disabled:cursor-not-allowed disabled:bg-white flex items-center gap-1 px-3 py-2"
         type="button"
-        (click)="onDelete()"
         [disabled]="isProcessing"
+        (click)="onDelete()"
       >
         <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
         Remove this notification

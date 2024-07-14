@@ -25,8 +25,9 @@ export class IndexPage {
     filter(response => !!response),
     map(response => response as UrlsResponse),
     tap((response: UrlsResponse) => {
-      this.currentPage = getValueInNumber(response.meta.currentPage);
-      this.totalPage = getValueInNumber(response.meta.totalPages);
+      const responseMeta = response.meta;
+      this.currentPage = getValueInNumber(responseMeta.currentPage);
+      this.totalPage = getValueInNumber(responseMeta.totalPages);
     }),
     scan((accumulatorResponse: Url[], response: UrlsResponse) => {
       return [...accumulatorResponse, ...response.data];

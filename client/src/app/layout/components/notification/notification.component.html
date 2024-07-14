@@ -7,10 +7,7 @@
   (menuClosed)="isNotificationMenuOpen = false"
 >
   <i class="icon-notification"></i>
-  <app-notification-unread-count
-    [updateNotification$]="updateNotification$"
-    [removeNotification$]="removeNotification$"
-  ></app-notification-unread-count>
+  <app-notification-unread-count></app-notification-unread-count>
 </button>
 
 <mat-menu
@@ -32,7 +29,8 @@
         [disabled]="isProcessing"
         (click)="onBulkChangeStatus()"
       >
-        <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
+
+      <i *ngIf="isProcessing" class="icon-spinner spinning"></i>
         {{ isProcessing ? 'Processing' : 'Mark all as read' }}
       </button>
     </div>
@@ -50,24 +48,28 @@
         <app-notification-item
           *ngFor="let notification of notifications$ | async"
           [notification]="notification"
-          [updateNotificationSubject]="updateNotificationSubject"
-          [removeNotificationSubject]="removeNotificationSubject"
+          [notificationsSubject]="notificationsSubject"
+          [notifications$]="notifications$"
+          [getNotificationsOptions]="getNotificationsOptions"
+          [unreadCountComponent]="unreadCountComponent"
         ></app-notification-item>
       </div>
 
-      <ng-container *ngIf="totalItems === 0">
-        <div class="h-96 max-h-96 min-h-96 text-primary flex flex-col items-center justify-center gap-4">
-          <i class="icon-excited text-7xl"></i>
-          <span class="text-lg">You have no notifications now!</span>
-        </div>
-      </ng-container>
+      <ng-container *ngIf="totalItems === 0" [ngTemplateOutlet]="emptyNotification"></ng-container>
     </ng-container>
-
-    <ng-template #loadingError>
-      <div class="h-96 max-h-96 min-h-96 flex flex-col items-center justify-center gap-4 text-gray-600">
-        <i class="icon-dissatified text-7xl"></i>
-        <span class="text-lg">Failed when loading notifications</span>
-      </div>
-    </ng-template>
   </div>
 </mat-menu>
+
+<ng-template #emptyNotification>
+  <div class="h-96 max-h-96 min-h-96 text-primary flex flex-col items-center justify-center gap-4">
+    <i class="icon-excited text-7xl"></i>
+    <span class="text-lg">You have no notifications now!</span>
+  </div>
+</ng-template>
+
+<ng-template #loadingError>
+  <div class="h-96 max-h-96 min-h-96 flex flex-col items-center justify-center gap-4 text-gray-600">
+    <i class="icon-dissatified text-7xl"></i>
+    <span class="text-lg">Failed when loading notifications</span>
+  </div>
+</ng-template>
