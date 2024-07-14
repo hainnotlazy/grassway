@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isUUID } from 'class-validator';
 import { PersonalLinksAnalytics, PublicLinksAnalytics } from 'src/common/models/analytics-response.model';
 import { User, Url, UrlAnalytics } from 'src/entities';
 import { RedisDatabase, RedisService } from 'src/shared/services/redis/redis.service';
@@ -12,7 +13,7 @@ export class AnalyticsService {
     private readonly urlRepository: Repository<Url>,
     @InjectRepository(UrlAnalytics)
     private readonly urlAnalyticsRepository: Repository<UrlAnalytics>,
-    private redisService: RedisService
+    private readonly redisService: RedisService
   ) {}
 
   /** 
@@ -127,6 +128,46 @@ export class AnalyticsService {
   }
 
   /**
+   * Describe: Get brand analytics
+  */
+  async getBrandAnalytics(currentUser: User, brandId: string) {
+    const [
+      // Get total visited & redirected success
+      totalVisited,
+      totalRedirectedSuccess,
+      // Get total clicks by devices
+      [
+        totalClicksByDesktop, 
+        totalClicksByTablet, 
+        totalClicksByMobile
+      ],
+      // Get total active & inactive links
+      totalActiveLinks,
+      totalInactiveLinks,
+      // Get total referrers
+      totalReferrers
+    ] = await Promise.all([
+      this.getTotalVisited(currentUser.id, brandId),
+      this.getTotalRedirectedSuccess(currentUser.id, brandId),
+      this.getVisitedByDevices(currentUser.id, brandId),
+      this.getTotalActiveLinks(currentUser.id, brandId),
+      this.getTotalInactiveLinks(currentUser.id, brandId),
+      this.getReferrersStatics(currentUser.id, brandId)
+    ]);
+
+    return {
+      totalVisited: this.parseValueIntoNumber(totalVisited),
+      totalRedirectedSuccess: this.parseValueIntoNumber(totalRedirectedSuccess),
+      totalClicksByDesktop: this.parseValueIntoNumber(totalClicksByDesktop),
+      totalClicksByTablet: this.parseValueIntoNumber(totalClicksByTablet),
+      totalClicksByMobile: this.parseValueIntoNumber(totalClicksByMobile),
+      totalActiveLinks: this.parseValueIntoNumber(totalActiveLinks),
+      totalInactiveLinks: this.parseValueIntoNumber(totalInactiveLinks),
+      totalReferrers
+    }
+  }
+
+  /**
    * Describe: Get total links
   */
   private async getTotalLinks() {
@@ -147,9 +188,26 @@ export class AnalyticsService {
   */
   private async getTotalVisited();
   private async getTotalVisited(userId: number);
-  private async getTotalVisited(userId?: number) {
-    if (!userId) {  
-      return (await this.urlAnalyticsRepository.createQueryBuilder("url_analytics")
+  private async getTotalVisited(userId: number, brandId: string);
+  private async getTotalVisited(userId?: number, brandId?: string) {
+    if (userId && brandId) {
+      if (!isUUID(brandId)) {
+        return 0;
+      }
+
+      return (await this.urlRepository
+        .createQueryBuilder("url")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .leftJoinAndSelect("url.brand", "brand")
+        .leftJoinAndSelect("brand.members", "brand_members")
+        .select("sum(url_analytics.visited_by_desktop + url_analytics.visited_by_tablet + url_analytics.visited_by_mobile)", "total")
+        .where("url.brand_id = :brandId", { brandId })
+        .andWhere("brand_members.user_id = :userId", { userId })
+        .getRawMany()
+      )[0].total;
+    } else if (!userId) {  
+      return (await this.urlAnalyticsRepository
+        .createQueryBuilder("url_analytics")
         .select("sum(url_analytics.visited_by_desktop + url_analytics.visited_by_tablet + url_analytics.visited_by_mobile)", "total")
         .getRawMany()
       )[0].total;
@@ -167,58 +225,139 @@ export class AnalyticsService {
   /** 
    * Describe: Get total redirected success
   */
-  private async getTotalRedirectedSuccess(userId: number) {
-    return (await this.urlRepository
-      .createQueryBuilder("url")
-      .leftJoinAndSelect("url.analytics", "url_analytics")
-      .select("sum(url_analytics.redirect_success)", "total")
-      .where("url.owner_id = :ownerId", { ownerId: userId })
-      .getRawMany()
-    )[0].total;
+  private async getTotalRedirectedSuccess(userId: number);
+  private async getTotalRedirectedSuccess(userId: number, brandId: string);
+  private async getTotalRedirectedSuccess(userId: number, brandId?: string) {
+    if (userId && brandId) {
+      if (!isUUID(brandId)) {
+        return 0;
+      }
+
+      return (await this.urlRepository
+        .createQueryBuilder("url")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .leftJoinAndSelect("url.brand", "brand")
+        .leftJoinAndSelect("brand.members", "brand_members")
+        .select("sum(url_analytics.redirect_success)", "total")
+        .where("url.brand_id = :brandId", { brandId })
+        .andWhere("brand_members.user_id = :userId", { userId })
+        .getRawMany()
+      )[0].total;
+    } else if (userId) {
+      return (await this.urlRepository
+        .createQueryBuilder("url")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .select("sum(url_analytics.redirect_success)", "total")
+        .where("url.owner_id = :ownerId", { ownerId: userId })
+        .getRawMany()
+      )[0].total;
+    }
   }
 
   /** 
    * Describe: Get total clicks by devices
   */
-  private async getVisitedByDevices(userId: number) {
-    const statics = await this.urlRepository
-      .createQueryBuilder("url")
-      .leftJoinAndSelect("url.analytics", "url_analytics")
-      .select([
-        "sum(url_analytics.visited_by_desktop) as total_desktop",
-        "sum(url_analytics.visited_by_tablet) as total_tablet",
-        "sum(url_analytics.visited_by_mobile) as total_mobile"
-      ])
-      .where("url.owner_id = :ownerId", { ownerId: userId })
-      .getRawMany();
+  private async getVisitedByDevices(userId: number);
+  private async getVisitedByDevices(userId: number, brandId: string);
+  private async getVisitedByDevices(userId: number, brandId?: string) {
+    if (userId && brandId) {
+      if (!isUUID(brandId)) {
+        return [0, 0, 0];
+      }
 
-    return [
-      this.parseValueIntoNumber(statics[0].total_desktop),
-      this.parseValueIntoNumber(statics[0].total_tablet),
-      this.parseValueIntoNumber(statics[0].total_mobile)
-    ];
+      const statics = await this.urlRepository
+        .createQueryBuilder("url")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .leftJoinAndSelect("url.brand", "brand")
+        .leftJoinAndSelect("brand.members", "brand_members")
+        .select([
+          "sum(url_analytics.visited_by_desktop) as total_desktop",
+          "sum(url_analytics.visited_by_tablet) as total_tablet",
+          "sum(url_analytics.visited_by_mobile) as total_mobile"
+        ])
+        .where("url.brand_id = :brandId", { brandId })
+        .andWhere("brand_members.user_id = :userId", { userId })
+        .getRawMany();
+  
+      return [
+        this.parseValueIntoNumber(statics[0].total_desktop),
+        this.parseValueIntoNumber(statics[0].total_tablet),
+        this.parseValueIntoNumber(statics[0].total_mobile)
+      ];
+    } else if (userId) {
+      const statics = await this.urlRepository
+        .createQueryBuilder("url")
+        .leftJoinAndSelect("url.analytics", "url_analytics")
+        .select([
+          "sum(url_analytics.visited_by_desktop) as total_desktop",
+          "sum(url_analytics.visited_by_tablet) as total_tablet",
+          "sum(url_analytics.visited_by_mobile) as total_mobile"
+        ])
+        .where("url.owner_id = :ownerId", { ownerId: userId })
+        .getRawMany();
+  
+      return [
+        this.parseValueIntoNumber(statics[0].total_desktop),
+        this.parseValueIntoNumber(statics[0].total_tablet),
+        this.parseValueIntoNumber(statics[0].total_mobile)
+      ];
+    }
   }
 
   /** 
    * Describe: Get total active links
   */
-  private async getTotalActiveLinks(userId: number) {
-    return await this.urlRepository
-      .createQueryBuilder("url")
-      .where("url.owner_id = :ownerId", { ownerId: userId })
-      .andWhere("url.is_active = :is_active", { is_active: true })
-      .getCount();
+  private async getTotalActiveLinks(userId: number);
+  private async getTotalActiveLinks(userId: number, brandId: string);
+  private async getTotalActiveLinks(userId: number, brandId?: string) {
+    if (userId && brandId) {
+      if (!isUUID(brandId)) {
+        return 0;
+      }
+
+      return await this.urlRepository
+        .createQueryBuilder("url")
+        .leftJoinAndSelect("url.brand", "brand")
+        .leftJoinAndSelect("brand.members", "brand_members")
+        .where("url.brand_id = :brandId", { brandId })
+        .andWhere("url.is_active = :is_active", { is_active: true })
+        .andWhere("brand_members.user_id = :userId", { userId })
+        .getCount();
+    } else if (userId) {
+      return await this.urlRepository
+        .createQueryBuilder("url")
+        .where("url.owner_id = :ownerId", { ownerId: userId })
+        .andWhere("url.is_active = :is_active", { is_active: true })
+        .getCount();
+    }
   }
 
   /**   
    * Describe: Get total inactive links
   */
-  private async getTotalInactiveLinks(userId: number) {
-    return await this.urlRepository
-      .createQueryBuilder("url")
-      .where("url.owner_id = :ownerId", { ownerId: userId })
-      .andWhere("url.is_active = :is_active", { is_active: false })
-      .getCount();
+  private async getTotalInactiveLinks(userId: number);
+  private async getTotalInactiveLinks(userId: number, brandId: string);
+  private async getTotalInactiveLinks(userId: number, brandId?: string) {
+    if (userId && brandId) {
+      if (!isUUID(brandId)) {
+        return 0;
+      }
+
+      return await this.urlRepository
+        .createQueryBuilder("url")
+        .leftJoinAndSelect("url.brand", "brand")
+        .leftJoinAndSelect("brand.members", "brand_members")
+        .where("url.brand_id = :brandId", { brandId })
+        .andWhere("url.is_active = :is_active", { is_active: false })
+        .andWhere("brand_members.user_id = :userId", { userId })
+        .getCount();
+    } else if (userId) {
+      return await this.urlRepository
+        .createQueryBuilder("url")
+        .where("url.owner_id = :ownerId", { ownerId: userId })
+        .andWhere("url.is_active = :is_active", { is_active: false })
+        .getCount();
+    }
   }
 
   /**   
@@ -259,32 +398,80 @@ export class AnalyticsService {
   /**
    * Describe: Get referrers statics
   */
-  private async getReferrersStatics(userId: number) {
-    const statics = await this.urlAnalyticsRepository.createQueryBuilder("url_analytics")
-      .leftJoinAndSelect("url_analytics.url", "url")
-      .select([
-        "sum(url_analytics.referrer_from_google) as total_referrer_from_google",
-        "sum(url_analytics.referrer_from_facebook) as total_referrer_from_facebook",
-        "sum(url_analytics.referrer_from_instagram) as total_referrer_from_instagram",
-        "sum(url_analytics.referrer_from_youtube) as total_referrer_from_youtube",
-        "sum(url_analytics.referrer_from_reddit) as total_referrer_from_reddit",
-        "sum(url_analytics.referrer_from_twitter) as total_referrer_from_twitter",
-        "sum(url_analytics.referrer_from_linkedin) as total_referrer_from_linkedin",
-        "sum(url_analytics.referrer_from_unknown) as total_referrer_from_unknown"
-      ])
-      .where("url.owner_id = :ownerId", { ownerId: userId })
-      .getRawMany();
-
-    const totalReferrers = {
-      google: this.parseValueIntoNumber(statics[0].total_referrer_from_google),
-      facebook: this.parseValueIntoNumber(statics[0].total_referrer_from_facebook),
-      instagram: this.parseValueIntoNumber(statics[0].total_referrer_from_instagram),
-      youtube: this.parseValueIntoNumber(statics[0].total_referrer_from_youtube),
-      reddit: this.parseValueIntoNumber(statics[0].total_referrer_from_reddit),
-      twitter: this.parseValueIntoNumber(statics[0].total_referrer_from_twitter),
-      linkedin: this.parseValueIntoNumber(statics[0].total_referrer_from_linkedin),
-      unknown: this.parseValueIntoNumber(statics[0].total_referrer_from_unknown)
+  private async getReferrersStatics(userId: number);
+  private async getReferrersStatics(userId: number, brandId: string);
+  private async getReferrersStatics(userId: number, brandId?: string) {
+    let totalReferrers = {
+      google: 0,
+      facebook: 0,
+      instagram: 0,
+      youtube: 0,
+      reddit: 0,
+      twitter: 0,
+      linkedin: 0,
+      unknown: 0
     };
+    if (userId && brandId) {
+      if (!isUUID(brandId)) {
+        return totalReferrers;  
+      }
+      
+      const statics = await this.urlAnalyticsRepository.createQueryBuilder("url_analytics")
+        .leftJoinAndSelect("url_analytics.url", "url")
+        .leftJoinAndSelect("url.brand", "brand")
+        .leftJoinAndSelect("brand.members", "brand_members")
+        .select([
+          "sum(url_analytics.referrer_from_google) as total_referrer_from_google",
+          "sum(url_analytics.referrer_from_facebook) as total_referrer_from_facebook",
+          "sum(url_analytics.referrer_from_instagram) as total_referrer_from_instagram",
+          "sum(url_analytics.referrer_from_youtube) as total_referrer_from_youtube",
+          "sum(url_analytics.referrer_from_reddit) as total_referrer_from_reddit",
+          "sum(url_analytics.referrer_from_twitter) as total_referrer_from_twitter",
+          "sum(url_analytics.referrer_from_linkedin) as total_referrer_from_linkedin",
+          "sum(url_analytics.referrer_from_unknown) as total_referrer_from_unknown"
+        ])
+        .where("url.brand_id = :brandId", { brandId })
+        .andWhere("url.owner_id = :userId", { userId })
+        .andWhere("brand_members.user_id = :userId", { userId })
+        .getRawMany();
+      
+      totalReferrers = {
+        google: this.parseValueIntoNumber(statics[0].total_referrer_from_google),
+        facebook: this.parseValueIntoNumber(statics[0].total_referrer_from_facebook),
+        instagram: this.parseValueIntoNumber(statics[0].total_referrer_from_instagram),
+        youtube: this.parseValueIntoNumber(statics[0].total_referrer_from_youtube),
+        reddit: this.parseValueIntoNumber(statics[0].total_referrer_from_reddit),
+        twitter: this.parseValueIntoNumber(statics[0].total_referrer_from_twitter),
+        linkedin: this.parseValueIntoNumber(statics[0].total_referrer_from_linkedin),
+        unknown: this.parseValueIntoNumber(statics[0].total_referrer_from_unknown)
+      };
+    } else if (userId) {
+      const statics = await this.urlAnalyticsRepository.createQueryBuilder("url_analytics")
+        .leftJoinAndSelect("url_analytics.url", "url")
+        .select([
+          "sum(url_analytics.referrer_from_google) as total_referrer_from_google",
+          "sum(url_analytics.referrer_from_facebook) as total_referrer_from_facebook",
+          "sum(url_analytics.referrer_from_instagram) as total_referrer_from_instagram",
+          "sum(url_analytics.referrer_from_youtube) as total_referrer_from_youtube",
+          "sum(url_analytics.referrer_from_reddit) as total_referrer_from_reddit",
+          "sum(url_analytics.referrer_from_twitter) as total_referrer_from_twitter",
+          "sum(url_analytics.referrer_from_linkedin) as total_referrer_from_linkedin",
+          "sum(url_analytics.referrer_from_unknown) as total_referrer_from_unknown"
+        ])
+        .where("url.owner_id = :ownerId", { ownerId: userId })
+        .getRawMany();
+      
+      totalReferrers = {
+        google: this.parseValueIntoNumber(statics[0].total_referrer_from_google),
+        facebook: this.parseValueIntoNumber(statics[0].total_referrer_from_facebook),
+        instagram: this.parseValueIntoNumber(statics[0].total_referrer_from_instagram),
+        youtube: this.parseValueIntoNumber(statics[0].total_referrer_from_youtube),
+        reddit: this.parseValueIntoNumber(statics[0].total_referrer_from_reddit),
+        twitter: this.parseValueIntoNumber(statics[0].total_referrer_from_twitter),
+        linkedin: this.parseValueIntoNumber(statics[0].total_referrer_from_linkedin),
+        unknown: this.parseValueIntoNumber(statics[0].total_referrer_from_unknown)
+      };
+    }
 
     return totalReferrers;
   }

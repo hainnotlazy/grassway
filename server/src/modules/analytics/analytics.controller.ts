@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
 import { CurrentUser, PublicRoute } from 'src/common/decorators';
 import { User } from 'src/entities';
@@ -75,5 +75,13 @@ export class AnalyticsController {
   })
   getAnalytics(@CurrentUser() currentUser: User) {
     return this.analyticsService.getAnalytics(currentUser);
+  }
+
+  @Get("/brands/:brandId")
+  getBrandAnalytics(
+    @CurrentUser() currentUser: User, 
+    @Param("brandId") brandId: string
+  ) {
+    return this.analyticsService.getBrandAnalytics(currentUser, brandId);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AnalyticsService } from 'src/app/core/services';
 
 @Component({
@@ -9,13 +9,10 @@ import { AnalyticsService } from 'src/app/core/services';
     class: 'block'
   }
 })
-export class OverviewChartsComponent implements OnInit {
+export class OverviewChartsComponent {
   overviewAnalytics$ = this.analyticsService.getPersonalLinksAnalytics();
+
   constructor(
     private analyticsService: AnalyticsService
   ) {}
-
-  ngOnInit() {
-
-  }
 }
