@@ -1,43 +1,118 @@
 <ng-container *ngIf="fetchedDesign; else loadingTab">
-  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
-    <app-profile-form
-      [logoControl]="designForm.controls.logo"
-      [titleControl]="designForm.controls.title"
-      [descriptionControl]="designForm.controls.description"
-    ></app-profile-form>
-  </div>
+  <mat-accordion multi class="space-y-4">
+    <mat-expansion-panel
+      hideToggle
+      expanded
+      class="border border-gray-300 rounded-md shadow-md"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h5 class="text-nowrap text-lg font-semibold">Brand</h5>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon class="text-end flex-grow text-black">info</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
 
-  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
-    <app-page-form
-      [layoutControl]="designForm.controls.layout"
-      [headerColorControl]="designForm.controls.headerColor"
-      [backgroundColorControl]="designForm.controls.backgroundColor"
-      [titleColorControl]="designForm.controls.titleColor"
-      [descriptionColorControl]="designForm.controls.descriptionColor"
-    ></app-page-form>
-  </div>
+      <ng-template matExpansionPanelContent>
+        <app-profile-form
+          [logoControl]="designForm.controls.logo"
+          [titleControl]="designForm.controls.title"
+          [descriptionControl]="designForm.controls.description"
+        ></app-profile-form>
+      </ng-template>
+    </mat-expansion-panel>
 
-  <div
-    *ngIf="brandSocialPlatforms"
-    class="p-4 bg-white border border-gray-300 rounded-md shadow"
-  >
-    <app-socials-form
-      [socialPlatforms]="brandSocialPlatforms"
-    ></app-socials-form>
-  </div>
+    <mat-expansion-panel
+      hideToggle
+      expanded
+      class="border border-gray-300 rounded-md shadow-md"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h5 class="text-nowrap text-lg font-semibold">Page</h5>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon class="text-end flex-grow text-black">design_services</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
 
-  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
-    <app-blocks-form
-      [blockShapeControl]="designForm.controls.blockShape"
-      [blockShadowControl]="designForm.controls.blockShadow"
-      [blockColorControl]="designForm.controls.blockColor"
-      [blockTextColorControl]="designForm.controls.blockTextColor"
-    ></app-blocks-form>
-  </div>
+      <ng-template matExpansionPanelContent>
+        <app-page-form
+          [layoutControl]="designForm.controls.layout"
+          [headerColorControl]="designForm.controls.headerColor"
+          [backgroundColorControl]="designForm.controls.backgroundColor"
+          [titleColorControl]="designForm.controls.titleColor"
+          [descriptionColorControl]="designForm.controls.descriptionColor"
+        ></app-page-form>
+      </ng-template>
+    </mat-expansion-panel>
 
-  <div class="p-4 bg-white border border-gray-300 rounded-md shadow">
-    <app-font-form [fontControl]="designForm.controls.font"></app-font-form>
-  </div>
+    <mat-expansion-panel
+      *ngIf="brandSocialPlatforms"
+      hideToggle
+      expanded
+      class="border border-gray-300 rounded-md shadow-md"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h5 class="text-nowrap text-lg font-semibold">Socials</h5>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon class="text-end flex-grow text-black">public</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <app-socials-form
+          [socialPlatforms]="brandSocialPlatforms"
+        ></app-socials-form>
+      </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel
+      hideToggle
+      expanded
+      class="border border-gray-300 rounded-md shadow-md"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h5 class="text-nowrap text-lg font-semibold">Blocks</h5>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon class="text-end flex-grow text-black">grid_view</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <app-blocks-form
+          [blockShapeControl]="designForm.controls.blockShape"
+          [blockShadowControl]="designForm.controls.blockShadow"
+          [blockColorControl]="designForm.controls.blockColor"
+          [blockTextColorControl]="designForm.controls.blockTextColor"
+        ></app-blocks-form>
+      </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel
+      hideToggle
+      expanded
+      class="border border-gray-300 rounded-md shadow-md"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h5 class="text-nowrap text-lg font-semibold">Font</h5>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon class="text-end flex-grow text-black">text_fields</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <app-font-form [fontControl]="designForm.controls.font"></app-font-form>
+      </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
 </ng-container>
 
 <ng-template #loadingTab>
