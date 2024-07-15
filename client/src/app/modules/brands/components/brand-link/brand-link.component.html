@@ -38,6 +38,12 @@ class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border
       <a class="hover:underline hover:text-black w-fit text-sm text-gray-500 break-all" [href]="link.origin_url">{{ link.origin_url }}</a>
     </div>
     <div class="flex items-center gap-2">
+      <a
+        class="flex items-center gap-1 px-2 py-0.5 rounded-md text-gray-700 bg-gray-300 border border-gray-300 hover:text-black hover:shadow"
+        [routerLink]="['/u/brands', brand.id, 'manage', 'analytics', 'view-statics', link.id]"
+      >
+        <i class="icon-bar-chart"></i> View statics
+      </a>
       <p class="flex items-center gap-1">
         <i class="icon-calendar"></i>
         <span>{{ link.created_at | date:"MMM dd, yyyy" }}</span>

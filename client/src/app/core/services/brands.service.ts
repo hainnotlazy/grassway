@@ -80,6 +80,13 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Get brand link by id
+  */
+  getBrandLinkById(brandId: string, urlId: number) {
+    return this.httpClient.get<Url>(`api/brands/${brandId}/urls/${urlId}`);
+  }
+
+  /**
    * Describe: Get brand members
   */
   getBrandMembers(brandId: string) {

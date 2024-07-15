@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ExtendedUrl, Tag } from 'src/app/core/models';
+import { Brand, ExtendedUrl, Tag } from 'src/app/core/models';
 
 @Component({
   selector: 'app-overview-table',
@@ -11,5 +11,6 @@ import { ExtendedUrl, Tag } from 'src/app/core/models';
 })
 export class OverviewTableComponent {
   @Input() url!: ExtendedUrl;
-  @Input() tags!: Tag[];
+  @Input() tags: Tag[] = [];
+  @Input() brand?: Brand;
 }

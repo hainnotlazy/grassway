@@ -72,6 +72,15 @@ export class BrandsController {
     return this.brandsService.getFilteredLinks(currentUser, id, query);
   }
 
+  @Get("/:id/urls/:linkId")
+  getLinkById(
+    @CurrentUser() currentUser: User,
+    @Param("id") brandId: string,
+    @Param("linkId", ParseIntPipe) linkId: number
+  ) {
+    return this.brandsService.getLinkById(currentUser, brandId, linkId);
+  }
+
   @Post()
   @UseInterceptors(FileInterceptor("logo"))
   createBrand(

@@ -36,6 +36,7 @@ import { InviteUserDialogComponent } from './components/invite-user-dialog/invit
 import { InvitationComponent } from './components/invitation/invitation.component';
 import { BrandAnalyticsTabComponent } from './components/brand-analytics-tab/brand-analytics-tab.component';
 import { AnalyticModule } from '../analytic/analytic.module';
+import { ViewStaticsPage } from './pages/view-statics/view-statics.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { AnalyticModule } from '../analytic/analytic.module';
     BrandMemberComponent,
     InviteUserDialogComponent,
     InvitationComponent,
-    BrandAnalyticsTabComponent
+    BrandAnalyticsTabComponent,
+    ViewStaticsPage
   ],
   imports: [
     CommonModule,

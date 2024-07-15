@@ -3,6 +3,12 @@
     <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Title</th>
     <td class="border-slate-300 text-primary px-4 py-2 font-semibold break-all border">{{ url.title }}</td>
   </tr>
+  <tr *ngIf="brand">
+    <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Brand</th>
+    <td class="border-slate-300 px-4 py-2 break-all border">
+      <span class="text-primary font-semibold">{{ brand.title }}</span> ({{ brand.prefix }})
+    </td>
+  </tr>
   <tr>
     <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Origin Link</th>
     <td class="border-slate-300 px-4 py-2 break-all border">
@@ -58,7 +64,7 @@
     <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Redirected success times</th>
     <td class="border-slate-300 text-secondary px-4 py-2 font-semibold break-all border">{{ url.analytics.redirect_success }}</td>
   </tr>
-  <tr>
+  <tr *ngIf="!brand">
     <th class="sm:text-nowrap text-start border-slate-300 bg-slate-50 px-4 py-2 border">Tags</th>
     <td class="border-slate-300 flex-wrap h-full gap-2 px-4 py-2 break-all border" [class.flex]="url.tags.length > 0">
       <ng-container *ngIf="tags.length > 0">

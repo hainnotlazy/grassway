@@ -160,6 +160,36 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Get link by id
+  */
+  async getLinkById(
+    currentUser: User,
+    brandId: string,
+    linkId: number
+  ) {
+    this.validateBrandId(brandId);
+    const existedBrand = await this.getBrand(currentUser, brandId);
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to view this brand");
+    }
+
+    const existedUrl = await this.urlRepository.findOne({
+      where: {
+        id: linkId,
+        brand: {
+          id: brandId
+        }
+      },
+      relations: ["analytics"]
+    });
+    if (!existedUrl) {
+      throw new NotFoundException("Link not found");
+    }
+
+    return existedUrl;
+  }
+
+  /**
    * Describe: Get members
   */
   async getMembers(currentUser: User, brandId: string) {
