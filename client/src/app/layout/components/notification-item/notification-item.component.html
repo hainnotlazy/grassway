@@ -8,7 +8,7 @@
   ></div>
   <app-notification-icon [type]="notification.type"></app-notification-icon>
   <div class="flex-grow">
-    <span class="text-primary font-semibold">{{ notification.title }} - {{ notification.id }}</span>
+    <span class="text-primary font-semibold">{{ notification.title }}</span>
     <p class="text-karla text-sm text-gray-500">{{ notification.description }}</p>
     <small>{{ notification.created_at | timeAgo | async }}</small>
   </div>

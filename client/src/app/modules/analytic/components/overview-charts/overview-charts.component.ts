@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { LinksAnalyticsResponse } from 'src/app/core/interfaces';
 import { AnalyticsService } from 'src/app/core/services';
 
 @Component({
@@ -9,10 +11,20 @@ import { AnalyticsService } from 'src/app/core/services';
     class: 'block'
   }
 })
-export class OverviewChartsComponent {
-  overviewAnalytics$ = this.analyticsService.getPersonalLinksAnalytics();
+export class OverviewChartsComponent implements OnInit {
+  overviewAnalytics$: Observable<LinksAnalyticsResponse>;
+
+  @Input() brandId?: string;
 
   constructor(
     private analyticsService: AnalyticsService
-  ) {}
+  ) {
+    this.overviewAnalytics$ = this.analyticsService.getPersonalLinksAnalytics();
+  }
+
+  ngOnInit() {
+    if (this.brandId) {
+      this.overviewAnalytics$ = this.analyticsService.getBrandLinksAnalytics(this.brandId);
+    }
+  }
 }

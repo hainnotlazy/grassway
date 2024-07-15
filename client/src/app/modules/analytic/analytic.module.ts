@@ -33,6 +33,9 @@ const components = [
     AnalyticRoutingModule,
     UrlModule,
     SharedModule,
+  ],
+  exports: [
+    ...components
   ]
 })
 export class AnalyticModule { }

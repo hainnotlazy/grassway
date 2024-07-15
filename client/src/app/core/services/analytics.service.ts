@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PersonalLinksAnalyticsResponse, PublicLinksAnalyticsResponse } from '../interfaces';
+import { LinksAnalyticsResponse, PublicLinksAnalyticsResponse } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,13 @@ export class AnalyticsService {
    * Describe: Get personal links analytics
   */
   getPersonalLinksAnalytics() {
-    return this.httpClient.get<PersonalLinksAnalyticsResponse>("api/analytics");
+    return this.httpClient.get<LinksAnalyticsResponse>("api/analytics");
+  }
+
+  /**
+   * Describe: Get brand links analytics
+  */
+  getBrandLinksAnalytics(brandId: string) {
+    return this.httpClient.get<LinksAnalyticsResponse>(`api/analytics/brands/${brandId}`);
   }
 }

@@ -1,0 +1,13 @@
+<div
+  *ngIf="brand; else loading"
+  class="py-4 space-y-4"
+>
+  <h1 class="text-poetsen-one text-2xl">Overview</h1>
+
+  <app-overview-charts [brandId]="brand.id"></app-overview-charts>
+</div>
+
+
+<ng-template #loading>
+  <app-loading-tab [description]="'Loading brand analytics...'"></app-loading-tab>
+</ng-template>

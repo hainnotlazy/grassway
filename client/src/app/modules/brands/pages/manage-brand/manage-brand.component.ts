@@ -1,6 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, NavigationEnd, Router, Scroll } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, distinctUntilChanged, filter, finalize, map, switchMap, take, tap } from 'rxjs';
@@ -20,11 +21,14 @@ import { environment } from 'src/environments/environment';
 })
 export class ManageBrandPage {
   readonly client = environment.client;
+  readonly tabsShowLivePreview = ["Build", "Design", "Links"];
+
   brand$ = this.brandsService.currentBrand$;
   joinedBrand = false;
   fetchedBrand = false;
   isProcessing = false;
   showLivePreview$: Observable<boolean>;
+  disabledLivePreview = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -41,7 +45,10 @@ export class ManageBrandPage {
       filter(event => event instanceof Scroll && event.routerEvent instanceof NavigationEnd),
       map(() => this.route.snapshot.paramMap.get("brandId") as string),
       distinctUntilChanged(),
-      tap(() => this.fetchedBrand = false),
+      tap(() => {
+        this.fetchedBrand = false;
+        this.disabledLivePreview = false;
+      }),
       switchMap((brandId: string) => this.brandsService.getBrandById(brandId)),
       tap(brand => {
         this.brandsService.setCurrentBrand(brand);
@@ -91,6 +98,10 @@ export class ManageBrandPage {
 
   onJoinBrand() {
     this.joinedBrand = true;
+  }
+
+  handleTabChange(event: MatTabChangeEvent) {
+    this.disabledLivePreview = !this.tabsShowLivePreview.includes(event.tab.textLabel);
   }
 
   private handlePublishFailed(error: any) {

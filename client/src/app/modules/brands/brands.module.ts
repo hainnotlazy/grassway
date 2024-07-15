@@ -34,6 +34,8 @@ import { QrCodeFormComponent } from './components/qr-code-form/qr-code-form.comp
 import { BrandMemberComponent } from './components/brand-member/brand-member.component';
 import { InviteUserDialogComponent } from './components/invite-user-dialog/invite-user-dialog.component';
 import { InvitationComponent } from './components/invitation/invitation.component';
+import { BrandAnalyticsTabComponent } from './components/brand-analytics-tab/brand-analytics-tab.component';
+import { AnalyticModule } from '../analytic/analytic.module';
 
 @NgModule({
   declarations: [
@@ -66,12 +68,14 @@ import { InvitationComponent } from './components/invitation/invitation.componen
     QrCodeFormComponent,
     BrandMemberComponent,
     InviteUserDialogComponent,
-    InvitationComponent
+    InvitationComponent,
+    BrandAnalyticsTabComponent
   ],
   imports: [
     CommonModule,
     BrandsRoutingModule,
     UrlModule,
+    AnalyticModule,
     SharedModule
   ]
 })

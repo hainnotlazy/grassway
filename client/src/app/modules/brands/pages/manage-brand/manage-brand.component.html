@@ -50,6 +50,7 @@
       mat-align-tabs="start"
       animationDuration="0ms"
       color="accent"
+      (selectedTabChange)="handleTabChange($event)"
     >
       <mat-tab label="Build">
         <ng-template matTabContent>
@@ -70,7 +71,9 @@
       </mat-tab>
 
       <mat-tab label="Analytics">
-        Not implement yet
+        <ng-template matTabContent>
+          <app-brand-analytics-tab></app-brand-analytics-tab>
+        </ng-template>
       </mat-tab>
 
       <mat-tab label="Settings">
@@ -81,7 +84,7 @@
     </mat-tab-group>
 
     <iframe
-      *ngIf="showLivePreview$ | async"
+      *ngIf="(showLivePreview$ | async) && !disabledLivePreview"
       class="rounded-xl top-20 xl:block sticky items-start hidden max-w-xs shadow-lg"
       [src]="(client + '/m/' + (brand$ | async)?.prefix + '?livePreview=true') | safe:'resourceUrl'"
       frameborder="0"

@@ -1,4 +1,4 @@
-export interface PersonalLinksAnalyticsResponse {
+export interface LinksAnalyticsResponse {
   totalVisited: number;
   totalRedirectedSuccess: number;
   totalClicksByDesktop: number;
