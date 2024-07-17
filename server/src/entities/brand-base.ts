@@ -8,7 +8,7 @@ export abstract class BrandBase {
   @Column({ nullable: true, length: 100 })
   description: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, length: 50 })
   prefix: string;
 
   @Column({ nullable: true })
@@ -176,7 +176,7 @@ export abstract class BrandBlockBase {
   @Column({ length: 80 })
   title: string;
 
-  @Column({ nullable: true, length: 150 })
+  @Column({ nullable: true, length: 100 })
   description: string;
 
   @Column({ nullable: true })

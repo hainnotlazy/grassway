@@ -7,7 +7,7 @@ const titleRequirements = {
 const prefixRequirements = {
   required: true,
   minlength: 3,
-  maxlength: 255,
+  maxlength: 50,
   existed: true,
   invalidPrefix: true
 }

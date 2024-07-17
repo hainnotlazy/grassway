@@ -17,7 +17,7 @@
       draggable="false"
     >
     <span class="sm:block hidden font-semibold">
-      {{ currentUser.fullname }}
+      {{ currentUser.fullname | truncate:25 }}
     </span>
     <i
       class="icon-chevron-down transition-all duration-500"
@@ -28,7 +28,7 @@
   <mat-menu
     #userMenu="matMenu"
     xPosition="before"
-    class="text-roboto-condensed mt-1"
+    class="text-roboto-condensed w-72 mt-1"
   >
     <div
       class="border-b-gray-300 flex gap-3 px-4 border-b py-2.5"
@@ -46,7 +46,7 @@
         >
       </div>
       <div class="flex flex-col justify-center cursor-default">
-        <span class="text-primary font-semibold">{{ currentUser.fullname | truncate:20 }}</span>
+        <span class="text-primary font-semibold">{{ currentUser.fullname | truncate:18 }}</span>
         <small class="text-gray-600">{{ currentUser.username }}</small>
       </div>
     </div>

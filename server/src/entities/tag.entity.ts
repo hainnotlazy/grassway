@@ -30,7 +30,7 @@ export class Tag {
   @OneToMany(() => TaggedUrl, (taggedUrl) => taggedUrl.tag)
   tagged_urls: TaggedUrl[];
 
-  @Column()
+  @Column({ length: 25 })
   name: string;
 
   @Column({
@@ -41,7 +41,8 @@ export class Tag {
   icon: string;
 
   @Column({
-    nullable: true
+    nullable: true,
+    length: 100
   })
   description: string;
 

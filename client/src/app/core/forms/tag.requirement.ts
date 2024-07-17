@@ -1,11 +1,11 @@
 const nameRequirements = {
   required: true,
   minlength: 3,
-  maxlength: 255
+  maxlength: 25
 }
 
 const descriptionRequirements = {
-  maxlength: 255
+  maxlength: 100
 }
 
 export const tagFormRequirements = {

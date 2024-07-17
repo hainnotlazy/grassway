@@ -10,7 +10,7 @@ export class UpdateTagDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
-  @MaxLength(255)
+  @MaxLength(25)
   @Transform(({ value }) => value.trim())
   name: string;
 
@@ -20,7 +20,7 @@ export class UpdateTagDto {
   })
   @IsString()
   @IsOptional()
-  @MaxLength(255)
+  @MaxLength(100)
   @Transform(({ value }) => value ? value.trim() : "")
   description?: string;
 

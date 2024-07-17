@@ -67,12 +67,12 @@
       <ul class="bg-slate-800 brand-sub-items" [class.show]="isBrandItemOpen">
         <li *ngFor="let brand of brands$ | async">
           <a
-            class="relative pr-4 pl-8 hover:text-white hover:bg-slate-700 py-2.5 block space-x-1 break-all"
+            class="relative pr-4 pl-8 hover:text-white hover:bg-slate-700 py-2.5 flex flex-wrap gap-1 break-all"
             [routerLink]="['brands', brand.id, 'manage']"
             routerLinkActive="sub-item-active"
             (click)="onClickNavigationItem()"
           >
-            <span>{{ brand.title }}</span>
+            <span>{{ brand.title | truncate:15 }}</span>
             <span class="text-nowrap">({{ brand.prefix | truncate:15 }})</span>
           </a>
         </li>
