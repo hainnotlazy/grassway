@@ -148,6 +148,9 @@ export class ShortenUrlComponent {
   }
 
   private isShortened(url: string) {
-    return this.cachedUrls.find(cachedUrl => cachedUrl.origin_url === url);
+    return this.cachedUrls.find(cachedUrl => {
+      const cachedOriginUrl = cachedUrl.origin_url.replace(/(http|https):\/\//, "");
+      return cachedOriginUrl === url;
+    });
   }
 }

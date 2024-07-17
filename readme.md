@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <b>Grassway</b> is a free URL shortener web app based on <a href="https://angular.io" target="_blank">Angular</a> and <a href="https://nestjs.com/" target="_blank">NestJS</a>, inspired by <a href="https://bit.ly" target="_blank">bit.ly</a>.
+  <b>Grassway</b> is a free URL shortener web app based on <a href="https://angular.io" target="_blank">Angular</a> and <a href="https://nestjs.com/" target="_blank">NestJS</a>, inspired by <a href="https://bit.ly" target="_blank">bit.ly</a> and <a href="https://linktr.ee" target="_blank">linktree</a>.
 </p>
 
 <hr/>
@@ -62,10 +62,13 @@ Grassway is now live at <a href="https://grassway.xyz" target="_blank">grassway.
 </table>
 
 ## Features
-- ✅ **Shorten URL** 
+- ⭐ **Shorten URL** 
+- ⭐ **Brand Page** 
 - ✅ **Manage Your URLs** 
 - ✅ **Customize QR Codes** 
 - ✅ **Analyze Your URLs** 
+- ✅ **Manage Brand** 
+- ✅ **Realtime notification** 
 - ... and more 
 
 ## Running the App for Development Locally
