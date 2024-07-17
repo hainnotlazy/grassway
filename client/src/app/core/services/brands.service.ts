@@ -200,4 +200,11 @@ export class BrandsService {
   removeMember(brandId: string, memberId: number) {
     return this.httpClient.delete<void>(`api/brands/${brandId}/members/${memberId}`);
   }
+
+  /**
+   * Describe: Leave brand
+  */
+  leaveBrand(brandId: string) {
+    return this.httpClient.delete<void>(`api/brands/${brandId}/members/leave`);
+  }
 }

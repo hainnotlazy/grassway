@@ -1,6 +1,7 @@
 <div mat-dialog-title class="!flex items-center justify-center !p-4">
   <i
-    class="icon-delete-forever text-rose-600 text-6xl"
+    class="text-rose-600 text-6xl"
+    [ngClass]="headingIcon"
   ></i>
 </div>
 
@@ -42,6 +43,6 @@
     cdkFocusInitial
     (click)="onDeleteClick()"
   >
-    Delete permanently
+    {{ processBtnText }}
   </button>
 </div>

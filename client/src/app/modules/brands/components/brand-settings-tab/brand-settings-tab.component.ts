@@ -79,6 +79,7 @@ export class BrandSettingsTabComponent {
     this.dialog.closeAll();
 
     const destroyDialog = this.dialog.open(DestroyDialogComponent, {
+      width: "500px",
       data: {
         title: `You are going to delete permanently brand ${this.brand.title}`,
         itemName: this.brand.title,
@@ -106,6 +107,42 @@ export class BrandSettingsTabComponent {
       }),
       untilDestroyed(this)
     ).subscribe()
+  }
+
+  onLeaveBrand() {
+    this.dialog.closeAll();
+
+    const leaveDialog = this.dialog.open(DestroyDialogComponent, {
+      width: "400px",
+      data: {
+        title: `You are going to leave brand ${this.brand.title}`,
+        itemName: this.brand.title,
+        headingIcon: "icon-logout",
+        processBtnText: "Leave",
+      }
+    });
+
+    leaveDialog.afterClosed().pipe(
+      take(1),
+      filter(data => !!data),
+      switchMap(() => this.brandsService.leaveBrand(this.brand.id)),
+      switchMap(() => this.brandsService.brands$),
+      take(1),
+      tap(brands => this.brandsService.setBrands(brands.filter(brand => brand.id !== this.brand.id))),
+      tap(() => {
+        this.snackbar.open(`You have left brand ${this.brand.title} successfully`, 'x', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
+        this.router.navigate(['/u/brands']);
+      }),
+      catchError(err => {
+        this.handleDeleteBrandFail(err);
+        return err;
+      }),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   private handleDeleteBrandFail(error: any) {

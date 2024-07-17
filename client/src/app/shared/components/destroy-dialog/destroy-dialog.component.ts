@@ -5,6 +5,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 interface DialogData {
   itemName: string;
   title: string;
+  headingIcon?: string;
+  processBtnText?: string;
 }
 
 @Component({
@@ -15,6 +17,8 @@ interface DialogData {
 export class DestroyDialogComponent {
   title!: string;
   itemName!: string;
+  headingIcon: string;
+  processBtnText: string;
   formError = "";
 
   itemNameControl = new FormControl("", [
@@ -27,6 +31,8 @@ export class DestroyDialogComponent {
   ) {
     this.title = data.title;
     this.itemName = data.itemName;
+    this.headingIcon = data.headingIcon || "icon-delete-forever";
+    this.processBtnText = data.processBtnText || "Delete permanently";
   }
 
   onDeleteClick() {

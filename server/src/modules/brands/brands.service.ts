@@ -750,6 +750,33 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Leave brand
+  */
+  async leaveBrand(currentUser: User, brandId: string) {
+    this.validateBrandId(brandId);
+    const brand = await this.brandRepository.findOne({
+      where: {
+        id: brandId,
+        members: {
+          user_id: currentUser.id
+        }
+      },
+      relations: ["members"]
+    });
+
+    if (!brand) {
+      throw new BadRequestException("You are not owner of this brand to do this action");
+    } else if (brand.members[0].role === BrandMemberRole.OWNER) {
+      throw new BadRequestException("You can't leave this brand because you are owner");
+    }
+
+    await this.brandMemberRepository.remove(brand.members[0]);
+
+    // Emit notification (run in background)
+    this.brandNotificationService.sendMemberLeftEvent(brand, currentUser);
+  }
+
+  /**
    * Describe: Validate brand id
   */
   validateBrandId(brandId: string): void {

@@ -177,6 +177,11 @@ export class BrandsController {
     return;
   } 
 
+  @Delete("/:id/members/leave")
+  async leaveBrand(@CurrentUser() currentUser: User, @Param("id") brandId: string) {
+    return this.brandsService.leaveBrand(currentUser, brandId);
+  }
+
   @Delete("/:id/members/:memberId")
   async removeMember(
     @CurrentUser() currentUser: User,
