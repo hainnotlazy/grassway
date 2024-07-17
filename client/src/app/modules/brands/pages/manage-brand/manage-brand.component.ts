@@ -89,9 +89,44 @@ export class ManageBrandPage {
           verticalPosition: "top"
         })
       }, err => {
-        this.handlePublishFailed(err);
+        this.handleProcessFailed(err);
       }),
       finalize(() => this.isProcessing = false),
+      untilDestroyed(this)
+    ).subscribe();
+  }
+
+  onDiscardChanges() {
+    if (this.isProcessing) {
+      return;
+    }
+
+    this.brandsService.currentBrand$.pipe(
+      take(1),
+      tap(() => this.isProcessing = true),
+      switchMap(brand => this.brandsService.discardChanges(brand.id)),
+      tap(() => {
+        this.snackbar.open("Discarded changes successfully", "x", {
+          duration: 3000,
+          horizontalPosition: "right",
+          verticalPosition: "top"
+        });
+        this.fetchedBrand = false;
+      }, err => {
+        this.handleProcessFailed(err);
+      }),
+      switchMap(() => this.brand$),
+      take(1),
+      switchMap(brand => this.brandsService.getBrandById(brand.id)),
+      tap(brand => {
+        this.brandsService.setCurrentBrand(brand);
+      }, () => {
+        this.router.navigate(["/u/brands"]);
+      }),
+      finalize(() => {
+        this.fetchedBrand = true;
+        this.isProcessing = false;
+      }),
       untilDestroyed(this)
     ).subscribe();
   }
@@ -104,7 +139,7 @@ export class ManageBrandPage {
     this.disabledLivePreview = !this.tabsShowLivePreview.includes(event.tab.textLabel);
   }
 
-  private handlePublishFailed(error: any) {
+  private handleProcessFailed(error: any) {
     const errorResponse: ErrorResponse = error.error;
     let errorMessage = errorResponse.message ?? "Unexpected error happened";
 

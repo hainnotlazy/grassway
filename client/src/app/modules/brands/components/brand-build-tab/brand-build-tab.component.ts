@@ -24,6 +24,7 @@ export class BrandBuildTabComponent {
     private brandsDraftService: BrandsDraftService,
     private dialog: MatDialog
   ) {
+    console.log("created")
     this.brandsService.currentBrand$.pipe(
       take(1),
       tap(brand => this.brandId = brand.id),

@@ -20,14 +20,25 @@
       </h1>
       <p class="italic text-gray-500">Manage all about your brand!</p>
     </div>
-    <div *ngIf="joinedBrand" class="sm:text-end flex-grow space-x-2">
+    <div *ngIf="joinedBrand" class="sm:text-end flex flex-wrap justify-end flex-grow gap-2">
+      <button
+        class="px-4 py-2.5 rounded-md shadow-md text-white bg-gray-500 hover:bg-gray-400 disabled:bg-sky-400 inline-flex items-center gap-2"
+        type="button"
+        (click)="onDiscardChanges()"
+        [disabled]="isProcessing"
+      >
+        <i [ngClass]="{
+          'icon-spinner spinning': isProcessing,
+          'icon-discard': !isProcessing,
+        }"></i>
+        {{ isProcessing ? 'Processing...' : 'Discard changes' }}
+      </button>
       <a
         class="px-4 py-2.5 h-11 rounded-md shadow-md text-white bg-primary hover:bg-primary/80 inline-flex items-center gap-2"
         [href]="client + '/m/' + (brand$ | async)?.prefix"
         target="_blank"
       >
         <i class="icon-open-in-new-tab"></i>
-        <span class="sm:inline hidden">View in new tab</span>
       </a>
       <button
         class="px-4 py-2.5 rounded-md shadow-md text-white bg-primary hover:bg-primary/80 disabled:bg-sky-400 inline-flex items-center gap-2"

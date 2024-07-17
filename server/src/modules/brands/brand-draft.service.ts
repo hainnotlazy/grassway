@@ -378,6 +378,59 @@ export class BrandDraftService {
   }
 
   /**
+   * Describe: Discard changes
+  */
+  async discardChanges(currentUser: User, brandId: string) {
+    this.brandsService.validateBrandId(brandId);
+
+    const existedBrand = await this.brandRepository.findOne({
+      where: {
+        id: brandId,
+        members: {
+          user_id: currentUser.id
+        }
+      },
+      relations: ["blocks", "blocks.url", "social_platforms"]
+    })
+    if (!existedBrand) {
+      throw new BadRequestException("You don't have permission to edit this brand");
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.update(BrandSocialPlatformsDraft, {
+        brand_id: brandId
+      }, existedBrand.social_platforms);
+
+      await queryRunner.manager.delete(BrandBlockDraft, {});
+      for (const block of existedBrand.blocks) {
+        delete block.id;
+        await queryRunner.manager.save(BrandBlockDraft, block);
+      }
+
+      delete existedBrand.id;
+      delete existedBrand.qr_code_background_color;
+      delete existedBrand.qr_code_foreground_color;
+      delete existedBrand.created_at;
+      delete existedBrand.blocks;
+      delete existedBrand.social_platforms;
+      await queryRunner.manager.update(BrandDraft, {
+        brand_id: brandId
+      }, existedBrand);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException("Failed to discard changes");
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  /**
    * Describe: Remove brand block
   */
   async removeBlock(

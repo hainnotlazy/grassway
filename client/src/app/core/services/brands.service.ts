@@ -181,6 +181,13 @@ export class BrandsService {
   }
 
   /**
+   * Describe: Discard changes
+  */
+  discardChanges(brandId: string) {
+    return this.httpClient.put<void>(`api/brands/${brandId}/discard-changes`, null);
+  }
+
+  /**
    * Describe: Delete brand
   */
   deleteBrand(brandId: string) {

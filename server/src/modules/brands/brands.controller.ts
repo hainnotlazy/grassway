@@ -120,6 +120,13 @@ export class BrandsController {
     return;
   }
 
+  @Put("/:id/discard-changes")
+  @HttpCode(204)
+  async discardChanges(@CurrentUser() currentUser: User, @Param("id") id: string) {
+    await this.brandDraftService.discardChanges(currentUser, id);
+    return;
+  }
+
   @Put("/:id/members/handle-invitation")
   async handleInvitation(
     @CurrentUser() currentUser: User,
