@@ -10,6 +10,11 @@
     .header-content {
       margin-top: -9rem;
     }
+
+    @media screen and (max-width: 680px) {
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+    }
   }
 
   @media screen and (min-width: 680px) {
