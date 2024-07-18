@@ -78,6 +78,49 @@ export class AnalyticsController {
   }
 
   @Get("/brands/:brandId")
+  @ApiOperation({ summary: 'Get brand analytics' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: "Get brand analytics data",
+    schema: {
+      example: {
+        totalLinks: 0,
+        totalVisits: 0,
+        totalActiveLinks: 0,
+        totalInactiveLinks: 0,
+        totalCustomBackHalfLinks: 0,
+        totalDefaultBackHalfLinks: 0
+      }
+    }
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid user id",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   getBrandAnalytics(
     @CurrentUser() currentUser: User, 
     @Param("brandId") brandId: string

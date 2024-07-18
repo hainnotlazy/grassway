@@ -3,9 +3,6 @@ import { CanActivateFn, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { isAuthenticated, removeAccessToken } from '../helpers/local-storage.helper';
 
-const publicRoutes = [
-]
-
 export const authGuard: CanActivateFn = (route, state) => {
   const jwtService = inject(JwtHelperService);
   const router = inject(Router);
@@ -19,7 +16,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   // Public routes
-  // TODO: Use public routes array
   if (currentUrl === "/" || currentUrl === "/auth/success-authentication") {
     if (isAuthenticated() && !jwtService.isTokenExpired()) {
       router.navigate(["/u/links"]);

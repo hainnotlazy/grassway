@@ -57,6 +57,42 @@ export class UsersController {
   }
   
   @Get("/filter")
+  @ApiOperation({
+    summary: "Get filtered users by username, email or fullname",
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: "Get filtered users successfully",
+    type: [User]
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid user id",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized",
+    content: {
+      "application/json": { 
+        examples: {
+          "Unauthorized": {
+            value: "Unauthorized"
+          },
+          "Token is invalid": {
+            value: "Token is invalid"
+          }
+        }
+      }
+    }
+  })
+  @ApiForbiddenResponse({
+    description: "Account is inactive",
+  })
+  @ApiNotFoundResponse({
+    description: "User not found",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Internal server error",
+  })
   filterUsers(
     @CurrentUser() currentUser: User,
     @Query("query", new DefaultValuePipe("")) query: string,

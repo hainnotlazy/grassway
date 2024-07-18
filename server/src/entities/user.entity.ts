@@ -59,7 +59,6 @@ export class User {
   })
   gender: string;
 
-  // TODO: Add to db erd
   @ApiProperty()
   @Column({ nullable: true })
   avatar: string;
