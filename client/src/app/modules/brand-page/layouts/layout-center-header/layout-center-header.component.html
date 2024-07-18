@@ -19,7 +19,8 @@
         class="min-h-44 min-w-44 aspect-square mx-auto border-4 rounded-full select-none"
         [style]="{
           'border-color': brand.background_color,
-          'filter': 'drop-shadow(0rem 0.5rem 0.5rem ' + brand.background_color + ')'
+          'filter': 'drop-shadow(0rem 0.5rem 0.5rem ' + brand.background_color + ')',
+          'background-color': brand.background_color
         }"
         [src]="brand.logo || defaultBrandLogo"
         [alt]="brand.title + '\'s logo'"
