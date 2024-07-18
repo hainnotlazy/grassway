@@ -39,7 +39,7 @@
     (submit)="onSubmit()"
   >
     <div class="flex flex-col gap-2">
-      <label class="text-gray-600" for="fullname">Full name:</label>
+      <label class="dark:text-gray-300 text-gray-600" for="fullname">Full name:</label>
       <mat-form-field
         class="md:w-1/2 w-full"
         color="accent"
@@ -60,7 +60,7 @@
 
     <div class="md:flex-row flex flex-col gap-4">
       <div class="md:w-1/2 flex flex-col w-full gap-2">
-        <label class="text-gray-600" for="dob">Date of birth:</label>
+        <label class="dark:text-gray-300 text-gray-600" for="dob">Date of birth:</label>
         <mat-form-field appearance="outline" color="accent">
           <input
             id="dob"
@@ -69,14 +69,14 @@
             [matDatepicker]="picker"
             placeholder="Your date of birth"
           >
-          <mat-hint class="italic text-gray-400">MM/DD/YYYY</mat-hint>
+          <mat-hint class="dark:text-gray-300 italic text-gray-400">MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
 
       <div class="md:w-1/2 flex flex-col w-full gap-2">
-        <label class="text-gray-600" for="phone">Phone number:</label>
+        <label class="dark:text-gray-300 text-gray-600" for="phone">Phone number:</label>
         <mat-form-field appearance="outline" color="accent">
           <input
             id="phone"
@@ -90,7 +90,7 @@
     </div>
 
     <div class="flex flex-col mt-2">
-      <p class="text-gray-600">Gender:</p>
+      <p class="dark:text-gray-300 text-gray-600">Gender:</p>
       <mat-radio-group
         formControlName="gender"
         class="gap-x-4 gap-y-2 flex flex-wrap"
@@ -103,7 +103,7 @@
     </div>
 
     <div class="flex flex-col gap-2 mt-2">
-      <label class="text-gray-600" for="bio">Bio:</label>
+      <label class="dark:text-gray-300 text-gray-600" for="bio">Bio:</label>
       <mat-form-field
         class="w-full"
         appearance="outline"

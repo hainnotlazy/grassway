@@ -1,8 +1,8 @@
 <div
   class="flex flex-col items-center justify-between h-full gap-2 p-4 text-center border border-gray-300 rounded-md shadow-md"
-  [class]="{
-    'bg-white': link.is_active,
-    'bg-gray-200': !link.is_active
+  [ngClass]="{
+    'bg-white dark:bg-neutral-600': link.is_active,
+    'bg-gray-200 dark:bg-zinc-600': !link.is_active
   }"
 >
   <div class="flex items-center justify-center">
@@ -25,12 +25,12 @@
       [width]="200"
     ></qrcode>
   </div>
-  <h6 class="text-primary flex items-center gap-2 text-lg font-semibold break-all cursor-default">
+  <h6 class="text-primary dark:text-secondary flex items-center gap-2 text-lg font-semibold break-all cursor-default">
     <small class="animate-pulse">{{ link.is_active ? '🟢' : '🔴' }}</small>
     {{ link.title }}
     <i
       *ngIf="link.description"
-      class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
+      class="icon-info hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 text-gray-400 cursor-pointer"
       [matTooltip]="link.description"
       matTooltipPosition="above"
     ></i>
@@ -42,13 +42,13 @@
     ></i>
   </h6>
   <a
-    class="text-secondary font-semibold break-all"
+    class="text-secondary dark:text-gray-300 font-semibold break-all"
     [routerLink]="'/l/' + (link.custom_back_half || link.back_half)"
   >
     {{ link.client + (link.custom_back_half || link.back_half) }}
   </a>
   <a
-    class="text-sm text-gray-500 break-all"
+    class="dark:text-gray-400 text-sm text-gray-500 break-all"
     [href]="link.origin_url"
   >
     {{ link.origin_url }}

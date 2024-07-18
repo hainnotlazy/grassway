@@ -4,12 +4,12 @@
 >
   <div class="sm:flex-row sm:items-center flex flex-col gap-4">
     <div class="space-y-1">
-      <h1 class="text-poetsen-one text-3xl">
+      <h1 class="text-poetsen-one dark:text-white text-3xl">
         Brand:
-        <span class="text-primary">
+        <span class="text-primary dark:text-secondary">
           {{ (brand$ | async)?.title || "" | truncate:15 }}
           <button
-            class="hover:text-blue-400 text-xl text-blue-600"
+            class="hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-600 text-xl text-blue-600"
             [cdkCopyToClipboard]="client + '/m/' + (brand$ | async)?.prefix"
             (click)="onCopy()"
             type="button"
@@ -18,11 +18,11 @@
           </button>
         </span>
       </h1>
-      <p class="italic text-gray-500">Manage all about your brand!</p>
+      <p class="dark:text-gray-300 italic text-gray-500">Manage all about your brand!</p>
     </div>
     <div *ngIf="joinedBrand" class="sm:text-end sm:justify-end flex flex-wrap flex-grow gap-2">
       <button
-        class="px-4 py-2.5 rounded-md shadow-md text-white bg-gray-500 hover:bg-gray-400 disabled:bg-sky-400 inline-flex items-center gap-2"
+        class="dark:bg-gray-400 dark:hover:bg-gray-500 px-4 py-2.5 rounded-md shadow-md text-white bg-gray-500 hover:bg-gray-400 disabled:bg-sky-400 inline-flex items-center gap-2"
         type="button"
         (click)="onDiscardChanges()"
         [disabled]="isProcessing"
@@ -60,7 +60,8 @@
       mat-stretch-tabs="false"
       mat-align-tabs="start"
       animationDuration="0ms"
-      color="accent"
+      color="primary"
+      [backgroundColor]="'accent'"
       (selectedTabChange)="handleTabChange($event)"
     >
       <mat-tab label="Build">

@@ -17,6 +17,7 @@ import { NotificationComponent } from './components/notification/notification.co
 import { NotificationItemComponent } from './components/notification-item/notification-item.component';
 import { NotificationIconComponent } from './components/notification-icon/notification-icon.component';
 import { NotificationUnreadCountComponent } from './components/notification-unread-count/notification-unread-count.component';
+import { ThemeChangerComponent } from './components/theme-changer/theme-changer.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { NotificationUnreadCountComponent } from './components/notification-unre
     NotificationItemComponent,
     NotificationIconComponent,
     NotificationUnreadCountComponent,
+    ThemeChangerComponent,
   ],
   imports: [
     CommonModule,

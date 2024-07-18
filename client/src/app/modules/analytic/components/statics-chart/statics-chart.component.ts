@@ -6,7 +6,7 @@ import { ExtendedUrl } from 'src/app/core/models';
   templateUrl: './statics-chart.component.html',
   styleUrls: ['./statics-chart.component.scss'],
   host: {
-    class: "block"
+    class: "block dark:p-4 dark:rounded-md dark:shadow-md dark:bg-neutral-200"
   }
 })
 export class StaticsChartComponent {

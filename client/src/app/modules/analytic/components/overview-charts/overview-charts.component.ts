@@ -8,7 +8,7 @@ import { AnalyticsService } from 'src/app/core/services';
   templateUrl: './overview-charts.component.html',
   styleUrls: ['./overview-charts.component.scss'],
   host: {
-    class: 'block'
+    class: 'block dark:p-4 dark:rounded-md dark:bg-neutral-200 dark:shadow-md'
   }
 })
 export class OverviewChartsComponent implements OnInit {

@@ -1,0 +1,7 @@
+<button
+  class="hover:text-secondary dark:text-white dark:hover:text-secondary flex items-center justify-center text-3xl text-gray-500"
+  type="button"
+  (click)="onChangeTheme()"
+>
+  <i [ngClass]="isDarkMode ? 'icon-light-mode' : 'icon-dark-mode'"></i>
+</button>

@@ -3,9 +3,9 @@
   (submit)="onSubmit()"
   class="space-y-2"
 >
-  <h6 class="text-poetsen-one text-xl font-semibold">Edit tag</h6>
+  <h6 class="text-poetsen-one dark:text-white text-xl font-semibold">Edit tag</h6>
   <div class="flex flex-col gap-2">
-    <label class="font-semibold text-gray-700" for="name">Name:<small class="text-red-500">*</small></label>
+    <label class="dark:text-gray-300 font-semibold text-gray-700" for="name">Name:<small class="text-red-500">*</small></label>
     <mat-form-field appearance="outline" color="accent">
       <input
         id="name"
@@ -26,7 +26,7 @@
   </div>
 
   <div class="flex flex-col gap-2">
-    <label class="font-semibold text-gray-700" for="description">Description:</label>
+    <label class="dark:text-gray-300 font-semibold text-gray-700" for="description">Description:</label>
     <mat-form-field appearance="outline" color="accent">
       <textarea
         id="description"
@@ -47,7 +47,7 @@
   </div>
 
   <div class="flex flex-col gap-2">
-    <label class="font-semibold text-gray-700" for="icon">Icon:</label>
+    <label class="dark:text-gray-300 font-semibold text-gray-700" for="icon">Icon:</label>
     <mat-form-field appearance="outline" color="accent" class="max-w-52">
       <mat-select id="icon" formControlName="icon">
         <mat-option value="none">-- None --</mat-option>

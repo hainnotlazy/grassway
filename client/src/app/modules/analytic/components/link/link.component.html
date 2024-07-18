@@ -1,4 +1,4 @@
-<div class="bg-white px-4 py-2.5 rounded-md shadow-md flex gap-4 border border-slate-300">
+<div class="bg-white dark:bg-neutral-600 px-4 py-2.5 rounded-md shadow-md flex gap-4 border border-slate-300">
   <img
     class="w-8 h-8 translate-y-full border border-gray-500 rounded-full"
     [src]="'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=' + url.origin_url + '&size=32'"
@@ -13,24 +13,24 @@
       <span class="text-jost text-secondary font-semibold">{{ url.title }}</span>
       <i
         *ngIf="url.description"
-        class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
+        class="icon-info hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 text-gray-400 cursor-pointer"
         [matTooltip]="url.description"
         matTooltipPosition="above"
       ></i>
       <i *ngIf="url.use_password" class="icon-key text-yellow-600 rotate-45"></i>
     </h6>
     <a
-      class="hover:underline hover:text-primary text-sm font-semibold text-gray-500 break-all"
+      class="hover:underline hover:text-primary dark:text-white dark:hover:text-gray-300 text-sm font-semibold text-gray-500 break-all"
       [routerLink]="['/l/' , (url.custom_back_half || url.back_half)]"
     >
       {{ url.client + (url.custom_back_half || url.back_half) }}
     </a>
-    <a class="hover:underline hover:text-black text-sm text-gray-500 break-all"
+    <a class="hover:underline hover:text-black dark:text-gray-300 dark:hover:text-gray-200 text-sm text-gray-500 break-all"
       [href]="url.origin_url"
     >
       {{ url.origin_url }}
     </a>
-    <p class="flex items-center gap-1">
+    <p class="dark:text-gray-200 flex items-center gap-1">
       <i class="icon-calendar"></i>
       <span>Jan 1, 2021</span>
     </p>

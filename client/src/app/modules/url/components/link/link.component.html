@@ -1,5 +1,5 @@
 <div
-  class="sm:flex-row flex flex-col items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow"
+  class="sm:flex-row dark:bg-neutral-600 flex flex-col items-baseline gap-4 p-4 bg-white border border-gray-300 rounded-md shadow"
 >
   <ng-container *ngIf="selectingAll !== null; else defaultCheckbox">
     <mat-checkbox
@@ -14,7 +14,7 @@
   </ng-template>
   <div class="self-center -mt-12 -ml-2">
     <img
-      class="w-8 h-8 border border-gray-500 rounded-full"
+      class="dark:border-white w-8 h-8 border border-gray-500 rounded-full"
       [src]="'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=' + url.origin_url + '&size=32'"
       [alt]="'Link of ' + url.origin_url"
       width="32"
@@ -29,7 +29,7 @@
         {{ url.title }}
         <i
           *ngIf="url.description"
-          class="icon-info hover:text-gray-600 text-gray-400 cursor-pointer"
+          class="icon-info hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 text-gray-400 cursor-pointer"
           [matTooltip]="url.description"
           matTooltipPosition="above"
         ></i>
@@ -41,12 +41,12 @@
         ></i>
       </h6>
       <a
-        class="hover:underline hover:text-primary w-fit text-sm font-semibold text-gray-500 break-all"
+        class="hover:underline hover:text-primary w-fit dark:text-white dark:hover:text-gray-300 text-sm font-semibold text-gray-500 break-all"
         [routerLink]="'/l/' + (url.custom_back_half ? url.custom_back_half : url.back_half)"
       >
         {{ url.client + (url.custom_back_half || url.back_half) }}
       </a>
-      <a class="hover:underline hover:text-black w-fit text-sm text-gray-500 break-all" [href]="url.origin_url">{{ url.origin_url }}</a>
+      <a class="hover:underline hover:text-black w-fit dark:text-gray-300 dark:hover:text-gray-200 text-sm text-gray-500 break-all" [href]="url.origin_url">{{ url.origin_url }}</a>
     </div>
     <div class="flex items-center gap-2">
       <a
@@ -55,7 +55,7 @@
       >
         <i class="icon-bar-chart"></i> View statics
       </a>
-      <p class="flex items-center gap-1">
+      <p class="dark:text-gray-200 flex items-center gap-1">
         <i class="icon-calendar"></i>
         <span>{{ url.created_at | date:"MMM dd, yyyy" }}</span>
       </p>
@@ -78,7 +78,7 @@
       matTooltip="Copy"
       matTooltipPosition="above"
     >
-      <i class="hover:text-black hover:shadow icon-copy p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+      <i class="hover:text-black hover:shadow dark:border-white icon-copy p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
     <button
       matTooltip="View QR Code"
@@ -86,7 +86,7 @@
       (click)="onOpenQRCodeDialog()"
       type="button"
     >
-      <i class="hover:text-black hover:shadow icon-qr-code p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+      <i class="hover:text-black hover:shadow dark:border-white icon-qr-code p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
     <button
       matTooltip="Edit"
@@ -94,7 +94,7 @@
       (click)="onOpenEditDialog()"
       type="button"
     >
-      <i class="hover:text-black hover:shadow icon-edit p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+      <i class="hover:text-black hover:shadow dark:border-white icon-edit p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
     <button
       matTooltip="Delete"
@@ -102,7 +102,7 @@
       (click)="onOpenDeleteDialog()"
       type="button"
     >
-      <i class="hover:text-black hover:shadow icon-delete p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
+      <i class="hover:text-black hover:shadow dark:border-white icon-delete p-1 text-2xl text-gray-600 bg-gray-100 border border-gray-400 rounded-md"></i>
     </button>
   </div>
 
