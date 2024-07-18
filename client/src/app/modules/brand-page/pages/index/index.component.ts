@@ -44,6 +44,7 @@ export class IndexPage implements OnInit {
       switchMap(prefix => this.getBrand(prefix)),
       tap(brand => {
         this.brand = brand;
+        this.brand.logo && this.setFavicon(this.brand.logo);
         this.titleService.setTitle(`${(brand.title || "") + " |"} Grassway Brands`);
       }, () => {
         this.brandNotFound = true;
@@ -110,5 +111,14 @@ export class IndexPage implements OnInit {
     this.brand.blocks?.sort((a, b) => {
       return b.order - a.order;
     })
+  }
+
+  private setFavicon(iconUrl: string) {
+    const link: HTMLLinkElement = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = iconUrl;
+
+    document.getElementsByTagName('head')[0].appendChild(link);
   }
 }
